@@ -67,7 +67,9 @@ document.addEventListener('DOMContentLoaded', () => {
                             <div class="caracteristica-item"><i class="fa-solid ${auto.iconoExtra}"></i> ${auto.caracteristicaExtra}</div>
                         </div>
                         
-                        <button class="btn-detalles">Ver Detalles <i class="fa-solid fa-arrow-right" style ="border:none;"></i></button>
+                        <button class="btn-detalles">Ver Información Técnica</button>
+                         <button class="btn-detalles">Reservar</button>
+                    </div>
                     </div>
                 </div>
             `;
