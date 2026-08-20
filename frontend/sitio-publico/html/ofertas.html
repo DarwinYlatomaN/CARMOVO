@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Categorías de Vehículos | Carmovo</title>
+    <!-- Tus tipografías -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    
+    
+    <link rel="stylesheet" href="../css/responsive.css">
+    <link rel="stylesheet" href="../css/paginas/home.css">
+    
+  
+    <link rel="stylesheet" href="../css/paginas/categorias.css">
+</head>
+<body>
+    
+   
+    <header class="cabecera">
+        <div class="cabecera-superior contenedor">
+            <div class="caja-logo">
+                <div class="logo-icono"><img src="../recursos/imagenes/home/logo-carmovo4.jpg" alt="logo-carmovo"></div>
+                <div class="logo-texto">
+                    <span class="logo-titulo">!Conduce Hoy!</span>
+                    <span class="logo-subtitulo">La llave de tu próxima aventura</span>
+                </div>
+            </div>
+
+            <div class="contenedor-buscador-principal">
+                <div class="barra-busqueda" id="formBusqueda">
+                    <input type="text" class="campo-busqueda" id="inputBusqueda" placeholder="Buscar tu compañero de aventura">
+                    <button type="submit" class="boton-buscar">Buscar</button>
+                </div>
+
+                <div id="modalResultados" class="modal-resultados oculto">
+                    <ul id="listaCoincidencias"></ul>
+                </div>
+                <div class="mensaje-error" id="errorBusqueda"></div>
+            </div>
+
+            <div class="cabecera-acciones">
+                <a href="#" class="enlace-telefono">
+                    <i class="fa-solid fa-phone-volume"></i> 927357060
+                </a>
+                <a href="miCuenta.html" class="boton-login">Iniciar sesión</a>
+                
+                <button class="menu-toggle oculto-desktop" id="btnMenu" aria-label="Abrir menú de navegación">
+                    <i class="fa-solid fa-bars"></i>
+                </button>
+            </div>
+        </div>
+
+        <nav class="navegacion-principal" id="navegacionPrincipal">
+            <ul class="lista-enlaces contenedor">
+                <li><a href="home.html" class="enlace">Home</a></li>
+                <li><a href="categorias.html" class="enlace">Categorías</a></li>
+                <li><a href="reservas.html" class="enlace">Reservas</a></li>
+                <li><a href="ofertas.html" class="enlace activo">Ofertas y Promociones</a></li>
+                <li><a href="experiencia.html" class="enlace">Experiencias</a></li>
+                <li><a href="soporte.html" class="enlace">Soporte</a></li>
+                <li><a href="miCuenta.html" class="enlace">Mi Cuenta</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    
+    
+    <footer class="pie-pagina contenedor">
+        <div class="pie-columna-izq">
+            <h4>!Construyamos una aventura asombrosa!.</h4>
+        </div>
+        <div class="pie-columna-centro">
+            <p>Correo:</p>
+            <a href="#"><i class="fa-regular fa-envelope"></i> soporte_carmovo@gmail.com</a>
+        </div>
+        <div class="pie-columna-der">
+            <p>Síguenos en redes</p>
+            <div class="iconos-redes">
+                <a href="#"><i class="fa-brands fa-instagram"></i></a>
+                <a href="#"><i class="fa-brands fa-whatsapp"></i></a>
+                <a href="#"><i class="fa-brands fa-facebook"></i></a>
+                <a href="#"><i class="fa-brands fa-linkedin-in"></i></a>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
