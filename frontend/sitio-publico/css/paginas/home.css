@@ -13,6 +13,7 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    
 }
 
 body {
@@ -32,9 +33,12 @@ ul {
 }
 
 .contenedor {
-    width: 92%;
-    max-width: 1250px;
-    margin: 0 auto;
+    max-width: 1750px;
+  
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 20px;
+    padding-right: 20px;
 }
 
 .cabecera-superior {
@@ -76,6 +80,10 @@ img {
     line-height: 1.1;
     background-color:transparent;
     border-radius: 20px;
+    margin-left:28px;
+    background-color: #147a59;
+    padding:6px 12px 6px 32px;
+    
     
     
 
@@ -86,8 +94,9 @@ img {
     color: #eb9f08;
     font-weight: 400;
     font-size:16px;
-    margin-top:5px;
+    margin-top:12px;
     font-weight:600;
+    margin-left:28px;
     
    
 }
@@ -95,7 +104,7 @@ img {
 .contenedor-buscador-principal {
     position: relative;
     flex: 1;
-    max-width: 450px;
+    max-width: 720px;
     margin: 0 20px;
 }
 
@@ -106,7 +115,11 @@ img {
     border-radius: 8px;
     overflow: hidden;
     height: 45px;
+    width:100%;
+    
+    
 }
+
 
 .barra-busqueda:focus-within {
     border-color: var(--color-naranja);
@@ -118,13 +131,15 @@ img {
     border: none;
     color: var(--color-blanco);
     padding: 0 15px;
-    font-family: 'Nunito', sans-serif;
+    font-family: 'Montserrat', sans-serif;
     font-size: 0.95rem;
     outline: none;
 }
 
 .campo-busqueda::placeholder {
     color: var(--texto-gris);
+    padding-left:18px;
+    font-size:0.99rem;
 }
 
 .boton-buscar {
@@ -133,6 +148,7 @@ img {
     border: none;
     padding: 0 20px;
     font-weight: 700;
+    font-size:1.1rem;
     cursor: pointer;
     font-family: 'Montserrat', sans-serif;
     transition: background-color 0.3s ease;
@@ -181,7 +197,7 @@ img {
 }
 
 .enlace-telefono i {
-    color: #1ec8a4;
+    color: #14be99;
 }
 
 .boton-login {
@@ -189,7 +205,7 @@ img {
     padding: 8px 22px;
     border-radius: 20px;
     font-weight: 600;
-    font-size: 0.9rem;
+    font-size: 1.1rem;
     transition: 0.3s;
 }
 
@@ -218,7 +234,7 @@ img {
 
 .lista-enlaces .enlace {
     color: var(--texto-gris);
-    font-size: 0.95rem;
+    font-size: 1.2rem;
     font-weight: 600;
     transition: 0.3s;
 }
@@ -268,15 +284,15 @@ img {
     justify-content: flex-end;
 }
 .video-fondo-pantalla {
-    position:absolute;
-    top:0;
-    left:50%;
-    transform:translateX(-50%);
-    width:100vw;
-    height:100%;
-    object-fit:cover;
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100vw; 
+    height: 110%;
+    object-fit: cover;
+    z-index: -2; 
 }
-
 
 .contenedor-reserva-flotante {
     margin-top: -90px;
@@ -459,4 +475,5 @@ img {
     gap: 18px;
     font-size: 1.2rem;
 }
+
 

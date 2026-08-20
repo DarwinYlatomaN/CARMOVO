@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const boton = document.createElement('button');
             boton.classList.add('btn-pestaña');
             
-            // CORRECCIÓN 1: Se compara la variable 'categoria'
+            
             if (categoria === 'Todos') {
                 boton.classList.add('activo');
             }
@@ -33,7 +33,7 @@ document.addEventListener('DOMContentLoaded', () => {
         contenedorAutos.innerHTML = '';
         
         if (arregloAutos.length === 0) {
-            // CORRECCIÓN 3: Se cerró la comilla en el style del <p>
+          
             contenedorAutos.innerHTML = `
              <div style="grid-column:1 / -1; text-align:center; padding:40px 20px;">
                  <i class="fa-solid fa-car-side" style="font-size:3rem; color: var(--borde-oscuro);margin-bottom:15px;"></i>
@@ -79,7 +79,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function filtrarAutos(categoriaSeleccionada) {
-        // CORRECCIÓN 4: Se usa 'style' en lugar de 'computedStyleMap'
+      
         contenedorAutos.style.opacity = '0.5';
         
         setTimeout(() => {
@@ -89,7 +89,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const autosFiltrados = autosDB.filter(auto => auto.categoria === categoriaSeleccionada);
                 renderizarAutos(autosFiltrados);
             }
-            // CORRECCIÓN 4: Se restaura usando 'style'
+            
             contenedorAutos.style.opacity = '1';
         }, 150);
     }
