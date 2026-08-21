@@ -11,7 +11,6 @@ document.addEventListener('DOMContentLoaded', () => {
             const boton = document.createElement('button');
             boton.classList.add('btn-pestaña');
             
-            
             if (categoria === 'Todos') {
                 boton.classList.add('activo');
             }
@@ -19,7 +18,6 @@ document.addEventListener('DOMContentLoaded', () => {
             boton.textContent = categoria;
 
             boton.addEventListener('click', (e) => {
-                // CORRECCIÓN 2: Se usa querySelectorAll
                 document.querySelectorAll('.btn-pestaña').forEach(btn => btn.classList.remove('activo'));
                 e.target.classList.add('activo');
                 filtrarAutos(categoria);
@@ -33,7 +31,6 @@ document.addEventListener('DOMContentLoaded', () => {
         contenedorAutos.innerHTML = '';
         
         if (arregloAutos.length === 0) {
-          
             contenedorAutos.innerHTML = `
              <div style="grid-column:1 / -1; text-align:center; padding:40px 20px;">
                  <i class="fa-solid fa-car-side" style="font-size:3rem; color: var(--borde-oscuro);margin-bottom:15px;"></i>
@@ -68,8 +65,8 @@ document.addEventListener('DOMContentLoaded', () => {
                         </div>
                         
                         <button class="btn-detalles">Ver Información Técnica</button>
-                         <button class="btn-detalles">Reservar</button>
-                    </div>
+                        <!-- AQUÍ ESTÁ EL CAMBIO: El botón ahora llama a la función pasándole los datos del auto -->
+                        <button class="btn-detalles" onclick="irAReservar('${auto.nombre}', '${auto.tipo}', ${auto.precio}, '${auto.imagen}')">Reservar</button>
                     </div>
                 </div>
             `;
@@ -79,7 +76,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function filtrarAutos(categoriaSeleccionada) {
-      
         contenedorAutos.style.opacity = '0.5';
         
         setTimeout(() => {
@@ -97,3 +93,19 @@ document.addEventListener('DOMContentLoaded', () => {
     renderizarCategorias();
     renderizarAutos(autosDB.slice(0, 24));
 });
+
+// Función para guardar el auto en LocalStorage y redirigir (Debe ir fuera del DOMContentLoaded)
+function irAReservar(nombre, tipo, precio, imagenUrl) {
+    const autoSeleccionado = {
+        nombre: nombre,
+        tipo: tipo,
+        precio: parseFloat(precio), 
+        imagen: imagenUrl
+    };
+
+    // Guardar en la memoria del navegador
+    localStorage.setItem('autoReserva', JSON.stringify(autoSeleccionado));
+
+    // Redirigir a la página de reservas
+    window.location.href = 'reservas.html';
+}

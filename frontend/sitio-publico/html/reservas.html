@@ -3,22 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Categorías de Vehículos | Carmovo</title>
-    <!-- Tus tipografías -->
+    <title>Reserva de Vehículo | Carmovo</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
     
-    
     <link rel="stylesheet" href="../css/responsive.css">
     <link rel="stylesheet" href="../css/paginas/home.css">
-    
-  
     <link rel="stylesheet" href="../css/paginas/categorias.css">
+    <link rel="stylesheet" href="../css/paginas/reserva.css">
 </head>
 <body>
     
-   
     <header class="cabecera">
         <div class="cabecera-superior contenedor">
             <div class="caja-logo">
@@ -56,7 +52,7 @@
         <nav class="navegacion-principal" id="navegacionPrincipal">
             <ul class="lista-enlaces contenedor">
                 <li><a href="home.html" class="enlace">Home</a></li>
-                <li><a href="categorias.html" class="enlace ">Categorías</a></li>
+                <li><a href="categorias.html" class="enlace">Categorías</a></li>
                 <li><a href="reservas.html" class="enlace activo">Reservas</a></li>
                 <li><a href="ofertas.html" class="enlace">Ofertas y Promociones</a></li>
                 <li><a href="experiencia.html" class="enlace">Experiencias</a></li>
@@ -66,8 +62,131 @@
         </nav>
     </header>
 
-    
-    
+    <main class="contenido-principal contenedor">
+        <div class="cabecera-reservas">
+            <h2>Completa tu Reserva</h2>
+            <p>Estás a un paso de comenzar tu próxima aventura.</p>
+        </div>
+
+        <div class="contenedor-reserva-layout">
+            <!-- Columna Izquierda: Formulario de Datos -->
+            <section class="seccion-formulario-reserva">
+                <form id="formFinalizarReserva" class="formulario-datos">
+                    <div class="tarjeta-reserva">
+                        <div class="tarjeta-reserva">
+                        <h3>1. Detalles del Alquiler</h3>
+                        <div class="grid-inputs">
+                            <div class="grupo-input">
+                                <label for="selector-auto">Vehículo seleccionado</label>
+                                <select id="selector-auto" required>
+                                    <option value="">-- Selecciona un auto --</option>
+                                    <!-- Las opciones se llenarán con JavaScript -->
+                                </select>
+                            </div>
+                            <div class="grupo-input">
+                                <label for="dias-alquiler">Cantidad de días</label>
+                                <input type="number" id="dias-alquiler" min="1" max="30" value="4" required>
+                            </div>
+                        </div>
+                    </div>
+                        <h3>1. Datos del Conductor</h3>
+                        <div class="grid-inputs">
+                            <div class="grupo-input">
+                                <label for="nombre">Nombre</label>
+                                <input type="text" id="nombre" placeholder="Tu nombre" required>
+                            </div>
+                            <div class="grupo-input">
+                                <label for="apellidos">Apellidos</label>
+                                <input type="text" id="apellidos" placeholder="Tus apellidos" required>
+                            </div>
+                            <div class="grupo-input">
+                                <label for="correo">Correo Electrónico</label>
+                                <input type="email" id="correo" placeholder="ejemplo@correo.com" required>
+                            </div>
+                            <div class="grupo-input">
+                                <label for="telefono">Teléfono</label>
+                                <input type="tel" id="telefono" placeholder="Tu número" required>
+                            </div>
+                            <div class="grupo-input">
+                                <label for="documento">DNI / Pasaporte</label>
+                                <input type="text" id="documento" placeholder="Número de documento" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="tarjeta-reserva">
+                        <h3>2. Método de Pago</h3>
+                        <div class="opciones-pago">
+                            <label class="radio-pago">
+                                <input type="radio" name="pago" value="tarjeta" checked>
+                                <span>Tarjeta de Crédito / Débito <i class="fa-regular fa-credit-card"></i></span>
+                            </label>
+                            <label class="radio-pago">
+                                <input type="radio" name="pago" value="paypal">
+                                <span>PayPal <i class="fa-brands fa-paypal"></i></span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="boton-accion-naranja boton-bloque">Confirmar Reserva y Pagar <i class="fa-solid fa-check"></i></button>
+                </form>
+            </section>
+
+            <!-- Columna Derecha: Resumen de Reserva -->
+            <aside class="seccion-resumen-reserva">
+                <div class="tarjeta-reserva resumen">
+                    <h3>Resumen de tu alquiler</h3>
+                    
+                    <div class="resumen-auto">
+                        <img src="../recursos/imagenes/home/logo-carmovo4.jpg" alt="Auto seleccionado" class="imagen-resumen" id="resumen-imagen">
+                        <div class="info-resumen-auto">
+                            <h4 id="resumen-nombre">Cargando auto...</h4>
+                            <span class="etiqueta naranja" id="resumen-tipo">--</span>
+                        </div>
+                    </div>
+
+                    <div class="detalles-reserva-lista">
+                        <div class="detalle-item">
+                            <i class="fa-solid fa-location-dot"></i>
+                            <div>
+                                <p class="detalle-label">Recogida</p>
+                                <p class="detalle-valor">Chiclayo, Lambayeque</p>
+                                <p class="detalle-fecha">20 May, 2025 - 10:00 AM</p>
+                            </div>
+                        </div>
+                        <div class="detalle-item">
+                            <i class="fa-solid fa-location-dot"></i>
+                            <div>
+                                <p class="detalle-label">Entrega</p>
+                                <p class="detalle-valor">Trujillo, La Libertad</p>
+                                <p class="detalle-fecha">24 May, 2025 - 10:00 AM</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="desglose-precio">
+                        <div class="precio-item">
+                            <span id="etiqueta-dias">Tarifa base (4 días)</span>
+                            <span id="resumen-tarifa-base">S/ 0.00</span>
+                        </div>
+                        <div class="precio-item">
+                            <span>Seguro básico</span>
+                            <span>S/ 120.00</span>
+                        </div>
+                        <div class="precio-item">
+                            <span>Impuestos (IGV 18%)</span>
+                            <span id="resumen-impuestos">S/ 0.00</span>
+                        </div>
+                        <div class="precio-total">
+                            <span>Total a pagar</span>
+                            <span class="monto-total" id="resumen-total">S/ 0.00</span>
+                        </div>
+                    </div>
+                </div>
+            </aside>
+        </div>
+    </main>
+
     <footer class="pie-pagina contenedor">
         <div class="pie-columna-izq">
             <h4>!Construyamos una aventura asombrosa!.</h4>
@@ -86,5 +205,7 @@
             </div>
         </div>
     </footer>
-</body>
+
+    <script src="../js/db y app-categorias/db.js"></script>
+    <script src="../js/paginas/reserva.pagina.js"></script></body>
 </html>
