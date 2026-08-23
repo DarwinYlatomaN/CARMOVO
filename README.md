@@ -1,7 +1,7 @@
  HEAD
 # 🚗 Carmovo — Plataforma de Renta y Venta de Vehículos
 
-Sistema web comercial que combina alquiler  en una sola plataforma, con un panel administrativo para el control total del negocio (flota, reservas, ventas, usuarios, reportes).
+Sistema web comercial que combina alquiler  en una sola plataforma, con un panel administrativo para el control total del negocio (flota, reservas, usuarios, reportes).
 
 Este README documenta la arquitectura completa del proyecto: qué hace cada carpeta, qué hace cada archivo, y por qué está diseñado así.
 
