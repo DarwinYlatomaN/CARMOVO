@@ -1,5 +1,5 @@
  HEAD
-# 🚗 Carmovo — Plataforma de Renta y Venta de Vehículos
+# 🚗 Carmovo — Plataforma de Alquiler de Vehículos
 
 Sistema web comercial que combina alquiler  en una sola plataforma, con un panel administrativo para el control total del negocio (flota, reservas, usuarios, reportes).
 
