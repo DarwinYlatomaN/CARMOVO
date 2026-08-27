@@ -3,56 +3,46 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Categorías de Vehículos | Carmovo</title>
-    <!-- Tus tipografías -->
+    <title>Ofertas y Promociones | Carmovo</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-    
-    
     <link rel="stylesheet" href="../css/responsive.css">
     <link rel="stylesheet" href="../css/paginas/home.css">
-    
-  
-    <link rel="stylesheet" href="../css/paginas/categorias.css">
+    <link rel="stylesheet" href="../css/paginas/ofertas.css">
 </head>
 <body>
-    
-   
     <header class="cabecera">
         <div class="cabecera-superior contenedor">
             <div class="caja-logo">
-                <div class="logo-icono"><img src="../recursos/imagenes/home/logo-carmovo4.jpg" alt="logo-carmovo"></div>
+                <div class="logo-icono">
+                    <img src="../recursos/imagenes/home/logo-carmovo4.jpg" alt="logo-carmovo">
+                </div>
                 <div class="logo-texto">
                     <span class="logo-titulo">!Conduce Hoy!</span>
                     <span class="logo-subtitulo">La llave de tu próxima aventura</span>
                 </div>
             </div>
-
             <div class="contenedor-buscador-principal">
                 <div class="barra-busqueda" id="formBusqueda">
                     <input type="text" class="campo-busqueda" id="inputBusqueda" placeholder="Buscar tu compañero de aventura">
                     <button type="submit" class="boton-buscar">Buscar</button>
                 </div>
-
                 <div id="modalResultados" class="modal-resultados oculto">
                     <ul id="listaCoincidencias"></ul>
                 </div>
                 <div class="mensaje-error" id="errorBusqueda"></div>
             </div>
-
             <div class="cabecera-acciones">
                 <a href="#" class="enlace-telefono">
                     <i class="fa-solid fa-phone-volume"></i> 927357060
                 </a>
                 <a href="miCuenta.html" class="boton-login">Iniciar sesión</a>
-                
                 <button class="menu-toggle oculto-desktop" id="btnMenu" aria-label="Abrir menú de navegación">
                     <i class="fa-solid fa-bars"></i>
                 </button>
             </div>
         </div>
-
         <nav class="navegacion-principal" id="navegacionPrincipal">
             <ul class="lista-enlaces contenedor">
                 <li><a href="home.html" class="enlace">Home</a></li>
@@ -66,8 +56,265 @@
         </nav>
     </header>
 
-    
-    
+    <main class="contenido-ofertas">
+        <section class="hero-ofertas">
+            <div class="contenedor hero-ofertas-contenido">
+                <div class="hero-ofertas-texto">
+                    <span class="etiqueta-oferta">
+                        <i class="fa-solid fa-fire"></i> PROMOCIONES ESPECIALES
+                    </span>
+                    <h1>Ofertas que te llevan <span>más lejos</span></h1>
+                    <p>Aprovecha nuestros descuentos especiales y encuentra el vehículo ideal para tu próxima aventura.</p>
+                    <a href="#lista-ofertas" class="boton-ver-ofertas">
+                        Ver ofertas <i class="fa-solid fa-arrow-down"></i>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <section class="beneficios-ofertas">
+            <div class="contenedor beneficios-grid">
+                <div class="beneficio-oferta">
+                    <div class="icono-beneficio">
+                        <i class="fa-solid fa-tags"></i>
+                    </div>
+                    <div>
+                        <h3>Precios especiales</h3>
+                        <p>Descuentos exclusivos en vehículos seleccionados.</p>
+                    </div>
+                </div>
+                <div class="beneficio-oferta">
+                    <div class="icono-beneficio">
+                        <i class="fa-solid fa-car"></i>
+                    </div>
+                    <div>
+                        <h3>Vehículos garantizados</h3>
+                        <p>Unidades revisadas y listas para tu viaje.</p>
+                    </div>
+                </div>
+                <div class="beneficio-oferta">
+                    <div class="icono-beneficio">
+                        <i class="fa-solid fa-calendar-check"></i>
+                    </div>
+                    <div>
+                        <h3>Reserva fácilmente</h3>
+                        <p>Selecciona tu vehículo y completa tu reserva.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="seccion-lista-ofertas" id="lista-ofertas">
+            <div class="contenedor">
+                <div class="cabecera-seccion-ofertas">
+                    <div>
+                        <span class="texto-pequeno-oferta">OFERTAS DESTACADAS</span>
+                        <h2>Elige tu próxima aventura</h2>
+                    </div>
+                    <p>Encuentra descuentos especiales en nuestros vehículos más solicitados.</p>
+                </div>
+                <div class="filtros-ofertas">
+                    <button type="button" class="filtro-oferta activo" data-categoria="Todos">Todas</button>
+                    <button type="button" class="filtro-oferta" data-categoria="Económicos">Económicos</button>
+                    <button type="button" class="filtro-oferta" data-categoria="Sedanes">Sedanes</button>
+                    <button type="button" class="filtro-oferta" data-categoria="SUVs">SUVs</button>
+                    <button type="button" class="filtro-oferta" data-categoria="Pick-ups 4x4">Pick-ups</button>
+                    <button type="button" class="filtro-oferta" data-categoria="Minivans">Minivans</button>
+                    <button type="button" class="filtro-oferta" data-categoria="Todoterreno">Todoterreno</button>
+                </div>
+
+                <div class="grid-ofertas">
+                    <article class="tarjeta-oferta" data-categoria="Económicos">
+                        <div class="imagen-oferta">
+                            <img src="../recursos/imagenes/economicos/Kia-picanto.jpg" alt="Kia Picanto">
+                            <span class="descuento-oferta">-15%</span>
+                            <span class="etiqueta-tarjeta-oferta">OFERTA</span>
+                        </div>
+                        <div class="contenido-tarjeta-oferta">
+                            <span class="categoria-oferta">ECONÓMICO</span>
+                            <h3>Kia Picanto</h3>
+                            <p class="descripcion-oferta">Compacto, práctico y perfecto para moverte por la ciudad.</p>
+                            <div class="caracteristicas-oferta">
+                                <span><i class="fa-solid fa-user-group"></i> 4 pasajeros</span>
+                                <span><i class="fa-solid fa-leaf"></i> Económico</span>
+                            </div>
+                            <div class="precios-oferta">
+                                <div>
+                                    <span class="precio-anterior">S/ 110.00</span>
+                                    <strong>S/ 93.50</strong>
+                                    <span class="por-dia">/ día</span>
+                                </div>
+                                <span class="ahorro-oferta">Ahorras S/ 16.50</span>
+                            </div>
+                            <button type="button" class="btn-reservar-oferta" data-id="1">
+                                Reservar ahora <i class="fa-solid fa-arrow-right"></i>
+                            </button>
+                        </div>
+                    </article>
+
+                    <article class="tarjeta-oferta" data-categoria="Sedanes">
+                        <div class="imagen-oferta">
+                            <img src="../recursos/imagenes/sedanes/Toyota-yaris.webp" alt="Toyota Yaris">
+                            <span class="descuento-oferta">-20%</span>
+                            <span class="etiqueta-tarjeta-oferta">MÁS BUSCADO</span>
+                        </div>
+                        <div class="contenido-tarjeta-oferta">
+                            <span class="categoria-oferta">SEDÁN</span>
+                            <h3>Toyota Yaris</h3>
+                            <p class="descripcion-oferta">Comodidad y eficiencia para tus viajes diarios.</p>
+                            <div class="caracteristicas-oferta">
+                                <span><i class="fa-solid fa-user-group"></i> 5 pasajeros</span>
+                                <span><i class="fa-solid fa-gear"></i> Mecánico</span>
+                            </div>
+                            <div class="precios-oferta">
+                                <div>
+                                    <span class="precio-anterior">S/ 140.00</span>
+                                    <strong>S/ 112.00</strong>
+                                    <span class="por-dia">/ día</span>
+                                </div>
+                                <span class="ahorro-oferta">Ahorras S/ 28.00</span>
+                            </div>
+                            <button type="button" class="btn-reservar-oferta" data-id="6">
+                                Reservar ahora <i class="fa-solid fa-arrow-right"></i>
+                            </button>
+                        </div>
+                    </article>
+
+                    <article class="tarjeta-oferta" data-categoria="SUVs">
+                        <div class="imagen-oferta">
+                            <img src="../recursos/imagenes/SUVs/Kia-sportage.jpg" alt="Kia Sportage">
+                            <span class="descuento-oferta">-15%</span>
+                            <span class="etiqueta-tarjeta-oferta">OFERTA</span>
+                        </div>
+                        <div class="contenido-tarjeta-oferta">
+                            <span class="categoria-oferta">SUV</span>
+                            <h3>Kia Sportage</h3>
+                            <p class="descripcion-oferta">Espacio, comodidad y seguridad para tus aventuras.</p>
+                            <div class="caracteristicas-oferta">
+                                <span><i class="fa-solid fa-user-group"></i> 5 pasajeros</span>
+                                <span><i class="fa-solid fa-suitcase"></i> Amplia</span>
+                            </div>
+                            <div class="precios-oferta">
+                                <div>
+                                    <span class="precio-anterior">S/ 200.00</span>
+                                    <strong>S/ 170.00</strong>
+                                    <span class="por-dia">/ día</span>
+                                </div>
+                                <span class="ahorro-oferta">Ahorras S/ 30.00</span>
+                            </div>
+                            <button type="button" class="btn-reservar-oferta" data-id="12">
+                                Reservar ahora <i class="fa-solid fa-arrow-right"></i>
+                            </button>
+                        </div>
+                    </article>
+
+                    <article class="tarjeta-oferta" data-categoria="Pick-ups 4x4">
+                        <div class="imagen-oferta">
+                            <img src="../recursos/imagenes/pickups/Toyota-hilux.jpg" alt="Toyota Hilux">
+                            <span class="descuento-oferta">-20%</span>
+                            <span class="etiqueta-tarjeta-oferta">OFERTA</span>
+                        </div>
+                        <div class="contenido-tarjeta-oferta">
+                            <span class="categoria-oferta">PICK-UP 4X4</span>
+                            <h3>Toyota Hilux</h3>
+                            <p class="descripcion-oferta">Potencia y resistencia para cualquier recorrido.</p>
+                            <div class="caracteristicas-oferta">
+                                <span><i class="fa-solid fa-user-group"></i> 5 pasajeros</span>
+                                <span><i class="fa-solid fa-mountain"></i> 4x4</span>
+                            </div>
+                            <div class="precios-oferta">
+                                <div>
+                                    <span class="precio-anterior">S/ 280.00</span>
+                                    <strong>S/ 224.00</strong>
+                                    <span class="por-dia">/ día</span>
+                                </div>
+                                <span class="ahorro-oferta">Ahorras S/ 56.00</span>
+                            </div>
+                            <button type="button" class="btn-reservar-oferta" data-id="16">
+                                Reservar ahora <i class="fa-solid fa-arrow-right"></i>
+                            </button>
+                        </div>
+                    </article>
+
+                    <article class="tarjeta-oferta" data-categoria="Todoterreno">
+                        <div class="imagen-oferta">
+                            <img src="../recursos/imagenes/todoTerreno/Jeep-wrangler.jpg" alt="Jeep Wrangler">
+                            <span class="descuento-oferta">-10%</span>
+                            <span class="etiqueta-tarjeta-oferta">AVENTURA</span>
+                        </div>
+                        <div class="contenido-tarjeta-oferta">
+                            <span class="categoria-oferta">TODOTERRENO</span>
+                            <h3>Jeep Wrangler</h3>
+                            <p class="descripcion-oferta">Vive una experiencia diferente con potencia y estilo.</p>
+                            <div class="caracteristicas-oferta">
+                                <span><i class="fa-solid fa-user-group"></i> 5 pasajeros</span>
+                                <span><i class="fa-solid fa-mountain"></i> 4x4</span>
+                            </div>
+                            <div class="precios-oferta">
+                                <div>
+                                    <span class="precio-anterior">S/ 350.00</span>
+                                    <strong>S/ 315.00</strong>
+                                    <span class="por-dia">/ día</span>
+                                </div>
+                                <span class="ahorro-oferta">Ahorras S/ 35.00</span>
+                            </div>
+                            <button type="button" class="btn-reservar-oferta" data-id="26">
+                                Reservar ahora <i class="fa-solid fa-arrow-right"></i>
+                            </button>
+                        </div>
+                    </article>
+
+                    <article class="tarjeta-oferta" data-categoria="Minivans">
+                        <div class="imagen-oferta">
+                            <img src="../recursos/imagenes/minivans/kia-carnival.jpg" alt="Kia Carnival">
+                            <span class="descuento-oferta">-20%</span>
+                            <span class="etiqueta-tarjeta-oferta">FAMILIAR</span>
+                        </div>
+                        <div class="contenido-tarjeta-oferta">
+                            <span class="categoria-oferta">MINIVAN</span>
+                            <h3>Kia Carnival</h3>
+                            <p class="descripcion-oferta">Máximo espacio y comodidad para toda la familia.</p>
+                            <div class="caracteristicas-oferta">
+                                <span><i class="fa-solid fa-user-group"></i> 8 pasajeros</span>
+                                <span><i class="fa-solid fa-couch"></i> VIP</span>
+                            </div>
+                            <div class="precios-oferta">
+                                <div>
+                                    <span class="precio-anterior">S/ 380.00</span>
+                                    <strong>S/ 304.00</strong>
+                                    <span class="por-dia">/ día</span>
+                                </div>
+                                <span class="ahorro-oferta">Ahorras S/ 76.00</span>
+                            </div>
+                            <button type="button" class="btn-reservar-oferta" data-id="23">
+                                Reservar ahora <i class="fa-solid fa-arrow-right"></i>
+                            </button>
+                        </div>
+                    </article>
+                </div>
+
+                <div class="sin-resultados-ofertas" id="sinResultadosOfertas" style="display: none;">
+                    <i class="fa-solid fa-car-side"></i>
+                    <h3>No hay ofertas en esta categoría</h3>
+                    <p>Selecciona otra categoría para continuar.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="cta-ofertas">
+            <div class="contenedor">
+                <div class="contenido-cta-ofertas">
+                    <span>¿LISTO PARA VIAJAR?</span>
+                    <h2>Encuentra el vehículo ideal para ti</h2>
+                    <p>Reserva hoy y aprovecha nuestras promociones especiales.</p>
+                    <a href="categorias.html" class="boton-cta-ofertas">
+                        Ver todos los vehículos <i class="fa-solid fa-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
+        </section>
+    </main>
+
     <footer class="pie-pagina contenedor">
         <div class="pie-columna-izq">
             <h4>!Construyamos una aventura asombrosa!.</h4>
@@ -86,5 +333,8 @@
             </div>
         </div>
     </footer>
+
+    <script src="../js/db y app-categorias/db.js"></script>
+    <script src="../js/paginas/ofertas.pagina.js"></script>
 </body>
 </html>

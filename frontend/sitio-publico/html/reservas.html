@@ -14,7 +14,6 @@
     <link rel="stylesheet" href="../css/paginas/reserva.css">
 </head>
 <body>
-    <!-- CABECERA -->
     <header class="cabecera">
         <div class="cabecera-superior contenedor">
             <div class="caja-logo">
@@ -62,7 +61,6 @@
         </nav>
     </header>
 
-    <!-- CONTENIDO PRINCIPAL -->
     <main class="contenido-principal contenedor">
         <div class="cabecera-reservas">
             <h2>Completa tu Reserva</h2>
@@ -106,30 +104,28 @@
                                     </div>
                                 </div>
                             </div>
-                                <div class="grupo-input">
-                                        <div class="grupo-campo">
-                                        <label>Lugar de entrega</label>
-                                        <div class="campo-input">
-                                            <i class="fa-solid fa-location-dot"></i>
-                                            <select required>
-                                                <option value="" disabled selected>Selecciona sede de entrega</option>
-                                                <option value="lima-miraflores">Lima - Miraflores</option>
-                                                <option value="lima-aeropuerto">Lima - Aeropuerto Jorge Chávez</option>
-                                                <option value="chiclayo">Chiclayo, Lambayeque</option>
-                                                <option value="trujillo">Trujillo, La Libertad</option>
-                                                <option value="piura">Piura, Piura</option>
-                                                <option value="arequipa">Arequipa, Arequipa</option>
-                                                <option value="cusco">Cusco, Cusco</option>
-                                                <option value="cajamarca">Cajamarca, Cajamarca</option>
-                                                <option value="tarapoto">Tarapoto, San Martín</option>
-                                                <option value="iquitos">Iquitos, Loreto</option>
-                                            </select>
-                                        </div>
+                            <div class="grupo-input">
+                                <div class="grupo-campo">
+                                    <label>Lugar de entrega</label>
+                                    <div class="campo-input">
+                                        <i class="fa-solid fa-location-dot"></i>
+                                        <select required>
+                                            <option value="" disabled selected>Selecciona sede de entrega</option>
+                                            <option value="lima-miraflores">Lima - Miraflores</option>
+                                            <option value="lima-aeropuerto">Lima - Aeropuerto Jorge Chávez</option>
+                                            <option value="chiclayo">Chiclayo, Lambayeque</option>
+                                            <option value="trujillo">Trujillo, La Libertad</option>
+                                            <option value="piura">Piura, Piura</option>
+                                            <option value="arequipa">Arequipa, Arequipa</option>
+                                            <option value="cusco">Cusco, Cusco</option>
+                                            <option value="cajamarca">Cajamarca, Cajamarca</option>
+                                            <option value="tarapoto">Tarapoto, San Martín</option>
+                                            <option value="iquitos">Iquitos, Loreto</option>
+                                        </select>
                                     </div>
-
                                 </div>
-                                
-                         </div>
+                            </div>
+                        </div>
                     </div>
 
                     <div class="tarjeta-reserva">
@@ -177,7 +173,6 @@
                                 <input type="text" id="domicilio" placeholder="Ej: Av. Balta 123, Urb. La Primavera" required>
                             </div>
 
-                            <!-- Selector Múltiple: Departamento, Provincia y Distrito -->
                             <div class="grupo-input">
                                 <label for="departamento">Departamento</label>
                                 <select id="departamento" required>
@@ -185,7 +180,6 @@
                                     <option value="Lambayeque">Lambayeque</option>
                                     <option value="La Libertad">La Libertad</option>
                                     <option value="Lima">Lima</option>
-                                    <!-- Se llenará dinámicamente con la API -->
                                 </select>
                             </div>
 
@@ -196,7 +190,6 @@
                                     <option value="Chiclayo">Chiclayo</option>
                                     <option value="San Pedro de Lloc">San Pedro de LLoc</option>
                                     <option value="San Antonio">San Antonio</option>
-                                    <!-- Se filtrará/llenará con la API -->
                                 </select>
                             </div>
 
@@ -207,7 +200,6 @@
                                     <option value="Chiclayo">La Victoria</option>
                                     <option value="Pacasmayo">Pacasmayo</option>
                                     <option value="Miraflores">Miraflores</option>
-                                    <!-- Se filtrará/llenará con la API -->
                                 </select>
                             </div>
                         </div>
@@ -286,29 +278,49 @@
                     </div>
 
                     <div class="desglose-precio">
-                        <div class="precio-item">
-                            <span id="etiqueta-dias">Tarifa base (1 días)</span>
-                            <span id="resumen-tarifa-base">S/ 0.00</span>
-                        </div>
-                        <div class="precio-item">
-                            <span>Seguro básico</span>
-                            <span>S/ 120.00</span>
-                        </div>
-                        <div class="precio-item">
-                            <span>Impuestos (IGV 18%)</span>
-                            <span id="resumen-impuestos">S/ 0.00</span>
-                        </div>
-                        <div class="precio-total">
-                            <span>Total a pagar</span>
-                            <span class="monto-total" id="resumen-total">S/ 0.00</span>
-                        </div>
+
+                    <div class="precio-item">
+                        <span id="etiqueta-dias">
+                            Tarifa base (1 día)
+                        </span>
+                        <span id="resumen-tarifa-base">
+                            S/ 0.00
+                        </span>
                     </div>
+
+                    <div class="precio-item">
+                        <span>
+                            Seguro básico
+                        </span>
+                        <span>
+                            S/ 120.00
+                        </span>
+                    </div>
+
+                    <div class="precio-item">
+                        <span>
+                            Impuestos (IGV 18%)
+                        </span>
+                        <span id="resumen-impuestos">
+                            S/ 0.00
+                        </span>
+                    </div>
+
+                    <div class="precio-total">
+                        <span>
+                            Total a pagar
+                        </span>
+                        <span class="monto-total" id="resumen-total">
+                            S/ 0.00
+                        </span>
+                    </div>
+
+                </div>
                 </div>
             </aside>
         </div>
     </main>
 
-    <!-- MODALES DE PAGO -->
     <div class="contenedor-modales-pago">
         
         <div id="modal-tarjeta" class="modal-pago oculto">
@@ -442,7 +454,6 @@
 
     </div>
 
-    <!-- PIE DE PÁGINA -->
     <footer class="pie-pagina contenedor">
         <div class="pie-columna-izq">
             <h4>!Construyamos una aventura asombrosa!.</h4>

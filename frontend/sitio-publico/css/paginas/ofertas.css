@@ -1,0 +1,810 @@
+/* =========================================================
+   CARMOVO - OFERTAS Y PROMOCIONES
+========================================================= */
+
+
+/* =========================================================
+   GENERAL
+========================================================= */
+
+.contenido-ofertas {
+    background: #090e17;
+    color: #ffffff;
+}
+
+
+/* =========================================================
+   HERO
+========================================================= */
+
+.hero-ofertas {
+    min-height: 450px;
+
+    display: flex;
+    align-items: center;
+
+    position: relative;
+
+    background:
+        radial-gradient(
+            circle at 80% 50%,
+            rgba(255, 90, 54, 0.18),
+            transparent 35%
+        ),
+        linear-gradient(
+            135deg,
+            #090e17 0%,
+            #101827 100%
+        );
+
+    overflow: hidden;
+}
+
+.hero-ofertas::after {
+    content: "";
+
+    position: absolute;
+
+    width: 420px;
+    height: 420px;
+
+    right: 5%;
+    top: 50%;
+
+    transform: translateY(-50%);
+
+    border: 1px solid rgba(255, 90, 54, 0.16);
+
+    border-radius: 50%;
+}
+
+.hero-ofertas-contenido {
+    position: relative;
+    z-index: 2;
+}
+
+.hero-ofertas-texto {
+    max-width: 720px;
+}
+
+.etiqueta-oferta {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+
+    padding: 8px 14px;
+
+    border-radius: 30px;
+
+    background: rgba(255, 90, 54, 0.12);
+
+    border: 1px solid rgba(255, 90, 54, 0.25);
+
+    color: #ff5a36;
+
+    font-size: 11px;
+    font-weight: 800;
+
+    letter-spacing: 1px;
+}
+
+.hero-ofertas h1 {
+    margin: 22px 0 18px;
+
+    font-family: 'Outfit', sans-serif;
+
+    font-size: clamp(42px, 6vw, 68px);
+
+    line-height: 1.05;
+
+    font-weight: 800;
+}
+
+.hero-ofertas h1 span {
+    color: #ff5a36;
+}
+
+.hero-ofertas p {
+    max-width: 610px;
+
+    margin: 0 0 30px;
+
+    color: #8d96a5;
+
+    font-size: 15px;
+
+    line-height: 1.8;
+}
+
+.boton-ver-ofertas {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+
+    padding: 14px 22px;
+
+    background: #ff5a36;
+
+    color: #ffffff;
+
+    border-radius: 10px;
+
+    text-decoration: none;
+
+    font-size: 13px;
+    font-weight: 800;
+
+    transition: 0.25s ease;
+}
+
+.boton-ver-ofertas:hover {
+    background: #e94725;
+
+    transform: translateY(-2px);
+}
+
+
+/* =========================================================
+   BENEFICIOS
+========================================================= */
+
+.beneficios-ofertas {
+    background: #0c121c;
+
+    border-top: 1px solid rgba(255,255,255,0.07);
+    border-bottom: 1px solid rgba(255,255,255,0.07);
+}
+
+.beneficios-grid {
+    display: grid;
+
+    grid-template-columns: repeat(3, 1fr);
+}
+
+.beneficio-oferta {
+    display: flex;
+    align-items: center;
+
+    gap: 15px;
+
+    padding: 28px 22px;
+
+    border-right: 1px solid rgba(255,255,255,0.07);
+}
+
+.beneficio-oferta:last-child {
+    border-right: 0;
+}
+
+.icono-beneficio {
+    width: 48px;
+    height: 48px;
+
+    flex-shrink: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 12px;
+
+    background: rgba(255,90,54,0.1);
+
+    color: #ff5a36;
+
+    font-size: 18px;
+}
+
+.beneficio-oferta h3 {
+    margin: 0 0 5px;
+
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.beneficio-oferta p {
+    margin: 0;
+
+    color: #8d96a5;
+
+    font-size: 11px;
+
+    line-height: 1.5;
+}
+
+
+/* =========================================================
+   SECCIÓN OFERTAS
+========================================================= */
+
+.seccion-lista-ofertas {
+    padding: 85px 0;
+}
+
+.cabecera-seccion-ofertas {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+
+    gap: 40px;
+
+    margin-bottom: 32px;
+}
+
+.texto-pequeno-oferta {
+    color: #ff5a36;
+
+    font-size: 10px;
+
+    font-weight: 800;
+
+    letter-spacing: 1.6px;
+}
+
+.cabecera-seccion-ofertas h2 {
+    margin: 10px 0 0;
+
+    font-family: 'Outfit', sans-serif;
+
+    font-size: clamp(30px, 4vw, 44px);
+
+    line-height: 1.1;
+}
+
+.cabecera-seccion-ofertas p {
+    max-width: 390px;
+
+    margin: 0;
+
+    color: #8d96a5;
+
+    font-size: 13px;
+
+    line-height: 1.7;
+}
+
+
+/* =========================================================
+   FILTROS
+========================================================= */
+
+.filtros-ofertas {
+    display: flex;
+
+    flex-wrap: wrap;
+
+    gap: 9px;
+
+    margin-bottom: 30px;
+}
+
+.filtro-oferta {
+    padding: 10px 16px;
+
+    border: 1px solid rgba(255,255,255,0.08);
+
+    border-radius: 30px;
+
+    background: transparent;
+
+    color: #8d96a5;
+
+    font-family: 'Montserrat', sans-serif;
+
+    font-size: 11px;
+
+    font-weight: 700;
+
+    cursor: pointer;
+
+    transition: 0.25s ease;
+}
+
+.filtro-oferta:hover {
+    color: #ffffff;
+
+    border-color: rgba(255,90,54,0.45);
+}
+
+.filtro-oferta.activo {
+    background: #ff5a36;
+
+    border-color: #ff5a36;
+
+    color: #ffffff;
+}
+
+
+/* =========================================================
+   GRID
+========================================================= */
+
+.grid-ofertas {
+    display: grid;
+
+    grid-template-columns: repeat(3, 1fr);
+
+    gap: 24px;
+}
+
+
+/* =========================================================
+   TARJETA
+========================================================= */
+
+.tarjeta-oferta {
+    overflow: hidden;
+
+    background: #121927;
+
+    border: 1px solid rgba(255,255,255,0.08);
+
+    border-radius: 18px;
+
+    transition:
+        transform 0.3s ease,
+        border-color 0.3s ease,
+        box-shadow 0.3s ease;
+}
+
+.tarjeta-oferta:hover {
+    transform: translateY(-6px);
+
+    border-color: rgba(255,90,54,0.4);
+
+    box-shadow:
+        0 18px 45px rgba(0,0,0,0.3);
+}
+
+.tarjeta-oferta.oculta {
+    display: none;
+}
+
+
+/* =========================================================
+   IMAGEN
+========================================================= */
+
+.imagen-oferta {
+    height: 220px;
+
+    position: relative;
+
+    overflow: hidden;
+
+    background: #161e2c;
+}
+
+.imagen-oferta img {
+    width: 100%;
+    height: 100%;
+
+    display: block;
+
+    object-fit: cover;
+
+    transition: transform 0.4s ease;
+}
+
+.tarjeta-oferta:hover .imagen-oferta img {
+    transform: scale(1.05);
+}
+
+.descuento-oferta {
+    position: absolute;
+
+    top: 15px;
+    left: 15px;
+
+    padding: 7px 11px;
+
+    background: #ff5a36;
+
+    color: #ffffff;
+
+    border-radius: 8px;
+
+    font-size: 12px;
+
+    font-weight: 800;
+}
+
+.etiqueta-tarjeta-oferta {
+    position: absolute;
+
+    top: 15px;
+    right: 15px;
+
+    padding: 7px 10px;
+
+    background: rgba(9,14,23,0.88);
+
+    border: 1px solid rgba(255,255,255,0.12);
+
+    border-radius: 8px;
+
+    color: #ffffff;
+
+    font-size: 9px;
+
+    font-weight: 800;
+
+    letter-spacing: 0.7px;
+}
+
+
+/* =========================================================
+   CONTENIDO TARJETA
+========================================================= */
+
+.contenido-tarjeta-oferta {
+    padding: 22px;
+}
+
+.categoria-oferta {
+    display: block;
+
+    margin-bottom: 7px;
+
+    color: #ff5a36;
+
+    font-size: 9px;
+
+    font-weight: 800;
+
+    letter-spacing: 1px;
+}
+
+.contenido-tarjeta-oferta h3 {
+    margin: 0;
+
+    font-family: 'Outfit', sans-serif;
+
+    font-size: 24px;
+
+    font-weight: 700;
+}
+
+.descripcion-oferta {
+    min-height: 40px;
+
+    margin: 9px 0 15px;
+
+    color: #8d96a5;
+
+    font-size: 11px;
+
+    line-height: 1.6;
+}
+
+
+/* =========================================================
+   CARACTERÍSTICAS
+========================================================= */
+
+.caracteristicas-oferta {
+    display: flex;
+
+    gap: 14px;
+
+    padding: 13px 0;
+
+    border-top: 1px solid rgba(255,255,255,0.07);
+
+    border-bottom: 1px solid rgba(255,255,255,0.07);
+}
+
+.caracteristicas-oferta span {
+    display: flex;
+    align-items: center;
+
+    gap: 6px;
+
+    color: #8d96a5;
+
+    font-size: 9px;
+}
+
+.caracteristicas-oferta i {
+    color: #ff5a36;
+}
+
+
+/* =========================================================
+   PRECIOS
+========================================================= */
+
+.precios-oferta {
+    display: flex;
+
+    align-items: flex-end;
+
+    justify-content: space-between;
+
+    gap: 10px;
+
+    padding: 17px 0;
+}
+
+.precio-anterior {
+    display: block;
+
+    color: #687181;
+
+    text-decoration: line-through;
+
+    font-size: 10px;
+}
+
+.precios-oferta strong {
+    font-family: 'Outfit', sans-serif;
+
+    color: #ffffff;
+
+    font-size: 24px;
+
+    font-weight: 800;
+}
+
+.por-dia {
+    color: #8d96a5;
+
+    font-size: 9px;
+}
+
+.ahorro-oferta {
+    color: #39c47a;
+
+    font-size: 9px;
+
+    font-weight: 700;
+
+    white-space: nowrap;
+}
+
+
+/* =========================================================
+   BOTÓN
+========================================================= */
+
+.btn-reservar-oferta {
+    width: 100%;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 9px;
+
+    padding: 13px 15px;
+
+    border: 1px solid rgba(255,90,54,0.45);
+
+    border-radius: 9px;
+
+    background: transparent;
+
+    color: #ff5a36;
+
+    font-family: 'Montserrat', sans-serif;
+
+    font-size: 11px;
+
+    font-weight: 800;
+
+    cursor: pointer;
+
+    transition: 0.25s ease;
+}
+
+.btn-reservar-oferta:hover {
+    background: #ff5a36;
+
+    border-color: #ff5a36;
+
+    color: #ffffff;
+}
+
+.btn-reservar-oferta i {
+    transition: transform 0.25s ease;
+}
+
+.btn-reservar-oferta:hover i {
+    transform: translateX(4px);
+}
+
+
+/* =========================================================
+   SIN RESULTADOS
+========================================================= */
+
+.sin-resultados-ofertas {
+    padding: 70px 20px;
+
+    text-align: center;
+
+    color: #8d96a5;
+}
+
+.sin-resultados-ofertas i {
+    margin-bottom: 15px;
+
+    color: #ff5a36;
+
+    font-size: 38px;
+}
+
+.sin-resultados-ofertas h3 {
+    margin: 0 0 8px;
+
+    color: #ffffff;
+
+    font-family: 'Outfit', sans-serif;
+}
+
+.sin-resultados-ofertas p {
+    margin: 0;
+
+    font-size: 12px;
+}
+
+
+/* =========================================================
+   CTA
+========================================================= */
+
+.cta-ofertas {
+    padding: 80px 0;
+
+    border-top: 1px solid rgba(255,255,255,0.07);
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(255,90,54,0.13),
+            rgba(255,90,54,0.03)
+        );
+}
+
+.contenido-cta-ofertas {
+    text-align: center;
+}
+
+.contenido-cta-ofertas > span {
+    color: #ff5a36;
+
+    font-size: 10px;
+
+    font-weight: 800;
+
+    letter-spacing: 1.5px;
+}
+
+.contenido-cta-ofertas h2 {
+    max-width: 700px;
+
+    margin: 12px auto;
+
+    font-family: 'Outfit', sans-serif;
+
+    font-size: clamp(30px, 4vw, 44px);
+}
+
+.contenido-cta-ofertas p {
+    margin: 0 auto 25px;
+
+    color: #8d96a5;
+
+    font-size: 13px;
+}
+
+.boton-cta-ofertas {
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 9px;
+
+    padding: 14px 22px;
+
+    border-radius: 10px;
+
+    background: #ff5a36;
+
+    color: #ffffff;
+
+    text-decoration: none;
+
+    font-size: 11px;
+
+    font-weight: 800;
+
+    transition: 0.25s ease;
+}
+
+.boton-cta-ofertas:hover {
+    background: #e94725;
+
+    transform: translateY(-2px);
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 1000px) {
+
+    .grid-ofertas {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .beneficios-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .beneficio-oferta {
+        border-right: 0;
+
+        border-bottom: 1px solid rgba(255,255,255,0.07);
+    }
+
+    .beneficio-oferta:last-child {
+        border-bottom: 0;
+    }
+
+}
+
+
+@media (max-width: 700px) {
+
+    .hero-ofertas {
+        min-height: 400px;
+    }
+
+    .hero-ofertas h1 {
+        font-size: 40px;
+    }
+
+    .cabecera-seccion-ofertas {
+        display: block;
+    }
+
+    .cabecera-seccion-ofertas p {
+        margin-top: 15px;
+    }
+
+    .grid-ofertas {
+        grid-template-columns: 1fr;
+    }
+
+    .imagen-oferta {
+        height: 240px;
+    }
+
+}
+
+
+@media (max-width: 450px) {
+
+    .hero-ofertas h1 {
+        font-size: 35px;
+    }
+
+    .seccion-lista-ofertas {
+        padding: 60px 0;
+    }
+
+    .contenido-tarjeta-oferta {
+        padding: 19px;
+    }
+
+    .precios-oferta {
+        flex-direction: column;
+
+        align-items: flex-start;
+    }
+
+}
