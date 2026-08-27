@@ -484,3 +484,29 @@
 .text-left { text-align: left; }
 .mt-15 { margin-top: 15px; }
 .mt-20 { margin-top: 20px; }
+
+/* =========================================================
+   OFERTAS EN RESERVA
+========================================================= */
+
+#fila-precio-normal {
+    display: none;
+}
+
+#fila-descuento {
+    display: none;
+}
+
+.precio-tachado {
+    color: #8d96a5;
+    text-decoration: line-through;
+}
+
+.precio-descuento {
+    color: #39c47a;
+    font-weight: 700;
+}
+
+#fila-descuento {
+    color: #39c47a;
+}
