@@ -63,6 +63,11 @@
     .grid-inputs {
         grid-template-columns: 1fr 1fr;
     }
+    
+    /* Nueva clase para inputs que ocupen todo el ancho */
+    .col-completa {
+        grid-column: 1 / -1;
+    }
 }
 
 .grupo-input {
@@ -71,13 +76,17 @@
     gap: 8px;
 }
 
-.grupo-input label {
+.grupo-input label,
+.grupo-campo label {
     font-size: 0.9rem;
     font-weight: 600;
     color: var(--texto-gris);
 }
 
-.grupo-input input {
+/* Ahora aplica a inputs y selectores */
+.grupo-input input,
+.grupo-input select,
+.campo-input select {
     background-color: var(--fondo-principal);
     border: 1px solid var(--borde-oscuro);
     color: var(--color-blanco);
@@ -87,10 +96,70 @@
     font-size: 1rem;
     outline: none;
     transition: border-color 0.3s;
+    width: 100%;
 }
 
-.grupo-input input:focus {
+/* Evitar flechas nativas feas en los select */
+.grupo-input select,
+.campo-input select {
+    cursor: pointer;
+}
+
+.grupo-input input:focus,
+.grupo-input select:focus,
+.campo-input select:focus {
     border-color: var(--color-naranja);
+}
+
+/* Selectores con iconos integrados */
+.grupo-campo {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.campo-input {
+    position: relative;
+}
+
+.campo-input i {
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--color-naranja);
+    pointer-events: none;
+}
+
+.campo-input select {
+    padding-left: 45px; /* Espacio para el icono */
+}
+
+/* Botón Validar Datos */
+.validar-datos {
+    margin-top: 25px;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.boton-validar {
+    background-color: transparent;
+    border: 1px solid var(--color-naranja);
+    color: var(--color-naranja);
+    padding: 12px 25px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.boton-validar:hover {
+    background-color: var(--color-naranja);
+    color: var(--color-blanco);
 }
 
 /* Opciones de pago */
@@ -123,7 +192,7 @@
     cursor: pointer;
 }
 
-.radio-pago span {
+.contenido-radio-pago {
     display: flex;
     justify-content: space-between;
     width: 100%;
@@ -132,9 +201,10 @@
     color: var(--color-blanco);
 }
 
-.radio-pago span i {
-    font-size: 1.5rem;
-    color: var(--texto-gris);
+.logo-metodo-pago {
+    height: 24px;
+    object-fit: contain;
+    border-radius: 4px;
 }
 
 /* Botón ancho completo */
@@ -143,7 +213,18 @@
     justify-content: center;
     padding: 18px;
     font-size: 1.2rem;
-    margin-top: 10px;
+    font-family: 'Outfit', sans-serif;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    border-radius: 8px;
+    background-color: var(--color-naranja);
+    color: var(--color-blanco);
+    transition: background-color 0.3s;
+}
+
+.boton-bloque:hover {
+    background-color: #e05e1b;
 }
 
 /* =========================================
@@ -169,6 +250,7 @@
     font-family: 'Outfit', sans-serif;
     font-size: 1.3rem;
     margin-bottom: 5px;
+    color: var(--color-blanco);
 }
 
 .detalles-reserva-lista {
@@ -243,3 +325,172 @@
     font-size: 1.8rem;
     color: var(--color-naranja);
 }
+
+/* =========================================
+   MODALES DE PAGO (NUEVO)
+========================================= */
+
+.contenedor-modales-pago {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none; /* Permite clickear la página de fondo si están ocultos */
+    z-index: 1000;
+}
+
+.modal-pago {
+    pointer-events: auto;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(4px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+.modal-pago.oculto {
+    display: none;
+}
+
+.modal-pago-contenido {
+    background-color: var(--fondo-tarjeta);
+    border: 1px solid var(--borde-oscuro);
+    border-radius: 12px;
+    padding: 30px;
+    width: 100%;
+    max-width: 500px;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+.modal-pago-cabecera {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    border-bottom: 1px solid var(--borde-oscuro);
+    padding-bottom: 15px;
+}
+
+.modal-pago-cabecera h4 {
+    font-family: 'Outfit', sans-serif;
+    font-size: 1.3rem;
+    color: var(--color-blanco);
+}
+
+.btn-cerrar-modal {
+    background: none;
+    border: none;
+    color: var(--texto-gris);
+    font-size: 1.5rem;
+    cursor: pointer;
+    transition: color 0.3s;
+}
+
+.btn-cerrar-modal:hover {
+    color: var(--color-naranja);
+}
+
+/* Elementos dentro del modal */
+.tarjeta-visa {
+    max-width: 200px;
+    margin: 0 auto 20px;
+    display: block;
+    border-radius: 8px;
+}
+
+.logo-modal {
+    max-width: 130px;
+    margin: 0 auto 15px;
+    display: block;
+}
+
+.qr-placeholder {
+    background-color: white;
+    padding: 15px;
+    border-radius: 12px;
+    display: inline-block;
+    margin-bottom: 15px;
+}
+
+.qr-imagen {
+    width: 180px;
+    height: 180px;
+    object-fit: contain;
+}
+
+.info-titular {
+    color: var(--color-blanco);
+    font-size: 1.1rem;
+    margin-bottom: 20px;
+    line-height: 1.5;
+}
+
+.texto-instruccion {
+    color: var(--texto-gris);
+    font-size: 0.95rem;
+    margin-bottom: 20px;
+    line-height: 1.5;
+}
+
+.input-archivo {
+    margin-top: 5px;
+    font-size: 0.9rem;
+    color: var(--texto-gris);
+}
+
+.vista-previa-imagen {
+    max-width: 100%;
+    margin-top: 15px;
+    border-radius: 8px;
+    border: 1px dashed var(--borde-oscuro);
+}
+
+/* Modal Exito (Animación) */
+.icono-exito {
+    font-size: 4.5rem;
+    color: #10b981; /* Verde éxito */
+    margin-bottom: 15px;
+}
+
+.titulo-exito {
+    font-family: 'Outfit', sans-serif;
+    font-size: 1.6rem;
+    color: var(--color-blanco);
+    margin-bottom: 10px;
+}
+
+.texto-validacion {
+    color: var(--texto-gris);
+    margin-bottom: 25px;
+    line-height: 1.5;
+}
+
+.cargando-spinner {
+    border: 4px solid var(--borde-oscuro);
+    border-top: 4px solid var(--color-naranja);
+    border-radius: 50%;
+    width: 45px;
+    height: 45px;
+    animation: girar 1s linear infinite;
+    margin: 0 auto 20px;
+}
+
+@keyframes girar {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Utilidades para los modales */
+.text-center { text-align: center; }
+.text-left { text-align: left; }
+.mt-15 { margin-top: 15px; }
+.mt-20 { margin-top: 20px; }
