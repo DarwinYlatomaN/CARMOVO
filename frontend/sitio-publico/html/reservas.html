@@ -14,11 +14,13 @@
     <link rel="stylesheet" href="../css/paginas/reserva.css">
 </head>
 <body>
-    
+    <!-- CABECERA -->
     <header class="cabecera">
         <div class="cabecera-superior contenedor">
             <div class="caja-logo">
-                <div class="logo-icono"><img src="../recursos/imagenes/home/logo-carmovo4.jpg" alt="logo-carmovo"></div>
+                <div class="logo-icono">
+                    <img src="../recursos/imagenes/home/logo-carmovo4.jpg" alt="logo-carmovo">
+                </div>
                 <div class="logo-texto">
                     <span class="logo-titulo">!Conduce Hoy!</span>
                     <span class="logo-subtitulo">La llave de tu próxima aventura</span>
@@ -30,7 +32,6 @@
                     <input type="text" class="campo-busqueda" id="inputBusqueda" placeholder="Buscar tu compañero de aventura">
                     <button type="submit" class="boton-buscar">Buscar</button>
                 </div>
-
                 <div id="modalResultados" class="modal-resultados oculto">
                     <ul id="listaCoincidencias"></ul>
                 </div>
@@ -42,7 +43,6 @@
                     <i class="fa-solid fa-phone-volume"></i> 927357060
                 </a>
                 <a href="miCuenta.html" class="boton-login">Iniciar sesión</a>
-                
                 <button class="menu-toggle oculto-desktop" id="btnMenu" aria-label="Abrir menú de navegación">
                     <i class="fa-solid fa-bars"></i>
                 </button>
@@ -62,6 +62,7 @@
         </nav>
     </header>
 
+    <!-- CONTENIDO PRINCIPAL -->
     <main class="contenido-principal contenedor">
         <div class="cabecera-reservas">
             <h2>Completa tu Reserva</h2>
@@ -69,27 +70,70 @@
         </div>
 
         <div class="contenedor-reserva-layout">
-            <!-- Columna Izquierda: Formulario de Datos -->
             <section class="seccion-formulario-reserva">
                 <form id="formFinalizarReserva" class="formulario-datos">
                     <div class="tarjeta-reserva">
-                        <div class="tarjeta-reserva">
                         <h3>1. Detalles del Alquiler</h3>
                         <div class="grid-inputs">
                             <div class="grupo-input">
                                 <label for="selector-auto">Vehículo seleccionado</label>
                                 <select id="selector-auto" required>
                                     <option value="">-- Selecciona un auto --</option>
-                                    <!-- Las opciones se llenarán con JavaScript -->
                                 </select>
                             </div>
                             <div class="grupo-input">
                                 <label for="dias-alquiler">Cantidad de días</label>
-                                <input type="number" id="dias-alquiler" min="1" max="30" value="4" required>
+                                <input type="number" id="dias-alquiler" min="1" max="30" value="1" required>
                             </div>
-                        </div>
+                            <div class="grupo-input">
+                                <div class="grupo-campo">
+                                    <label>Lugar de recogida</label>
+                                    <div class="campo-input">
+                                        <i class="fa-solid fa-location-dot"></i>
+                                        <select required>
+                                            <option value="" disabled selected>Selecciona sede de recogida</option>
+                                            <option value="lima-miraflores">Lima - Miraflores</option>
+                                            <option value="lima-aeropuerto">Lima - Aeropuerto Jorge Chávez</option>
+                                            <option value="chiclayo">Chiclayo, Lambayeque</option>
+                                            <option value="trujillo">Trujillo, La Libertad</option>
+                                            <option value="piura">Piura, Piura</option>
+                                            <option value="arequipa">Arequipa, Arequipa</option>
+                                            <option value="cusco">Cusco, Cusco</option>
+                                            <option value="cajamarca">Cajamarca, Cajamarca</option>
+                                            <option value="tarapoto">Tarapoto, San Martín</option>
+                                            <option value="iquitos">Iquitos, Loreto</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                                <div class="grupo-input">
+                                        <div class="grupo-campo">
+                                        <label>Lugar de entrega</label>
+                                        <div class="campo-input">
+                                            <i class="fa-solid fa-location-dot"></i>
+                                            <select required>
+                                                <option value="" disabled selected>Selecciona sede de entrega</option>
+                                                <option value="lima-miraflores">Lima - Miraflores</option>
+                                                <option value="lima-aeropuerto">Lima - Aeropuerto Jorge Chávez</option>
+                                                <option value="chiclayo">Chiclayo, Lambayeque</option>
+                                                <option value="trujillo">Trujillo, La Libertad</option>
+                                                <option value="piura">Piura, Piura</option>
+                                                <option value="arequipa">Arequipa, Arequipa</option>
+                                                <option value="cusco">Cusco, Cusco</option>
+                                                <option value="cajamarca">Cajamarca, Cajamarca</option>
+                                                <option value="tarapoto">Tarapoto, San Martín</option>
+                                                <option value="iquitos">Iquitos, Loreto</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                
+                         </div>
                     </div>
-                        <h3>1. Datos del Conductor</h3>
+
+                    <div class="tarjeta-reserva">
+                        <h3>2. Datos del Conductor</h3>
                         <div class="grid-inputs">
                             <div class="grupo-input">
                                 <label for="nombre">Nombre</label>
@@ -100,8 +144,24 @@
                                 <input type="text" id="apellidos" placeholder="Tus apellidos" required>
                             </div>
                             <div class="grupo-input">
+                                <label for="nacimiento">Fecha de Nacimiento</label>
+                                <input type="text" id="nacimiento" placeholder="Fecha de Nacimiento" required>
+                            </div>
+                            <div class="grupo-input">
                                 <label for="correo">Correo Electrónico</label>
-                                <input type="email" id="correo" placeholder="ejemplo@correo.com" required>
+                                <input type="email" id="correo" placeholder="Correo Electrónico" required>
+                            </div>
+                            <div class="grupo-input">
+                                <label for="licencia">Número de Licencia</label>
+                                <input type="text" id="licencia" placeholder="Número de Licencia" required>
+                            </div>
+                            <div class="grupo-input">
+                                <label for="categoria">Categoría de Licencia</label>
+                                <input type="text" id="categoria" placeholder="Categoría de Licencia" required>
+                            </div>
+                            <div class="grupo-input">
+                                <label for="fecha-vence-licencia">Fecha de vencimiento de Licencia</label>
+                                <input type="text" id="fecha-vence-licencia" placeholder="Validar fecha" required>
                             </div>
                             <div class="grupo-input">
                                 <label for="telefono">Teléfono</label>
@@ -109,30 +169,91 @@
                             </div>
                             <div class="grupo-input">
                                 <label for="documento">DNI / Pasaporte</label>
-                                <input type="text" id="documento" placeholder="Número de documento" required>
+                                <input type="text" id="documento" placeholder="Número de documento" minlength="8" maxlength="9" value="" required>
                             </div>
+                            
+                            <div class="grupo-input col-completa">
+                                <label for="domicilio">Domicilio del solicitante (Calle / Urbanización)</label>
+                                <input type="text" id="domicilio" placeholder="Ej: Av. Balta 123, Urb. La Primavera" required>
+                            </div>
+
+                            <!-- Selector Múltiple: Departamento, Provincia y Distrito -->
+                            <div class="grupo-input">
+                                <label for="departamento">Departamento</label>
+                                <select id="departamento" required>
+                                    <option value="">Selecciona departamento</option>
+                                    <option value="Lambayeque">Lambayeque</option>
+                                    <option value="La Libertad">La Libertad</option>
+                                    <option value="Lima">Lima</option>
+                                    <!-- Se llenará dinámicamente con la API -->
+                                </select>
+                            </div>
+
+                            <div class="grupo-input">
+                                <label for="provincia">Provincia</label>
+                                <select id="provincia" required>
+                                    <option value="">Selecciona provincia</option>
+                                    <option value="Chiclayo">Chiclayo</option>
+                                    <option value="San Pedro de Lloc">San Pedro de LLoc</option>
+                                    <option value="San Antonio">San Antonio</option>
+                                    <!-- Se filtrará/llenará con la API -->
+                                </select>
+                            </div>
+
+                            <div class="grupo-input">
+                                <label for="distrito">Distrito</label>
+                                <select id="distrito" required>
+                                    <option value="">Selecciona distrito</option>
+                                    <option value="Chiclayo">La Victoria</option>
+                                    <option value="Pacasmayo">Pacasmayo</option>
+                                    <option value="Miraflores">Miraflores</option>
+                                    <!-- Se filtrará/llenará con la API -->
+                                </select>
+                            </div>
+                        </div>
+                        <div class="validar-datos">
+                            <button type="button" id="btn-validar-conductor" class="boton-validar">
+                                <i class="fa-solid fa-user-check"></i> <span>Validar Datos</span>
+                            </button>
                         </div>
                     </div>
 
                     <div class="tarjeta-reserva">
-                        <h3>2. Método de Pago</h3>
+                        <h3>3. Método de Pago</h3>
                         <div class="opciones-pago">
                             <label class="radio-pago">
-                                <input type="radio" name="pago" value="tarjeta" checked>
-                                <span>Tarjeta de Crédito / Débito <i class="fa-regular fa-credit-card"></i></span>
+                                <input type="radio" name="pago" value="tarjeta" data-modal="modal-tarjeta">
+                                <span class="contenido-radio-pago">
+                                    Tarjeta de Crédito / Débito
+                                    <img src="../recursos/pagos/visa.jpg" alt="Tarjetas" class="logo-metodo-pago">
+                                </span>
                             </label>
                             <label class="radio-pago">
-                                <input type="radio" name="pago" value="paypal">
-                                <span>PayPal <i class="fa-brands fa-paypal"></i></span>
+                                <input type="radio" name="pago" value="paypal" data-modal="modal-paypal">
+                                <span class="contenido-radio-pago">
+                                    PayPal
+                                    <img src="../recursos/pagos/Pay-Pal.webp" alt="PayPal" class="logo-metodo-pago">
+                                </span>
+                            </label>
+                            <label class="radio-pago">
+                                <input type="radio" name="pago" value="yape" data-modal="modal-yape">
+                                <span class="contenido-radio-pago">
+                                    Yape
+                                    <img src="../recursos/pagos/yape.png" alt="Yape" class="logo-metodo-pago">
+                                </span>
+                            </label>
+                            <label class="radio-pago">
+                                <input type="radio" name="pago" value="plin" data-modal="modal-plin">
+                                <span class="contenido-radio-pago">
+                                    Plin
+                                    <img src="../recursos/pagos/plin.jpg" alt="Plin" class="logo-metodo-pago">
+                                </span>
                             </label>
                         </div>
                     </div>
-
-                    <button type="submit" class="boton-accion-naranja boton-bloque">Confirmar Reserva y Pagar <i class="fa-solid fa-check"></i></button>
                 </form>
             </section>
-
-            <!-- Columna Derecha: Resumen de Reserva -->
+            
             <aside class="seccion-resumen-reserva">
                 <div class="tarjeta-reserva resumen">
                     <h3>Resumen de tu alquiler</h3>
@@ -166,7 +287,7 @@
 
                     <div class="desglose-precio">
                         <div class="precio-item">
-                            <span id="etiqueta-dias">Tarifa base (4 días)</span>
+                            <span id="etiqueta-dias">Tarifa base (1 días)</span>
                             <span id="resumen-tarifa-base">S/ 0.00</span>
                         </div>
                         <div class="precio-item">
@@ -187,6 +308,141 @@
         </div>
     </main>
 
+    <!-- MODALES DE PAGO -->
+    <div class="contenedor-modales-pago">
+        
+        <div id="modal-tarjeta" class="modal-pago oculto">
+            <div class="modal-pago-contenido">
+                <div class="modal-pago-cabecera">
+                    <h4>Detalles de Tarjeta</h4>
+                    <button type="button" class="btn-cerrar-modal"><i class="fa-solid fa-xmark"></i></button>
+                </div>
+                <div class="pago-tarjeta">
+                    <img src="../recursos/pagos/visa.jpg" alt="tarjeta " class="tarjeta-visa">
+                </div>
+                <div class="grid-inputs">
+                    <div class="grupo-input col-completa">
+                        <label>Número de Tarjeta</label>
+                        <input type="text" placeholder="0000 0000 0000 0000" maxlength="19">
+                    </div>
+                    <div class="grupo-input col-completa">
+                        <label>Titular de la Tarjeta</label>
+                        <input type="text" class="titular-auto-relleno" placeholder="Nombre completo">
+                    </div>
+                    <div class="grupo-input">
+                        <label>Vencimiento</label>
+                        <input type="text" placeholder="MM/AA" maxlength="5">
+                    </div>
+                    <div class="grupo-input">
+                        <label>CVV</label>
+                        <input type="password" placeholder="123" maxlength="4">
+                    </div>
+                    <div class="grupo-input col-completa mt-15">
+                        <label>Adjuntar foto del plástico (Opcional)</label>
+                        <input type="file" accept="image/*" class="input-archivo">
+                        <img class="vista-previa-imagen oculto" src="" alt="Vista previa">
+                    </div>
+                </div>
+                <button type="button" class="boton-accion-naranja boton-bloque btn-guardar-modal mt-20">Confirmar Pago con Tarjeta</button>
+            </div>
+        </div>
+
+        <div id="modal-paypal" class="modal-pago oculto">
+            <div class="modal-pago-contenido text-center">
+                <div class="modal-pago-cabecera">
+                    <h4>Conectar con PayPal</h4>
+                    <button type="button" class="btn-cerrar-modal"><i class="fa-solid fa-xmark"></i></button>
+                </div>
+                <img src="../recursos/pagos/Pay-pal.webp" alt="PayPal" class="logo-modal">
+                <p class="texto-instruccion">Serás redirigido a la plataforma segura de PayPal para completar tu pago al confirmar la reserva.</p>
+                <div class="grupo-input text-left">
+                    <label>Nombre del titular de la cuenta</label>
+                    <input type="text" class="titular-auto-relleno" placeholder="Nombre completo">
+                </div>
+                <div class="grupo-input text-left mt-15">
+                    <label>Correo de cuenta PayPal</label>
+                    <input type="email" placeholder="correo@ejemplo.com">
+                </div>
+                <div class="grupo-input text-left mt-15">
+                    <label>Adjuntar captura de pago (Si ya realizaste transferencia)</label>
+                    <input type="file" accept="image/*" class="input-archivo">
+                    <img class="vista-previa-imagen oculto" src="" alt="Vista previa">
+                </div>
+                <button type="button" class="boton-accion-naranja boton-bloque btn-guardar-modal mt-20">Confirmar Pago Pay-Pal</button>
+            </div>
+        </div>
+
+        <div id="modal-yape" class="modal-pago oculto">
+            <div class="modal-pago-contenido text-center">
+                <div class="modal-pago-cabecera">
+                    <h4>Pago con Yape</h4>
+                    <button type="button" class="btn-cerrar-modal"><i class="fa-solid fa-xmark"></i></button>
+                </div>
+                <div class="qr-placeholder bg-yape">
+                    <img src="../recursos/pagos/yape.png" alt="QR Yape" class="qr-imagen">
+                </div>
+                <p class="info-titular">Titular: CARMOVE S.A.C.<br>Número: 927 357 060</p>
+                <div class="grupo-input text-left">
+                    <label>Nombre de quien transfiere</label>
+                    <input type="text" class="titular-auto-relleno" placeholder="Nombre completo">
+                </div>
+                <div class="grupo-input text-left mt-15">
+                    <label>Número de Operación / Aprobación</label>
+                    <input type="text" placeholder="Ej: 12345678">
+                </div>
+                <div class="grupo-input text-left mt-15">
+                    <label>Adjuntar comprobante Yape</label>
+                    <input type="file" accept="image/*" class="input-archivo">
+                    <img class="vista-previa-imagen oculto" src="" alt="Vista previa">
+                </div>
+                <button type="button" class="boton-accion-naranja boton-bloque btn-guardar-modal mt-20">Confirmar Pago Yape</button>
+            </div>
+        </div>
+
+        <div id="modal-plin" class="modal-pago oculto">
+            <div class="modal-pago-contenido text-center">
+                <div class="modal-pago-cabecera">
+                    <h4>Pago con Plin</h4>
+                    <button type="button" class="btn-cerrar-modal"><i class="fa-solid fa-xmark"></i></button>
+                </div>
+                <div class="qr-placeholder bg-plin">
+                    <img src="../recursos/pagos/plin.jpg" alt="QR Plin" class="qr-imagen">
+                </div>
+                <p class="info-titular">Titular: CARMOVE S.A.C.<br>Número: 927 357 060</p>
+                <div class="grupo-input text-left">
+                    <label>Nombre de quien transfiere</label>
+                    <input type="text" class="titular-auto-relleno" placeholder="Nombre completo">
+                </div>
+                <div class="grupo-input text-left mt-15">
+                    <label>Número de Operación / Aprobación</label>
+                    <input type="text" placeholder="Ej: 12345678">
+                </div>
+                <div class="grupo-input text-left mt-15">
+                    <label>Adjuntar comprobante Plin</label>
+                    <input type="file" accept="image/*" class="input-archivo">
+                    <img class="vista-previa-imagen oculto" src="" alt="Vista previa">
+                </div>
+                <button type="button" class="boton-accion-naranja boton-bloque btn-guardar-modal mt-20">Confirmar Pago Plin</button>
+            </div>
+        </div>
+        
+        <div id="modal-pago-exito" class="modal-pago oculto">
+            <div class="modal-pago-contenido text-center">
+                <div class="icono-exito">
+                    <i class="fa-solid fa-circle-check"></i>
+                </div>
+                <h4 class="titulo-exito">¡Pago Realizado, <span id="nombre-exito"></span>!</h4>
+                <p class="texto-validacion">
+                    Nuestro equipo validará el pago.<br>Espere un momento, por favor...
+                </p>
+                <div class="cargando-spinner"></div>
+                <button type="button" class="boton-accion-naranja boton-bloque btn-cerrar-exito mt-20">Entendido</button>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- PIE DE PÁGINA -->
     <footer class="pie-pagina contenedor">
         <div class="pie-columna-izq">
             <h4>!Construyamos una aventura asombrosa!.</h4>
@@ -207,5 +463,6 @@
     </footer>
 
     <script src="../js/db y app-categorias/db.js"></script>
-    <script src="../js/paginas/reserva.pagina.js"></script></body>
+    <script src="../js/paginas/reserva.pagina.js"></script>
+</body>
 </html>

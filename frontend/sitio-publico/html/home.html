@@ -8,7 +8,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
     <link rel="stylesheet" href="../css/paginas/home.css">
-    <link rel ="stylesheet" href="../css/responsive.css">
+    <link rel="stylesheet" href="../css/responsive.css">
 </head>
 <body>
     <header class="cabecera">
@@ -21,9 +21,8 @@
                 </div>
             </div>
 
-         
             <div class="contenedor-buscador-principal">
-                <div class ="barra-busqueda" id="formBusqueda">
+                <div class="barra-busqueda" id="formBusqueda">
                     <input type="text" class="campo-busqueda" id="inputBusqueda" placeholder="Buscar tu compañero de aventura">
                     <button type="submit" class="boton-buscar">Buscar</button>
                 </div>
@@ -33,7 +32,6 @@
                 </div>
                 <div class="mensaje-error" id="errorBusqueda"></div>
             </div>
-          
 
             <div class="cabecera-acciones">
                 <a href="#" class="enlace-telefono">
@@ -62,9 +60,7 @@
 
     <main class="contenido-principal contenedor">
         <section class="seccion-hero">
-             <div class="hero-textos">
-                
-            
+            <div class="hero-textos">
                 <h1 class="titulo-principal">
                     Mueve momentos, crea recuerdos.<br>
                     Tu auto listo para la <span class="texto-resaltado">próxima aventura.</span>
@@ -72,66 +68,78 @@
                 <p class="descripcion-hero">
                     En Carmovo ofrecemos una flota preparada, atención cercana y asistencia 24/7 para que cada viaje se convierta en una historia inolvidable.
                 </p>
-             </div>
-             
-             <div class="hero-imagen-caja">
-    
-               
+            </div>
+            
+            <div class="hero-imagen-caja">
                 <video class="video-fondo-pantalla" autoplay loop muted playsinline>
                     <source src="../recursos/imagenes/home/video-auto.mp4" type="video/mp4">
                 </video>
-    
-    <!-- Filtro oscuro para no perder legibilidad en el texto -->
-    <div class="capa-oscura-video"></div>
-             </div>
+                <!-- Filtro oscuro para no perder legibilidad en el texto -->
+                <div class="capa-oscura-video"></div>
+            </div>
         </section>
 
- 
         <div class="contenedor-reserva-flotante">
             <form id="formReserva" class="formulario-reservas">
                 <div class="grupo-campo">
                     <label>Lugar de recogida</label>
                     <div class="campo-input">
                         <i class="fa-solid fa-location-dot"></i>
-                        <select>
-                            <option>Chiclayo, Lambayeque</option>
+                        <select required>
+                            <option value="" disabled selected>Selecciona sede de recogida</option>
+                            <option value="lima-miraflores">Lima - Miraflores</option>
+                            <option value="lima-aeropuerto">Lima - Aeropuerto Jorge Chávez</option>
+                            <option value="chiclayo">Chiclayo, Lambayeque</option>
+                            <option value="trujillo">Trujillo, La Libertad</option>
+                            <option value="piura">Piura, Piura</option>
+                            <option value="arequipa">Arequipa, Arequipa</option>
+                            <option value="cusco">Cusco, Cusco</option>
+                            <option value="cajamarca">Cajamarca, Cajamarca</option>
+                            <option value="tarapoto">Tarapoto, San Martín</option>
+                            <option value="iquitos">Iquitos, Loreto</option>
                         </select>
                     </div>
                 </div>
-                
+
                 <div class="separador-vertical"></div>
-                
+
                 <div class="grupo-campo">
                     <label>Lugar de entrega</label>
                     <div class="campo-input">
                         <i class="fa-solid fa-location-dot"></i>
-                        <select>
-                            <option>Trujillo, La Libertad</option>
+                        <select required>
+                            <option value="" disabled selected>Selecciona sede de entrega</option>
+                            <option value="lima-miraflores">Lima - Miraflores</option>
+                            <option value="lima-aeropuerto">Lima - Aeropuerto Jorge Chávez</option>
+                            <option value="chiclayo">Chiclayo, Lambayeque</option>
+                            <option value="trujillo">Trujillo, La Libertad</option>
+                            <option value="piura">Piura, Piura</option>
+                            <option value="arequipa">Arequipa, Arequipa</option>
+                            <option value="cusco">Cusco, Cusco</option>
+                            <option value="cajamarca">Cajamarca, Cajamarca</option>
+                            <option value="tarapoto">Tarapoto, San Martín</option>
+                            <option value="iquitos">Iquitos, Loreto</option>
                         </select>
                     </div>
                 </div>
-                
+
                 <div class="separador-vertical"></div>
-                
+
                 <div class="grupo-campo">
                     <label>Fecha de recogida</label>
                     <div class="campo-input">
                         <i class="fa-regular fa-calendar"></i>
-                        <select>
-                            <option>20 May, 2025</option>
-                        </select>
+                        <input type="date" value="2025-05-20" required>
                     </div>
                 </div>
-                
+
                 <div class="separador-vertical"></div>
-                
+
                 <div class="grupo-campo">
                     <label>Fecha de entrega</label>
                     <div class="campo-input">
                         <i class="fa-regular fa-calendar"></i>
-                        <select>
-                            <option>24 May, 2025</option>
-                        </select>
+                        <input type="date" value="2025-05-24" required>
                     </div>
                 </div>
                 
@@ -140,7 +148,6 @@
         </div>
 
         <section class="seccion-caracteristicas">
-        
             <h2 class="titulo-seccion-caracteristicas">Por qué los clientes aman Carmovo</h2>
             
             <div class="grid-beneficios">
@@ -175,17 +182,14 @@
             </div>
         </section>
     </main>
-    
 
     <footer class="pie-pagina contenedor">
         <div class="pie-columna-izq">
             <h4>!Construyamos una aventura asombrosa!.</h4>
-           
         </div>
         <div class="pie-columna-centro">
             <p>Correo:</p>
             <a href="#"><i class="fa-regular fa-envelope"></i> soporte_carmovo@gmail.com</a>
-          
         </div>
         <div class="pie-columna-der">
             <p>Síguenos en redes</p>
@@ -197,5 +201,7 @@
             </div>
         </div>
     </footer>
+
+    
 </body>
 </html>
