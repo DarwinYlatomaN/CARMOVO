@@ -12,8 +12,8 @@
     
     <link rel="stylesheet" href="../css/responsive.css">
     <link rel="stylesheet" href="../css/paginas/home.css">
-    
-  
+    <link rel="stylesheet" href="../css/paginas/miCuenta.css">
+
     <link rel="stylesheet" href="../css/paginas/categorias.css">
 </head>
 <body>
@@ -65,9 +65,200 @@
             </ul>
         </nav>
     </header>
+    <main class="contenido-principal contenedor">
+        <div class="cabecera-cuenta">
+            <h2>Panel de Usuario</h2>
+            <p>Gestiona tu información personal y revisa el estado de tus alquileres.</p>
+        </div>
 
-    
-    
+        <div class="cuenta-grid-layout">
+            
+            <!-- SECCIÓN 1: PERFIL Y DATOS DEL CONDUCTOR -->
+            <section class="tarjeta-cuenta perfil-conductor">
+                <div class="perfil-cabecera">
+                    <div class="avatar-usuario">
+                        <i class="fa-solid fa-user-shield"></i>
+                    </div>
+                    <div class="info-principal-usuario">
+                        <h3 id="lbl-nombre-completo">Shark 4.0</h3>
+                        <p id="lbl-correo">darvinyl@ejemplo.com</p>
+                    </div>
+                    <!-- Botón de Engranaje para Editar -->
+                    <button type="button" id="btn-editar-perfil" class="btn-engranaje" title="Editar Información">
+                        <i class="fa-solid fa-gear"></i>
+                    </button>
+                </div>
+
+                
+
+                <h4>Información Completa del Conductor</h4>
+                <div class="grid-datos-usuario">
+                    <div class="item-dato">
+                        <span class="label">Teléfono:</span>
+                        <span class="valor" id="lbl-telefono">5616846</span>
+                    </div>
+                    <div class="item-dato">
+                        <span class="label">DNI / Pasaporte:</span>
+                        <span class="valor" id="lbl-documento">789654</span>
+                    </div>
+                    <div class="item-dato">
+                        <span class="label">Fecha de Nacimiento:</span>
+                        <span class="valor" id="lbl-nacimiento">12/05/1998</span>
+                    </div>
+                    <div class="item-dato">
+                        <span class="label">N° de Licencia:</span>
+                        <span class="valor" id="lbl-licencia">Q-89237461</span>
+                    </div>
+                    <div class="item-dato">
+                        <span class="label">Categoría Licencia:</span>
+                        <span class="valor" id="lbl-categoria">A-I</span>
+                    </div>
+                    <div class="item-dato">
+                        <span class="label">Vencimiento Licencia:</span>
+                        <span class="valor" id="lbl-vence">15/10/2030</span>
+                    </div>
+                    <div class="item-dato col-completa">
+                        <span class="label">Domicilio:</span>
+                        <span class="valor" id="lbl-domicilio">Av. Balta 123, Urb. La Primavera, Chiclayo</span>
+                    </div>
+                </div>
+            </section>
+
+      
+            <section class="tarjeta-cuenta estado-reserva">
+                <h3>Estado de tu Reserva y Pago</h3>
+                
+              
+                <div class="caja-estado-actual pendiente">
+                    <div class="icono-estado">
+                        <i class="fa-solid fa-clock-rotate-left"></i>
+                    </div>
+                    <div class="detalles-estado">
+                        <span class="etiqueta-estado">Estado Actual:</span>
+                        <h4 id="texto-estado-reserva">En Proceso de Validación</h4>
+                        <p id="mensaje-verificador">Tus datos y comprobante están siendo revisados por nuestro equipo de seguridad.</p>
+                    </div>
+                </div>
+
+                <div class="resumen-alquiler-cuenta">
+                    <h4>Detalles del Alquiler Asociado</h4>
+                    <div class="item-dato">
+                        <span class="label">Vehículo:</span>
+                        <span class="valor">Toyota Hilux 4x4</span>
+                    </div>
+                    <div class="item-dato">
+                        <span class="label">Fechas:</span>
+                        <span class="valor">20 May, 2025 - 24 May, 2025</span>
+                    </div>
+                    <div class="item-dato">
+                        <span class="label">Método de Pago:</span>
+                        <span class="valor">Yape (Comprobante adjunto)</span>
+                    </div>
+                    <div class="item-dato">
+                        <span class="label">Total Pagado:</span>
+                        <span class="valor monto">S/ 480.00</span>
+                    </div>
+                </div>
+            </section>
+
+        </div>
+    </main>
+                <div class="contenedor-modales-pago">
+                    
+                <div id="modal-editar-cuenta" class="modal-pago oculto">
+                    <div class="modal-pago-contenido modal-ancho-personalizado">
+                        
+                        
+                        <div class="modal-pago-cabecera">
+                            <div class="titulo-con-icono">
+                                <i class="fa-solid fa-user-pen"></i>
+                                <h4>Editar Perfil </h4>
+                            </div>
+                            <button type="button" class="btn-cerrar-modal"><i class="fa-solid fa-xmark"></i></button>
+                        </div>
+            
+                        <p class="subtitulo-modal">Actualiza tu información personal y los datos de tu licencia de conducir.</p>
+            
+                        <form id="form-editar-cuenta" class="grid-inputs mt-15">
+                            
+                            <div class="grupo-input">
+                                <label>Nombre</label>
+                                <input type="text" id="edit-nombre" placeholder="Tu nombre" required>
+                            </div>
+            
+                            <div class="grupo-input">
+                                <label>Apellidos</label>
+                                <input type="text" id="edit-apellidos" placeholder="Tus apellidos" required>
+                            </div>
+            
+                            <div class="grupo-input">
+                                <label>Correo Electrónico</label>
+                                <input type="email" id="edit-correo" placeholder="correo@ejemplo.com" required>
+                            </div>
+            
+                            <div class="grupo-input">
+                                <label>Teléfono</label>
+                                <input type="tel" id="edit-telefono" placeholder="Tu número" required>
+                            </div>
+            
+                            <div class="grupo-input">
+                                <label>Fecha de Nacimiento</label>
+                                <input type="date" id="edit-nacimiento" required>
+                            </div>
+            
+                            <div class="grupo-input">
+                                <label>DNI / Pasaporte</label>
+                                <input type="text" id="edit-documento" placeholder="N° de documento" required>
+                            </div>
+            
+                            <div class="grupo-input">
+                                <label>Núm. de Licencia (Brevete)</label>
+                                <input type="text" id="edit-licencia" placeholder="Ej: Q-89237461" required>
+                            </div>
+            
+                            <div class="grupo-input">
+                                <label>Categoría de Licencia</label>
+                                <input type="text" id="edit-categoria" placeholder="Ej: A-I" required>
+                            </div>
+            
+                            <div class="grupo-input">
+                                <label>Vencimiento de Licencia</label>
+                                <input type="date" id="edit-vence" required>
+                            </div>
+            
+                            <div class="grupo-input col-completa">
+                                <label>Domicilio (Calle / Urbanización)</label>
+                                <input type="text" id="edit-domicilio" placeholder="Ej: Av. Balta 123, Urb. La Primavera" required>
+                            </div>
+            
+                            
+                            <div class="grupo-input col-completa mt-20 acciones-modal">
+                                <button type="button" class="boton-secundario-cancelar btn-cerrar-modal">Cancelar</button>
+                                <button type="submit" class="boton-accion-naranja">Guardar Cambios</button>
+                            </div>
+            
+                        </form>
+                    </div>
+                </div>
+                    
+                        <div id="modal-exito-actualizacion" class="modal-pago oculto">
+                            <div class="modal-pago-contenido text-center modal-pequeno">
+                                <div class="icono-exito-verde">
+                                    <i class="fa-solid fa-circle-check"></i>
+                                </div>
+                                <h4 class="titulo-exito-modal">¡Tus datos han sido actualizados con éxito!</h4>
+                                <p class="texto-exito-modal">La información del conductor se guardó correctamente en tu perfil.</p>
+                                <div class="btn-entendido">
+                                    <button type="button" class="boton-accion-naranja boton-bloque mt-20 btn-cerrar-exito-cuenta">Entendido</button>
+                                </div>
+                            </div>
+                        </div>
+                
+            
+            </div>
+                
+                
+                
     <footer class="pie-pagina contenedor">
         <div class="pie-columna-izq">
             <h4>!Construyamos una aventura asombrosa!.</h4>
@@ -86,5 +277,6 @@
             </div>
         </div>
     </footer>
+   <script src="../js/paginas/miCuenta.js"></script>pt>
 </body>
 </html>

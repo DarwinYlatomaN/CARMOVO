@@ -1,0 +1,323 @@
+.cabecera-cuenta {
+    margin:30px 0 20px 0;
+    text-align: left;
+}
+.cabecera-cuenta h2 {
+    color:#ffff;
+    font-size: 2rem;
+    font-family: "Monteserrat",sanserif;
+}
+.cabecera-cuenta p {
+    color:#94a3b8;
+    font-size: 0.95rem;
+}
+.cuenta-grid-layout {
+    display: grid;
+    grid-template-columns: 1.2fr 0.8fr;
+    gap:30px;
+    margin-bottom:50px;
+}
+.tarjeta-cuenta {
+    background-color: #10172a;
+    border-radius: 16px;
+    padding:30px;
+
+}
+.tarjeta-cuenta h3, .tarjeta-cuenta h4 {
+    color:#fff;
+    font-family: "Montserrat",sans-serif;
+    margin-bottom: 20px;
+}
+.perfil-cabecera {
+    display: flex;
+    align-items: center;
+    gap:20px;
+    position: relative;
+
+}
+.avatar-usuario {
+    width: 45px;
+    height: 45px;
+    background: rgba(255, 90, 54, 0.15);
+    border: 2px solid #ff5a36;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color:  #ff5a36;
+    font-size: 1.8rem;
+}
+.info-principal-usuario h3 {
+    margin: 0 0 5px 0;
+    font-size: 1.3rem;
+}
+.info-principal-usuario p {
+    margin: 0;
+    color: #94a3b8;
+    font-size: 0.9rem;
+}
+.btn-engranaje {
+    position: absolute;
+    top:0;
+    right:0;
+    color:#cbd5e1;
+    background-color: #ff5a36;
+    border:none;
+    width:30px;
+    height: 30px;
+    border-radius:50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+
+    
+}
+.btn-engranaje:hover {
+    background-color: #e14d2c;
+    color:#ffff;
+    transform: rotate(90deg);
+
+}
+.grid-datos-usuario {
+    display:grid;
+    grid-template-columns: 1fr 1fr;
+    gap:18px;
+}
+.item-dato {
+    background-color:#121927;
+    padding:12px 15px;
+    border-radius: 10px;
+}
+.item-dato.col-completa {
+    grid-column: span 2;
+}
+.item-dato .label {
+    display:block;
+    color:#94a3b8;
+    font-size: 1.1rem;
+    text-transform:uppercase;
+    margin-bottom:4px;
+}
+.item-dato .valor {
+    color:#fff;
+    font-size: 0.95rem;
+    font-weight: 600;
+}
+.item-dato .valor.monto {
+    color: #ff5a36;
+    font-size:0.95rem;
+}
+.caja-estado-actual.pendiente {
+    background: rgba(245, 158, 11, 0.1);
+    border: 3px solid #f59e0b;
+    padding:20px;
+} 
+.caja-estado-actual.pendiente .icono-estado {
+    color: #f59e0b;
+}
+.caja-estado-actual.aceptado {
+    background: rgba(16, 185, 129, 0.1);
+    border: 1px solid rgba(16, 185, 129, 0.3);
+}
+.caja-estado-actual.aceptado .icono-estado {
+    color: #10b981;
+}
+.caja-estado-actual.rechazado {
+    background: rgba(239, 68, 68, 0.1);
+    border: 1px solid rgba(239, 68, 68, 0.3);
+}
+.caja-estado-actual.rechazado .icono-estado {
+    color: #ef4444;
+}
+.icono-estado {
+    font-size: 1.5rem;
+    margin-top: 2px;
+}
+.detalles-estado .etiqueta-estado {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    color: #94a3b8;
+    font-weight: 700;
+}
+.detalles-estado h4 {
+    margin: 2px 0 6px 0;
+    font-size: 1.1rem;
+    color: #ffffff;
+}
+.detalles-estado p {
+    margin: 0;
+    font-size: 0.85rem;
+    color: #cbd5e1;
+    line-height: 1.4;
+}
+.resumen-alquiler-cuenta {
+    
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    
+}
+.resumen-alquiler-cuenta h4 {
+    background-color: #10b981;
+    border-radius: 28px;
+    margin-top:16px;
+    padding:8px 0;
+    display: flex;
+    justify-content: center;
+}
+/*Modal de edicion de perfil*/
+.modal-ancho-personalizado {
+    max-width: 650px !important;
+    width: 90% !important;
+    text-align: left !important;
+}
+.modal-pago-cabecera .titulo-con-icono {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #ffffff;
+}
+.modal-pago-cabecera .titulo-con-icono i {
+    color: var(--acento-naranja, #ff5a36);
+    font-size: 1.2rem;
+}
+
+.subtitulo-modal {
+    color: #94a3b8;
+    font-size: 0.85rem;
+    margin: -10px 0 20px 0;
+}
+.acciones-modal {
+    display: flex;
+    gap: 15px;
+    justify-content: flex-end;
+}
+.boton-secundario-cancelar {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: #cbd5e1;
+    padding: 12px 24px;
+    border-radius: 10px;
+    font-family: 'Outfit', sans-serif;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    
+}
+.boton-secundario-cancelar:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: #ffffff;
+}
+
+
+.contenedor-modales-pago {
+    position: relative;
+    z-index: 9999;
+}
+
+
+.modal-pago.oculto {
+    display: none !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+}
+
+
+.modal-pago.activo {
+    display: flex !important;
+    justify-content: center;
+    opacity: 1 !important;
+    visibility: visible !important;
+    pointer-events: auto !important;
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    background-color: rgba(11, 17, 30, 0.85) !important; 
+    backdrop-filter: blur(5px) !important; 
+    align-items: center !important;
+    z-index: 100000 !important;
+    overflow-y: auto !important;
+    padding: 20px !important;
+}
+
+
+.modal-pago-contenido {
+    background: #0f172a !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    border-radius: 16px !important;
+    padding: 30px !important;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6) !important;
+    position: relative !important;
+    max-height: 90vh !important;
+    overflow-y: auto !important;
+    pointer-events: auto !important;
+}
+
+
+.modal-pago-cabecera {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    padding-bottom: 15px;
+}
+
+.modal-pago-cabecera h4 {
+    color: #ffffff;
+    font-family: 'Outfit', sans-serif;
+    font-size: 1.25rem;
+    margin: 0;
+}
+.grupo-input {
+    margin-bottom:16px;
+}
+/*MODAL DE DATOS ACTUALIZADOS*/
+.modal-pequeno {
+    max-width: 400px !important;
+    width: 90% !important;
+    text-align: center !important;
+    padding: 35px 25px !important;
+}
+
+.icono-exito-verde {
+    font-size: 3.5rem;
+    color: #10b981; 
+    margin-bottom: 15px;
+    animation: escalarIcono 0.4s ease-in-out;
+}
+
+.titulo-exito-modal {
+    color: #ffffff !important;
+    font-size: 1.25rem !important;
+    font-family: 'Outfit', sans-serif !important;
+    margin-bottom: 8px !important;
+}
+
+.texto-exito-modal {
+    color: #94a3b8 !important;
+    font-size: 0.9rem !important;
+    margin-bottom: 0 !important;
+}
+
+.modal-pago-contenido button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.btn-entendido {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 8px;
+}
+@keyframes escalarIcono {
+    0% { transform: scale(0); }
+    70% { transform: scale(1.15); }
+    100% { transform: scale(1); }
+}
