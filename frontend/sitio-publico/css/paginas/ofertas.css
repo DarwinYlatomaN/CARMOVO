@@ -1,11 +1,4 @@
-/* =========================================================
-   CARMOVO - OFERTAS Y PROMOCIONES
-========================================================= */
 
-
-/* =========================================================
-   GENERAL
-========================================================= */
 
 .contenido-ofertas {
     background: #090e17;
@@ -13,9 +6,7 @@
 }
 
 
-/* =========================================================
-   HERO
-========================================================= */
+
 
 .hero-ofertas {
     min-height: 450px;
@@ -28,13 +19,13 @@
     background:
         radial-gradient(
             circle at 80% 50%,
-            rgba(255, 90, 54, 0.18),
+            rgba(233, 10, 10, 0.18),
             transparent 35%
         ),
         linear-gradient(
             135deg,
-            #090e17 0%,
-            #101827 100%
+            #147a59 0%,
+            #050507 100%
         );
 
     overflow: hidden;
@@ -53,9 +44,9 @@
 
     transform: translateY(-50%);
 
-    border: 1px solid rgba(255, 90, 54, 0.16);
+    border: 120px solid rgba(255, 52, 6, 0.16);
 
-    border-radius: 50%;
+    border-radius: 100%;
 }
 
 .hero-ofertas-contenido {
@@ -149,10 +140,9 @@
 ========================================================= */
 
 .beneficios-ofertas {
-    background: #0c121c;
+    background: #147a59
 
-    border-top: 1px solid rgba(255,255,255,0.07);
-    border-bottom: 1px solid rgba(255,255,255,0.07);
+    
 }
 
 .beneficios-grid {
@@ -168,54 +158,50 @@
     gap: 15px;
 
     padding: 28px 22px;
-
-    border-right: 1px solid rgba(255,255,255,0.07);
+   
+}
+.beneficios-ofertas .beneficio-oferta:nth-child(1){
+     border-right:8px solid #ff5a36;
+     border-left:8px solid #ff5a36;
+    
+}
+.beneficios-ofertas .beneficio-oferta:nth-child(2){
+     border-right:8px solid #ff5a36;
+     
+    
+}
+.beneficios-ofertas .beneficio-oferta:nth-child(3){
+     border-right:8px solid #ff5a36;
+     
 }
 
 .beneficio-oferta:last-child {
     border-right: 0;
 }
 
-.icono-beneficio {
-    width: 48px;
-    height: 48px;
 
-    flex-shrink: 0;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    border-radius: 12px;
-
-    background: rgba(255,90,54,0.1);
-
-    color: #ff5a36;
-
-    font-size: 18px;
-}
 
 .beneficio-oferta h3 {
     margin: 0 0 5px;
 
-    font-size: 13px;
+    font-size: 24px;
     font-weight: 700;
+    font-family: "Montserrat",sans-serif;
 }
 
 .beneficio-oferta p {
     margin: 0;
 
-    color: #8d96a5;
+    color: #abb0b9;
 
-    font-size: 11px;
+    font-size: 16px;
 
-    line-height: 1.5;
+    line-height: 1.2;
+    font-family: "Montserrat",sans-serif;
 }
 
 
-/* =========================================================
-   SECCIÓN OFERTAS
-========================================================= */
+
 
 .seccion-lista-ofertas {
     padding: 85px 0;
@@ -228,15 +214,15 @@
 
     gap: 40px;
 
-    margin-bottom: 32px;
+    margin-bottom: 38px;
 }
 
 .texto-pequeno-oferta {
     color: #ff5a36;
 
-    font-size: 10px;
+    font-size: 18px;
 
-    font-weight: 800;
+    font-weight: 700;
 
     letter-spacing: 1.6px;
 }
@@ -246,7 +232,7 @@
 
     font-family: 'Outfit', sans-serif;
 
-    font-size: clamp(30px, 4vw, 44px);
+    font-size: clamp(30px, 4vw, 40px);
 
     line-height: 1.1;
 }
@@ -255,35 +241,44 @@
     max-width: 390px;
 
     margin: 0;
+    background-color: #147a59;
 
-    color: #8d96a5;
+    color: #ffff;
 
-    font-size: 13px;
+    font-size: 18px;
+    border-radius:8px;
 
     line-height: 1.7;
+    font-family: "Montserrat",sans-serif;
+    border-left:8px solid#ff5a36;
+    padding-left: 12px;
+    
+    
+}
+.cabecera-seccion-ofertas p:hover {
+    box-shadow: 0px 3px 5px 3px #e2e50f;
 }
 
 
-/* =========================================================
-   FILTROS
-========================================================= */
+
 
 .filtros-ofertas {
     display: flex;
 
     flex-wrap: wrap;
 
-    gap: 9px;
+    gap: 32px;
 
     margin-bottom: 30px;
+    position:sticky;
 }
 
 .filtro-oferta {
     padding: 10px 16px;
 
-    border: 1px solid rgba(255,255,255,0.08);
+    border: none;
 
-    border-radius: 30px;
+    border-radius: 35px;
 
     background: transparent;
 
@@ -291,19 +286,19 @@
 
     font-family: 'Montserrat', sans-serif;
 
-    font-size: 11px;
+    font-size: 18px;
 
     font-weight: 700;
 
     cursor: pointer;
-
+    
     transition: 0.25s ease;
 }
 
 .filtro-oferta:hover {
     color: #ffffff;
 
-    border-color: rgba(255,90,54,0.45);
+   
 }
 
 .filtro-oferta.activo {
@@ -315,9 +310,7 @@
 }
 
 
-/* =========================================================
-   GRID
-========================================================= */
+
 
 .grid-ofertas {
     display: grid;
@@ -328,16 +321,13 @@
 }
 
 
-/* =========================================================
-   TARJETA
-========================================================= */
+
 
 .tarjeta-oferta {
     overflow: hidden;
 
     background: #121927;
 
-    border: 1px solid rgba(255,255,255,0.08);
 
     border-radius: 18px;
 
@@ -348,12 +338,11 @@
 }
 
 .tarjeta-oferta:hover {
-    transform: translateY(-6px);
+    transform: translateY(-7px);
 
     border-color: rgba(255,90,54,0.4);
 
-    box-shadow:
-        0 18px 45px rgba(0,0,0,0.3);
+    ;
 }
 
 .tarjeta-oferta.oculta {
@@ -361,9 +350,7 @@
 }
 
 
-/* =========================================================
-   IMAGEN
-========================================================= */
+
 
 .imagen-oferta {
     height: 220px;
@@ -373,6 +360,7 @@
     overflow: hidden;
 
     background: #161e2c;
+    
 }
 
 .imagen-oferta img {
@@ -425,7 +413,7 @@
 
     color: #ffffff;
 
-    font-size: 9px;
+    font-size: 10px;
 
     font-weight: 800;
 
@@ -438,17 +426,17 @@
 ========================================================= */
 
 .contenido-tarjeta-oferta {
-    padding: 22px;
+    padding: 32px;
 }
 
 .categoria-oferta {
     display: block;
 
-    margin-bottom: 7px;
+    margin-bottom: 8px;
 
     color: #ff5a36;
 
-    font-size: 9px;
+    font-size: 14px;
 
     font-weight: 800;
 
@@ -458,7 +446,7 @@
 .contenido-tarjeta-oferta h3 {
     margin: 0;
 
-    font-family: 'Outfit', sans-serif;
+    font-family: 'Montserrat', sans-serif;
 
     font-size: 24px;
 
@@ -472,7 +460,7 @@
 
     color: #8d96a5;
 
-    font-size: 11px;
+    font-size: 14px;
 
     line-height: 1.6;
 }
@@ -485,13 +473,11 @@
 .caracteristicas-oferta {
     display: flex;
 
-    gap: 14px;
+    justify-content: space-between;
 
     padding: 13px 0;
 
-    border-top: 1px solid rgba(255,255,255,0.07);
-
-    border-bottom: 1px solid rgba(255,255,255,0.07);
+   
 }
 
 .caracteristicas-oferta span {
@@ -502,11 +488,12 @@
 
     color: #8d96a5;
 
-    font-size: 9px;
+    font-size: 14px;
 }
 
 .caracteristicas-oferta i {
     color: #ff5a36;
+    font-size:14px;
 }
 
 
@@ -523,7 +510,7 @@
 
     gap: 10px;
 
-    padding: 17px 0;
+    padding: 15px 0;
 }
 
 .precio-anterior {
@@ -533,7 +520,7 @@
 
     text-decoration: line-through;
 
-    font-size: 10px;
+    font-size: 18px;
 }
 
 .precios-oferta strong {
@@ -541,7 +528,7 @@
 
     color: #ffffff;
 
-    font-size: 24px;
+    font-size: 25px;
 
     font-weight: 800;
 }
@@ -555,64 +542,11 @@
 .ahorro-oferta {
     color: #39c47a;
 
-    font-size: 9px;
+    font-size: 14px;
 
     font-weight: 700;
 
-    white-space: nowrap;
-}
-
-
-/* =========================================================
-   BOTÓN
-========================================================= */
-
-.btn-reservar-oferta {
-    width: 100%;
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: center;
-
-    gap: 9px;
-
-    padding: 13px 15px;
-
-    border: 1px solid rgba(255,90,54,0.45);
-
-    border-radius: 9px;
-
-    background: transparent;
-
-    color: #ff5a36;
-
-    font-family: 'Montserrat', sans-serif;
-
-    font-size: 11px;
-
-    font-weight: 800;
-
-    cursor: pointer;
-
-    transition: 0.25s ease;
-}
-
-.btn-reservar-oferta:hover {
-    background: #ff5a36;
-
-    border-color: #ff5a36;
-
-    color: #ffffff;
-}
-
-.btn-reservar-oferta i {
-    transition: transform 0.25s ease;
-}
-
-.btn-reservar-oferta:hover i {
-    transform: translateX(4px);
+    
 }
 
 
@@ -656,7 +590,7 @@
 ========================================================= */
 
 .cta-ofertas {
-    padding: 80px 0;
+    padding: 15px 0;
 
     border-top: 1px solid rgba(255,255,255,0.07);
 
@@ -669,17 +603,25 @@
 }
 
 .contenido-cta-ofertas {
-    text-align: center;
+    display:flex;
+    flex-direction: column;
+    justify-content: space-between ;
+    align-items: center;
+    
 }
 
-.contenido-cta-ofertas > span {
+.contenido-cta-ofertas  span {
     color: #ff5a36;
 
-    font-size: 10px;
+    font-size: 14px;
 
     font-weight: 800;
 
     letter-spacing: 1.5px;
+    
+}
+.contenido-cta-ofertas  span:hover {
+    border-bottom: 3px solid #b6f607;
 }
 
 .contenido-cta-ofertas h2 {
@@ -687,21 +629,62 @@
 
     margin: 12px auto;
 
-    font-family: 'Outfit', sans-serif;
+    font-family: 'Montserrat', sans-serif;
 
-    font-size: clamp(30px, 4vw, 44px);
+    font-size: 28px;
+    
+}
+.contenido-cta-ofertas h2:hover {
+    color:#39c47a
+}.contenido-cta-ofertas h2 {
+  position: relative;
+  display: inline-block;
+  transition: color 0.3s ease;
 }
 
+.contenido-cta-ofertas h2:hover {
+  color: #39c47a;
+}
+
+
+.contenido-cta-ofertas h2::after {
+   
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 0%;
+  width: 5px;
+  height: 5px;
+  background: #e7610d;
+  border-radius: 50%;
+  opacity: 0;
+  box-shadow: 
+    20px -10px #490bce,
+    -20px 10px #c7800d,
+    15px 15px #c3082a,
+    -15px -15px #39c47a,
+    0px 20px #9505d8,
+    0px -20px #c0e90a;
+  transform: translate(-50%, -50%) scale(0);
+  transition: transform 0.56s ease, opacity 0.6s ease;
+}
+
+.contenido-cta-ofertas h2:hover::after {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1.8);
+}
+
+f
 .contenido-cta-ofertas p {
     margin: 0 auto 25px;
 
     color: #8d96a5;
 
-    font-size: 13px;
+    font-size: 16px;
 }
 
 .boton-cta-ofertas {
-    display: inline-flex;
+    display: flex;
 
     align-items: center;
 
@@ -717,9 +700,10 @@
 
     text-decoration: none;
 
-    font-size: 11px;
+    font-size: 14px;
 
     font-weight: 800;
+    margin-top: 18px;
 
     transition: 0.25s ease;
 }
@@ -727,7 +711,115 @@
 .boton-cta-ofertas:hover {
     background: #e94725;
 
-    transform: translateY(-2px);
+    transform: translateY(-4px);
+}
+/*SECCION CARRUSEL*/
+.seccion-carrusel-infinito {
+    padding: 25px 0;
+
+
+    background:
+        transparent;
+    padding:30px 0;
+    overflow: hidden;
+    white-space: nowrap;
+    position: relative;
+    width:100%;
+
+
+}
+.marquee-contenedor {
+    display: flex;
+    width: 100%;
+    overflow: hidden;
+    mask-image: linear-gradient(to right, transparent, rgb(194, 191, 191) 10%, rgb(163, 17, 17) 90%, transparent);
+    -webkit-mask-image: linear-gradient(to right, transparent, rgb(205, 200, 200) 10%, rgb(205, 201, 201) 90%, transparent);
+}
+.marquee-pista {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    width: max-content;
+    animation: desplazamientoInfinito 25s linear infinite;
+}
+.marquee-pista:hover {
+    animation-play-state: paused;
+
+}
+.marquee-item {
+    border-radius: 14px;
+    overflow: hidden;
+    width: 590px;
+    height: 380px; 
+    position: relative; 
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end; 
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+    transition: all 0.3s ease;
+}
+.marquee-item .marquee-texto p, h4{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    
+
+}
+
+.marquee-item i {
+    color:  #ff5a36;
+    font-size: 1.1rem;
+}
+.marquee-item img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover; 
+    z-index: 1;
+}
+.marquee-item::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 70%;
+    background: linear-gradient(to top, rgba(11, 17, 30, 0.95) 20%, rgba(11, 17, 30, 0.6) 60%, transparent 100%);
+    z-index: 2;
+}
+.marquee-texto {
+    position: relative;
+    z-index: 3; 
+    padding: 20px;
+    text-align: left;
+}
+
+.marquee-texto h4 {
+    color: #ffffff;
+    font-size: 1rem;
+    font-family: 'Outfit', sans-serif;
+    font-weight: 700;
+    margin: 0 0 6px 0;
+}
+
+.marquee-texto p {
+    color: #94a3b8;
+    font-size: 0.85rem;
+    font-family: 'Montserrat', sans-serif;
+    margin: 0;
+    white-space: normal; 
+    line-height: 1.4;
+}
+@keyframes desplazamientoInfinito {
+    0% {
+        transform: translateX(0%);
+    }
+    100% {
+        transform: translateX(-60%);
+    }
 }
 
 
