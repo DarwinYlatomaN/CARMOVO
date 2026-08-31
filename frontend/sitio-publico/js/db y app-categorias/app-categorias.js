@@ -11,6 +11,9 @@ document.addEventListener('DOMContentLoaded', () => {
             const boton = document.createElement('button');
             boton.classList.add('btn-pestaña');
             
+   
+            boton.setAttribute('data-categoria', categoria);
+            
             if (categoria === 'Todos') {
                 boton.classList.add('activo');
             }
@@ -65,7 +68,6 @@ document.addEventListener('DOMContentLoaded', () => {
                         </div>
                         
                         <button class="btn-detalles">Ver Información Técnica</button>
-                        <!-- AQUÍ ESTÁ EL CAMBIO: El botón ahora llama a la función pasándole los datos del auto -->
                         <button class="btn-detalles" onclick="irAReservar('${auto.nombre}', '${auto.tipo}', ${auto.precio}, '${auto.imagen}')">Reservar</button>
                     </div>
                 </div>
@@ -90,11 +92,25 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 150);
     }
 
+    
     renderizarCategorias();
     renderizarAutos(autosDB.slice(0, 24));
+
+   
+    const parametros = new URLSearchParams(window.location.search);
+    const categoriaSolicitada = parametros.get('categoria');
+
+    if (categoriaSolicitada) {
+        const botonFiltro = document.querySelector(`[data-categoria="${categoriaSolicitada}"]`);
+        
+        if (botonFiltro) {
+            setTimeout(() => {
+                botonFiltro.click();
+            }, 100); 
+        }
+    }
 });
 
-// Función para guardar el auto en LocalStorage y redirigir (Debe ir fuera del DOMContentLoaded)
 function irAReservar(nombre, tipo, precio, imagenUrl) {
     const autoSeleccionado = {
         nombre: nombre,
@@ -103,9 +119,6 @@ function irAReservar(nombre, tipo, precio, imagenUrl) {
         imagen: imagenUrl
     };
 
-    // Guardar en la memoria del navegador
     localStorage.setItem('autoReserva', JSON.stringify(autoSeleccionado));
-
-    // Redirigir a la página de reservas
     window.location.href = 'reservas.html';
 }

@@ -12,8 +12,9 @@
     
     <link rel="stylesheet" href="../css/responsive.css">
     <link rel="stylesheet" href="../css/paginas/home.css">
+    <link rel="stylesheet" href="../css/paginas/experiencia.css">
     
-  
+
     <link rel="stylesheet" href="../css/paginas/categorias.css">
 </head>
 <body>
@@ -65,6 +66,245 @@
             </ul>
         </nav>
     </header>
+    <main class="contenido-experiencias">
+        
+        
+       
+        <section class="seccion-historias contenedor mt-40">
+            <div class="historias-carrusel">
+                <div class="historia-item" data-story="tips">
+                    <div class="borde-gradiente"><img src="../recursos/imagenes/experiencias/historia1.jpg" alt="Tips"></div>
+                    <span>Tips de Ruta</span>
+                </div>
+                <div class="historia-item" data-story="selva">
+                    <div class="borde-gradiente"><img src="../recursos/imagenes/experiencias/historia2.jpg" alt="Selva"></div>
+                    <span>Ruta Selva</span>
+                </div>
+                <div class="historia-item" data-story="playas">
+                    <div class="borde-gradiente"><img src="../recursos/imagenes/experiencias/historia3.avif" alt="Playas"></div>
+                    <span>Ruta Costa</span>
+                </div>
+                <div class="historia-item" data-story="sierra">
+                    <div class="borde-gradiente"><img src="../recursos/imagenes/experiencias/historia4.jpg" alt="Sierra"></div>
+                    <span>Ruta Andina</span>
+                </div>
+                <div class="historia-item" data-story="equipaje">
+                    <div class="borde-gradiente"><img src="../recursos/imagenes/experiencias/historia5.png" alt="Equipaje"></div>
+                    <span>¿Qué llevar?</span>
+                </div>
+                
+            </div>
+        </section>
+
+        
+        <div id="modal-historias" class="modal-story oculto">
+            <div class="modal-story-contenido">
+                <button type="button" class="btn-cerrar-story" id="btnCerrarStory"><i class="fa-solid fa-xmark"></i></button>
+                <div class="story-header">
+                    <img id="story-img" src="" alt="Historia">
+                    <h3 id="story-title">Título</h3>
+                </div>
+                <div class="story-body">
+                    <ul id="story-list" class="lista-tips-story">
+                        
+
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <section class="seccion-mood-finder contenedor mt-60">
+            <div class="cabecera-mood">
+                <h2>¿Qué vibra buscas hoy?</h2>
+                <p>Selecciona tu plan y te daremos el vehículo perfecto.</p>
+            </div>
+            
+            <div class="botones-mood">
+               
+                    <a href="categorias.html?categoria=Económicos" class="btn-mood activo">
+                    <i class="fa-solid fa-umbrella-beach"></i> Escapada de Fin de Semana
+                    </a>
+                    <a href="categorias.html?categoria=Pick-ups 4x4" class="btn-mood">
+                        <i class="fa-solid fa-mountain"></i> Aventura Extrema 4x4
+                    </a>
+                    <a href="categorias.html?categoria=Minivans" class="btn-mood">
+                        <i class="fa-solid fa-people-roof"></i> Viaje Familiar
+                    </a>
+                    <a href="categorias.html?categoria=Sedanes" class="btn-mood">
+                        <i class="fa-solid fa-champagne-glasses"></i> Ruta Romántica
+                    </a>
+             </div>
+
+            <div class="resultado-mood-card" id="resultadoMood">
+                <div class="mood-info">
+                    <h3 id="mood-titulo">Escapada de Fin de Semana</h3>
+                    <p id="mood-desc">Desconéctate del estrés. Maneja hacia el sur, siente la brisa y relájate. Ideal para viajes cortos pero memorables.</p>
+                    <div class="mood-tags">
+                        <span><i class="fa-solid fa-location-dot"></i> Destino sugerido: Máncora</span>
+                        <span><i class="fa-solid fa-car"></i> Auto ideal: Kia Picanto</span>
+                    </div>
+                    <a href="reservas.html" class="boton-accion-naranja mt-20">Alquilar este modelo</a>
+                </div>
+                <div class="mood-imagen">
+                    <img id="mood-img" src="../recursos/imagenes/economicos/Kia-picanto.jpg" alt="Auto">
+                </div>
+            </div>
+        </section>
+
+       
+        <section class="seccion-rutas contenedor mt-60">
+            <h2 class="titulo-seccion-exp">Rutas Recomendadas</h2>
+            <div class="grid-rutas">
+                <article class="tarjeta-ruta">
+                    <img src="../recursos/imagenes/experiencias/ruta-playas.jpg" alt="Ruta Playas">
+                    <div class="contenido-ruta">
+                        <h3>Ruta de las Playas del Norte</h3>
+                        <div class="detalles-ruta">
+                            <span><i class="fa-solid fa-road"></i> 350 km</span>
+                            <span><i class="fa-regular fa-clock"></i> 3 Días</span>
+                        </div>
+                        <p>Recorre desde Chiclayo hasta Punta Sal disfrutando del mejor clima y gastronomía.</p>
+                        <a href="reservas.html" class="link-ruta">Ver vehículos para esta ruta <i class="fa-solid fa-arrow-right"></i></a>
+                    </div>
+                </article>
+
+                <article class="tarjeta-ruta">
+                    <img src="../recursos/imagenes/experiencias/ruta-montana.jpg" alt="Ruta Montaña">
+                    <div class="contenido-ruta">
+                        <h3>Camino a la Montaña Mágica</h3>
+                        <div class="detalles-ruta">
+                            <span><i class="fa-solid fa-road"></i> 180 km</span>
+                            <span><i class="fa-regular fa-clock"></i> 2 Días</span>
+                        </div>
+                        <p>Terrenos desafiantes y paisajes andinos. Requiere un 4x4 resistente.</p>
+                        <a href="reservas.html" class="link-ruta">Ver vehículos para esta ruta <i class="fa-solid fa-arrow-right"></i></a>
+                    </div>
+                </article>
+            </div>
+        </section>
+
+        
+        <section class="seccion-muro contenedor mt-60">
+            <h2 class="titulo-seccion-exp">Muro de Aventureros</h2>
+            <p class="subtitulo-seccion">Historias reales de viajeros Carmovo.</p>
+            
+            <div class="masonry-grid">
+                <div class="masonry-item">
+                    <img src="../recursos/imagenes/experiencias/user1.jpg" alt="Cliente">
+                    <div class="capa-testimonio">
+                        <div class="estrellas"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
+                        <p>"El viaje a la sierra fue increíble gracias a la Hilux. ¡Cero problemas en el camino!"</p>
+                        <span class="etiqueta-auto"><i class="fa-solid fa-car"></i> Viajó en Toyota Hilux</span>
+                    </div>
+                </div>
+
+                <div class="masonry-item">
+                    <img src="../recursos/imagenes/experiencias/user2.jpg" alt="Cliente">
+                    <div class="capa-testimonio">
+                        <div class="estrellas"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star-half-stroke"></i></div>
+                        <p>"Súper espaciosa la minivan para toda mi familia. Repetiremos."</p>
+                        <span class="etiqueta-auto"><i class="fa-solid fa-car"></i> Viajó en Kia Carnival</span>
+                    </div>
+                </div>
+
+                <div class="masonry-item">
+                    <img src="../recursos/imagenes/experiencias/user3.jpg" alt="Cliente">
+                    <div class="capa-testimonio">
+                        <div class="estrellas"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
+                        <p>"Pequeño, ahorrador y rapidísimo de alquilar. 10/10."</p>
+                        <span class="etiqueta-auto"><i class="fa-solid fa-car"></i> Viajó en Kia Picanto</span>
+                    </div>
+                </div>
+                
+                <div class="masonry-item">
+                    <img src="../recursos/imagenes/experiencias/user4.jpg" alt="Cliente">
+                    <div class="capa-testimonio">
+                        <div class="estrellas"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
+                        <p>"Nuestra escapada de aniversario por la costa fue perfecta. El auto súper silencioso, cómodo y con un maletero enorme."</p>
+                        <span class="etiqueta-auto"><i class="fa-solid fa-car"></i> Viajó en Toyota Yaris</span>
+                    </div>
+                </div>
+
+               
+                <div class="masonry-item">
+                    <img src="../recursos/imagenes/experiencias/user5.jpg" alt="Cliente">
+                    <div class="capa-testimonio">
+                        <div class="estrellas"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
+                        <p>"Fuimos 4 amigos buscando olas al norte. Todo el equipaje entró sobrado y el aire acondicionado nos salvó la vida."</p>
+                        <span class="etiqueta-auto"><i class="fa-solid fa-car"></i> Viajó en Kia Sportage</span>
+                    </div>
+                </div>
+
+                
+                <div class="masonry-item">
+                    <img src="../recursos/imagenes/experiencias/user6.jpg" alt="Cliente">
+                    <div class="capa-testimonio">
+                        <div class="estrellas"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star-half-stroke"></i></div>
+                        <p>"Rutas con barro, piedras y lluvia. Llegamos a la laguna escondida sin sudar. ¡Es una verdadera bestia en la montaña!"</p>
+                        <span class="etiqueta-auto"><i class="fa-solid fa-car"></i> Viajó en Jeep Wrangler</span>
+                    </div>
+                </div>
+
+                
+                <div class="masonry-item">
+                    <img src="../recursos/imagenes/experiencias/user7.jpg" alt="Cliente">
+                    <div class="capa-testimonio">
+                        <div class="estrellas"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
+                        <p>"Lo alquilé para recorrer pueblitos mágicos por mi cuenta el fin de semana. Consumo bajísimo de gasolina y súper estable en las curvas."</p>
+                        <span class="etiqueta-auto"><i class="fa-solid fa-car"></i> Viajó en Renault Duster</span>
+                    </div>
+                </div>
+            
+                <div class="masonry-item">
+                    <img src="../recursos/imagenes/experiencias/user8.jpg" alt="Cliente">
+                    <div class="capa-testimonio">
+                        <div class="estrellas"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
+                        <p>"Fui por trabajo a Piura y terminé extendiendo el alquiler para ir a la playa. El auto me dio la presencia ejecutiva que necesitaba y la comodidad para relajarme después."</p>
+                        <span class="etiqueta-auto"><i class="fa-solid fa-car"></i> Viajó en Nissan Versa</span>
+                    </div>
+                </div>
+
+               
+                <div class="masonry-item">
+                    <img src="../recursos/imagenes/experiencias/user9.jpg" alt="Cliente">
+                    <div class="capa-testimonio">
+                        <div class="estrellas"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star-half-stroke"></i></div>
+                        <p>"Alquilamos esta van para llevar a toda la familia a una boda fuera de la ciudad. Súper segura, con buen aire acondicionado y el proceso de recojo fue rapidísimo."</p>
+                        <span class="etiqueta-auto"><i class="fa-solid fa-car"></i> Viajó en Hyundai H1</span>
+                    </div>
+                </div>
+                
+                
+            </div>
+        </section>
+
+        
+        <section class="seccion-insignias contenedor mt-60 mb-60">
+            <h2 class="titulo-seccion-exp text-center">Tus Insignias Carmovo</h2>
+            <p class="subtitulo-seccion text-center">Suma kilómetros y desbloquea descuentos exclusivos.</p>
+            
+            <div class="grid-insignias">
+                <div class="insignia-card desbloqueada">
+                    <div class="icono-insignia"><i class="fa-solid fa-seedling"></i></div>
+                    <h4>Viajero Novato</h4>
+                    <p>1 Viaje completado</p>
+                </div>
+                
+                <div class="insignia-card bloqueada">
+                    <div class="icono-insignia"><i class="fa-solid fa-compass"></i></div>
+                    <h4>Explorador</h4>
+                    <p>5 Viajes completados</p>
+                </div>
+
+                <div class="insignia-card bloqueada">
+                    <div class="icono-insignia"><i class="fa-solid fa-crown"></i></div>
+                    <h4>Nómada Carmovo</h4>
+                    <p>10 Viajes completados</p>
+                </div>
+            </div>
+        </section>
+
+    </main>
 
     
     
@@ -86,5 +326,8 @@
             </div>
         </div>
     </footer>
+    <script src="../js/paginas/experiencia.js"></script>
+    <script src="../js/db y app-categorias/app-categorias.js"></script>
+</body>
 </body>
 </html>

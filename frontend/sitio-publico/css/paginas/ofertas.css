@@ -135,9 +135,6 @@
 }
 
 
-/* =========================================================
-   BENEFICIOS
-========================================================= */
 
 .beneficios-ofertas {
     background: #147a59
@@ -753,6 +750,7 @@ f
 
 
 }
+
 .marquee-contenedor {
     display: flex;
     width: 100%;
@@ -838,6 +836,8 @@ f
     white-space: normal; 
     line-height: 1.4;
 }
+
+
 @keyframes desplazamientoInfinito {
     0% {
         transform: translateX(0%);
@@ -845,6 +845,50 @@ f
     100% {
         transform: translateX(-50%);
     }
+}
+.burbujas-magicas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index:4;
+    overflow: hidden;
+}
+.burbuja {
+    position: absolute;
+    background: rgba(255, 255, 255, 0.12);
+    color: #687181;
+    padding: 10px 16px;
+    border-radius: 50%;
+    font-family: 'Outfit', sans-serif;
+    font-size: 1.2rem;
+    font-weight: 700;
+     box-shadow: 0px 4px 5px 4px #ff5a36;
+    white-space: nowrap;
+    will-change: transform, opacity;
+}
+
+.burbuja.pos-1 { top: 15%; left: 8%; animation: floatTypeA 4s ease-in-out infinite alternate; }
+.burbuja.pos-2 { top: 60%; right: 8%; animation: floatTypeB 4.5s ease-in-out infinite alternate-reverse; }
+.burbuja.pos-3 { top: 60%; right: 10%; animation: floatTypeC 3.8s ease-in-out infinite alternate; }
+.burbuja.pos-4 { top: 20%; left: 5%; animation: floatTypeA 4.2s ease-in-out infinite alternate-reverse; }
+.burbuja.pos-5 { top: 65%; right: 15%; animation: floatTypeB 3.5s ease-in-out infinite alternate; }
+
+@keyframes floatTypeA {
+    0% { transform: translate(0, 0) rotate(-8deg) scale(1.1); opacity: 0.85; }
+    100% { transform: translate(6px, -18px) rotate(2deg) scale(1.02); opacity: 1; }
+}
+
+@keyframes floatTypeB {
+    0% { transform: translate(0, 0) rotate(10deg) scale(1.1); opacity: 0.85; }
+    100% { transform: translate(-6px, -15px) rotate(-2deg) scale(1.05); opacity: 1; }
+}
+
+@keyframes floatTypeC {
+    0% { transform: translate(0, 0) rotate(-4deg) scale(1.1); opacity: 0.85; }
+    100% { transform: translate(4px, -20px) rotate(4deg) scale(1.02); opacity: 1; }
 }
 
 
