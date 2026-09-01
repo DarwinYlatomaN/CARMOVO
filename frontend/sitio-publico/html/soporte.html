@@ -9,15 +9,12 @@
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
     
-    
     <link rel="stylesheet" href="../css/responsive.css">
     <link rel="stylesheet" href="../css/paginas/home.css">
-    
-  
+    <link rel="stylesheet" href="../css/paginas/soporte.css">
     <link rel="stylesheet" href="../css/paginas/categorias.css">
 </head>
 <body>
-    
    
     <header class="cabecera">
         <div class="cabecera-superior contenedor">
@@ -42,9 +39,7 @@
             </div>
 
             <div class="cabecera-acciones">
-                <a href="#" class="enlace-telefono">
-                    <i class="fa-solid fa-phone-volume"></i> Contáctanos
-                </a>
+               
                 <a href="miCuenta.html" class="boton-login">Iniciar sesión</a>
                 
                 <button class="menu-toggle oculto-desktop" id="btnMenu" aria-label="Abrir menú de navegación">
@@ -65,9 +60,304 @@
             </ul>
         </nav>
     </header>
+    
+    <main class="contenido-soporte">
+        
+        <section class="hero-soporte contenedor mt-60 text-center">
+            <h1>Hola, ¿en qué podemos ayudarte hoy?</h1>
+            <p>Busca tu duda o selecciona una categoría abajo.</p>
+           
+            <div class="tags-busqueda mt-20">
+                
+                <a href="#faq" class="tag">Garantía</a>
+                <a href="#faq" class="tag">Política de combustible</a>
+                <a href="#faq" class="tag">Devolución tardía</a>
+                <a href="#contacto" class="tag">Asesor</a>
+            </div>
+        </section>
 
-    
-    
+        <section class="seccion-sos contenedor mt-60">
+            <div class="tarjeta-sos">
+                <div class="sos-info">
+                    <div class="sos-icono"><i class="fa-solid fa-triangle-exclamation"></i></div>
+                    <div>
+                        <h3>¿Tienes una emergencia en la ruta?</h3>
+                        <p>Si sufriste un accidente, pinchazo o falla mecánica, contáctanos de inmediato. Estamos 24/7 para ti.</p>
+                    </div>
+                </div>
+                <a href="tel:+51999888777" class="btn-llamar-sos"><i class="fa-solid fa-phone-volume"></i> Asistencia Inmediata</a>
+            </div>
+        </section>
+
+        <section class="seccion-categorias contenedor mt-60">
+            <div class="grid-ayuda">
+                <!-- Se agregaron los atributos data-categoria -->
+                <article class="tarjeta-ayuda" data-categoria="requisitos">
+                    <i class="fa-regular fa-id-card"></i>
+                    <h4>Requisitos de Alquiler</h4>
+                    <p>Edad mínima, tipos de brevete aceptados y depósito de garantía.</p>
+                </article>
+                <article class="tarjeta-ayuda" data-categoria="pagos">
+                    <i class="fa-regular fa-credit-card"></i>
+                    <h4>Pagos y Facturación</h4>
+                    <p>Métodos de pago, comprobantes, devoluciones y facturas.</p>
+                </article>
+                <article class="tarjeta-ayuda" data-categoria="seguros">
+                    <i class="fa-solid fa-shield-halved"></i>
+                    <h4>Seguros y Coberturas</h4>
+                    <p>Diferencias entre el seguro básico y la protección premium.</p>
+                </article>
+                <article class="tarjeta-ayuda" data-categoria="viaje">
+                    <i class="fa-solid fa-route"></i>
+                    <h4>Durante el Viaje</h4>
+                    <p>Límites de kilometraje, cruce de fronteras regionales y multas.</p>
+                </article>
+                <article class="tarjeta-ayuda" data-categoria="cancelaciones">
+                    <i class="fa-solid fa-calendar-xmark"></i>
+                    <h4>Cancelaciones</h4>
+                    <p>Políticas de reembolso y cómo modificar las fechas de tu reserva.</p>
+                </article>
+                <article class="tarjeta-ayuda" data-categoria="combustible">
+                    <i class="fa-solid fa-gas-pump"></i>
+                    <h4>Políticas de Combustible</h4>
+                    <p>Opciones de prepago, "Lleno a Lleno" y cargos por recarga.</p>
+                </article>
+            </div>
+        </section>
+
+        <section class="seccion-guias contenedor mt-60">
+            <h2 class="titulo-seccion text-center">Guías Rápidas de Emergencia</h2>
+            <p class="subtitulo-seccion text-center">Soluciones paso a paso para imprevistos en la vía.</p>
+            
+            <div class="grid-guias">
+                <!-- Se agregaron los atributos data-guia -->
+                <div class="tarjeta-guia" data-guia="choque">
+                    <div class="guia-icono"><i class="fa-solid fa-car-burst"></i></div>
+                    <h4>¿Qué hacer en caso de choque?</h4>
+                    <p>Pasos legales y de seguridad inmediatos para reportar el incidente al seguro.</p>
+                    <a href="#" class="enlace-guia">Leer pasos <i class="fa-solid fa-arrow-right"></i></a>
+                </div>
+                <div class="tarjeta-guia" data-guia="llanta">
+                    <div class="guia-icono"><i class="fa-solid fa-wrench"></i></div>
+                    <h4>¿Cómo cambiar una llanta?</h4>
+                    <p>Tutorial rápido para usar la gata mecánica y colocar el neumático de repuesto.</p>
+                    <a href="#" class="enlace-guia">Leer pasos <i class="fa-solid fa-arrow-right"></i></a>
+                </div>
+                <div class="tarjeta-guia" data-guia="llave">
+                    <div class="guia-icono"><i class="fa-solid fa-key"></i></div>
+                    <h4>¿Perdiste la llave del auto?</h4>
+                    <p>Procedimiento de seguridad para solicitar un duplicado al equipo de asistencia.</p>
+                    <a href="#" class="enlace-guia">Leer pasos <i class="fa-solid fa-arrow-right"></i></a>
+                </div>
+            </div>
+        </section>
+
+        <section id="faq" class="seccion-faq contenedor mt-60">
+            <h2 class="titulo-seccion text-center">Preguntas Frecuentes</h2>
+            
+            <div class="acordeon-faq" id="contenedor-faq">
+                <div class="item-faq">
+                    <button class="pregunta-faq">
+                        ¿Cuál es la edad mínima para alquilar un vehículo?
+                        <i class="fa-solid fa-chevron-down"></i>
+                    </button>
+                    <div class="respuesta-faq">
+                        <p>Debes tener al menos 21 años cumplidos al momento de firmar el contrato. Los conductores entre 21 y 24 años podrían estar sujetos a una tarifa de "Conductor Joven" debido a políticas de aseguradoras.</p>
+                    </div>
+                </div>
+
+                <div class="item-faq">
+                    <button class="pregunta-faq">
+                        ¿Necesito una tarjeta de crédito obligatoriamente?
+                        <i class="fa-solid fa-chevron-down"></i>
+                    </button>
+                    <div class="respuesta-faq">
+                        <p>Sí, requerimos una tarjeta de crédito física (a nombre del titular de la reserva) para retener el depósito de garantía durante el periodo de alquiler. No se aceptan tarjetas de débito o virtuales para este fin.</p>
+                    </div>
+                </div>
+
+                <div class="item-faq">
+                    <button class="pregunta-faq">
+                        ¿Cuál es la política de combustible?
+                        <i class="fa-solid fa-chevron-down"></i>
+                    </button>
+                    <div class="respuesta-faq">
+                        <p>Aplicamos la política "Lleno a Lleno". Te entregamos el vehículo con el tanque al 100% y deberás devolverlo igual. Si lo devuelves con menos combustible, se aplicará un recargo por el servicio de repostaje.</p>
+                    </div>
+                </div>
+
+                <div class="item-faq">
+                    <button class="pregunta-faq">
+                        ¿Qué pasa si me retraso en la devolución del vehículo?
+                        <i class="fa-solid fa-chevron-down"></i>
+                    </button>
+                    <div class="respuesta-faq">
+                        <p>Brindamos un periodo de gracia de 59 minutos. Pasado este tiempo, se cobrará una fracción del día o un día completo de alquiler dependiendo de las horas de retraso. Si prevés un retraso, comunícate con soporte.</p>
+                    </div>
+                </div>
+
+                <div class="item-faq">
+                    <button class="pregunta-faq">
+                        ¿Están permitidas las mascotas en el auto?
+                        <i class="fa-solid fa-chevron-down"></i>
+                    </button>
+                    <div class="respuesta-faq">
+                        <p>¡Nos encantan los animales! Sí están permitidos, pero te pedimos devolver el auto limpio de pelos o suciedad. Si el vehículo requiere una limpieza profunda especial (lavado de salón), se aplicará un recargo de limpieza.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="contacto" class="seccion-contacto contenedor mt-60 mb-60">
+            <h2 class="titulo-seccion text-center">¿Aún no encuentras tu respuesta?</h2>
+            
+            <div class="grid-contacto mt-40">
+                <div class="tarjeta-contacto wssp">
+                    <i class="fa-brands fa-whatsapp"></i>
+                    <h3>Chat Directo</h3>
+                    <p>Respuestas rápidas de 8am a 8pm.</p>
+                    <a href="#" class="btn-contacto-wssp">Escríbenos</a>
+                </div>
+                
+                <div class="tarjeta-contacto email">
+                    <i class="fa-regular fa-envelope"></i>
+                    <h3>Correo Electrónico</h3>
+                    <p>Para consultas detalladas o reclamos.</p>
+                    <a href="mailto:soporte_carmovo@gmail.com" class="btn-contacto-email">soporte_carmovo@gmail.com</a>
+                </div>
+
+                <div class="tarjeta-contacto oficina">
+                    <i class="fa-solid fa-location-dot"></i>
+                    <h3>Oficina Central</h3>
+                    <p>Av. Salaverry 1234, Chiclayo.</p>
+                    <a href="#" class="btn-contacto-oficina">Ver en Google Maps</a>
+                </div>
+                <div class="tarjeta-contacto reclamo">
+                    <i class="fa-solid fa-file-signature"></i>
+                    <h3>Quejas y Reclamos</h3>
+                    <p>Registra tu inconformidad formalmente.</p>
+                    <button class="btn-contacto-reclamo" id="btnAbrirReclamo">Registrar caso</button>
+                </div>
+                
+            </div>
+        </section>
+
+        <!-- MODAL PARA GUÍAS RÁPIDAS -->
+        <div id="modal-guia" class="modal-guia oculto">
+            <div class="modal-guia-contenido">
+                <button type="button" class="btn-cerrar-guia" id="btnCerrarGuia">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+                <div class="guia-modal-header">
+                    <div class="guia-modal-icono" id="modal-guia-icono">
+                        <i class="fa-solid fa-circle-info"></i>
+                    </div>
+                    <div>
+                        <span class="etiqueta-guia-modal">GUÍA DE EMERGENCIA</span>
+                        <h3 id="modal-guia-titulo">Título de la Guía</h3>
+                    </div>
+                </div>
+                <div class="guia-modal-body">
+                    <p id="modal-guia-descripcion" class="guia-desc-intro">Descripción corta...</p>
+                    <div class="pasos-contenedor">
+                        <h4><i class="fa-solid fa-list-check"></i> Pasos a seguir:</h4>
+                        <ol id="modal-guia-pasos" class="lista-pasos-guia">
+                            <!-- Los pasos se inyectan dinámicamente desde JS -->
+                        </ol>
+                    </div>
+                </div>
+                <div class="guia-modal-footer">
+                    <a href="tel:+51999888777" class="btn-sos-modal">
+                        <i class="fa-solid fa-phone-volume"></i> Llamar a Asistencia SOS
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- MODAL PARA CATEGORÍAS DE AYUDA -->
+        <div id="modal-categoria" class="modal-guia oculto">
+            <div class="modal-guia-contenido">
+                <button type="button" class="btn-cerrar-guia" id="btnCerrarCategoria">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+                <div class="guia-modal-header">
+                    <div class="guia-modal-icono" id="modal-cat-icono">
+                        <i class="fa-solid fa-circle-info"></i>
+                    </div>
+                    <div>
+                        <span class="etiqueta-guia-modal">INFORMACIÓN DETALLADA</span>
+                        <h3 id="modal-cat-titulo">Título de la Categoría</h3>
+                    </div>
+                </div>
+                <div class="guia-modal-body">
+                    <p id="modal-cat-descripcion" class="guia-desc-intro">Descripción general...</p>
+                    <div class="pasos-contenedor">
+                        <h4><i class="fa-solid fa-file-lines"></i> Detalles clave:</h4>
+                        <ul id="modal-cat-detalles" class="lista-pasos-guia" style="list-style-type: disc;">
+                            <!-- Los detalles se inyectan dinámicamente desde JS -->
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--Modal de formulario de registro de quejas-->
+        <div id="modal-reclamo" class="modal-guia oculto">
+    <div class="modal-guia-contenido" style="max-width: 650px;">
+        <button type="button" class="btn-cerrar-guia" id="btnCerrarReclamo">
+            <i class="fa-solid fa-xmark"></i>
+        </button>
+        <div class="guia-modal-header">
+            <div class="guia-modal-icono" >
+                <i class="fa-solid fa-scale-balanced"></i>
+            </div>
+            <div>
+                <span class="etiqueta-guia-modal" >ATENCIÓN AL CLIENTE</span>
+                <h3 >Libro de Reclamaciones</h3>
+            </div>
+        </div>
+        <div class="guia-modal-body">
+            <p class="guia-desc-intro">Por favor, completa los siguientes datos para atender tu caso a la brevedad.</p>
+            
+            <form id="form-reclamo" class="formulario-reclamo">
+                <div class="grupo-form">
+                    <label>Nombre Completo</label>
+                    <input type="text" placeholder="Nombres Completos" required>
+                </div>
+                <div class="fila-form">
+                    <div class="grupo-form">
+                        <label>DNI / Pasaporte</label>
+                        <input type="text" placeholder="Número de documento" required>
+                    </div>
+                    <div class="grupo-form">
+                        <label>Teléfono</label>
+                        <input type="tel" placeholder="Número de contacto" required>
+                    </div>
+                </div>
+                <div class="grupo-form">
+                    <label>Correo Electrónico</label>
+                    <input type="email" placeholder="correo@ejemplo.com" required>
+                </div>
+                <div class="grupo-form">
+                    <label>Tipo de Solicitud</label>
+                    <select required>
+                        <option value="">Selecciona una opción...</option>
+                        <option value="queja">Queja (Disconformidad con la atención recibida)</option>
+                        <option value="reclamo">Reclamo (Disconformidad con el servicio/vehículo)</option>
+                    </select>
+                </div>
+                <div class="grupo-form">
+                    <label>Detalle de la situación</label>
+                    <textarea rows="4" placeholder="Describe detalladamente lo ocurrido..." required></textarea>
+                </div>
+                <button type="submit" class="btn-enviar-reclamo">Enviar Solicitud</button>
+            </form>
+
+        </div>
+    </div>
+</div>
+
+    </main>
+
     <footer class="pie-pagina contenedor">
         <div class="pie-columna-izq">
             <h4>!Construyamos una aventura asombrosa!.</h4>
@@ -86,5 +376,7 @@
             </div>
         </div>
     </footer>
+
+    <script src="../js/paginas/soporte.js"></script>
 </body>
 </html>

@@ -1,0 +1,590 @@
+.mt-60 { margin-top: 60px; }
+.mb-60 { margin-bottom: 60px; }
+.text-center { text-align: center; }
+
+/* Hero Soporte */
+.hero-soporte h1 {
+    color: #ffffff;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+}
+.hero-soporte p {
+    color: #94a3b8;
+    margin-bottom: 30px;
+}
+.caja-busqueda {
+    position: relative;
+    max-width: 600px;
+    margin: 0 auto;
+}
+.caja-busqueda i {
+    position: absolute;
+    left: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #94a3b8;
+    font-size: 1.2rem;
+}
+.caja-busqueda input {
+    width: 100%;
+    padding: 18px 20px 18px 50px;
+    border-radius: 30px;
+   
+    background: rgba(255, 255, 255, 0.05);
+    color: #fff;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1rem;
+    outline: none;
+    transition: all 0.3s;
+}
+.caja-busqueda input:focus {
+  
+    background: rgba(255, 255, 255, 0.08);
+}
+
+/* Tarjeta SOS */
+.tarjeta-sos {
+    background: linear-gradient(135deg, rgba(234, 35, 35, 0.15), rgba(248, 10, 10, 0));
+   
+    border-radius: 16px;
+    padding: 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 0 20px rgba(239, 68, 68, 0.1);
+    animation: pulsoSOS 3s infinite;
+}
+@keyframes pulsoSOS {
+    0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4); }
+    25% { box-shadow: 0 0 0 25px rgba(227, 0, 0, 0); }
+    50% { box-shadow: 0 0 0 25px rgba(215, 16, 16, 0); }
+    75% { box-shadow: 0 0 0 25px rgba(239, 68, 68, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+}
+.sos-info {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+.sos-icono {
+    font-size: 2.5rem;
+    color: #ef4444;
+}
+.sos-info h3 {
+    color: #fff;
+    font-family: 'Montserrat', sans-serif;
+    margin: 0 0 5px 0;
+    font-size: 1.4rem;
+}
+.sos-info p {
+    color: #cbd5e1;
+    margin: 0;
+    font-size: 0.95rem;
+}
+.btn-llamar-sos {
+    background: #ef4444;
+    color: white;
+    padding: 14px 24px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transition: background 0.3s;
+    white-space: nowrap;
+}
+.btn-llamar-sos:hover { background: #dc2626; }
+
+/* Categorías de Ayuda */
+.grid-ayuda {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 25px;
+}
+.tarjeta-ayuda {
+    background: rgba(255, 255, 255, 0.03);
+
+    border-radius: 16px;
+    padding: 30px 20px;
+    text-align: center;
+    transition: transform 0.3s, border-color 0.3s;
+    cursor: pointer;
+}
+.tarjeta-ayuda:hover {
+    transform: translateY(-5px);
+    border-color: var(--acento-naranja, #ff5a36);
+}
+.tarjeta-ayuda i {
+    font-size: 2.5rem;
+    color: var(--acento-naranja, #ff5a36);
+    margin-bottom: 15px;
+}
+.tarjeta-ayuda h4 {
+    color: #fff;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1.2rem;
+    margin: 0 0 10px 0;
+}
+.tarjeta-ayuda p {
+    color: #94a3b8;
+    font-size: 0.9rem;
+    margin: 0;
+}
+
+
+.titulo-seccion {
+    color: #fff;
+    font-family: 'Outfit';
+    font-size: 2.2rem;
+    margin-bottom: 30px;
+}
+.acordeon-faq {
+    max-width: 800px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+.item-faq {
+    background: rgba(255, 255, 255, 0.03);
+   
+    border-radius: 12px;
+    overflow: hidden;
+}
+.pregunta-faq {
+    width: 100%;
+    background: none;
+    border: none;
+    color: #fff;
+    font-family: 'Outfit', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 600;
+    text-align: left;
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+.pregunta-faq:hover { background: rgba(255, 255, 255, 0.05); }
+.pregunta-faq i {
+    color: var(--acento-naranja, #ff5a36);
+    transition: transform 0.3s;
+}
+.item-faq.activo .pregunta-faq i { transform: rotate(180deg); }
+.respuesta-faq {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s ease;
+}
+.respuesta-faq p {
+    padding: 0 20px 20px 20px;
+    margin: 0;
+    color: #cbd5e1;
+    line-height: 1.6;
+}
+
+/* Contacto Directo */
+.grid-contacto {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+    max-width: 800px;
+    margin: 0 auto;
+}
+.tarjeta-contacto {
+    background: rgba(255, 255, 255, 0.03);
+    
+    border-radius: 16px;
+    padding: 40px;
+    text-align: center;
+}
+.tarjeta-contacto i {
+    font-size: 3rem;
+    margin-bottom: 15px;
+}
+.tarjeta-contacto.wssp i { color: #22c55e; }
+.tarjeta-contacto.email i { color: #3b82f6; }
+.tarjeta-contacto h3 {
+    color: #fff;
+    font-family: 'Outfit';
+    margin: 0 0 10px 0;
+}
+.tarjeta-contacto p {
+    color: #94a3b8;
+    margin-bottom: 25px;
+}
+.btn-contacto-wssp, .btn-contacto-email {
+    display: inline-block;
+    padding: 12px 24px;
+    border-radius: 8px;
+    color: white;
+    text-decoration: none;
+    font-weight: 600;
+    transition: transform 0.3s;
+}
+.btn-contacto-wssp { background: #22c55e; }
+.btn-contacto-email { background: #3b82f6; }
+.btn-contacto-wssp:hover, .btn-contacto-email:hover { transform: scale(1.05); }
+
+/* --- Etiquetas de Búsqueda --- */
+.tags-busqueda {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+.etiqueta-titulo {
+    color: #94a3b8;
+    font-size: 0.9rem;
+    margin-right: 5px;
+}
+.tags-busqueda .tag {
+    background: rgba(255, 255, 255, 0.05);
+   
+    color: #cbd5e1;
+    padding: 6px 15px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+.tags-busqueda .tag:hover {
+    background: var(--acento-naranja, #ff5a36);
+    color: #fff;
+   
+}
+
+/* --- Nueva Sección: Guías Rápidas --- */
+.subtitulo-seccion {
+    color: #94a3b8;
+    margin-bottom: 40px;
+}
+.grid-guias {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 25px;
+}
+.tarjeta-guia {
+    background: linear-gradient(145deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.01) 100%);
+  
+    border-radius: 16px;
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    transition: transform 0.3s;
+}
+.tarjeta-guia:hover {
+    transform: translateY(-5px);
+}
+.guia-icono {
+    background: rgba(255, 90, 54, 0.1);
+    width: 60px;
+    height: 60px;
+    border-radius: 12px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.8rem;
+    color: var(--acento-naranja, #ff5a36);
+    margin-bottom: 20px;
+}
+.tarjeta-guia h4 {
+    color: #fff;
+    font-family: 'Outfit';
+    font-size: 1.3rem;
+    margin: 0 0 10px 0;
+}
+.tarjeta-guia p {
+    color: #94a3b8;
+    font-size: 0.95rem;
+    line-height: 1.5;
+    margin: 0 0 20px 0;
+    flex-grow: 1; /* Empuja el botón al fondo si los textos varían en altura */
+}
+.enlace-guia {
+    color: var(--acento-naranja, #ff5a36);
+    text-decoration: none;
+    font-weight: 700;
+    font-family: 'Outfit';
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: gap 0.3s;
+}
+.tarjeta-guia:hover .enlace-guia {
+    gap: 12px; 
+}
+
+
+.tarjeta-contacto.oficina i { color: #f59e0b; }
+.btn-contacto-oficina {
+    display: inline-block;
+    padding: 12px 24px;
+    border-radius: 8px;
+    color: white;
+    text-decoration: none;
+    font-weight: 600;
+    background: #f59e0b;
+    transition: transform 0.3s;
+}
+.btn-contacto-oficina:hover {
+    transform: scale(1.05);
+}
+
+/*MODALES*/
+.tarjeta-guia, .tarjeta-ayuda {
+    cursor: pointer;
+}
+
+.modal-guia {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(11, 17, 30, 0.85);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    z-index: 99999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+}
+
+.modal-guia.activo {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.modal-guia-contenido {
+    background: #0f172a;
+    
+    width: 90%;
+    max-width: 580px;
+    max-height: 85vh;
+    border-radius: 20px;
+    position: relative;
+    overflow-y: auto;
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.6);
+    transform: scale(0.92);
+    transition: transform 0.3s ease;
+    padding: 30px;
+}
+
+.modal-guia.activo .modal-guia-contenido {
+    transform: scale(1);
+}
+
+.btn-cerrar-guia {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: rgba(255, 255, 255, 0.08);
+    border: none;
+    color: #ffffff;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.1rem;
+    transition: background 0.3s ease, transform 0.3s ease;
+}
+
+.btn-cerrar-guia:hover {
+    background: var(--acento-naranja, #ff5a36);
+    transform: rotate(90deg);
+}
+
+.guia-modal-header {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding-bottom: 20px;
+    
+    margin-bottom: 20px;
+}
+
+.guia-modal-icono {
+    background: rgba(255, 90, 54, 0.15);
+    color: var(--acento-naranja, #ff5a36);
+    width: 55px;
+    height: 55px;
+    border-radius: 14px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.8rem;
+    flex-shrink: 0;
+}
+
+.etiqueta-guia-modal {
+    color: var(--acento-naranja, #ff5a36);
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+}
+
+.guia-modal-header h3 {
+    color: #ffffff;
+    font-family: 'Outfit', sans-serif;
+    font-size: 1.4rem;
+    margin: 4px 0 0 0;
+}
+
+.guia-desc-intro {
+    color: #cbd5e1;
+    font-size: 0.95rem;
+    line-height: 1.6;
+    margin-bottom: 25px;
+}
+
+.pasos-contenedor h4 {
+    color: #ffffff;
+    font-family: 'Outfit', sans-serif;
+    font-size: 1.1rem;
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.pasos-contenedor h4 i {
+    color: var(--acento-naranja, #ff5a36);
+}
+
+.lista-pasos-guia {
+    padding-left: 20px;
+    margin: 0;
+}
+
+.lista-pasos-guia li {
+    color: #cbd5e1;
+    font-size: 0.9rem;
+    line-height: 1.6;
+    margin-bottom: 12px;
+}
+
+.lista-pasos-guia li::marker {
+    color: var(--acento-naranja, #ff5a36);
+    font-weight: bold;
+}
+
+.guia-modal-footer {
+    margin-top: 30px;
+    padding-top: 20px;
+  
+}
+
+.btn-sos-modal {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    background: #ef4444;
+    color: #ffffff;
+    padding: 14px;
+    border-radius: 10px;
+    text-decoration: none;
+    font-family: 'Outfit', sans-serif;
+    font-weight: 700;
+    font-size: 0.95rem;
+    transition: background 0.3s ease;
+}
+
+.btn-sos-modal:hover {
+    background: #dc2626;
+}
+.tarjeta-contacto.reclamo i { 
+    color: #ef4444; 
+}
+
+.btn-contacto-reclamo {
+    display: inline-block;
+    padding: 12px 24px;
+    border-radius: 8px;
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-family: 'Outfit', sans-serif;
+    font-size: 1rem;
+    font-weight: 600;
+    background: #ef4444;
+    transition: transform 0.3s;
+    width: auto;
+}
+
+.btn-contacto-reclamo:hover {
+    transform: scale(1.05);
+}
+
+/* Formulario de Reclamos */
+.formulario-reclamo {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+.fila-form {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+}
+.grupo-form {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+.grupo-form label {
+    color: #cbd5e1;
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+.grupo-form input,
+.grupo-form select,
+.grupo-form textarea {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    color: #fff;
+    padding: 12px;
+    border-radius: 8px;
+    font-family: 'Montserrat', sans-serif;
+    outline: none;
+    transition: border-color 0.3s;
+}
+.grupo-form input:focus,
+.grupo-form select:focus,
+.grupo-form textarea:focus {
+    border-color: var(--acento-naranja, #ff5a36);
+}
+.grupo-form select option {
+    background: #0f172a;
+    color: #fff;
+}
+.btn-enviar-reclamo {
+    background: var(--acento-naranja, #ff5a36);
+    color: white;
+    border: none;
+    padding: 14px;
+    border-radius: 8px;
+    font-family: 'Outfit', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: background 0.3s;
+}
+.btn-enviar-reclamo:hover {
+    background: #e6512e;
+}
