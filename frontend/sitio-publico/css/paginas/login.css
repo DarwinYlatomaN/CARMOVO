@@ -1,0 +1,308 @@
+/* ==========================================================================
+   ESTILOS DE LA PÁGINA MI CUENTA / LOGIN & MODALES
+   ========================================================================== */
+
+.seccion-login {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: calc(100vh - 220px);
+    padding: 40px 20px;
+}
+
+.caja-login {
+    background-color: var(--fondo-tarjeta, #121927);
+    border: 1px solid var(--borde-oscuro, #1f2937);
+    border-radius: 16px;
+    padding: 40px;
+    width: 100%;
+    max-width: 480px;
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+}
+
+.login-header {
+    text-align: center;
+    margin-bottom: 25px;
+}
+
+.login-header h2 {
+    font-family: 'Outfit', sans-serif;
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 10px;
+    color: var(--color-blanco, #ffffff);
+}
+
+.login-header p {
+    color: var(--texto-gris, #8b95a5);
+    font-size: 0.95rem;
+}
+
+.formulario-login {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.grupo-input-login {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.grupo-input-login label {
+    color: var(--color-blanco, #ffffff);
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+.input-con-icono {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.input-con-icono i {
+    position: absolute;
+    left: 15px;
+    color: var(--texto-gris, #8b95a5);
+}
+
+.input-con-icono input {
+    width: 100%;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--borde-oscuro, #1f2937);
+    padding: 14px 15px 14px 45px;
+    border-radius: 10px;
+    color: var(--color-blanco, #ffffff);
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.95rem;
+    outline: none;
+    transition: border-color 0.3s ease;
+}
+
+.input-con-icono input:focus {
+    border-color: var(--color-naranja, #ff5a36);
+}
+
+.opciones-login {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.85rem;
+    color: var(--texto-gris, #8b95a5);
+}
+
+.recuerdame {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+}
+
+.recuerdame input {
+    accent-color: var(--color-naranja, #ff5a36);
+}
+
+.recuperar-pass {
+    color: var(--color-naranja, #ff5a36);
+    cursor: pointer;
+    transition: color 0.3s;
+}
+
+.recuperar-pass:hover {
+    text-decoration: underline;
+}
+
+.btn-ingresar {
+    background-color: var(--color-naranja, #ff5a36);
+    color: var(--color-blanco, #ffffff);
+    border: none;
+    padding: 14px;
+    border-radius: 10px;
+    font-family: 'Outfit', sans-serif;
+    font-size: 1.05rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s;
+    width: 100%;
+}
+
+.btn-ingresar:hover {
+    background-color: #e04a29;
+    transform: translateY(-2px);
+}
+
+/* Redes Sociales */
+.divisor-redes {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    color: var(--texto-gris, #8b95a5);
+    font-size: 0.85rem;
+    margin: 5px 0;
+}
+
+.divisor-redes::before,
+.divisor-redes::after {
+    content: '';
+    flex: 1;
+    border-bottom: 1px solid var(--borde-oscuro, #1f2937);
+}
+
+.divisor-redes span {
+    padding: 0 10px;
+}
+
+.contenedor-redes-sociales {
+    display: flex;
+    gap: 15px;
+}
+
+.btn-red-social {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid var(--borde-oscuro, #1f2937);
+    padding: 12px;
+    border-radius: 10px;
+    color: var(--color-blanco, #ffffff);
+    font-weight: 600;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.btn-red-social.google:hover {
+    background: rgba(234, 67, 53, 0.15);
+    border-color: #ea4335;
+}
+
+.btn-red-social.facebook:hover {
+    background: rgba(24, 119, 242, 0.15);
+    border-color: #1877f2;
+}
+
+.login-footer {
+    text-align: center;
+    margin-top: 15px;
+    font-size: 0.9rem;
+    color: var(--texto-gris, #8b95a5);
+}
+
+.login-footer a {
+    color: var(--color-naranja, #ff5a36);
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.login-footer a:hover {
+    text-decoration: underline;
+}
+
+/* Modales Compartidos */
+.modal-cuenta {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(11, 17, 30, 0.85);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    z-index: 99999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+}
+
+.modal-cuenta.activo {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.modal-cuenta-contenido {
+    background: var(--fondo-tarjeta, #121927);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    width: 90%;
+    max-width: 520px;
+    max-height: 90vh;
+    border-radius: 20px;
+    position: relative;
+    overflow-y: auto;
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.6);
+    transform: scale(0.92);
+    transition: transform 0.3s ease;
+    padding: 35px;
+}
+
+.modal-cuenta.activo .modal-cuenta-contenido {
+    transform: scale(1);
+}
+
+.btn-cerrar-modal {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: rgba(255, 255, 255, 0.08);
+    border: none;
+    color: #ffffff;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.1rem;
+    transition: background 0.3s ease, transform 0.3s ease;
+}
+
+.btn-cerrar-modal:hover {
+    background: var(--color-naranja, #ff5a36);
+    transform: rotate(90deg);
+}
+
+.modal-cuenta-contenido h3 {
+    font-family: 'Outfit', sans-serif;
+    font-size: 1.5rem;
+    color: #ffffff;
+    margin-bottom: 8px;
+}
+
+.modal-cuenta-contenido p {
+    color: var(--texto-gris, #8b95a5);
+    font-size: 0.9rem;
+    margin-bottom: 20px;
+}
+
+.form-modal-interno {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.fila-registro {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+}
+
+@media (max-width: 480px) {
+    .caja-login, .modal-cuenta-contenido {
+        padding: 25px 20px;
+    }
+    .fila-registro {
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
+    .contenedor-redes-sociales {
+        flex-direction: column;
+    }
+}
