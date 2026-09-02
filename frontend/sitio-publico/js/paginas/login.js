@@ -1,107 +1,64 @@
 document.addEventListener('DOMContentLoaded', () => {
-    
-    // -------------------------------------------------------------------------
-    // 1. MENÚ HAMBURGUESA MÓVIL (TOGGLE)
-    // -------------------------------------------------------------------------
-    const btnMenu = document.getElementById('btnMenu');
-    const navegacionPrincipal = document.getElementById('navegacionPrincipal');
+    const btnMostrarPassword = document.getElementById('btnMostrarPassword');
+    const inputPassword = document.getElementById('password');
+    const formularioLogin = document.getElementById('formularioLogin');
 
-    if (btnMenu && navegacionPrincipal) {
-        btnMenu.addEventListener('click', (e) => {
-            e.preventDefault();
-            navegacionPrincipal.classList.toggle('activo');
+    if (btnMostrarPassword && inputPassword) {
+        btnMostrarPassword.addEventListener('click', () => {
+            const tipoActual = inputPassword.getAttribute('type');
+            const icono = btnMostrarPassword.querySelector('i');
+            
+            if (tipoActual === 'password') {
+                inputPassword.setAttribute('type', 'text');
+                icono.classList.remove('fa-eye');
+                icono.classList.add('fa-eye-slash');
+            } else {
+                inputPassword.setAttribute('type', 'password');
+                icono.classList.remove('fa-eye-slash');
+                icono.classList.add('fa-eye');
+            }
         });
     }
 
-    
-    //  MODAL: RECUPERAR CONTRASEÑA
-  
-    const enlaceOlvido = document.getElementById('enlaceOlvido');
-    const modalRecuperar = document.getElementById('modalRecuperar');
-    const cerrarModalRecuperar = document.getElementById('cerrarModalRecuperar');
-    const formRecuperar = document.getElementById('formRecuperar');
-
-    if (enlaceOlvido && modalRecuperar) {
-        enlaceOlvido.addEventListener('click', (e) => {
+    if (formularioLogin) {
+        formularioLogin.addEventListener('submit', (e) => {
             e.preventDefault();
-            modalRecuperar.classList.remove('oculto');
-            modalRecuperar.classList.add('activo');
-        });
-    }
+            
+            const correo = document.getElementById('correo').value.trim();
+            const password = inputPassword.value.trim();
 
-    const cerrarRecuperarFn = () => {
-        if (modalRecuperar) {
-            modalRecuperar.classList.remove('activo');
-            setTimeout(() => modalRecuperar.classList.add('oculto'), 300);
-        }
-    };
-
-    if (cerrarModalRecuperar) cerrarModalRecuperar.addEventListener('click', cerrarRecuperarFn);
-
-    if (formRecuperar) {
-        formRecuperar.addEventListener('submit', (e) => {
-            e.preventDefault();
-            alert("¡Correo enviado con éxito! Revisa tu bandeja de entrada para actualizar tu contraseña.");
-            cerrarRecuperarFn();
-            formRecuperar.reset();
-        });
-    }
-
-   
-    //  REGISTRO DE USUARIO
-
-    const enlaceRegistro = document.getElementById('enlaceRegistro');
-    const modalRegistro = document.getElementById('modalRegistro');
-    const cerrarModalRegistro = document.getElementById('cerrarModalRegistro');
-    const formRegistro = document.getElementById('formRegistro');
-
-    if (enlaceRegistro && modalRegistro) {
-        enlaceRegistro.addEventListener('click', (e) => {
-            e.preventDefault();
-            modalRegistro.classList.remove('oculto');
-            modalRegistro.classList.add('activo');
-        });
-    }
-
-    const cerrarRegistroFn = () => {
-        if (modalRegistro) {
-            modalRegistro.classList.remove('activo');
-            setTimeout(() => modalRegistro.classList.add('oculto'), 300);
-        }
-    };
-
-    if (cerrarModalRegistro) cerrarModalRegistro.addEventListener('click', cerrarRegistroFn);
-
-    if (formRegistro) {
-        formRegistro.addEventListener('submit', (e) => {
-            e.preventDefault();
-            const inputs = formRegistro.querySelectorAll('input');
-            const pass1 = inputs[4].value;
-            const pass2 = inputs[5].value;
-
-            if (pass1 !== pass2) {
-                alert("Las contraseñas no coinciden. Por favor, verifícalas.");
+            if (correo === '' || password === '') {
                 return;
             }
 
-            alert("¡Registro exitoso! Tu cuenta en Carmovo ha sido creada correctamente.");
-            cerrarRegistroFn();
-            formRegistro.reset();
+            let usuariosDB = JSON.parse(localStorage.getItem('carmovo_usuarios')) || [];
+            const usuarioValido = usuariosDB.find(u => u.correo === correo && u.password === password);
+
+            if (usuarioValido) {
+                const sesion = { logueado: true, nombre: usuarioValido.nombre, correo: usuarioValido.correo };
+                localStorage.setItem('carmovo_sesion', JSON.stringify(sesion));
+                localStorage.setItem('usuarioCarmovoLogueado', 'true');
+                
+                window.location.href = 'reservas.html';
+            } else {
+                let errorLogin = document.getElementById('errorLoginMsg');
+                if (!errorLogin) {
+                    errorLogin = document.createElement('div');
+                    errorLogin.id = 'errorLoginMsg';
+                    errorLogin.style.color = '#ef4444';
+                    errorLogin.style.fontSize = '0.9rem';
+                    errorLogin.style.fontWeight = '600';
+                    errorLogin.style.textAlign = 'center';
+                    errorLogin.style.padding = '10px';
+                    errorLogin.style.backgroundColor = 'rgba(239, 68, 68, 0.1)';
+                    errorLogin.style.border = '1px solid #ef4444';
+                    errorLogin.style.borderRadius = '8px';
+                    
+                    const btnSubmit = formularioLogin.querySelector('button[type="submit"]');
+                    formularioLogin.insertBefore(errorLogin, btnSubmit);
+                }
+                errorLogin.textContent = 'Correo o contraseña incorrectos';
+            }
         });
     }
-
-    
-    //  CIERRE GLOBAL DE MODALES 
-    window.addEventListener('click', (e) => {
-        if (e.target === modalRecuperar) cerrarRecuperarFn();
-        if (e.target === modalRegistro) cerrarRegistroFn();
-    });
-
-    window.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape') {
-            cerrarRecuperarFn();
-            cerrarRegistroFn();
-        }
-    });
-
 });

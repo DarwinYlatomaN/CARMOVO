@@ -36,50 +36,26 @@ a {
     align-items: center;
     min-height: 100vh;
     padding: 20px;
-    background-image: radial-gradient(circle at top right, #147a5920, transparent 40%),
-                      radial-gradient(circle at bottom left, #ff5a3615, transparent 40%);
+    background-image: radial-gradient(circle at top left, #147a5920, transparent 40%),
+                      radial-gradient(circle at bottom right, #ff5a3615, transparent 40%);
 }
 
-.tarjeta-login {
+.tarjeta-registro {
     background-color: var(--fondo-tarjeta);
     width: 100%;
-    max-width: 480px;
+    max-width: 800px; 
     border-radius: 16px;
     padding: 40px;
     box-shadow: 0 15px 35px rgba(0,0,0,0.5);
     border: 1px solid var(--borde-oscuro);
-    position: relative;
 }
 
-.btn-volver {
-    position: absolute;
-    top: 25px;
-    left: 25px;
-    color: var(--texto-secundario);
-    font-size: 1.3rem;
-    transition: 0.3s ease;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 35px;
-    height: 35px;
-    border-radius: 50%;
-    background-color: var(--fondo-principal);
-    border: 1px solid var(--borde-oscuro);
-}
-
-.btn-volver:hover {
-    color: var(--color-blanco);
-    background-color: var(--color-naranja);
-    border-color: var(--color-naranja);
-}
-
-.cabecera-login {
+.cabecera-registro {
     text-align: center;
     margin-bottom: 30px;
 }
 
-.logo-login {
+.logo-registro {
     width: 140px;
     height: auto;
     margin-bottom: 20px;
@@ -87,7 +63,7 @@ a {
     border-radius: 8px;
 }
 
-.titulo-login {
+.titulo-registro {
     font-family: 'Outfit', sans-serif;
     font-size: 2rem;
     font-weight: 700;
@@ -95,7 +71,7 @@ a {
     margin-bottom: 8px;
 }
 
-.subtitulo-login {
+.subtitulo-registro {
     color: var(--texto-secundario);
     font-size: 0.95rem;
 }
@@ -104,6 +80,19 @@ a {
     display: flex;
     flex-direction: column;
     gap: 20px;
+}
+
+.grid-dos-columnas {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+.separador-registro {
+    border: 0;
+    height: 1px;
+    background: var(--borde-oscuro);
+    margin: 10px 0;
 }
 
 .grupo-input {
@@ -118,20 +107,20 @@ a {
     color: var(--texto-secundario);
 }
 
-.campo-input-login {
+.campo-input-registro {
     position: relative;
     display: flex;
     align-items: center;
 }
 
-.campo-input-login i:first-child {
+.campo-input-registro i:first-child {
     position: absolute;
     left: 15px;
     color: var(--texto-gris);
     font-size: 1.1rem;
 }
 
-.campo-input-login input {
+.campo-input-registro input {
     width: 100%;
     background-color: var(--fondo-principal);
     border: 1px solid var(--borde-oscuro);
@@ -142,15 +131,20 @@ a {
     font-size: 1rem;
     outline: none;
     transition: 0.3s;
+    color-scheme: dark;
 }
 
-.campo-input-login input:focus {
+.campo-input-registro input:focus {
     border-color: var(--color-naranja);
     box-shadow: 0 0 0 2px rgba(255, 90, 54, 0.2);
 }
 
-.campo-input-login input::placeholder {
+.campo-input-registro input::placeholder {
     color: #4b5563;
+}
+
+.campo-input-error input {
+    border-color: var(--rojo-error);
 }
 
 .btn-mostrar-password {
@@ -168,35 +162,12 @@ a {
     color: var(--color-blanco);
 }
 
-.opciones-extra {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-size: 0.9rem;
-}
-
-.checkbox-recordar {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    color: var(--texto-secundario);
-    cursor: pointer;
-}
-
-.checkbox-recordar input[type="checkbox"] {
-    accent-color: var(--color-naranja);
-    width: 16px;
-    height: 16px;
-    cursor: pointer;
-}
-
-.enlace-olvido {
-    color: var(--color-naranja);
+.mensaje-error-oculto {
+    display: none;
+    color: var(--rojo-error);
+    font-size: 0.85rem;
     font-weight: 600;
-}
-
-.enlace-olvido:hover {
-    color: #e04a29;
+    text-align: center;
 }
 
 .boton-accion-naranja {
@@ -225,18 +196,24 @@ a {
     width: 100%;
 }
 
-.pie-login {
+.pie-registro {
     margin-top: 30px;
     text-align: center;
     font-size: 0.95rem;
     color: var(--texto-secundario);
 }
 
-.enlace-registro {
+.enlace-login {
     color: var(--color-blanco);
     font-weight: 700;
 }
 
-.enlace-registro:hover {
+.enlace-login:hover {
     color: var(--color-naranja);
+}
+
+@media (max-width: 768px) {
+    .grid-dos-columnas {
+        grid-template-columns: 1fr;
+    }
 }

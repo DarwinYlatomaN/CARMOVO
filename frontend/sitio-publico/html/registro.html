@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro | Carmovo</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link rel="stylesheet" href="../css/paginas/registro.css">
+</head>
+<body>
+    <div class="pantalla-centrada">
+        <div class="tarjeta-registro">
+            <div class="cabecera-registro">
+                <a href="home.html">
+                    <img src="../recursos/imagenes/home/logo-carmovo4.jpg" alt="Logo Carmovo" class="logo-registro">
+                </a>
+                <h1 class="titulo-registro">Crea tu cuenta</h1>
+                <p class="subtitulo-registro">Únete a Carmovo y empieza tu próxima aventura</p>
+            </div>
+
+            <form id="formularioRegistro" class="formulario-acceso">
+                
+                <div class="grid-dos-columnas">
+                    <div class="grupo-input">
+                        <label for="nombreCompleto">Nombre Completo</label>
+                        <div class="campo-input-registro">
+                            <i class="fa-regular fa-user"></i>
+                            <input type="text" id="nombreCompleto" placeholder="Nombres y apellidos" required>
+                        </div>
+                    </div>
+    
+                    <div class="grupo-input">
+                        <label for="correoRegistro">Correo Electrónico</label>
+                        <div class="campo-input-registro">
+                            <i class="fa-regular fa-envelope"></i>
+                            <input type="email" id="correoRegistro" placeholder="ejemplo@correo.com" required>
+                        </div>
+                    </div>
+    
+                    <div class="grupo-input">
+                        <label for="telefonoRegistro">Teléfono</label>
+                        <div class="campo-input-registro">
+                            <i class="fa-solid fa-phone"></i>
+                            <input type="tel" id="telefonoRegistro" placeholder="Tu número" required>
+                        </div>
+                    </div>
+    
+                    <div class="grupo-input">
+                        <label for="documentoRegistro">DNI / Pasaporte</label>
+                        <div class="campo-input-registro">
+                            <i class="fa-regular fa-id-card"></i>
+                            <input type="text" id="documentoRegistro" placeholder="N° de documento" required>
+                        </div>
+                    </div>
+    
+                    <div class="grupo-input">
+                        <label for="nacimientoRegistro">Fecha de Nacimiento</label>
+                        <div class="campo-input-registro">
+                            <i class="fa-regular fa-calendar-days"></i>
+                            <input type="date" id="nacimientoRegistro" required>
+                        </div>
+                    </div>
+    
+                    <div class="grupo-input">
+                        <label for="domicilioRegistro">Domicilio (Calle / Urb)</label>
+                        <div class="campo-input-registro">
+                            <i class="fa-solid fa-location-dot"></i>
+                            <input type="text" id="domicilioRegistro" placeholder="Ej: Av. Balta 123" required>
+                        </div>
+                    </div>
+    
+                    <div class="grupo-input">
+                        <label for="licenciaRegistro">N° de Licencia (Brevete)</label>
+                        <div class="campo-input-registro">
+                            <i class="fa-solid fa-id-badge"></i>
+                            <input type="text" id="licenciaRegistro" placeholder="Ej: Q-89237461" required>
+                        </div>
+                    </div>
+    
+                    <div class="grupo-input">
+                        <label for="categoriaRegistro">Categoría Licencia</label>
+                        <div class="campo-input-registro">
+                            <i class="fa-solid fa-car"></i>
+                            <input type="text" id="categoriaRegistro" placeholder="Ej: A-I" required>
+                        </div>
+                    </div>
+    
+                    <div class="grupo-input">
+                        <label for="venceLicenciaRegistro">Vencimiento Licencia</label>
+                        <div class="campo-input-registro">
+                            <i class="fa-solid fa-calendar-xmark"></i>
+                            <input type="date" id="venceLicenciaRegistro" required>
+                        </div>
+                    </div>
+                </div>
+
+                <hr class="separador-registro">
+
+                <div class="grid-dos-columnas">
+                    <div class="grupo-input">
+                        <label for="passwordRegistro">Contraseña</label>
+                        <div class="campo-input-registro">
+                            <i class="fa-solid fa-lock"></i>
+                            <input type="password" id="passwordRegistro" placeholder="Crea una contraseña" required>
+                            <button type="button" class="btn-mostrar-password" id="btnMostrarPassword1">
+                                <i class="fa-regular fa-eye"></i>
+                            </button>
+                        </div>
+                    </div>
+    
+                    <div class="grupo-input">
+                        <label for="passwordConfirmar">Confirmar Contraseña</label>
+                        <div class="campo-input-registro">
+                            <i class="fa-solid fa-lock"></i>
+                            <input type="password" id="passwordConfirmar" placeholder="Repite tu contraseña" required>
+                            <button type="button" class="btn-mostrar-password" id="btnMostrarPassword2">
+                                <i class="fa-regular fa-eye"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="mensajeErrorRegistro" class="mensaje-error-oculto">Las contraseñas no coinciden</div>
+
+                <button type="submit" class="boton-accion-naranja boton-bloque">
+                    Registrarme <i class="fa-solid fa-arrow-right"></i>
+                </button>
+            </form>
+
+            <div class="pie-registro">
+                <p>¿Ya tienes una cuenta? <a href="login.html" class="enlace-login">Inicia sesión aquí</a></p>
+            </div>
+        </div>
+    </div>
+
+    <script src="../js/paginas/registro.js"></script>
+</body>
+</html>

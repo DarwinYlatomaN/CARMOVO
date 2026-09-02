@@ -7,12 +7,11 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-    
-    <link rel="stylesheet" href="../css/responsive.css">
     <link rel="stylesheet" href="../css/paginas/home.css">
-    <link rel="stylesheet" href="../css/paginas/categorias.css">
+    <link rel="stylesheet" href="../css/paginas/footer.css">
+    
+   
     <link rel="stylesheet" href="../css/paginas/reserva.css">
-     <link rel="stylesheet" href="../css/paginas//footer.css">
 </head>
 <body>
     <header class="cabecera">
@@ -60,7 +59,22 @@
         </nav>
     </header>
 
-    <main class="contenido-principal contenedor">
+    <div id="pantalla-bloqueo-sesion" class="bloqueo-sesion oculto">
+        <div class="tarjeta-bloqueo">
+            <button id="btn-cerrar-bloqueo" class="btn-volver-bloqueo" aria-label="Volver">
+                <i class="fa-solid fa-arrow-left"></i>
+            </button>
+            <i class="fa-solid fa-lock icono-candado"></i>
+            <h3>Inicia sesión para reservar</h3>
+            <p>Necesitas acceder a tu cuenta para continuar con el proceso de pago y confirmar tu vehículo.</p>
+            <div class="botones-bloqueo">
+                <a href="login.html" class="btn-principal-bloqueo">Iniciar Sesión</a>
+                <a href="registro.html" class="btn-secundario-bloqueo">Crear Cuenta</a>
+            </div>
+        </div>
+    </div>
+
+    <main class="contenido-principal contenedor" id="contenido-reserva-principal">
         <div class="cabecera-reservas">
             <h2>Completa tu Reserva</h2>
             <p>Estás a un paso de comenzar tu próxima aventura.</p>
@@ -69,6 +83,12 @@
         <div class="contenedor-reserva-layout">
             <section class="seccion-formulario-reserva">
                 <form id="formFinalizarReserva" class="formulario-datos">
+                    
+                    <div class="alerta-error-formulario oculto" id="alertaErroresFormulario">
+                        <i class="fa-solid fa-circle-exclamation"></i>
+                        <span>Por favor, completa todos los campos resaltados en rojo antes de proceder al pago.</span>
+                    </div>
+
                     <div class="tarjeta-reserva">
                         <h3>1. Detalles del Alquiler</h3>
                         <div class="grid-inputs">
@@ -87,7 +107,7 @@
                                     <label>Lugar de recogida</label>
                                     <div class="campo-input">
                                         <i class="fa-solid fa-location-dot"></i>
-                                        <select required>
+                                        <select id="lugar-recogida" required>
                                             <option value="" disabled selected>Selecciona sede de recogida</option>
                                             <option value="lima-miraflores">Lima - Miraflores</option>
                                             <option value="lima-aeropuerto">Lima - Aeropuerto Jorge Chávez</option>
@@ -108,7 +128,7 @@
                                     <label>Lugar de entrega</label>
                                     <div class="campo-input">
                                         <i class="fa-solid fa-location-dot"></i>
-                                        <select required>
+                                        <select id="lugar-entrega" required>
                                             <option value="" disabled selected>Selecciona sede de entrega</option>
                                             <option value="lima-miraflores">Lima - Miraflores</option>
                                             <option value="lima-aeropuerto">Lima - Aeropuerto Jorge Chávez</option>
@@ -140,7 +160,7 @@
                             </div>
                             <div class="grupo-input">
                                 <label for="nacimiento">Fecha de Nacimiento</label>
-                                <input type="text" id="nacimiento" placeholder="Fecha de Nacimiento" required>
+                                <input type="date" id="nacimiento" required>
                             </div>
                             <div class="grupo-input">
                                 <label for="correo">Correo Electrónico</label>
@@ -156,7 +176,7 @@
                             </div>
                             <div class="grupo-input">
                                 <label for="fecha-vence-licencia">Fecha de vencimiento de Licencia</label>
-                                <input type="text" id="fecha-vence-licencia" placeholder="Validar fecha" required>
+                                <input type="date" id="fecha-vence-licencia" required>
                             </div>
                             <div class="grupo-input">
                                 <label for="telefono">Teléfono</label>
@@ -164,7 +184,7 @@
                             </div>
                             <div class="grupo-input">
                                 <label for="documento">DNI / Pasaporte</label>
-                                <input type="text" id="documento" placeholder="Número de documento" minlength="8" maxlength="9" value="" required>
+                                <input type="text" id="documento" placeholder="Número de documento" minlength="8" maxlength="9" required>
                             </div>
                             
                             <div class="grupo-input col-completa">
@@ -202,14 +222,19 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="validar-datos">
+                        
+                        <div class="validar-datos" style="display: flex; flex-direction: column; align-items: flex-start;">
                             <button type="button" id="btn-validar-conductor" class="boton-validar">
                                 <i class="fa-solid fa-user-check"></i> <span>Validar Datos</span>
+                            </button>
+                            
+                            <button type="button" id="btn-procesar-pago" class="boton-accion-naranja oculto" style="margin-top: 15px;">
+                                Procesar Pago <i class="fa-solid fa-arrow-down"></i>
                             </button>
                         </div>
                     </div>
 
-                    <div class="tarjeta-reserva">
+                    <div class="tarjeta-reserva oculto" id="seccion-metodos-pago">
                         <h3>3. Método de Pago</h3>
                         <div class="opciones-pago">
                             <label class="radio-pago">
@@ -262,76 +287,56 @@
                             <i class="fa-solid fa-location-dot"></i>
                             <div>
                                 <p class="detalle-label">Recogida</p>
-                                <p class="detalle-valor">Chiclayo, Lambayeque</p>
-                                <p class="detalle-fecha">20 May, 2025 - 10:00 AM</p>
+                                <p class="detalle-valor" id="resumen-texto-recogida">Sin seleccionar</p>
                             </div>
                         </div>
                         <div class="detalle-item">
                             <i class="fa-solid fa-location-dot"></i>
                             <div>
                                 <p class="detalle-label">Entrega</p>
-                                <p class="detalle-valor">Trujillo, La Libertad</p>
-                                <p class="detalle-fecha">24 May, 2025 - 10:00 AM</p>
+                                <p class="detalle-valor" id="resumen-texto-entrega">Sin seleccionar</p>
                             </div>
                         </div>
                     </div>
 
                     <div class="desglose-precio">
+                        <div class="precio-item">
+                            <span id="etiqueta-dias">Tarifa base (1 día)</span>
+                            <span id="resumen-tarifa-base">S/ 0.00</span>
+                        </div>
 
-                    <div class="precio-item">
-                        <span id="etiqueta-dias">
-                            Tarifa base (1 día)
-                        </span>
-                        <span id="resumen-tarifa-base">
-                            S/ 0.00
-                        </span>
+                        <div class="precio-item">
+                            <span>Seguro básico</span>
+                            <span>S/ 120.00</span>
+                        </div>
+
+                        <div class="precio-item">
+                            <span>Impuestos (IGV 18%)</span>
+                            <span id="resumen-impuestos">S/ 0.00</span>
+                        </div>
+
+                        <div class="precio-total">
+                            <span>Total a pagar</span>
+                            <span class="monto-total" id="resumen-total">S/ 0.00</span>
+                        </div>
                     </div>
-
-                    <div class="precio-item">
-                        <span>
-                            Seguro básico
-                        </span>
-                        <span>
-                            S/ 120.00
-                        </span>
-                    </div>
-
-                    <div class="precio-item">
-                        <span>
-                            Impuestos (IGV 18%)
-                        </span>
-                        <span id="resumen-impuestos">
-                            S/ 0.00
-                        </span>
-                    </div>
-
-                    <div class="precio-total">
-                        <span>
-                            Total a pagar
-                        </span>
-                        <span class="monto-total" id="resumen-total">
-                            S/ 0.00
-                        </span>
-                    </div>
-
-                </div>
                 </div>
             </aside>
         </div>
     </main>
 
     <div class="contenedor-modales-pago">
-        
         <div id="modal-tarjeta" class="modal-pago oculto">
-            <div class="modal-pago-contenido">
+            <div class="modal-pago-contenido text-center">
                 <div class="modal-pago-cabecera">
                     <h4>Detalles de Tarjeta</h4>
                     <button type="button" class="btn-cerrar-modal"><i class="fa-solid fa-xmark"></i></button>
                 </div>
-                <div class="pago-tarjeta">
+                <h3 class="monto-modal-destacado">Total: <span class="monto-dinamico-modal">S/ 0.00</span></h3>
+                <div class="pago-tarjeta" style="margin-bottom: 20px;">
                     <img src="../recursos/pagos/visa.jpg" alt="tarjeta " class="tarjeta-visa">
                 </div>
-                <div class="grid-inputs">
+                <div class="grid-inputs text-left">
                     <div class="grupo-input col-completa">
                         <label>Número de Tarjeta</label>
                         <input type="text" placeholder="0000 0000 0000 0000" maxlength="19">
@@ -348,11 +353,6 @@
                         <label>CVV</label>
                         <input type="password" placeholder="123" maxlength="4">
                     </div>
-                    <div class="grupo-input col-completa mt-15">
-                        <label>Adjuntar foto del plástico (Opcional)</label>
-                        <input type="file" accept="image/*" class="input-archivo">
-                        <img class="vista-previa-imagen oculto" src="" alt="Vista previa">
-                    </div>
                 </div>
                 <button type="button" class="boton-accion-naranja boton-bloque btn-guardar-modal mt-20">Confirmar Pago con Tarjeta</button>
             </div>
@@ -364,20 +364,12 @@
                     <h4>Conectar con PayPal</h4>
                     <button type="button" class="btn-cerrar-modal"><i class="fa-solid fa-xmark"></i></button>
                 </div>
-                <img src="../recursos/pagos/Pay-pal.webp" alt="PayPal" class="logo-modal">
-                <p class="texto-instruccion">Serás redirigido a la plataforma segura de PayPal para completar tu pago al confirmar la reserva.</p>
-                <div class="grupo-input text-left">
+                <h3 class="monto-modal-destacado">Total: <span class="monto-dinamico-modal">S/ 0.00</span></h3>
+                <img src="../recursos/pagos/Pay-Pal.webp" alt="PayPal" class="logo-modal" style="margin-bottom: 15px;">
+                <p class="texto-instruccion">Serás redirigido a la plataforma de PayPal.</p>
+                <div class="grupo-input text-left mt-15">
                     <label>Nombre del titular de la cuenta</label>
                     <input type="text" class="titular-auto-relleno" placeholder="Nombre completo">
-                </div>
-                <div class="grupo-input text-left mt-15">
-                    <label>Correo de cuenta PayPal</label>
-                    <input type="email" placeholder="correo@ejemplo.com">
-                </div>
-                <div class="grupo-input text-left mt-15">
-                    <label>Adjuntar captura de pago (Si ya realizaste transferencia)</label>
-                    <input type="file" accept="image/*" class="input-archivo">
-                    <img class="vista-previa-imagen oculto" src="" alt="Vista previa">
                 </div>
                 <button type="button" class="boton-accion-naranja boton-bloque btn-guardar-modal mt-20">Confirmar Pago Pay-Pal</button>
             </div>
@@ -389,23 +381,35 @@
                     <h4>Pago con Yape</h4>
                     <button type="button" class="btn-cerrar-modal"><i class="fa-solid fa-xmark"></i></button>
                 </div>
-                <div class="qr-placeholder bg-yape">
+                <h3 class="monto-modal-destacado">Total: <span class="monto-dinamico-modal">S/ 0.00</span></h3>
+                
+                <button type="button" class="btn-abrir-qr" data-target="qr-yape-container">
+                    <i class="fa-solid fa-qrcode"></i> Mostrar QR
+                </button>
+                <div id="qr-yape-container" class="qr-placeholder bg-yape oculto">
                     <img src="../recursos/pagos/yape.png" alt="QR Yape" class="qr-imagen">
                 </div>
+                
                 <p class="info-titular">Titular: CARMOVE S.A.C.<br>Número: 927 357 060</p>
                 <div class="grupo-input text-left">
                     <label>Nombre de quien transfiere</label>
                     <input type="text" class="titular-auto-relleno" placeholder="Nombre completo">
                 </div>
                 <div class="grupo-input text-left mt-15">
-                    <label>Número de Operación / Aprobación</label>
+                    <label>Número de Operación</label>
                     <input type="text" placeholder="Ej: 12345678">
                 </div>
                 <div class="grupo-input text-left mt-15">
-                    <label>Adjuntar comprobante Yape</label>
-                    <input type="file" accept="image/*" class="input-archivo">
-                    <img class="vista-previa-imagen oculto" src="" alt="Vista previa">
+                <label>Sube tu comprobante de pago</label>
+                <div class="contenedor-subir-archivo">
+                    <input type="file" class="input-comprobante" id="comprobante-yape" accept="image/png, image/jpeg, image/jpg" data-preview="preview-yape">
+                    <label for="comprobante-yape" class="label-archivo">
+                        <i class="fa-solid fa-cloud-arrow-up"></i> <span>Seleccionar imagen</span>
+                    </label>
                 </div>
+                  <img id="preview-yape" class="vista-previa-imagen oculto" alt="Vista previa">
+                </div>
+
                 <button type="button" class="boton-accion-naranja boton-bloque btn-guardar-modal mt-20">Confirmar Pago Yape</button>
             </div>
         </div>
@@ -416,23 +420,35 @@
                     <h4>Pago con Plin</h4>
                     <button type="button" class="btn-cerrar-modal"><i class="fa-solid fa-xmark"></i></button>
                 </div>
-                <div class="qr-placeholder bg-plin">
+                <h3 class="monto-modal-destacado">Total: <span class="monto-dinamico-modal">S/ 0.00</span></h3>
+                
+                <button type="button" class="btn-abrir-qr" data-target="qr-plin-container">
+                    <i class="fa-solid fa-qrcode"></i> Mostrar QR
+                </button>
+                <div id="qr-plin-container" class="qr-placeholder bg-plin oculto">
                     <img src="../recursos/pagos/plin.jpg" alt="QR Plin" class="qr-imagen">
                 </div>
+                
                 <p class="info-titular">Titular: CARMOVE S.A.C.<br>Número: 927 357 060</p>
                 <div class="grupo-input text-left">
                     <label>Nombre de quien transfiere</label>
                     <input type="text" class="titular-auto-relleno" placeholder="Nombre completo">
                 </div>
                 <div class="grupo-input text-left mt-15">
-                    <label>Número de Operación / Aprobación</label>
+                    <label>Número de Operación</label>
                     <input type="text" placeholder="Ej: 12345678">
                 </div>
                 <div class="grupo-input text-left mt-15">
-                    <label>Adjuntar comprobante Plin</label>
-                    <input type="file" accept="image/*" class="input-archivo">
-                    <img class="vista-previa-imagen oculto" src="" alt="Vista previa">
+                <label>Sube tu comprobante de pago</label>
+                <div class="contenedor-subir-archivo">
+                    <input type="file" class="input-comprobante" id="comprobante-yape" accept="image/png, image/jpeg, image/jpg" data-preview="preview-yape">
+                    <label for="comprobante-yape" class="label-archivo">
+                        <i class="fa-solid fa-cloud-arrow-up"></i> <span>Seleccionar imagen</span>
+                    </label>
                 </div>
+                  <img id="preview-yape" class="vista-previa-imagen oculto" alt="Vista previa">
+                </div>
+
                 <button type="button" class="boton-accion-naranja boton-bloque btn-guardar-modal mt-20">Confirmar Pago Plin</button>
             </div>
         </div>
@@ -443,21 +459,17 @@
                     <i class="fa-solid fa-circle-check"></i>
                 </div>
                 <h4 class="titulo-exito">¡Pago Realizado, <span id="nombre-exito"></span>!</h4>
-                <p class="texto-validacion">
-                    Nuestro equipo validará el pago.<br>Espere un momento, por favor...
-                </p>
+                <p class="texto-validacion">Nuestro equipo validará el pago.<br>Espere un momento, por favor...</p>
                 <div class="cargando-spinner"></div>
                 <button type="button" class="boton-accion-naranja boton-bloque btn-cerrar-exito mt-20">Entendido</button>
             </div>
         </div>
-
     </div>
-<footer class="pie-pagina-nuevo">
+
+    <footer class="pie-pagina-nuevo">
         <div class="contenedor pie-principal">
             <div class="pie-logo-info">
-                <div class="caja-logo">
-                    <img src="../recursos/imagenes/home/logo-carmovo4.jpg" alt="logo-carmovo">
-                </div>
+                
             </div>
             
             <div class="pie-enlaces">
@@ -502,20 +514,20 @@
         
         <div class="pie-inferior contenedor">
             <p>&copy; 2026 Carmovo. Todos los derechos reservados.</p>
-           
+            
             <div class="iconos-redes">
                 <a href="https://facebook.com" target="_blank"><i class="fa-brands fa-facebook"></i></a>
                 <a href="https://instagram.com" target="_blank"><i class="fa-brands fa-instagram"></i></a>
                 <a href="https://wa.me/51999999999" target="_blank"><i class="fa-brands fa-whatsapp"></i></a>
             </div>
         </div>
-
-        <a href="https://wa.me/51999999999" class="btn-whatsapp-flotante" target="_blank">
-            <i class="fa-brands fa-whatsapp"></i>
-        </a>
     </footer>
 
+    <script src="../js/paginas/experiencia.js"></script>
     <script src="../js/db y app-categorias/db.js"></script>
+    <script src="../js/db y app-categorias/app-categorias.js"></script>
+    <script src="../js/paginas/busqueda.js"></script>
     <script src="../js/paginas/reserva.pagina.js"></script>
+
 </body>
 </html>

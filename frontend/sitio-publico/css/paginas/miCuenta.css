@@ -186,7 +186,7 @@
 
 .subtitulo-modal {
     color: #94a3b8;
-    font-size: 0.85rem;
+    font-size: 1rem;
     margin: -10px 0 20px 0;
 }
 .acciones-modal {
@@ -274,8 +274,29 @@
     font-size: 1.25rem;
     margin: 0;
 }
+.modal-pago-cabecera  .btn-cerrar-modal {
+    padding:8px;
+   
+}
+.modal-pago-cabecera  .btn-cerrar-modal:hover {
+    background-color:#ff5a36;
+    border-radius: 50%;
+    color:#fff;
+    border:none;
+    rotate: 90deg;
+}
 .grupo-input {
     margin-bottom:16px;
+    margin-left:8px;
+}  
+.grupo-input input {
+    padding:10px;
+    border-radius: 8px;
+     margin-left:8px;
+     font-size:1.21em;
+     display:flex;
+     align-items:center;
+    
 }
 /*MODAL DE DATOS ACTUALIZADOS*/
 .modal-pequeno {

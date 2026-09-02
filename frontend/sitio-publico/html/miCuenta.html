@@ -3,23 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Categorías de Vehículos | Carmovo</title>
-    <!-- Tus tipografías -->
+    <title>Mi Cuenta | Carmovo</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
     
-    
-    <link rel="stylesheet" href="../css/responsive.css">
     <link rel="stylesheet" href="../css/paginas/home.css">
+    
     <link rel="stylesheet" href="../css/paginas/miCuenta.css">
-     <link rel="stylesheet" href="../css/paginas//footer.css">
-
-    <link rel="stylesheet" href="../css/paginas/categorias.css">
+    <link rel="stylesheet" href="../css/paginas/footer.css">
 </head>
 <body>
-    
-   
     <header class="cabecera">
         <div class="cabecera-superior contenedor">
             <div class="caja-logo">
@@ -43,7 +37,7 @@
             </div>
 
             <div class="cabecera-acciones">
-               
+              
                 <a href="login.html" class="boton-login">Iniciar sesión</a>
                 
                 <button class="menu-toggle oculto-desktop" id="btnMenu" aria-label="Abrir menú de navegación">
@@ -57,13 +51,14 @@
                 <li><a href="home.html" class="enlace">Home</a></li>
                 <li><a href="categorias.html" class="enlace">Categorías</a></li>
                 <li><a href="reservas.html" class="enlace">Reservas</a></li>
-                <li><a href="ofertas.html" class="enlace ">Ofertas y Promociones</a></li>
-                <li><a href="experiencia.html" class="enlace ">Experiencias</a></li>
+                <li><a href="ofertas.html" class="enlace">Ofertas y Promociones</a></li>
+                <li><a href="experiencia.html" class="enlace">Experiencias</a></li>
                 <li><a href="soporte.html" class="enlace">Soporte</a></li>
                 <li><a href="miCuenta.html" class="enlace activo">Mi Cuenta</a></li>
             </ul>
         </nav>
     </header>
+
     <main class="contenido-principal contenedor">
         <div class="cabecera-cuenta">
             <h2>Panel de Usuario</h2>
@@ -71,8 +66,6 @@
         </div>
 
         <div class="cuenta-grid-layout">
-            
-            <!-- SECCIÓN 1: PERFIL Y DATOS DEL CONDUCTOR -->
             <section class="tarjeta-cuenta perfil-conductor">
                 <div class="perfil-cabecera">
                     <div class="avatar-usuario">
@@ -82,13 +75,10 @@
                         <h3 id="lbl-nombre-completo">Shark 4.0</h3>
                         <p id="lbl-correo">darvinyl@ejemplo.com</p>
                     </div>
-                    <!-- Botón de Engranaje para Editar -->
                     <button type="button" id="btn-editar-perfil" class="btn-engranaje" title="Editar Información">
                         <i class="fa-solid fa-gear"></i>
                     </button>
                 </div>
-
-                
 
                 <h4>Información Completa del Conductor</h4>
                 <div class="grid-datos-usuario">
@@ -123,11 +113,9 @@
                 </div>
             </section>
 
-      
             <section class="tarjeta-cuenta estado-reserva">
                 <h3>Estado de tu Reserva y Pago</h3>
                 
-              
                 <div class="caja-estado-actual pendiente">
                     <div class="icono-estado">
                         <i class="fa-solid fa-clock-rotate-left"></i>
@@ -159,110 +147,99 @@
                     </div>
                 </div>
             </section>
-
         </div>
     </main>
-                <div class="contenedor-modales-pago">
-                    
-                <div id="modal-editar-cuenta" class="modal-pago oculto">
-                    <div class="modal-pago-contenido modal-ancho-personalizado">
-                        
-                        
-                        <div class="modal-pago-cabecera">
-                            <div class="titulo-con-icono">
-                                <i class="fa-solid fa-user-pen"></i>
-                                <h4>Editar Perfil </h4>
-                            </div>
-                            <button type="button" class="btn-cerrar-modal"><i class="fa-solid fa-xmark"></i></button>
-                        </div>
-            
-                        <p class="subtitulo-modal">Actualiza tu información personal y los datos de tu licencia de conducir.</p>
-            
-                        <form id="form-editar-cuenta" class="grid-inputs mt-15">
-                            
-                            <div class="grupo-input">
-                                <label>Nombre</label>
-                                <input type="text" id="edit-nombre" placeholder="Tu nombre" required>
-                            </div>
-            
-                            <div class="grupo-input">
-                                <label>Apellidos</label>
-                                <input type="text" id="edit-apellidos" placeholder="Tus apellidos" required>
-                            </div>
-            
-                            <div class="grupo-input">
-                                <label>Correo Electrónico</label>
-                                <input type="email" id="edit-correo" placeholder="correo@ejemplo.com" required>
-                            </div>
-            
-                            <div class="grupo-input">
-                                <label>Teléfono</label>
-                                <input type="tel" id="edit-telefono" placeholder="Tu número" required>
-                            </div>
-            
-                            <div class="grupo-input">
-                                <label>Fecha de Nacimiento</label>
-                                <input type="date" id="edit-nacimiento" required>
-                            </div>
-            
-                            <div class="grupo-input">
-                                <label>DNI / Pasaporte</label>
-                                <input type="text" id="edit-documento" placeholder="N° de documento" required>
-                            </div>
-            
-                            <div class="grupo-input">
-                                <label>Núm. de Licencia (Brevete)</label>
-                                <input type="text" id="edit-licencia" placeholder="Ej: Q-89237461" required>
-                            </div>
-            
-                            <div class="grupo-input">
-                                <label>Categoría de Licencia</label>
-                                <input type="text" id="edit-categoria" placeholder="Ej: A-I" required>
-                            </div>
-            
-                            <div class="grupo-input">
-                                <label>Vencimiento de Licencia</label>
-                                <input type="date" id="edit-vence" required>
-                            </div>
-            
-                            <div class="grupo-input col-completa">
-                                <label>Domicilio (Calle / Urbanización)</label>
-                                <input type="text" id="edit-domicilio" placeholder="Ej: Av. Balta 123, Urb. La Primavera" required>
-                            </div>
-            
-                            
-                            <div class="grupo-input col-completa mt-20 acciones-modal">
-                                <button type="button" class="boton-secundario-cancelar btn-cerrar-modal">Cancelar</button>
-                                <button type="submit" class="boton-accion-naranja">Guardar Cambios</button>
-                            </div>
-            
-                        </form>
+
+    <div class="contenedor-modales-pago">
+        <div id="modal-editar-cuenta" class="modal-pago oculto">
+            <div class="modal-pago-contenido modal-ancho-personalizado">
+                <div class="modal-pago-cabecera">
+                    <div class="titulo-con-icono">
+                        <i class="fa-solid fa-user-pen"></i>
+                        <h4>Editar Perfil </h4>
                     </div>
+                    <button type="button" class="btn-cerrar-modal"><i class="fa-solid fa-xmark"></i></button>
                 </div>
-                    
-                        <div id="modal-exito-actualizacion" class="modal-pago oculto">
-                            <div class="modal-pago-contenido text-center modal-pequeno">
-                                <div class="icono-exito-verde">
-                                    <i class="fa-solid fa-circle-check"></i>
-                                </div>
-                                <h4 class="titulo-exito-modal">¡Tus datos han sido actualizados con éxito!</h4>
-                                <p class="texto-exito-modal">La información del conductor se guardó correctamente en tu perfil.</p>
-                                <div class="btn-entendido">
-                                    <button type="button" class="boton-accion-naranja boton-bloque mt-20 btn-cerrar-exito-cuenta">Entendido</button>
-                                </div>
-                            </div>
-                        </div>
-                
-            
+    
+                <p class="subtitulo-modal">Actualiza tu información personal y los datos de tu licencia de conducir.</p>
+    
+                <form id="form-editar-cuenta" class="grid-inputs mt-15">
+                    <div class="grupo-input">
+                        <label>Nombre</label>
+                        <input type="text" id="edit-nombre" placeholder="Tu nombre" required>
+                    </div>
+    
+                    <div class="grupo-input">
+                        <label>Apellidos</label>
+                        <input type="text" id="edit-apellidos" placeholder="Tus apellidos" required>
+                    </div>
+    
+                    <div class="grupo-input">
+                        <label>Correo Electrónico</label>
+                        <input type="email" id="edit-correo" placeholder="correo@ejemplo.com" required>
+                    </div>
+    
+                    <div class="grupo-input">
+                        <label>Teléfono</label>
+                        <input type="tel" id="edit-telefono" placeholder="Tu número" required>
+                    </div>
+    
+                    <div class="grupo-input">
+                        <label>Fecha de Nacimiento</label>
+                        <input type="date" id="edit-nacimiento" required>
+                    </div>
+    
+                    <div class="grupo-input">
+                        <label>DNI / Pasaporte</label>
+                        <input type="text" id="edit-documento" placeholder="N° de documento" required>
+                    </div>
+    
+                    <div class="grupo-input">
+                        <label>Núm. de Licencia (Brevete)</label>
+                        <input type="text" id="edit-licencia" placeholder="Ej: Q-89237461" required>
+                    </div>
+    
+                    <div class="grupo-input">
+                        <label>Categoría de Licencia</label>
+                        <input type="text" id="edit-categoria" placeholder="Ej: A-I" required>
+                    </div>
+    
+                    <div class="grupo-input">
+                        <label>Vencimiento de Licencia</label>
+                        <input type="date" id="edit-vence" required>
+                    </div>
+    
+                    <div class="grupo-input col-completa">
+                        <label>Domicilio (Calle / Urbanización)</label>
+                        <input type="text" id="edit-domicilio" placeholder="Ej: Av. Balta 123, Urb. La Primavera" required>
+                    </div>
+    
+                    <div class="grupo-input col-completa mt-20 acciones-modal">
+                        <button type="button" class="boton-secundario-cancelar btn-cerrar-modal">Cancelar</button>
+                        <button type="submit" class="boton-accion-naranja">Guardar Cambios</button>
+                    </div>
+                </form>
             </div>
-                
-                
-     <footer class="pie-pagina-nuevo">
+        </div>
+            
+        <div id="modal-exito-actualizacion" class="modal-pago oculto">
+            <div class="modal-pago-contenido text-center modal-pequeno">
+                <div class="icono-exito-verde">
+                    <i class="fa-solid fa-circle-check"></i>
+                </div>
+                <h4 class="titulo-exito-modal">¡Tus datos han sido actualizados con éxito!</h4>
+                <p class="texto-exito-modal">La información del conductor se guardó correctamente en tu perfil.</p>
+                <div class="btn-entendido">
+                    <button type="button" class="boton-accion-naranja boton-bloque mt-20 btn-cerrar-exito-cuenta">Entendido</button>
+                </div>
+            </div>
+        </div>
+    </div>
+      
+    <footer class="pie-pagina-nuevo">
         <div class="contenedor pie-principal">
             <div class="pie-logo-info">
-                <div class="caja-logo">
-                    <img src="../recursos/imagenes/home/logo-carmovo4.jpg" alt="logo-carmovo">
-                </div>
+                
             </div>
             
             <div class="pie-enlaces">
@@ -314,11 +291,12 @@
                 <a href="https://wa.me/51999999999" target="_blank"><i class="fa-brands fa-whatsapp"></i></a>
             </div>
         </div>
-
-        <a href="https://wa.me/51999999999" class="btn-whatsapp-flotante" target="_blank">
-            <i class="fa-brands fa-whatsapp"></i>
-        </a>
     </footer>
-   <script src="../js/paginas/miCuenta.js"></script>pt>
+    
+    <script src="../js/paginas/miCuenta.js"></script>
+    <script src="../js/paginas/experiencia.js"></script>
+    <script src="../js/db y app-categorias/db.js"></script>
+    <script src="../js/db y app-categorias/app-categorias.js"></script>
+    <script src="../js/paginas/busqueda.js"></script>
 </body>
 </html>

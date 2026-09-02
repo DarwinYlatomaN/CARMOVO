@@ -55,7 +55,8 @@ ul {
 img {
     width: 200px;
     height: 120px;
-    box-shadow: 0px 2px 12px var(--color-naranja);
+    border-radius: 20px;
+    box-shadow:  10px 10px  var(--color-naranja);
 }
 
 .logo-icono {
@@ -175,7 +176,7 @@ img {
     font-weight: 600;
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 2px;
     font-size: 0.95rem;
 }
 
@@ -278,8 +279,9 @@ img {
 .contenedor-reserva-flotante {
     margin-top: -90px;
     position: relative;
-    z-index: 10;
+    z-index: 20;
     margin-bottom: 70px;
+    padding: 0 15px;
 }
 
 .formulario-reservas {
@@ -288,80 +290,75 @@ img {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 15px;
+    padding: 12px 12px 12px 25px;
     box-shadow: 0 25px 50px rgba(0,0,0,0.4);
+    gap: 15px;
 }
 
 .grupo-campo {
     display: flex;
     flex-direction: column;
-    padding: 0 20px;
     flex: 1;
+    position: relative;
+    padding: 10px 15px;
+    border-radius: 10px;
+    transition: background 0.3s ease;
 }
-
 .grupo-campo label {
-    color: #a0aabf;
-    font-size: 0.85rem;
+    color: #64748b;
+    font-size: 0.8rem;
     font-weight: 700;
-    margin-bottom: 5px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 6px;
 }
-
 .campo-input {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 12px;
 }
-
-.campo-input i {
+.campo-input i  input[type="date"] {
     color: var(--fondo-principal);
     font-size: 1.1rem;
+    display: flex;
+    justify-content: flex-start;
 }
 
+.campo-input select,
 .campo-input input[type="date"] {
-    color: #121927;
-    font-size: 1.1rem;
-    font-weight: 700;
-    margin-bottom: 5px;
-    border: none;
-    font-family: "Montserrat";
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 12px;
-} 
-
-.campo-input select {
     border: none;
     background: transparent;
     color: var(--fondo-principal);
-    font-weight: 800;
+    font-weight: 700;
     font-size: 1.05rem;
     font-family: 'Montserrat', sans-serif;
     outline: none;
     cursor: pointer;
     width: 100%;
+    padding: 0;
     appearance: none;
 }
 
 .separador-vertical {
-    width: 8px;
-    height: 45px;
-    background-color: #e5e7eb;
+    width: 10px;
+    height: 50px;
+    background-color: rgba(0, 0, 0, 0.08); /* Separador sutil */
+    flex-shrink: 0;
 }
-
 .boton-accion-naranja {
     background-color: var(--color-naranja);
     color: var(--color-blanco);
     border: none;
-    padding: 20px 35px;
-    border-radius: 10px;
+    padding: 18px 32px;
+    border-radius: 12px;
     font-weight: 800;
-    font-size: 1.1rem;
+    font-size: 1.05rem;
     cursor: pointer;
     display: flex;
     align-items: center;
     gap: 12px;
-    transition: 0.3s;
+    transition: all 0.3s ease;
+    white-space: nowrap;
 }
 
 .boton-accion-naranja:hover {
@@ -634,7 +631,9 @@ img {
         border-bottom: 1px solid rgba(255, 255, 255, 0.05);
         font-size: 1.05rem;
     }
-    
+    .seccion-hero {
+        padding: 0;
+    }
     .titulo-principal {
         font-size: 2.2rem;
         margin-bottom: 15px;
@@ -642,22 +641,26 @@ img {
     .descripcion-hero {
         font-size: 1rem;
     }
-    
+    .hero-video-caja {
+    width: 100%;
+    position: relative;
+    display: flex;
+    justify-content: flex-end;
+}
+
 .video-fondo-pantalla {
-    
+    position: absolute;
     top: 0;
-    
+    left: 50%;
     transform: translateX(-50%);
-    width: 180%;
+    width: 100vw;
     height: 120%;
     object-fit: cover;
     z-index: -2;
 }
     .contenedor-reserva-flotante {
-       display: flex;
-       justify-content: center;
-       align-items: center;
-    
+        margin-top: -50px;
+        margin-bottom: 40px;
     }
     .formulario-reservas {
         display: flex;
@@ -681,8 +684,7 @@ img {
         padding: 16px;
     }
     .seccion-caracteristicas {
-       display: flex;
-       flex-direction: column;
+        margin-bottom: 50px;
     }
     .titulo-seccion-caracteristicas {
         margin-bottom: 20px;

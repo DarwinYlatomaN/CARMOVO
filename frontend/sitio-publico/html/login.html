@@ -4,285 +4,67 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Iniciar Sesión | Carmovo</title>
-    <!-- Tipografías y FontAwesome -->
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-    
-
-    <link rel="stylesheet" href="../css/paginas/home.css">
-     <link rel="stylesheet" href="../css/paginas//footer.css">
-    
     <link rel="stylesheet" href="../css/paginas/login.css">
 </head>
 <body>
-    
-  
-    <header class="cabecera">
-        <div class="cabecera-superior contenedor">
-            <div class="caja-logo">
-                <div class="logo-icono"><img src="../recursos/imagenes/home/logo-carmovo4.jpg" alt="logo-carmovo"></div>
-                <div class="logo-texto">
-                    <span class="logo-titulo">!Conduce Hoy!</span>
-                    <span class="logo-subtitulo">La llave de tu próxima aventura</span>
-                </div>
-            </div>
-
-            <div class="contenedor-buscador-principal">
-                <div class="barra-busqueda" id="formBusqueda">
-                    <input type="text" class="campo-busqueda" id="inputBusqueda" placeholder="Buscar tu compañero de aventura">
-                    <button type="submit" class="boton-buscar">Buscar</button>
-                </div>
-            </div>
-
-            <div class="cabecera-acciones">
-               
-                <a href="login.html" class="boton-login">Iniciar sesión</a>
-                
-                <button class="menu-toggle oculto-desktop" id="btnMenu" aria-label="Abrir menú de navegación">
-                    <i class="fa-solid fa-bars"></i>
-                </button>
-            </div>
-        </div>
-
-        <nav class="navegacion-principal" id="navegacionPrincipal">
-            <ul class="lista-enlaces contenedor">
-                <li><a href="home.html" class="enlace">Home</a></li>
-                <li><a href="categorias.html" class="enlace">Categorías</a></li>
-                <li><a href="reservas.html" class="enlace">Reservas</a></li>
-                <li><a href="ofertas.html" class="enlace">Ofertas y Promociones</a></li>
-                <li><a href="experiencia.html" class="enlace">Experiencias</a></li>
-                <li><a href="soporte.html" class="enlace">Soporte</a></li>
-                <li><a href="miCuenta.html" class="enlace ">Mi Cuenta</a></li>
-            </ul>
-        </nav>
-    </header>
-
-    
-    <main class="seccion-login contenedor">
-        <div class="caja-login">
-            <div class="login-header">
-                <h2>¡Bienvenido de nuevo!</h2>
-                <p>Ingresa a tu cuenta de Carmovo para gestionar tus reservas.</p>
-            </div>
-
-            <form class="formulario-login" action="home.html" method="GET">
-                <div class="grupo-input-login">
-                    <label for="email">Correo Electrónico</label>
-                    <div class="input-con-icono">
-                        <i class="fa-regular fa-envelope"></i>
-                        <input type="email" id="email" placeholder="Ingresa tu correo Electrónico" required>
-                    </div>
-                </div>
-
-                <div class="grupo-input-login">
-                    <label for="password">Contraseña</label>
-                    <div class="input-con-icono">
-                        <i class="fa-solid fa-lock"></i>
-                        <input type="password" id="password" placeholder="Contraseña" required>
-                    </div>
-                </div>
-
-                <div class="opciones-login">
-                    <label class="recuerdame">
-                        <input type="checkbox"> Recuérdame
-                    </label>
-                    <a href="#" id="enlaceOlvido" class="recuperar-pass">¿Olvidaste tu contraseña?</a>
-                </div>
-
-                <button type="submit" class="btn-ingresar">Iniciar Sesión</button>
-
-                
-                <div class="divisor-redes">
-                    <span>o continúa con</span>
-                </div>
-
-                <div class="contenedor-redes-sociales">
-                    <button type="button" class="btn-red-social google">
-                        <i class="fa-brands fa-google"></i> Google
-                    </button>
-                    <button type="button" class="btn-red-social facebook">
-                        <i class="fa-brands fa-facebook-f"></i> Facebook
-                    </button>
-                </div>
-
-                <div class="login-footer">
-                    <p>¿Aún no tienes una cuenta? <a href="#" id="enlaceRegistro">Regístrate aquí</a></p>
-                </div>
-            </form>
-        </div>
-    </main>
-
-    
-    <div id="modalRecuperar" class="modal-cuenta oculto">
-        <div class="modal-cuenta-contenido">
-            <button type="button" class="btn-cerrar-modal" id="cerrarModalRecuperar"><i class="fa-solid fa-xmark"></i></button>
-            <h3>Recuperar Contraseña</h3>
-            <p>Ingresa tu correo electrónico registrado y te enviaremos las instrucciones para actualizar tu contraseña.</p>
-            <form id="formRecuperar" class="form-modal-interno">
-                <div class="grupo-input-login">
-                    <label>Correo Electrónico</label>
-                    <div class="input-con-icono">
-                        <i class="fa-regular fa-envelope"></i>
-                        <input type="email" placeholder="Ingresa tu correo electrónico para validar" required>
-                    </div>
-                </div>
-                <button type="submit" class="btn-ingresar">Enviar Instrucciones</button>
-            </form>
-        </div>
-    </div>
-
-   
-    <div id="modalRegistro" class="modal-cuenta oculto">
-        <div class="modal-cuenta-contenido">
-            <button type="button" class="btn-cerrar-modal" id="cerrarModalRegistro"><i class="fa-solid fa-xmark"></i></button>
-            <h3>Crea tu Cuenta en Carmovo</h3>
-            <p>Completa los datos para disfrutar de todos nuestros beneficios.</p>
-            <form id="formRegistro" class="form-modal-interno">
-                <div class="fila-registro">
-                    <div class="grupo-input-login">
-                        <label>Nombres</label>
-                        <div class="input-con-icono">
-                            <i class="fa-regular fa-user"></i>
-                            <input type="text" placeholder="Nombres" required>
-                        </div>
-                    </div>
-                    <div class="grupo-input-login">
-                        <label>Apellidos</label>
-                        <div class="input-con-icono">
-                            <i class="fa-regular fa-user"></i>
-                            <input type="text" placeholder="Apellidos" required>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="grupo-input-login">
-                    <label for="">Correo Electrónico</label>
-                    <div class="input-con-icono">
-                        <i class="fa-regular fa-envelope"></i>
-                        <input type="email" placeholder="Ingresa tu correo electrónico" required>
-                    </div>
-                </div>
-                <div class="grupo-input">
-                        <label for="categoriaRegistro">Categoría Licencia</label>
-                        <div class="campo-input-icono">
-                            <i class="fa-regular fa-car"></i>
-                            <input type="text" id="categoriaRegistro" placeholder=" AIIC" required>
-                        </div>
-                </div>
-                <div class="grupo-input-login">
-                        <label for="venceLicenciaRegistro">Vencimiento Licencia</label>
-                        <div class="campo-input-icono">
-                            <i class="fa-regular fa-calendar-xmark"></i>
-                            <input type="date" id="venceLicenciaRegistro" required>
-                        </div>
-                </div>
-                <div class="grupo-input-login">
-                        <label for="domicilioRegistro">Domicilio (Calle / Urb)</label>
-                        <div class="campo-input-icono">
-                            <i class="fa-regular fa-location-dot"></i>
-                           <input type="text" id="domicilioRegistro" placeholder=" Av. Balta 123" required>
-                       </div>
-                </div>
-    
-
-                <div class="grupo-input-login">
-                    <label>País</label>
-                    <div class="input-con-icono">
-                        <i class="fa-solid fa-globe"></i>
-                        <input type="text" placeholder="País" required>
-                    </div>
-                </div>
-
-                <div class="fila-registro">
-                    <div class="grupo-input-login">
-                        <label>Crea tu contraseña</label>
-                        <div class="input-con-icono">
-                            <i class="fa-solid fa-lock"></i>
-                            <input type="password" placeholder="Crea Contraseña" required>
-                        </div>
-                    </div>
-                    <div class="grupo-input-login">
-                        <label>Verifica tu contraseña</label>
-                        <div class="input-con-icono">
-                            <i class="fa-solid fa-lock"></i>
-                            <input type="password" placeholder="Verifica Contraseña" required>
-                        </div>
-                    </div>
-                </div>
-
-                <button type="submit" class="btn-ingresar" style="margin-top: 15px;">Registrarme en Carmovo</button>
-            </form>
-        </div>
-    </div>
-
-   <footer class="pie-pagina-nuevo">
-        <div class="contenedor pie-principal">
-            <div class="pie-logo-info">
-                <div class="caja-logo">
-                    <img src="../recursos/imagenes/home/logo-carmovo4.jpg" alt="logo-carmovo">
-                </div>
-            </div>
+    <div class="pantalla-centrada">
+        <div class="tarjeta-login">
             
-            <div class="pie-enlaces">
-                <div class="pie-columna">
-                    <h4>Navegación</h4>
-                    <ul>
-                        <li><a href="home.html">Inicio</a></li>
-                        <li><a href="categorias.html">Categorías</a></li>
-                        <li><a href="ofertas.html">Ofertas</a></li>
-                        <li><a href="experiencia.html">Experiencias</a></li>
-                        <li><a href="reservas.html">Reservas</a></li>
-                    </ul>
+            <!-- NUEVO: Botón de regresar -->
+            <a href="home.html" class="btn-volver" aria-label="Volver al inicio">
+                <i class="fa-solid fa-arrow-left"></i>
+            </a>
+
+            <div class="cabecera-login">
+                <a href="home.html">
+                    <img src="../recursos/imagenes/home/logo-carmovo4.jpg" alt="Logo Carmovo" class="logo-login">
+                </a>
+                <h1 class="titulo-login">Iniciar Sesión</h1>
+                <p class="subtitulo-login">Ingresa tus datos para continuar con tu reserva</p>
+            </div>
+
+            <form id="formularioLogin" class="formulario-acceso">
+                <div class="grupo-input">
+                    <label for="correo">Correo Electrónico</label>
+                    <div class="campo-input-login">
+                        <i class="fa-regular fa-envelope"></i>
+                        <input type="email" id="correo" placeholder="ejemplo@correo.com" required>
+                    </div>
                 </div>
-                <div class="pie-columna">
-                    <h4>Recursos</h4>
-                    <ul>
-                        <li><a href="miCuenta.html">Mi Cuenta</a></li>
-                        <li><a href="soporte.html">Soporte</a></li>
-                        <li><a href="#">Ubicación</a></li>
-                        <li><a href="https://wa.me/51999999999" target="_blank">Llamar</a></li>
-                    </ul>
+
+                <div class="grupo-input">
+                    <label for="password">Contraseña</label>
+                    <div class="campo-input-login">
+                        <i class="fa-solid fa-lock"></i>
+                        <input type="password" id="password" placeholder="Ingresa tu contraseña" required>
+                        <button type="button" class="btn-mostrar-password" id="btnMostrarPassword">
+                            <i class="fa-regular fa-eye"></i>
+                        </button>
+                    </div>
                 </div>
-                <div class="pie-columna">
-                    <h4>Legal</h4>
-                    <ul>
-                        <li><a href="#">Privacidad</a></li>
-                        <li><a href="#">Términos</a></li>
-                        <li><a href="#">Cookies</a></li>
-                        <li><a href="#">Preguntas</a></li>
-                    </ul>
+
+                <div class="opciones-extra">
+                    <label class="checkbox-recordar">
+                        <input type="checkbox">
+                        <span>Recordarme</span>
+                    </label>
+                    <a href="recuperar-password.html" class="enlace-olvido">¿Olvidaste tu contraseña?</a>
                 </div>
-                <div class="pie-columna pie-suscripcion">
-                    <h4>Suscribirse</h4>
-                    <p>Recibe noticias directo en tu correo.</p>
-                    <form class="form-suscripcion">
-                        <input type="email" placeholder="Tu correo aquí" required>
-                        <button type="submit">Suscribir</button>
-                    </form>
-                </div>
+
+                <button type="submit" class="boton-accion-naranja boton-bloque">
+                    Ingresar a mi cuenta <i class="fa-solid fa-arrow-right"></i>
+                </button>
+            </form>
+
+            <div class="pie-login">
+                <p>¿Aún no tienes una cuenta? <a href="registro.html" class="enlace-registro">Regístrate aquí</a></p>
             </div>
         </div>
-        
-        <div class="pie-inferior contenedor">
-            <p>&copy; 2026 Carmovo. Todos los derechos reservados.</p>
-            <div class="pie-inferior-enlaces">
-                <a href="#">Política de privacidad</a>
-                <a href="#">Términos de servicio</a>
-            </div>
-            <div class="iconos-redes">
-                <a href="https://facebook.com" target="_blank"><i class="fa-brands fa-facebook"></i></a>
-                <a href="https://instagram.com" target="_blank"><i class="fa-brands fa-instagram"></i></a>
-                <a href="https://wa.me/51999999999" target="_blank"><i class="fa-brands fa-whatsapp"></i></a>
-            </div>
-        </div>
+    </div>
 
-        <a href="https://wa.me/51999999999" class="btn-whatsapp-flotante" target="_blank">
-            <i class="fa-brands fa-whatsapp"></i>
-        </a>
-    </footer>
-
-    
     <script src="../js/paginas/login.js"></script>
 </body>
 </html>
