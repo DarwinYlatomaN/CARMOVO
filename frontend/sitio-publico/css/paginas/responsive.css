@@ -1,0 +1,237 @@
+/* ==========================================================
+   CARMOVO — responsive.css
+   Estilos del buscador (autocompletado) + Responsive general
+   ========================================================== */
+
+/* ---------- Resultados del buscador (autocompletado) ---------- */
+.modal-resultados {
+    max-height: 340px;
+    overflow-y: auto;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+}
+
+.item-coincidencia {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 15px;
+    cursor: pointer;
+    border-bottom: 1px solid var(--borde-oscuro, #1f2937);
+    transition: background-color 0.2s ease;
+}
+
+.item-coincidencia:last-child {
+    border-bottom: none;
+}
+
+.item-coincidencia:hover {
+    background-color: rgba(255, 90, 54, 0.12);
+}
+
+.item-coincidencia img {
+    width: 60px;
+    height: 42px;
+    object-fit: cover;
+    border-radius: 6px;
+    box-shadow: none;
+    flex-shrink: 0;
+}
+
+.item-coincidencia div {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.3;
+}
+
+.item-coincidencia strong {
+    color: var(--color-blanco, #fff);
+    font-size: 0.95rem;
+}
+
+.item-coincidencia span {
+    color: var(--texto-gris, #8b95a5);
+    font-size: 0.8rem;
+}
+
+/* Resalta la tarjeta del auto encontrado al llegar a Categorías */
+.resaltado-busqueda {
+    outline: 3px solid var(--color-naranja, #ff5a36);
+    outline-offset: 4px;
+    border-radius: 12px;
+    animation: parpadeoBusqueda 1.4s ease-in-out 2;
+}
+
+@keyframes parpadeoBusqueda {
+    0%, 100% { outline-color: var(--color-naranja, #ff5a36); }
+    50% { outline-color: transparent; }
+}
+
+/* ---------- Botón hamburguesa (oculto en escritorio) ---------- */
+.menu-toggle {
+    background: transparent;
+    border: none;
+    color: var(--color-blanco, #fff);
+    font-size: 1.6rem;
+    cursor: pointer;
+    padding: 6px;
+}
+
+/* ==========================================================
+   RESPONSIVE
+   ========================================================== */
+
+/* ----- Laptops pequeñas / tablets grandes ----- */
+@media (max-width: 1200px) {
+    .titulo-principal { font-size: 3.2rem; }
+    .contenedor-buscador-principal { max-width: 400px; }
+    .grid-beneficios { grid-template-columns: repeat(2, 1fr); }
+}
+
+/* ----- Tablets ----- */
+@media (max-width: 1024px) {
+    .cabecera-superior {
+        flex-wrap: wrap;
+        row-gap: 15px;
+    }
+
+    .contenedor-buscador-principal {
+        order: 3;
+        flex-basis: 100%;
+        max-width: 100%;
+        margin: 0;
+    }
+
+    .seccion-hero {
+        flex-direction: column;
+        padding-bottom: 60px;
+    }
+
+    .hero-textos,
+    .hero-video-caja,
+    .hero-imagen-caja {
+        width: 100%;
+    }
+
+    .hero-textos {
+        text-align: center;
+        margin-bottom: 30px;
+    }
+
+    .descripcion-hero {
+        max-width: 100%;
+        margin: 0 auto;
+    }
+
+    .titulo-principal { font-size: 2.6rem; }
+
+    .formulario-reservas {
+        flex-wrap: wrap;
+        gap: 15px;
+    }
+
+    .grupo-campo {
+        flex: 1 1 45%;
+    }
+
+    .separador-vertical { display: none; }
+}
+
+/* ----- Mobile / tablets pequeñas ----- */
+@media (max-width: 768px) {
+
+    /* --- Header --- */
+    .caja-logo img,
+    .pie-logo-info .caja-logo img { width: 130px; height: auto; }
+
+    .logo-titulo { font-size: 1.1rem; }
+    .logo-subtitulo { font-size: 0.75rem; margin-top: 6px; }
+
+    .cabecera-acciones { gap: 15px; }
+    .enlace-telefono span,
+    .enlace-telefono { font-size: 0; gap: 0; } /* se oculta el texto, queda el ícono */
+    .enlace-telefono i { font-size: 1.3rem; }
+
+    .menu-toggle { display: flex; align-items: center; justify-content: center; }
+
+    /* --- Menú de navegación como panel desplegable --- */
+    .cabecera { position: relative; }
+
+    .navegacion-principal {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        width: 100%;
+        background-color: var(--fondo-tarjeta, #121927);
+        box-shadow: 0 20px 30px rgba(0, 0, 0, 0.45);
+        z-index: 999;
+        padding: 10px 0;
+    }
+
+    .navegacion-principal.nav-activa {
+        display: block;
+    }
+
+    .lista-enlaces {
+        flex-direction: column;
+        gap: 0;
+    }
+
+    .lista-enlaces .enlace {
+        display: block;
+        width: 100%;
+        padding: 14px 20px;
+        font-size: 1rem;
+        border-bottom: 1px solid var(--borde-oscuro, #1f2937);
+    }
+
+    /* --- Formulario de reserva flotante --- */
+    .contenedor-reserva-flotante {
+        margin-top: 20px;
+    }
+
+    .formulario-reservas {
+        flex-direction: column;
+        align-items: stretch;
+        padding: 20px;
+    }
+
+    .grupo-campo {
+        flex: 1 1 100%;
+        padding: 12px 0;
+        border-bottom: 1px solid #e5e7eb;
+    }
+
+    .boton-accion-naranja {
+        width: 100%;
+        justify-content: center;
+        margin-top: 10px;
+    }
+
+    /* --- Beneficios --- */
+    .grid-beneficios { grid-template-columns: 1fr; }
+
+    /* --- Footer --- */
+    .pie-principal { flex-direction: column; gap: 30px; }
+    .pie-enlaces { flex-direction: column; gap: 25px; }
+    .pie-inferior { flex-direction: column; text-align: center; }
+
+    .btn-whatsapp-flotante {
+        width: 50px;
+        height: 50px;
+        font-size: 1.8rem;
+        bottom: 20px;
+        right: 20px;
+    }
+}
+
+/* ----- Móviles pequeños ----- */
+@media (max-width: 480px) {
+    .titulo-principal { font-size: 1.9rem; }
+    .descripcion-hero { font-size: 1rem; }
+
+    .campo-busqueda { font-size: 0.85rem; }
+    .boton-buscar { padding: 0 14px; font-size: 0.95rem; }
+
+    .grid-dos-columnas { grid-template-columns: 1fr !important; }
+}
