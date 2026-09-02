@@ -218,7 +218,7 @@
 
 .tarjeta-ruta img {
     width: 100%;
-    height: 220px;
+    height: 320px;
     object-fit: cover;
 }
 
@@ -307,7 +307,7 @@
     color: #fff;
     font-style: italic;
     font-size: 0.9rem;
-    margin-bottom: 15px;
+    margin-bottom: 1px;
     line-height: 1.4;
 }
 

@@ -1,0 +1,211 @@
+
+
+.pie-pagina-nuevo {
+    background-color: var(--fondo-tarjeta, #121927);
+   
+    color: var(--texto-gris, #8b95a5);
+    padding: 60px 0 30px 0;
+    position: relative;
+    margin-top: 80px;
+}
+
+.pie-principal {
+    display: grid;
+    grid-template-columns: 1.2fr 3fr;
+    gap: 40px;
+    align-items: start;
+    padding-bottom: 45px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.pie-logo-info .caja-logo img {
+    width: 170px;
+    height: auto;
+    box-shadow: 0px 22px 15px rgba(190, 47, 15, 0.2);
+    border-radius: 8px;
+}
+
+.pie-enlaces {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 15px;
+}
+
+.pie-columna h4 {
+    color: var(--color-blanco, #ffffff);
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-bottom: 18px;
+    letter-spacing: 0.5px;
+}
+
+.pie-columna ul {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.pie-columna ul li a {
+    color: var(--texto-gris, #8b95a5);
+    font-family: "Montserrat"  ,sans-serif;
+    font-size:1rem;
+    transition: color 0.3s ease, transform 0.2s ease;
+    display: inline-block;
+}
+
+.pie-columna ul li a:hover {
+    color: var(--color-naranja, #ff5a36);
+    transform: translateX(4px);
+}
+
+/* Columna de Suscripción */
+.pie-suscripcion p {
+    font-size: 1rem;
+    margin-bottom: 15px;
+    line-height: 1.5;
+}
+
+.form-suscripcion {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.form-suscripcion input {
+    background: rgba(255, 255, 255, 0.05);
+    border:none;
+    padding: 12px 15px;
+    border-radius: 8px;
+    color: var(--color-blanco, #ffffff);
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.9rem;
+    outline: none;
+    transition: border-color 0.3s;
+}
+
+.form-suscripcion input:focus {
+    border-color: var(--color-naranja, #ff5a36);
+}
+
+.form-suscripcion button {
+    background-color: var(--color-naranja, #ff5a36);
+    color: var(--color-blanco, #ffffff);
+    border: none;
+    font-size:14px;
+    padding: 12px;
+    border-radius: 8px;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 0.3s, transform 0.2s;
+}
+
+.form-suscripcion button:hover {
+    background-color: #e04a29;
+    transform: translateY(-2px);
+}
+
+/* Pie Inferior (Copyright y Redes) */
+.pie-inferior {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 30px;
+    font-size: 0.85rem;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+.pie-inferior p {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1rem;
+}
+.pie-inferior-enlaces {
+    display: flex;
+    gap: 25px;
+}
+
+.pie-inferior-enlaces a {
+    color: var(--texto-gris, #8b95a5);
+    transition: color 0.3s;
+}
+
+.pie-inferior-enlaces a:hover {
+    color: var(--color-blanco, #ffffff);
+}
+
+.pie-inferior .iconos-redes {
+    display: flex;
+    gap: 15px;
+    font-size: 1.1rem;
+}
+
+.pie-inferior .iconos-redes a {
+    background: rgba(255, 255, 255, 0.05);
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-blanco, #ffffff);
+    border: 1px solid var(--borde-oscuro, #1f2937);
+    transition: background 0.3s, border-color 0.3s, transform 0.3s;
+}
+
+.pie-inferior .iconos-redes a:hover {
+    background: var(--color-naranja, #ff5a36);
+    border-color: var(--color-naranja, #ff5a36);
+    transform: translateY(-3px);
+}
+
+/* Botón Flotante de WhatsApp */
+.btn-whatsapp-flotante {
+    position: fixed;
+    bottom: 25px;
+    right: 25px;
+    background-color: #25d366;
+    color: #ffffff;
+    width: 55px;
+    height: 55px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.8rem;
+    box-shadow: 0 10px 25px rgba(37, 211, 102, 0.4);
+    z-index: 99999;
+    transition: transform 0.3s ease, background-color 0.3s ease;
+}
+
+.btn-whatsapp-flotante:hover {
+    background-color: #20ba5a;
+    transform: scale(1.1);
+}
+
+
+@media (max-width: 1024px) {
+    .pie-principal {
+        grid-template-columns: 1fr;
+        gap: 30px;
+    }
+    .pie-enlaces {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 30px;
+    }
+}
+
+@media (max-width: 768px) {
+    .pie-enlaces {
+        grid-template-columns: 1fr;
+        gap: 25px;
+    }
+    .pie-inferior {
+        flex-direction: column;
+        text-align: center;
+        gap: 15px;
+    }
+    .pie-inferior-enlaces {
+        justify-content: center;
+    }
+}
