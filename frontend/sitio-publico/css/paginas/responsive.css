@@ -1,9 +1,6 @@
-/* ==========================================================
-   CARMOVO — responsive.css
-   Estilos del buscador (autocompletado) + Responsive general
-   ========================================================== */
 
-/* ---------- Resultados del buscador (autocompletado) ---------- */
+
+/* ---------- Resultados del buscador ---------- */
 .modal-resultados {
     max-height: 340px;
     overflow-y: auto;
@@ -76,9 +73,9 @@
     padding: 6px;
 }
 
-/* ==========================================================
+/* 
    RESPONSIVE
-   ========================================================== */
+   */
 
 /* ----- Laptops pequeñas / tablets grandes ----- */
 @media (max-width: 1200px) {

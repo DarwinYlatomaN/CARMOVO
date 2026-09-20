@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Prueba de Conexión Frontend-Backend</title>
+    <style>
+        body { font-family: Arial; background: #0f172a; color: #fff; padding: 40px; }
+        .card { background: #1e293b; padding: 20px; margin: 10px 0; border-radius: 8px; border: 1px solid #334155; }
+    </style>
+</head>
+<body>
+
+    <h1>🚗 Estado de Conexión con el Backend</h1>
+    <div id="resultado">Conectando con la base de datos a través de Spring Boot...</div>
+
+    <div id="lista-autos"></div>
+
+    <script>
+        // Hacemos la petición fetch a tu API en Java
+        fetch('http://localhost:8080/api/v1/vehiculos')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Error en la respuesta del servidor');
+                }
+                return response.json();
+            })
+            .then(vehiculos => {
+                const divResultado = document.getElementById('resultado');
+                const divLista = document.getElementById('lista-autos');
+                
+                divResultado.innerHTML = "✅ **¡Conexión exitosa!** El backend respondió correctamente con los datos de PostgreSQL.";
+                divLista.innerHTML = ""; // Limpiar
+
+                // Pintar los autos que vienen de Java
+                vehiculos.forEach(auto => {
+                    divLista.innerHTML += `
+                        <div class="card">
+                            <h3>${auto.marca} ${auto.modelo} (${auto.categoria})</h3>
+                            <p>Transmisión: ${auto.transmision} | Pasajeros: ${auto.pasajeros}</p>
+                            <p><strong>Precio: $${auto.precioDia} / día</strong></p>
+                        </div>
+                    `;
+                });
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                document.getElementById('resultado').innerHTML = "❌ **Fallo la conexión:** No se pudo conectar con el backend. Revisa si Spring Boot está corriendo y si pusiste el `@CrossOrigin`.";
+            });
+    </script>
+
+</body>
+</html>

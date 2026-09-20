@@ -1,124 +1,167 @@
 document.addEventListener('DOMContentLoaded', () => {
-    let contenedorCategorias = document.querySelector('#contenedor-categorias');
-    let contenedorAutos = document.querySelector('#contenedor-autos');
-    
-    if(!contenedorCategorias || !contenedorAutos) return;
-
-    function renderizarCategorias() {
-        contenedorCategorias.innerHTML = '';
-        
-        categoriasDB.forEach(categoria => {
-            const boton = document.createElement('button');
-            boton.classList.add('btn-pestaña');
-            
-   
-            boton.setAttribute('data-categoria', categoria);
-            
-            if (categoria === 'Todos') {
-                boton.classList.add('activo');
-            }
-            
-            boton.textContent = categoria;
-
-            boton.addEventListener('click', (e) => {
-                document.querySelectorAll('.btn-pestaña').forEach(btn => btn.classList.remove('activo'));
-                e.target.classList.add('activo');
-                filtrarAutos(categoria);
-            });
-            
-            contenedorCategorias.appendChild(boton);
-        });
-    }
-
-    function renderizarAutos(arregloAutos) {
-        contenedorAutos.innerHTML = '';
-        
-        if (arregloAutos.length === 0) {
-            contenedorAutos.innerHTML = `
-             <div style="grid-column:1 / -1; text-align:center; padding:40px 20px;">
-                 <i class="fa-solid fa-car-side" style="font-size:3rem; color: var(--borde-oscuro);margin-bottom:15px;"></i>
-                 <h3 style="color:var(--texto-blanco); font-size:1.2rem; margin-bottom: 10px;">No hay vehículos disponibles</h3>
-                 <p style="color:var(--texto-gris);">Lo sentimos, no encontramos autos para esta categoría en este momento.</p>
-             </div>               
-            `;
-            return;
-        }
-        
-        arregloAutos.forEach(auto => {
-            const tarjetaHTML = `
-                <div class="tarjeta-auto">
-                    <div class="tarjeta-top">
-                        <span class="etiqueta ${auto.claseEtiqueta}">${auto.etiqueta}</span>
-                        <button class="btn-favorito" aria-label="Añadir a favoritos"><i class="fa-regular fa-heart"></i></button>
-                    </div>
-                    <img src="${auto.imagen}" alt="${auto.nombre}" class="imagen-auto">
-                    
-                    <div class="info-auto">
-                        <h3>${auto.nombre}</h3>
-                        <p class="tipo-auto">${auto.tipo}</p>
-                        
-                        <div class="precio-y-rating">
-                            <div class="precio">S/ ${auto.precio}<span>/día</span></div>
-                            <div class="rating"><i class="fa-solid fa-star"></i> <span>${auto.rating}</span></div>
-                        </div>
-                        
-                        <div class="caracteristicas">
-                            <div class="caracteristica-item"><i class="fa-solid fa-user"></i> ${auto.pasajeros} Pasajeros</div>
-                            <div class="caracteristica-item"><i class="fa-solid ${auto.iconoExtra}"></i> ${auto.caracteristicaExtra}</div>
-                        </div>
-                        
-                        <button class="btn-detalles">Ver Información Técnica</button>
-                        <button class="btn-detalles" onclick="irAReservar('${auto.nombre}', '${auto.tipo}', ${auto.precio}, '${auto.imagen}')">Reservar</button>
-                    </div>
-                </div>
-            `;
-            
-            contenedorAutos.insertAdjacentHTML('beforeend', tarjetaHTML);
-        });
-    }
-
-    function filtrarAutos(categoriaSeleccionada) {
-        contenedorAutos.style.opacity = '0.5';
-        
-        setTimeout(() => {
-            if (categoriaSeleccionada === "Todos") {
-                renderizarAutos(autosDB);
-            } else {
-                const autosFiltrados = autosDB.filter(auto => auto.categoria === categoriaSeleccionada);
-                renderizarAutos(autosFiltrados);
-            }
-            
-            contenedorAutos.style.opacity = '1';
-        }, 150);
-    }
-
-    
-    renderizarCategorias();
-    renderizarAutos(autosDB.slice(0, 24));
-
-   
-    const parametros = new URLSearchParams(window.location.search);
-    const categoriaSolicitada = parametros.get('categoria');
-
-    if (categoriaSolicitada) {
-        const botonFiltro = document.querySelector(`[data-categoria="${categoriaSolicitada}"]`);
-        
-        if (botonFiltro) {
-            setTimeout(() => {
-                botonFiltro.click();
-            }, 100); 
-        }
-    }
+    inicializarCatalogoVehiculos();
+    crearEstructuraModalTecnico(); // Crea el modal dinámicamente si no existe
 });
 
-function irAReservar(nombre, tipo, precio, imagenUrl) {
-    const autoSeleccionado = {
-        nombre: nombre,
-        tipo: tipo,
-        precio: parseFloat(precio), 
-        imagen: imagenUrl
-    };
+async function inicializarCatalogoVehiculos() {
+    const contenedorAutos = document.getElementById('contenedor-autos');
+    const contenedorCategorias = document.getElementById('contenedor-categorias');
 
-    localStorage.setItem('autoReserva', JSON.stringify(autoSeleccionado));
-    window.location.href = 'reservas.html';
+    if (!contenedorAutos) return;
+
+    try {
+        const respuesta = await fetch('http://localhost:8080/api/v1/vehiculos');
+        if (!respuesta.ok) throw new Error('Error al conectar con el servidor');
+
+        const autosDB = await respuesta.json();
+        const categoriasDB = ["Todos", ...new Set(autosDB.map(auto => auto.categoria))];
+
+        if (contenedorCategorias) {
+            contenedorCategorias.innerHTML = '';
+            categoriasDB.forEach((categoria, index) => {
+                const boton = document.createElement('button');
+                boton.textContent = categoria;
+                boton.className = index === 0 ? 'pestana activo' : 'pestana';
+                
+                boton.addEventListener('click', (e) => {
+                    document.querySelectorAll('.pestana').forEach(p => p.classList.remove('activo'));
+                    e.target.classList.add('activo');
+
+                    if (categoria === 'Todos') {
+                        renderizarAutos(autosDB, contenedorAutos);
+                    } else {
+                        const autosFiltrados = autosDB.filter(auto => auto.categoria === categoria);
+                        renderizarAutos(autosFiltrados, contenedorAutos);
+                    }
+                });
+
+                contenedorCategorias.appendChild(boton);
+            });
+        }
+
+        renderizarAutos(autosDB, contenedorAutos);
+
+    } catch (error) {
+        console.error("Error al cargar los vehículos:", error);
+        contenedorAutos.innerHTML = '<p style="color: #ff5a36; text-align: center; grid-column: 1/-1;">No se pudo conectar con la base de datos de Carmovo.</p>';
+    }
 }
+
+function renderizarAutos(listaAutos, contenedor) {
+    contenedor.innerHTML = '';
+
+    if (listaAutos.length === 0) {
+        contenedor.innerHTML = '<p style="text-align: center; grid-column: 1/-1; color: #8b95a5;">No hay vehículos disponibles en esta categoría.</p>';
+        return;
+    }
+
+    listaAutos.forEach(auto => {
+        const tipo = auto.tipo || 'Vehículo Confiable';
+        const rating = auto.rating || '4.8';
+        const pasajeros = auto.pasajeros || 5;
+        const caracteristicaExtra = auto.caracteristicaExtra || auto.transmision || 'Automático';
+        const iconoExtra = auto.iconoExtra || 'fa-gear';
+        const etiqueta = auto.etiqueta || 'Disponible';
+        const claseEtiqueta = auto.claseEtiqueta || 'naranja';
+        const precio = auto.precioDia ? Number(auto.precioDia).toFixed(2) : '150.00';
+
+        const tarjetaHTML = `
+            <div class="tarjeta-vehiculo">
+                <div class="imagen-contenedor">
+                    <span class="etiqueta-badge ${claseEtiqueta}">${etiqueta}</span>
+                    <img src="../recursos/imagenes/vehiculos/${auto.imagen}" alt="${auto.marca} ${auto.modelo}" onerror="this.src='../recursos/imagenes/carrusel/camioneta1.jpg'">
+                    <div class="rating-badge">
+                        <i class="fa-solid fa-star"></i> ${rating}
+                    </div>
+                </div>
+                
+                <div class="info-vehiculo">
+                    <span class="subtipo-auto">${tipo}</span>
+                    <h3>${auto.marca} ${auto.modelo}</h3>
+                    
+                    <div class="caracteristicas-grid">
+                        <span><i class="fa-solid fa-users"></i> ${pasajeros} Pasajeros</span>
+                        <span><i class="fa-solid ${iconoExtra}"></i> ${caracteristicaExtra}</span>
+                    </div>
+
+                    <!-- Botón de Información Técnica -->
+                    <button type="button" class="btn-info-tecnica" onclick='abrirModalTecnico(${JSON.stringify(auto)})'>
+                        <i class="fa-solid fa-circle-info"></i> Información Técnica
+                    </button>
+
+                    <div class="precio-reserva" style="margin-top: 15px;">
+                        <div class="caja-precio">
+                            <span class="etiqueta-precio">Precio por día</span>
+                            <span class="precio">$${precio}</span>
+                        </div>
+                        <a href="reservas.html" class="boton-accion-naranja">
+                            ${auto.estado === 'Disponible' ? 'Reservar' : 'No disponible'}
+                        </a>
+                    </div>
+                </div>
+            </div>
+        `;
+        contenedor.innerHTML += tarjetaHTML;
+    });
+}
+
+// -------------------------------------------------------------------------
+// MODAL DINÁMICO DE INFORMACIÓN TÉCNICA
+// -------------------------------------------------------------------------
+function crearEstructuraModalTecnico() {
+    if (document.getElementById('modalTecnico')) return;
+
+    const modalHTML = `
+        <div id="modalTecnico" class="modal-cuenta oculto">
+            <div class="modal-cuenta-contenido" style="max-width: 550px;">
+                <button type="button" class="btn-cerrar-modal" id="cerrarModalTecnico"><i class="fa-solid fa-xmark"></i></button>
+                <span id="modalCategoria" style="color: var(--color-naranja); font-weight: 700; text-transform: uppercase; font-size: 0.8rem;"></span>
+                <h3 id="modalTitulo" style="font-size: 1.8rem; margin: 5px 0 15px 0;"></h3>
+                
+                <div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); padding: 20px; border-radius: 12px; margin-bottom: 20px;">
+                    <h4 style="color: #fff; margin-bottom: 8px; font-size: 1rem;"><i class="fa-solid fa-gauge-high"></i> Especificaciones y Descripción</h4>
+                    <p id="modalDescripcion" style="color: var(--texto-gris); font-size: 0.95rem; line-height: 1.6;"></p>
+                </div>
+
+                <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid rgba(255,255,255,0.08); padding-top: 15px;">
+                    <div>
+                        <span style="font-size: 0.8rem; color: var(--texto-gris);">Transmisión: <strong id="modalTransmision" style="color:#fff"></strong></span><br>
+                        <span style="font-size: 0.8rem; color: var(--texto-gris);">Capacidad: <strong id="modalPasajeros" style="color:#fff"></strong> pasajeros</span>
+                    </div>
+                    <a href="reservas.html" class="boton-accion-naranja" style="padding: 10px 20px;">Ir a Reservar</a>
+                </div>
+            </div>
+        </div>
+    `;
+    document.body.insertAdjacentHTML('beforeend', modalHTML);
+
+    // Eventos para cerrar el modal
+    const modal = document.getElementById('modalTecnico');
+    const btnCerrar = document.getElementById('modalCerrarTecnico');
+    
+    document.getElementById('cerrarModalTecnico').addEventListener('click', () => {
+        modal.classList.remove('activo');
+        setTimeout(() => modal.classList.add('oculto'), 300);
+    });
+
+    window.addEventListener('click', (e) => {
+        if (e.target === modal) {
+            modal.classList.remove('activo');
+            setTimeout(() => modal.classList.add('oculto'), 300);
+        }
+    });
+}
+
+window.abrirModalTecnico = function(auto) {
+    const modal = document.getElementById('modalTecnico');
+    if (!modal) return;
+
+    document.getElementById('modalCategoria').textContent = auto.categoria;
+    document.getElementById('modalTitulo').textContent = `${auto.marca} ${auto.modelo}`;
+    document.getElementById('modalDescripcion').textContent = auto.descripcion || "Vehículo en excelentes condiciones, equipado con tecnología de punta, confort garantizado y revisiones al día para tu total seguridad en rutas del Perú.";
+    document.getElementById('modalTransmision').textContent = auto.transmision || 'Automática';
+    document.getElementById('modalPasajeros').textContent = auto.pasajeros || 5;
+
+    modal.classList.remove('oculto');
+    setTimeout(() => modal.classList.add('activo'), 10);
+};

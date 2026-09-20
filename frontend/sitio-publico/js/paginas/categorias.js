@@ -1,25 +1,47 @@
 document.addEventListener('DOMContentLoaded', () => {
-    
-    // ... AQUÍ ARRIBA ESTARÁ TU CÓDIGO EXISTENTE DE RENDERIZAR AUTOS ...
-
-    /* =========================================================================
-       NUEVO: LEER LA URL Y FILTRAR AUTOMÁTICAMENTE
-       ========================================================================= */
-    // 1. Obtenemos el parámetro 'categoria' de la URL (ej: ?categoria=Económicos)
-    const parametros = new URLSearchParams(window.location.search);
-    const categoriaSolicitada = parametros.get('categoria');
-
-    if (categoriaSolicitada) {
-        // 2. Buscamos el botón de filtro en categorias.html que coincida con ese nombre.
-        // OJO: Cambia '.filtro-categoria' por la clase real que tengan tus botones de filtro en categorias.html
-        const botonFiltro = document.querySelector(`[data-categoria="${categoriaSolicitada}"]`);
-        
-        if (botonFiltro) {
-            // 3. Retrasamos un poquitito el clic (50 milisegundos) para asegurar 
-            // que los autos ya se hayan pintado en el HTML.
-            setTimeout(() => {
-                botonFiltro.click(); // ¡Esto simula que el usuario hizo clic en el filtro!
-            }, 50);
-        }
-    }
+    cargarVehiculosDesdeAPI();
 });
+
+async function cargarVehiculosDesdeAPI() {
+    const contenedor = document.getElementById('contenedorVehiculos');
+    
+    // Si no existe el contenedor en esta página, detenemos la función
+    if (!contenedor) return;
+
+    try {
+        // Hacemos la petición a la API que acabas de probar
+        const respuesta = await fetch('http://localhost:8080/api/v1/vehiculos');
+        const vehiculos = await respuesta.json();
+
+        // Limpiamos el contenedor (por si había autos de prueba "hardcodeados")
+        contenedor.innerHTML = '';
+
+        // Recorremos cada vehículo que trajo la base de datos
+        vehiculos.forEach(vehiculo => {
+            const tarjetaHTML = `
+                <div class="tarjeta-vehiculo">
+                    <img src="../recursos/imagenes/vehiculos/${vehiculo.imagen}" alt="${vehiculo.marca} ${vehiculo.modelo}">
+                    <div class="info-vehiculo">
+                        <h3>${vehiculo.marca} ${vehiculo.modelo}</h3>
+                        <p class="categoria">${vehiculo.categoria}</p>
+                        <div class="caracteristicas">
+                            <span><i class="fa-solid fa-users"></i> ${vehiculo.pasajeros} Pasajeros</span>
+                            <span><i class="fa-solid fa-gears"></i> ${vehiculo.transmision}</span>
+                        </div>
+                        <div class="precio-reserva">
+                            <span class="precio">$${vehiculo.precioDia} / día</span>
+                            <button class="btn-reservar" ${vehiculo.estado !== 'Disponible' ? 'disabled' : ''}>
+                                ${vehiculo.estado === 'Disponible' ? 'Reservar' : 'No Disponible'}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            contenedor.innerHTML += tarjetaHTML;
+        });
+
+    } catch (error) {
+        console.error("Error al cargar los vehículos:", error);
+        contenedor.innerHTML = '<p>No se pudieron cargar los vehículos en este momento.</p>';
+    }
+}
