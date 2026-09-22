@@ -1,5 +1,11 @@
 C:\CARMOVO_PROY\CARMOVO\backend\src\main\java\com\carmovo\BackendApplication.java
 C:\CARMOVO_PROY\CARMOVO\backend\src\main\java\com\carmovo\controlador\TestControlador.java
+C:\CARMOVO_PROY\CARMOVO\backend\src\main\java\com\carmovo\modulos\integraciones\identidad\ReniecController.java
+C:\CARMOVO_PROY\CARMOVO\backend\src\main\java\com\carmovo\modulos\reservas\Reserva.java
+C:\CARMOVO_PROY\CARMOVO\backend\src\main\java\com\carmovo\modulos\reservas\ReservaController.java
+C:\CARMOVO_PROY\CARMOVO\backend\src\main\java\com\carmovo\modulos\reservas\ReservaDTO.java
+C:\CARMOVO_PROY\CARMOVO\backend\src\main\java\com\carmovo\modulos\reservas\ReservaRepository.java
+C:\CARMOVO_PROY\CARMOVO\backend\src\main\java\com\carmovo\modulos\reservas\ReservaServicio.java
 C:\CARMOVO_PROY\CARMOVO\backend\src\main\java\com\carmovo\modulos\roles\Opcion.java
 C:\CARMOVO_PROY\CARMOVO\backend\src\main\java\com\carmovo\modulos\roles\Perfil.java
 C:\CARMOVO_PROY\CARMOVO\backend\src\main\java\com\carmovo\modulos\usuarios\Usuario.java

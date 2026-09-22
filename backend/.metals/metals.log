@@ -8647,3 +8647,647 @@ WARNING: sun.misc.Unsafe::arrayBaseOffset has been called by com.sourcegraph.sha
 WARNING: Please consider reporting this to the maintainers of class com.sourcegraph.shaded.com.google.protobuf.UnsafeUtil$MemoryAccessor
 WARNING: sun.misc.Unsafe::arrayBaseOffset will be removed in a future release.
 2026.09.20 17:56:50 INFO  time: compiled backend in 2.6s
+2026.09.20 22:07:50 INFO  compiling backend (1 java source)
+2026.09.20 22:07:56 WARN  Unexpected javac output: WARNING: A terminally deprecated method in sun.misc.Unsafe has been called
+WARNING: sun.misc.Unsafe::arrayBaseOffset has been called by com.sourcegraph.shaded.com.google.protobuf.UnsafeUtil$MemoryAccessor (file:/C:/Users/hp/AppData/Local/bloop/cache/semanticdb/com.sourcegraph.semanticdb-javac.0.12.3/semanticdb-javac-0.12.3.jar)
+WARNING: Please consider reporting this to the maintainers of class com.sourcegraph.shaded.com.google.protobuf.UnsafeUtil$MemoryAccessor
+WARNING: sun.misc.Unsafe::arrayBaseOffset will be removed in a future release.
+2026.09.20 22:07:56 INFO  time: compiled backend in 6.32s
+2026.09.20 22:07:56 INFO  compiling backend (1 java source)
+2026.09.20 22:07:59 WARN  Unexpected javac output: WARNING: A terminally deprecated method in sun.misc.Unsafe has been called
+WARNING: sun.misc.Unsafe::arrayBaseOffset has been called by com.sourcegraph.shaded.com.google.protobuf.UnsafeUtil$MemoryAccessor (file:/C:/Users/hp/AppData/Local/bloop/cache/semanticdb/com.sourcegraph.semanticdb-javac.0.12.3/semanticdb-javac-0.12.3.jar)
+WARNING: Please consider reporting this to the maintainers of class com.sourcegraph.shaded.com.google.protobuf.UnsafeUtil$MemoryAccessor
+WARNING: sun.misc.Unsafe::arrayBaseOffset will be removed in a future release.
+2026.09.20 22:07:59 INFO  time: compiled backend in 2.87s
+2026.09.20 22:07:59 INFO  compiling backend (1 java source)
+2026.09.20 22:08:01 WARN  Unexpected javac output: WARNING: A terminally deprecated method in sun.misc.Unsafe has been called
+WARNING: sun.misc.Unsafe::arrayBaseOffset has been called by com.sourcegraph.shaded.com.google.protobuf.UnsafeUtil$MemoryAccessor (file:/C:/Users/hp/AppData/Local/bloop/cache/semanticdb/com.sourcegraph.semanticdb-javac.0.12.3/semanticdb-javac-0.12.3.jar)
+WARNING: Please consider reporting this to the maintainers of class com.sourcegraph.shaded.com.google.protobuf.UnsafeUtil$MemoryAccessor
+WARNING: sun.misc.Unsafe::arrayBaseOffset will be removed in a future release.
+2026.09.20 22:08:01 INFO  time: compiled backend in 2.39s
+2026.09.20 22:08:01 INFO  compiling backend (1 java source)
+2026.09.20 22:08:02 WARN  Could not load snapshot text for C:\CARMOVO_PROY\CARMOVO\backend\src\main\java\com\carmovo\modulos\vehiculos\Vehiculo.java
+2026.09.20 22:08:03 WARN  Unexpected javac output: WARNING: A terminally deprecated method in sun.misc.Unsafe has been called
+WARNING: sun.misc.Unsafe::arrayBaseOffset has been called by com.sourcegraph.shaded.com.google.protobuf.UnsafeUtil$MemoryAccessor (file:/C:/Users/hp/AppData/Local/bloop/cache/semanticdb/com.sourcegraph.semanticdb-javac.0.12.3/semanticdb-javac-0.12.3.jar)
+WARNING: Please consider reporting this to the maintainers of class com.sourcegraph.shaded.com.google.protobuf.UnsafeUtil$MemoryAccessor
+WARNING: sun.misc.Unsafe::arrayBaseOffset will be removed in a future release.
+2026.09.20 22:08:03 INFO  time: compiled backend in 1.83s
+set. 20, 2026 11:14:56 P. M. scala.meta.internal.mtags.SymbolIndexBucket addMtagsSourceFile
+WARNING: Error indexing C:\CARMOVO_PROY\CARMOVO\backend\src\main\java\com\carmovo\modulos\vehiculos\VehiculoControlador.java
+java.nio.file.NoSuchFileException: C:\CARMOVO_PROY\CARMOVO\backend\src\main\java\com\carmovo\modulos\vehiculos\VehiculoControlador.java
+	at java.base/sun.nio.fs.WindowsException.translateToIOException(WindowsException.java:85)
+	at java.base/sun.nio.fs.WindowsException.rethrowAsIOException(WindowsException.java:103)
+	at java.base/sun.nio.fs.WindowsException.rethrowAsIOException(WindowsException.java:108)
+	at java.base/sun.nio.fs.WindowsFileSystemProvider.newByteChannel(WindowsFileSystemProvider.java:231)
+	at java.base/java.nio.file.Files.newByteChannel(Files.java:357)
+	at java.base/java.nio.file.Files.newByteChannel(Files.java:399)
+	at java.base/java.nio.file.Files.readAllBytes(Files.java:2973)
+	at scala.meta.internal.io.PlatformFileIO$.slurp(PlatformFileIO.scala:38)
+	at scala.meta.internal.io.FileIO$.slurp(FileIO.scala:18)
+	at scala.meta.internal.mtags.ScalametaCommonEnrichments$XtensionAbsolutePath.toInput(ScalametaCommonEnrichments.scala:512)
+	at scala.meta.internal.mtags.Mtags.index(Mtags.scala:101)
+	at scala.meta.internal.mtags.Mtags.allSymbols(Mtags.scala:21)
+	at scala.meta.internal.mtags.SymbolIndexBucket.allSymbols(SymbolIndexBucket.scala:293)
+	at scala.meta.internal.mtags.SymbolIndexBucket.addMtagsSourceFile(SymbolIndexBucket.scala:304)
+	at scala.meta.internal.mtags.SymbolIndexBucket.$anonfun$query0$1(SymbolIndexBucket.scala:220)
+	at scala.meta.internal.mtags.SymbolIndexBucket.$anonfun$query0$1$adapted(SymbolIndexBucket.scala:220)
+	at scala.collection.immutable.Set$Set2.foreach(Set.scala:210)
+	at scala.meta.internal.mtags.SymbolIndexBucket.query0(SymbolIndexBucket.scala:220)
+	at scala.meta.internal.mtags.SymbolIndexBucket.query(SymbolIndexBucket.scala:193)
+	at scala.meta.internal.mtags.OnDemandSymbolIndex.$anonfun$findSymbolDefinition$1(OnDemandSymbolIndex.scala:143)
+	at scala.collection.immutable.List.flatMap(List.scala:283)
+	at scala.meta.internal.mtags.OnDemandSymbolIndex.findSymbolDefinition(OnDemandSymbolIndex.scala:143)
+	at scala.meta.internal.mtags.OnDemandSymbolIndex.definition(OnDemandSymbolIndex.scala:48)
+	at scala.meta.internal.metals.Docstrings.indexSymbol(Docstrings.scala:138)
+	at scala.meta.internal.metals.Docstrings.documentation(Docstrings.scala:49)
+	at scala.meta.internal.metals.MetalsSymbolSearch.documentation(MetalsSymbolSearch.scala:47)
+	at scala.meta.internal.pc.JavaMetalsGlobal.documentation(JavaMetalsGlobal.scala:187)
+	at scala.meta.internal.pc.JavaHoverProvider.$anonfun$hoverOffset$1(JavaHoverProvider.scala:67)
+	at scala.Option.map(Option.scala:242)
+	at scala.meta.internal.pc.JavaHoverProvider.hoverOffset(JavaHoverProvider.scala:57)
+	at scala.meta.internal.pc.JavaHoverProvider.hover(JavaHoverProvider.scala:37)
+	at scala.meta.internal.pc.JavaPresentationCompiler.hover(JavaPresentationCompiler.scala:80)
+	at scala.meta.internal.metals.Compilers.$anonfun$hover$1(Compilers.scala:1134)
+	at scala.meta.internal.metals.Compilers.$anonfun$withPCAndAdjustLsp$12(Compilers.scala:1628)
+	at scala.Option.map(Option.scala:242)
+	at scala.meta.internal.metals.Compilers.$anonfun$withPCAndAdjustLsp$10(Compilers.scala:1628)
+	at scala.Option.flatMap(Option.scala:283)
+	at scala.meta.internal.metals.Compilers.withPCAndAdjustLsp(Compilers.scala:1610)
+	at scala.meta.internal.metals.Compilers.hover(Compilers.scala:1129)
+	at scala.meta.internal.metals.MetalsLspService.$anonfun$hover$1(MetalsLspService.scala:996)
+	at scala.meta.internal.metals.CancelTokens$.future(CancelTokens.scala:38)
+	at scala.meta.internal.metals.MetalsLspService.hover(MetalsLspService.scala:994)
+	at scala.meta.internal.metals.WorkspaceLspService.hover(WorkspaceLspService.scala:526)
+	at scala.meta.metals.lsp.DelegatingScalaService.hover(DelegatingScalaService.scala:78)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:104)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:565)
+	at org.eclipse.lsp4j.jsonrpc.services.GenericEndpoint.lambda$recursiveFindRpcMethods$0(GenericEndpoint.java:65)
+	at org.eclipse.lsp4j.jsonrpc.services.GenericEndpoint.request(GenericEndpoint.java:128)
+	at org.eclipse.lsp4j.jsonrpc.RemoteEndpoint.handleRequest(RemoteEndpoint.java:265)
+	at org.eclipse.lsp4j.jsonrpc.RemoteEndpoint.consume(RemoteEndpoint.java:195)
+	at org.eclipse.lsp4j.jsonrpc.json.StreamMessageProducer.handleMessage(StreamMessageProducer.java:189)
+	at org.eclipse.lsp4j.jsonrpc.json.StreamMessageProducer.listen(StreamMessageProducer.java:97)
+	at org.eclipse.lsp4j.jsonrpc.json.ConcurrentMessageProcessor.run(ConcurrentMessageProcessor.java:97)
+	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:545)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:328)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1090)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:614)
+	at java.base/java.lang.Thread.run(Thread.java:1474)
+
+set. 20, 2026 11:14:56 P. M. scala.meta.internal.mtags.SymbolIndexBucket addMtagsSourceFile
+WARNING: Error indexing C:\CARMOVO_PROY\CARMOVO\backend\src\main\java\com\carmovo\modulos\vehiculos\VehiculoControlador.java
+java.nio.file.NoSuchFileException: C:\CARMOVO_PROY\CARMOVO\backend\src\main\java\com\carmovo\modulos\vehiculos\VehiculoControlador.java
+	at java.base/sun.nio.fs.WindowsException.translateToIOException(WindowsException.java:85)
+	at java.base/sun.nio.fs.WindowsException.rethrowAsIOException(WindowsException.java:103)
+	at java.base/sun.nio.fs.WindowsException.rethrowAsIOException(WindowsException.java:108)
+	at java.base/sun.nio.fs.WindowsFileSystemProvider.newByteChannel(WindowsFileSystemProvider.java:231)
+	at java.base/java.nio.file.Files.newByteChannel(Files.java:357)
+	at java.base/java.nio.file.Files.newByteChannel(Files.java:399)
+	at java.base/java.nio.file.Files.readAllBytes(Files.java:2973)
+	at scala.meta.internal.io.PlatformFileIO$.slurp(PlatformFileIO.scala:38)
+	at scala.meta.internal.io.FileIO$.slurp(FileIO.scala:18)
+	at scala.meta.internal.mtags.ScalametaCommonEnrichments$XtensionAbsolutePath.toInput(ScalametaCommonEnrichments.scala:512)
+	at scala.meta.internal.mtags.Mtags.index(Mtags.scala:101)
+	at scala.meta.internal.mtags.Mtags.allSymbols(Mtags.scala:21)
+	at scala.meta.internal.mtags.SymbolIndexBucket.allSymbols(SymbolIndexBucket.scala:293)
+	at scala.meta.internal.mtags.SymbolIndexBucket.addMtagsSourceFile(SymbolIndexBucket.scala:304)
+	at scala.meta.internal.mtags.SymbolIndexBucket.addMtagsSourceFile(SymbolIndexBucket.scala:315)
+	at scala.meta.internal.mtags.SymbolIndexBucket.$anonfun$query0$1(SymbolIndexBucket.scala:220)
+	at scala.meta.internal.mtags.SymbolIndexBucket.$anonfun$query0$1$adapted(SymbolIndexBucket.scala:220)
+	at scala.collection.immutable.Set$Set2.foreach(Set.scala:210)
+	at scala.meta.internal.mtags.SymbolIndexBucket.query0(SymbolIndexBucket.scala:220)
+	at scala.meta.internal.mtags.SymbolIndexBucket.query(SymbolIndexBucket.scala:193)
+	at scala.meta.internal.mtags.OnDemandSymbolIndex.$anonfun$findSymbolDefinition$1(OnDemandSymbolIndex.scala:143)
+	at scala.collection.immutable.List.flatMap(List.scala:283)
+	at scala.meta.internal.mtags.OnDemandSymbolIndex.findSymbolDefinition(OnDemandSymbolIndex.scala:143)
+	at scala.meta.internal.mtags.OnDemandSymbolIndex.definition(OnDemandSymbolIndex.scala:48)
+	at scala.meta.internal.metals.Docstrings.indexSymbol(Docstrings.scala:138)
+	at scala.meta.internal.metals.Docstrings.documentation(Docstrings.scala:49)
+	at scala.meta.internal.metals.MetalsSymbolSearch.documentation(MetalsSymbolSearch.scala:47)
+	at scala.meta.internal.pc.JavaMetalsGlobal.documentation(JavaMetalsGlobal.scala:187)
+	at scala.meta.internal.pc.JavaHoverProvider.$anonfun$hoverOffset$1(JavaHoverProvider.scala:67)
+	at scala.Option.map(Option.scala:242)
+	at scala.meta.internal.pc.JavaHoverProvider.hoverOffset(JavaHoverProvider.scala:57)
+	at scala.meta.internal.pc.JavaHoverProvider.hover(JavaHoverProvider.scala:37)
+	at scala.meta.internal.pc.JavaPresentationCompiler.hover(JavaPresentationCompiler.scala:80)
+	at scala.meta.internal.metals.Compilers.$anonfun$hover$1(Compilers.scala:1134)
+	at scala.meta.internal.metals.Compilers.$anonfun$withPCAndAdjustLsp$12(Compilers.scala:1628)
+	at scala.Option.map(Option.scala:242)
+	at scala.meta.internal.metals.Compilers.$anonfun$withPCAndAdjustLsp$10(Compilers.scala:1628)
+	at scala.Option.flatMap(Option.scala:283)
+	at scala.meta.internal.metals.Compilers.withPCAndAdjustLsp(Compilers.scala:1610)
+	at scala.meta.internal.metals.Compilers.hover(Compilers.scala:1129)
+	at scala.meta.internal.metals.MetalsLspService.$anonfun$hover$1(MetalsLspService.scala:996)
+	at scala.meta.internal.metals.CancelTokens$.future(CancelTokens.scala:38)
+	at scala.meta.internal.metals.MetalsLspService.hover(MetalsLspService.scala:994)
+	at scala.meta.internal.metals.WorkspaceLspService.hover(WorkspaceLspService.scala:526)
+	at scala.meta.metals.lsp.DelegatingScalaService.hover(DelegatingScalaService.scala:78)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:104)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:565)
+	at org.eclipse.lsp4j.jsonrpc.services.GenericEndpoint.lambda$recursiveFindRpcMethods$0(GenericEndpoint.java:65)
+	at org.eclipse.lsp4j.jsonrpc.services.GenericEndpoint.request(GenericEndpoint.java:128)
+	at org.eclipse.lsp4j.jsonrpc.RemoteEndpoint.handleRequest(RemoteEndpoint.java:265)
+	at org.eclipse.lsp4j.jsonrpc.RemoteEndpoint.consume(RemoteEndpoint.java:195)
+	at org.eclipse.lsp4j.jsonrpc.json.StreamMessageProducer.handleMessage(StreamMessageProducer.java:189)
+	at org.eclipse.lsp4j.jsonrpc.json.StreamMessageProducer.listen(StreamMessageProducer.java:97)
+	at org.eclipse.lsp4j.jsonrpc.json.ConcurrentMessageProcessor.run(ConcurrentMessageProcessor.java:97)
+	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:545)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:328)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1090)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:614)
+	at java.base/java.lang.Thread.run(Thread.java:1474)
+
+2026.09.20 23:15:08 INFO  Created report: Optional[file:///C:/CARMOVO_PROY/CARMOVO/backend/src/main/java/com/carmovo/modulos/vehiculos/VehiculoController.java]
+2026.09.20 23:15:08 INFO  empty definition using pc, found symbol in pc:  (full report at: "C:\CARMOVO_PROY\CARMOVO\backend\.metals\.reports\metals-full\2026-09-20\r_empty-definition_(backend)_23-15-08-426.md")
+set. 20, 2026 11:21:48 P. M. scala.meta.internal.mtags.SymbolIndexBucket addMtagsSourceFile
+WARNING: Error indexing C:\CARMOVO_PROY\CARMOVO\backend\src\main\java\com\carmovo\modulos\vehiculos\VehiculoControlador.java
+java.nio.file.NoSuchFileException: C:\CARMOVO_PROY\CARMOVO\backend\src\main\java\com\carmovo\modulos\vehiculos\VehiculoControlador.java
+	at java.base/sun.nio.fs.WindowsException.translateToIOException(WindowsException.java:85)
+	at java.base/sun.nio.fs.WindowsException.rethrowAsIOException(WindowsException.java:103)
+	at java.base/sun.nio.fs.WindowsException.rethrowAsIOException(WindowsException.java:108)
+	at java.base/sun.nio.fs.WindowsFileSystemProvider.newByteChannel(WindowsFileSystemProvider.java:231)
+	at java.base/java.nio.file.Files.newByteChannel(Files.java:357)
+	at java.base/java.nio.file.Files.newByteChannel(Files.java:399)
+	at java.base/java.nio.file.Files.readAllBytes(Files.java:2973)
+	at scala.meta.internal.io.PlatformFileIO$.slurp(PlatformFileIO.scala:38)
+	at scala.meta.internal.io.FileIO$.slurp(FileIO.scala:18)
+	at scala.meta.internal.mtags.ScalametaCommonEnrichments$XtensionAbsolutePath.toInput(ScalametaCommonEnrichments.scala:512)
+	at scala.meta.internal.mtags.Mtags.index(Mtags.scala:101)
+	at scala.meta.internal.mtags.Mtags.allSymbols(Mtags.scala:21)
+	at scala.meta.internal.mtags.SymbolIndexBucket.allSymbols(SymbolIndexBucket.scala:293)
+	at scala.meta.internal.mtags.SymbolIndexBucket.addMtagsSourceFile(SymbolIndexBucket.scala:304)
+	at scala.meta.internal.mtags.SymbolIndexBucket.$anonfun$query0$1(SymbolIndexBucket.scala:220)
+	at scala.meta.internal.mtags.SymbolIndexBucket.$anonfun$query0$1$adapted(SymbolIndexBucket.scala:220)
+	at scala.collection.immutable.Set$Set2.foreach(Set.scala:210)
+	at scala.meta.internal.mtags.SymbolIndexBucket.query0(SymbolIndexBucket.scala:220)
+	at scala.meta.internal.mtags.SymbolIndexBucket.query(SymbolIndexBucket.scala:193)
+	at scala.meta.internal.mtags.OnDemandSymbolIndex.$anonfun$findSymbolDefinition$1(OnDemandSymbolIndex.scala:143)
+	at scala.collection.immutable.List.flatMap(List.scala:283)
+	at scala.meta.internal.mtags.OnDemandSymbolIndex.findSymbolDefinition(OnDemandSymbolIndex.scala:143)
+	at scala.meta.internal.mtags.OnDemandSymbolIndex.definition(OnDemandSymbolIndex.scala:48)
+	at scala.meta.internal.metals.Docstrings.indexSymbol(Docstrings.scala:138)
+	at scala.meta.internal.metals.Docstrings.documentation(Docstrings.scala:49)
+	at scala.meta.internal.metals.MetalsSymbolSearch.documentation(MetalsSymbolSearch.scala:47)
+	at scala.meta.internal.pc.JavaMetalsGlobal.documentation(JavaMetalsGlobal.scala:187)
+	at scala.meta.internal.pc.JavaHoverProvider.$anonfun$hoverOffset$1(JavaHoverProvider.scala:67)
+	at scala.Option.map(Option.scala:242)
+	at scala.meta.internal.pc.JavaHoverProvider.hoverOffset(JavaHoverProvider.scala:57)
+	at scala.meta.internal.pc.JavaHoverProvider.hover(JavaHoverProvider.scala:37)
+	at scala.meta.internal.pc.JavaPresentationCompiler.hover(JavaPresentationCompiler.scala:80)
+	at scala.meta.internal.metals.Compilers.$anonfun$hover$1(Compilers.scala:1134)
+	at scala.meta.internal.metals.Compilers.$anonfun$withPCAndAdjustLsp$12(Compilers.scala:1628)
+	at scala.Option.map(Option.scala:242)
+	at scala.meta.internal.metals.Compilers.$anonfun$withPCAndAdjustLsp$10(Compilers.scala:1628)
+	at scala.Option.flatMap(Option.scala:283)
+	at scala.meta.internal.metals.Compilers.withPCAndAdjustLsp(Compilers.scala:1610)
+	at scala.meta.internal.metals.Compilers.hover(Compilers.scala:1129)
+	at scala.meta.internal.metals.MetalsLspService.$anonfun$hover$1(MetalsLspService.scala:996)
+	at scala.meta.internal.metals.CancelTokens$.future(CancelTokens.scala:38)
+	at scala.meta.internal.metals.MetalsLspService.hover(MetalsLspService.scala:994)
+	at scala.meta.internal.metals.WorkspaceLspService.hover(WorkspaceLspService.scala:526)
+	at scala.meta.metals.lsp.DelegatingScalaService.hover(DelegatingScalaService.scala:78)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:104)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:565)
+	at org.eclipse.lsp4j.jsonrpc.services.GenericEndpoint.lambda$recursiveFindRpcMethods$0(GenericEndpoint.java:65)
+	at org.eclipse.lsp4j.jsonrpc.services.GenericEndpoint.request(GenericEndpoint.java:128)
+	at org.eclipse.lsp4j.jsonrpc.RemoteEndpoint.handleRequest(RemoteEndpoint.java:265)
+	at org.eclipse.lsp4j.jsonrpc.RemoteEndpoint.consume(RemoteEndpoint.java:195)
+	at org.eclipse.lsp4j.jsonrpc.json.StreamMessageProducer.handleMessage(StreamMessageProducer.java:189)
+	at org.eclipse.lsp4j.jsonrpc.json.StreamMessageProducer.listen(StreamMessageProducer.java:97)
+	at org.eclipse.lsp4j.jsonrpc.json.ConcurrentMessageProcessor.run(ConcurrentMessageProcessor.java:97)
+	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:545)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:328)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1090)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:614)
+	at java.base/java.lang.Thread.run(Thread.java:1474)
+
+set. 20, 2026 11:21:48 P. M. scala.meta.internal.mtags.SymbolIndexBucket addMtagsSourceFile
+WARNING: Error indexing C:\CARMOVO_PROY\CARMOVO\backend\src\main\java\com\carmovo\modulos\vehiculos\VehiculoControlador.java
+java.nio.file.NoSuchFileException: C:\CARMOVO_PROY\CARMOVO\backend\src\main\java\com\carmovo\modulos\vehiculos\VehiculoControlador.java
+	at java.base/sun.nio.fs.WindowsException.translateToIOException(WindowsException.java:85)
+	at java.base/sun.nio.fs.WindowsException.rethrowAsIOException(WindowsException.java:103)
+	at java.base/sun.nio.fs.WindowsException.rethrowAsIOException(WindowsException.java:108)
+	at java.base/sun.nio.fs.WindowsFileSystemProvider.newByteChannel(WindowsFileSystemProvider.java:231)
+	at java.base/java.nio.file.Files.newByteChannel(Files.java:357)
+	at java.base/java.nio.file.Files.newByteChannel(Files.java:399)
+	at java.base/java.nio.file.Files.readAllBytes(Files.java:2973)
+	at scala.meta.internal.io.PlatformFileIO$.slurp(PlatformFileIO.scala:38)
+	at scala.meta.internal.io.FileIO$.slurp(FileIO.scala:18)
+	at scala.meta.internal.mtags.ScalametaCommonEnrichments$XtensionAbsolutePath.toInput(ScalametaCommonEnrichments.scala:512)
+	at scala.meta.internal.mtags.Mtags.index(Mtags.scala:101)
+	at scala.meta.internal.mtags.Mtags.allSymbols(Mtags.scala:21)
+	at scala.meta.internal.mtags.SymbolIndexBucket.allSymbols(SymbolIndexBucket.scala:293)
+	at scala.meta.internal.mtags.SymbolIndexBucket.addMtagsSourceFile(SymbolIndexBucket.scala:304)
+	at scala.meta.internal.mtags.SymbolIndexBucket.addMtagsSourceFile(SymbolIndexBucket.scala:315)
+	at scala.meta.internal.mtags.SymbolIndexBucket.$anonfun$query0$1(SymbolIndexBucket.scala:220)
+	at scala.meta.internal.mtags.SymbolIndexBucket.$anonfun$query0$1$adapted(SymbolIndexBucket.scala:220)
+	at scala.collection.immutable.Set$Set2.foreach(Set.scala:210)
+	at scala.meta.internal.mtags.SymbolIndexBucket.query0(SymbolIndexBucket.scala:220)
+	at scala.meta.internal.mtags.SymbolIndexBucket.query(SymbolIndexBucket.scala:193)
+	at scala.meta.internal.mtags.OnDemandSymbolIndex.$anonfun$findSymbolDefinition$1(OnDemandSymbolIndex.scala:143)
+	at scala.collection.immutable.List.flatMap(List.scala:283)
+	at scala.meta.internal.mtags.OnDemandSymbolIndex.findSymbolDefinition(OnDemandSymbolIndex.scala:143)
+	at scala.meta.internal.mtags.OnDemandSymbolIndex.definition(OnDemandSymbolIndex.scala:48)
+	at scala.meta.internal.metals.Docstrings.indexSymbol(Docstrings.scala:138)
+	at scala.meta.internal.metals.Docstrings.documentation(Docstrings.scala:49)
+	at scala.meta.internal.metals.MetalsSymbolSearch.documentation(MetalsSymbolSearch.scala:47)
+	at scala.meta.internal.pc.JavaMetalsGlobal.documentation(JavaMetalsGlobal.scala:187)
+	at scala.meta.internal.pc.JavaHoverProvider.$anonfun$hoverOffset$1(JavaHoverProvider.scala:67)
+	at scala.Option.map(Option.scala:242)
+	at scala.meta.internal.pc.JavaHoverProvider.hoverOffset(JavaHoverProvider.scala:57)
+	at scala.meta.internal.pc.JavaHoverProvider.hover(JavaHoverProvider.scala:37)
+	at scala.meta.internal.pc.JavaPresentationCompiler.hover(JavaPresentationCompiler.scala:80)
+	at scala.meta.internal.metals.Compilers.$anonfun$hover$1(Compilers.scala:1134)
+	at scala.meta.internal.metals.Compilers.$anonfun$withPCAndAdjustLsp$12(Compilers.scala:1628)
+	at scala.Option.map(Option.scala:242)
+	at scala.meta.internal.metals.Compilers.$anonfun$withPCAndAdjustLsp$10(Compilers.scala:1628)
+	at scala.Option.flatMap(Option.scala:283)
+	at scala.meta.internal.metals.Compilers.withPCAndAdjustLsp(Compilers.scala:1610)
+	at scala.meta.internal.metals.Compilers.hover(Compilers.scala:1129)
+	at scala.meta.internal.metals.MetalsLspService.$anonfun$hover$1(MetalsLspService.scala:996)
+	at scala.meta.internal.metals.CancelTokens$.future(CancelTokens.scala:38)
+	at scala.meta.internal.metals.MetalsLspService.hover(MetalsLspService.scala:994)
+	at scala.meta.internal.metals.WorkspaceLspService.hover(WorkspaceLspService.scala:526)
+	at scala.meta.metals.lsp.DelegatingScalaService.hover(DelegatingScalaService.scala:78)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:104)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:565)
+	at org.eclipse.lsp4j.jsonrpc.services.GenericEndpoint.lambda$recursiveFindRpcMethods$0(GenericEndpoint.java:65)
+	at org.eclipse.lsp4j.jsonrpc.services.GenericEndpoint.request(GenericEndpoint.java:128)
+	at org.eclipse.lsp4j.jsonrpc.RemoteEndpoint.handleRequest(RemoteEndpoint.java:265)
+	at org.eclipse.lsp4j.jsonrpc.RemoteEndpoint.consume(RemoteEndpoint.java:195)
+	at org.eclipse.lsp4j.jsonrpc.json.StreamMessageProducer.handleMessage(StreamMessageProducer.java:189)
+	at org.eclipse.lsp4j.jsonrpc.json.StreamMessageProducer.listen(StreamMessageProducer.java:97)
+	at org.eclipse.lsp4j.jsonrpc.json.ConcurrentMessageProcessor.run(ConcurrentMessageProcessor.java:97)
+	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:545)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:328)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1090)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:614)
+	at java.base/java.lang.Thread.run(Thread.java:1474)
+
+set. 20, 2026 11:21:48 P. M. scala.meta.internal.mtags.SymbolIndexBucket addMtagsSourceFile
+WARNING: Error indexing C:\CARMOVO_PROY\CARMOVO\backend\src\main\java\com\carmovo\modulos\vehiculos\VehiculoControlador.java
+java.nio.file.NoSuchFileException: C:\CARMOVO_PROY\CARMOVO\backend\src\main\java\com\carmovo\modulos\vehiculos\VehiculoControlador.java
+	at java.base/sun.nio.fs.WindowsException.translateToIOException(WindowsException.java:85)
+	at java.base/sun.nio.fs.WindowsException.rethrowAsIOException(WindowsException.java:103)
+	at java.base/sun.nio.fs.WindowsException.rethrowAsIOException(WindowsException.java:108)
+	at java.base/sun.nio.fs.WindowsFileSystemProvider.newByteChannel(WindowsFileSystemProvider.java:231)
+	at java.base/java.nio.file.Files.newByteChannel(Files.java:357)
+	at java.base/java.nio.file.Files.newByteChannel(Files.java:399)
+	at java.base/java.nio.file.Files.readAllBytes(Files.java:2973)
+	at scala.meta.internal.io.PlatformFileIO$.slurp(PlatformFileIO.scala:38)
+	at scala.meta.internal.io.FileIO$.slurp(FileIO.scala:18)
+	at scala.meta.internal.mtags.ScalametaCommonEnrichments$XtensionAbsolutePath.toInput(ScalametaCommonEnrichments.scala:512)
+	at scala.meta.internal.mtags.Mtags.index(Mtags.scala:101)
+	at scala.meta.internal.mtags.Mtags.allSymbols(Mtags.scala:21)
+	at scala.meta.internal.mtags.SymbolIndexBucket.allSymbols(SymbolIndexBucket.scala:293)
+	at scala.meta.internal.mtags.SymbolIndexBucket.addMtagsSourceFile(SymbolIndexBucket.scala:304)
+	at scala.meta.internal.mtags.SymbolIndexBucket.$anonfun$query0$1(SymbolIndexBucket.scala:220)
+	at scala.meta.internal.mtags.SymbolIndexBucket.$anonfun$query0$1$adapted(SymbolIndexBucket.scala:220)
+	at scala.collection.immutable.Set$Set2.foreach(Set.scala:210)
+	at scala.meta.internal.mtags.SymbolIndexBucket.query0(SymbolIndexBucket.scala:220)
+	at scala.meta.internal.mtags.SymbolIndexBucket.$anonfun$query0$8(SymbolIndexBucket.scala:242)
+	at scala.collection.immutable.List.flatMap(List.scala:283)
+	at scala.meta.internal.mtags.SymbolIndexBucket.query0(SymbolIndexBucket.scala:242)
+	at scala.meta.internal.mtags.SymbolIndexBucket.query(SymbolIndexBucket.scala:193)
+	at scala.meta.internal.mtags.OnDemandSymbolIndex.$anonfun$findSymbolDefinition$1(OnDemandSymbolIndex.scala:143)
+	at scala.collection.immutable.List.flatMap(List.scala:283)
+	at scala.meta.internal.mtags.OnDemandSymbolIndex.findSymbolDefinition(OnDemandSymbolIndex.scala:143)
+	at scala.meta.internal.mtags.OnDemandSymbolIndex.definition(OnDemandSymbolIndex.scala:48)
+	at scala.meta.internal.metals.Docstrings.indexSymbol(Docstrings.scala:138)
+	at scala.meta.internal.metals.Docstrings.documentation(Docstrings.scala:49)
+	at scala.meta.internal.metals.MetalsSymbolSearch.documentation(MetalsSymbolSearch.scala:47)
+	at scala.meta.internal.pc.JavaMetalsGlobal.documentation(JavaMetalsGlobal.scala:187)
+	at scala.meta.internal.pc.JavaHoverProvider.$anonfun$hoverOffset$1(JavaHoverProvider.scala:67)
+	at scala.Option.map(Option.scala:242)
+	at scala.meta.internal.pc.JavaHoverProvider.hoverOffset(JavaHoverProvider.scala:57)
+	at scala.meta.internal.pc.JavaHoverProvider.hover(JavaHoverProvider.scala:37)
+	at scala.meta.internal.pc.JavaPresentationCompiler.hover(JavaPresentationCompiler.scala:80)
+	at scala.meta.internal.metals.Compilers.$anonfun$hover$1(Compilers.scala:1134)
+	at scala.meta.internal.metals.Compilers.$anonfun$withPCAndAdjustLsp$12(Compilers.scala:1628)
+	at scala.Option.map(Option.scala:242)
+	at scala.meta.internal.metals.Compilers.$anonfun$withPCAndAdjustLsp$10(Compilers.scala:1628)
+	at scala.Option.flatMap(Option.scala:283)
+	at scala.meta.internal.metals.Compilers.withPCAndAdjustLsp(Compilers.scala:1610)
+	at scala.meta.internal.metals.Compilers.hover(Compilers.scala:1129)
+	at scala.meta.internal.metals.MetalsLspService.$anonfun$hover$1(MetalsLspService.scala:996)
+	at scala.meta.internal.metals.CancelTokens$.future(CancelTokens.scala:38)
+	at scala.meta.internal.metals.MetalsLspService.hover(MetalsLspService.scala:994)
+	at scala.meta.internal.metals.WorkspaceLspService.hover(WorkspaceLspService.scala:526)
+	at scala.meta.metals.lsp.DelegatingScalaService.hover(DelegatingScalaService.scala:78)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:104)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:565)
+	at org.eclipse.lsp4j.jsonrpc.services.GenericEndpoint.lambda$recursiveFindRpcMethods$0(GenericEndpoint.java:65)
+	at org.eclipse.lsp4j.jsonrpc.services.GenericEndpoint.request(GenericEndpoint.java:128)
+	at org.eclipse.lsp4j.jsonrpc.RemoteEndpoint.handleRequest(RemoteEndpoint.java:265)
+	at org.eclipse.lsp4j.jsonrpc.RemoteEndpoint.consume(RemoteEndpoint.java:195)
+	at org.eclipse.lsp4j.jsonrpc.json.StreamMessageProducer.handleMessage(StreamMessageProducer.java:189)
+	at org.eclipse.lsp4j.jsonrpc.json.StreamMessageProducer.listen(StreamMessageProducer.java:97)
+	at org.eclipse.lsp4j.jsonrpc.json.ConcurrentMessageProcessor.run(ConcurrentMessageProcessor.java:97)
+	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:545)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:328)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1090)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:614)
+	at java.base/java.lang.Thread.run(Thread.java:1474)
+
+set. 20, 2026 11:21:48 P. M. scala.meta.internal.mtags.SymbolIndexBucket addMtagsSourceFile
+WARNING: Error indexing C:\CARMOVO_PROY\CARMOVO\backend\src\main\java\com\carmovo\modulos\vehiculos\VehiculoControlador.java
+java.nio.file.NoSuchFileException: C:\CARMOVO_PROY\CARMOVO\backend\src\main\java\com\carmovo\modulos\vehiculos\VehiculoControlador.java
+	at java.base/sun.nio.fs.WindowsException.translateToIOException(WindowsException.java:85)
+	at java.base/sun.nio.fs.WindowsException.rethrowAsIOException(WindowsException.java:103)
+	at java.base/sun.nio.fs.WindowsException.rethrowAsIOException(WindowsException.java:108)
+	at java.base/sun.nio.fs.WindowsFileSystemProvider.newByteChannel(WindowsFileSystemProvider.java:231)
+	at java.base/java.nio.file.Files.newByteChannel(Files.java:357)
+	at java.base/java.nio.file.Files.newByteChannel(Files.java:399)
+	at java.base/java.nio.file.Files.readAllBytes(Files.java:2973)
+	at scala.meta.internal.io.PlatformFileIO$.slurp(PlatformFileIO.scala:38)
+	at scala.meta.internal.io.FileIO$.slurp(FileIO.scala:18)
+	at scala.meta.internal.mtags.ScalametaCommonEnrichments$XtensionAbsolutePath.toInput(ScalametaCommonEnrichments.scala:512)
+	at scala.meta.internal.mtags.Mtags.index(Mtags.scala:101)
+	at scala.meta.internal.mtags.Mtags.allSymbols(Mtags.scala:21)
+	at scala.meta.internal.mtags.SymbolIndexBucket.allSymbols(SymbolIndexBucket.scala:293)
+	at scala.meta.internal.mtags.SymbolIndexBucket.addMtagsSourceFile(SymbolIndexBucket.scala:304)
+	at scala.meta.internal.mtags.SymbolIndexBucket.addMtagsSourceFile(SymbolIndexBucket.scala:315)
+	at scala.meta.internal.mtags.SymbolIndexBucket.$anonfun$query0$1(SymbolIndexBucket.scala:220)
+	at scala.meta.internal.mtags.SymbolIndexBucket.$anonfun$query0$1$adapted(SymbolIndexBucket.scala:220)
+	at scala.collection.immutable.Set$Set2.foreach(Set.scala:210)
+	at scala.meta.internal.mtags.SymbolIndexBucket.query0(SymbolIndexBucket.scala:220)
+	at scala.meta.internal.mtags.SymbolIndexBucket.$anonfun$query0$8(SymbolIndexBucket.scala:242)
+	at scala.collection.immutable.List.flatMap(List.scala:283)
+	at scala.meta.internal.mtags.SymbolIndexBucket.query0(SymbolIndexBucket.scala:242)
+	at scala.meta.internal.mtags.SymbolIndexBucket.query(SymbolIndexBucket.scala:193)
+	at scala.meta.internal.mtags.OnDemandSymbolIndex.$anonfun$findSymbolDefinition$1(OnDemandSymbolIndex.scala:143)
+	at scala.collection.immutable.List.flatMap(List.scala:283)
+	at scala.meta.internal.mtags.OnDemandSymbolIndex.findSymbolDefinition(OnDemandSymbolIndex.scala:143)
+	at scala.meta.internal.mtags.OnDemandSymbolIndex.definition(OnDemandSymbolIndex.scala:48)
+	at scala.meta.internal.metals.Docstrings.indexSymbol(Docstrings.scala:138)
+	at scala.meta.internal.metals.Docstrings.documentation(Docstrings.scala:49)
+	at scala.meta.internal.metals.MetalsSymbolSearch.documentation(MetalsSymbolSearch.scala:47)
+	at scala.meta.internal.pc.JavaMetalsGlobal.documentation(JavaMetalsGlobal.scala:187)
+	at scala.meta.internal.pc.JavaHoverProvider.$anonfun$hoverOffset$1(JavaHoverProvider.scala:67)
+	at scala.Option.map(Option.scala:242)
+	at scala.meta.internal.pc.JavaHoverProvider.hoverOffset(JavaHoverProvider.scala:57)
+	at scala.meta.internal.pc.JavaHoverProvider.hover(JavaHoverProvider.scala:37)
+	at scala.meta.internal.pc.JavaPresentationCompiler.hover(JavaPresentationCompiler.scala:80)
+	at scala.meta.internal.metals.Compilers.$anonfun$hover$1(Compilers.scala:1134)
+	at scala.meta.internal.metals.Compilers.$anonfun$withPCAndAdjustLsp$12(Compilers.scala:1628)
+	at scala.Option.map(Option.scala:242)
+	at scala.meta.internal.metals.Compilers.$anonfun$withPCAndAdjustLsp$10(Compilers.scala:1628)
+	at scala.Option.flatMap(Option.scala:283)
+	at scala.meta.internal.metals.Compilers.withPCAndAdjustLsp(Compilers.scala:1610)
+	at scala.meta.internal.metals.Compilers.hover(Compilers.scala:1129)
+	at scala.meta.internal.metals.MetalsLspService.$anonfun$hover$1(MetalsLspService.scala:996)
+	at scala.meta.internal.metals.CancelTokens$.future(CancelTokens.scala:38)
+	at scala.meta.internal.metals.MetalsLspService.hover(MetalsLspService.scala:994)
+	at scala.meta.internal.metals.WorkspaceLspService.hover(WorkspaceLspService.scala:526)
+	at scala.meta.metals.lsp.DelegatingScalaService.hover(DelegatingScalaService.scala:78)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:104)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:565)
+	at org.eclipse.lsp4j.jsonrpc.services.GenericEndpoint.lambda$recursiveFindRpcMethods$0(GenericEndpoint.java:65)
+	at org.eclipse.lsp4j.jsonrpc.services.GenericEndpoint.request(GenericEndpoint.java:128)
+	at org.eclipse.lsp4j.jsonrpc.RemoteEndpoint.handleRequest(RemoteEndpoint.java:265)
+	at org.eclipse.lsp4j.jsonrpc.RemoteEndpoint.consume(RemoteEndpoint.java:195)
+	at org.eclipse.lsp4j.jsonrpc.json.StreamMessageProducer.handleMessage(StreamMessageProducer.java:189)
+	at org.eclipse.lsp4j.jsonrpc.json.StreamMessageProducer.listen(StreamMessageProducer.java:97)
+	at org.eclipse.lsp4j.jsonrpc.json.ConcurrentMessageProcessor.run(ConcurrentMessageProcessor.java:97)
+	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:545)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:328)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1090)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:614)
+	at java.base/java.lang.Thread.run(Thread.java:1474)
+
+set. 21, 2026 1:49:30 P. M. org.eclipse.lsp4j.jsonrpc.RemoteEndpoint handleCancellation
+WARNING: Unmatched cancel notification for request id 808
+set. 21, 2026 1:59:22 P. M. org.eclipse.lsp4j.jsonrpc.RemoteEndpoint handleCancellation
+WARNING: Unmatched cancel notification for request id 820
+2026.09.21 13:59:25 INFO  compiling backend (1 java source)
+2026.09.21 13:59:30 INFO  time: compiled backend in 4.44s
+2026.09.21 13:59:36 INFO  compiling backend (1 java source)
+set. 21, 2026 1:59:38 P. M. org.eclipse.lsp4j.jsonrpc.RemoteEndpoint handleCancellation
+WARNING: Unmatched cancel notification for request id 855
+set. 21, 2026 1:59:39 P. M. org.eclipse.lsp4j.jsonrpc.RemoteEndpoint handleCancellation
+WARNING: Unmatched cancel notification for request id 858
+2026.09.21 13:59:42 WARN  Unexpected javac output: WARNING: A terminally deprecated method in sun.misc.Unsafe has been called
+WARNING: sun.misc.Unsafe::arrayBaseOffset has been called by com.sourcegraph.shaded.com.google.protobuf.UnsafeUtil$MemoryAccessor (file:/C:/Users/hp/AppData/Local/bloop/cache/semanticdb/com.sourcegraph.semanticdb-javac.0.12.3/semanticdb-javac-0.12.3.jar)
+WARNING: Please consider reporting this to the maintainers of class com.sourcegraph.shaded.com.google.protobuf.UnsafeUtil$MemoryAccessor
+WARNING: sun.misc.Unsafe::arrayBaseOffset will be removed in a future release.
+2026.09.21 13:59:43 INFO  time: compiled backend in 7.22s
+2026.09.21 14:00:00 INFO  compiling backend (1 java source)
+set. 21, 2026 2:00:04 P. M. org.eclipse.lsp4j.jsonrpc.RemoteEndpoint handleCancellation
+WARNING: Unmatched cancel notification for request id 877
+2026.09.21 14:00:10 INFO  time: compiled backend in 10s
+2026.09.21 14:00:10 INFO  compiling backend (1 java source)
+set. 21, 2026 2:00:11 P. M. org.eclipse.lsp4j.jsonrpc.RemoteEndpoint handleCancellation
+WARNING: Unmatched cancel notification for request id 894
+2026.09.21 14:00:13 WARN  Unexpected javac output: WARNING: A terminally deprecated method in sun.misc.Unsafe has been called
+WARNING: sun.misc.Unsafe::arrayBaseOffset has been called by com.sourcegraph.shaded.com.google.protobuf.UnsafeUtil$MemoryAccessor (file:/C:/Users/hp/AppData/Local/bloop/cache/semanticdb/com.sourcegraph.semanticdb-javac.0.12.3/semanticdb-javac-0.12.3.jar)
+WARNING: Please consider reporting this to the maintainers of class com.sourcegraph.shaded.com.google.protobuf.UnsafeUtil$MemoryAccessor
+WARNING: sun.misc.Unsafe::arrayBaseOffset will be removed in a future release.
+2026.09.21 14:00:13 INFO  time: compiled backend in 3.34s
+2026.09.21 14:00:18 INFO  compiling backend (1 java source)
+2026.09.21 14:00:24 WARN  Unexpected javac output: WARNING: A terminally deprecated method in sun.misc.Unsafe has been called
+WARNING: sun.misc.Unsafe::arrayBaseOffset has been called by com.sourcegraph.shaded.com.google.protobuf.UnsafeUtil$MemoryAccessor (file:/C:/Users/hp/AppData/Local/bloop/cache/semanticdb/com.sourcegraph.semanticdb-javac.0.12.3/semanticdb-javac-0.12.3.jar)
+WARNING: Please consider reporting this to the maintainers of class com.sourcegraph.shaded.com.google.protobuf.UnsafeUtil$MemoryAccessor
+WARNING: sun.misc.Unsafe::arrayBaseOffset will be removed in a future release.
+2026.09.21 14:00:24 INFO  time: compiled backend in 5.98s
+2026.09.21 14:00:25 INFO  Created report: Optional[file:///C:/CARMOVO_PROY/CARMOVO/backend/src/main/java/com/carmovo/modulos/reservas/ReservaDTO.java]
+2026.09.21 14:00:25 INFO  empty definition using pc, found symbol in pc:  (full report at: "C:\CARMOVO_PROY\CARMOVO\backend\.metals\.reports\metals-full\2026-09-21\r_empty-definition_(backend)_14-00-25-429.md")
+2026.09.21 14:00:30 INFO  compiling backend (1 java source)
+set. 21, 2026 2:00:31 P. M. org.eclipse.lsp4j.jsonrpc.RemoteEndpoint handleCancellation
+WARNING: Unmatched cancel notification for request id 923
+set. 21, 2026 2:00:31 P. M. org.eclipse.lsp4j.jsonrpc.RemoteEndpoint handleCancellation
+WARNING: Unmatched cancel notification for request id 922
+2026.09.21 14:00:35 INFO  time: compiled backend in 4.93s
+2026.09.21 14:00:37 INFO  compiling backend (1 java source)
+2026.09.21 14:00:40 WARN  Unexpected javac output: WARNING: A terminally deprecated method in sun.misc.Unsafe has been called
+WARNING: sun.misc.Unsafe::arrayBaseOffset has been called by com.sourcegraph.shaded.com.google.protobuf.UnsafeUtil$MemoryAccessor (file:/C:/Users/hp/AppData/Local/bloop/cache/semanticdb/com.sourcegraph.semanticdb-javac.0.12.3/semanticdb-javac-0.12.3.jar)
+WARNING: Please consider reporting this to the maintainers of class com.sourcegraph.shaded.com.google.protobuf.UnsafeUtil$MemoryAccessor
+WARNING: sun.misc.Unsafe::arrayBaseOffset will be removed in a future release.
+2026.09.21 14:00:40 INFO  time: compiled backend in 2.97s
+2026.09.21 14:01:06 INFO  compiling backend (1 java source)
+2026.09.21 14:01:11 INFO  time: compiled backend in 4.16s
+2026.09.21 14:01:18 INFO  compiling backend (1 java source)
+2026.09.21 14:01:21 WARN  Unexpected javac output: WARNING: A terminally deprecated method in sun.misc.Unsafe has been called
+WARNING: sun.misc.Unsafe::arrayBaseOffset has been called by com.sourcegraph.shaded.com.google.protobuf.UnsafeUtil$MemoryAccessor (file:/C:/Users/hp/AppData/Local/bloop/cache/semanticdb/com.sourcegraph.semanticdb-javac.0.12.3/semanticdb-javac-0.12.3.jar)
+WARNING: Please consider reporting this to the maintainers of class com.sourcegraph.shaded.com.google.protobuf.UnsafeUtil$MemoryAccessor
+WARNING: sun.misc.Unsafe::arrayBaseOffset will be removed in a future release.
+2026.09.21 14:01:21 INFO  time: compiled backend in 3.43s
+2026.09.21 14:01:50 INFO  compiling backend (1 java source)
+2026.09.21 14:01:56 INFO  time: compiled backend in 6.43s
+2026.09.21 14:02:01 INFO  compiling backend (1 java source)
+2026.09.21 14:02:06 WARN  Unexpected javac output: WARNING: A terminally deprecated method in sun.misc.Unsafe has been called
+WARNING: sun.misc.Unsafe::arrayBaseOffset has been called by com.sourcegraph.shaded.com.google.protobuf.UnsafeUtil$MemoryAccessor (file:/C:/Users/hp/AppData/Local/bloop/cache/semanticdb/com.sourcegraph.semanticdb-javac.0.12.3/semanticdb-javac-0.12.3.jar)
+WARNING: Please consider reporting this to the maintainers of class com.sourcegraph.shaded.com.google.protobuf.UnsafeUtil$MemoryAccessor
+WARNING: sun.misc.Unsafe::arrayBaseOffset will be removed in a future release.
+2026.09.21 14:02:06 INFO  time: compiled backend in 5.26s
+2026.09.21 14:22:54 INFO  compiling backend (1 java source)
+set. 21, 2026 2:22:56 P. M. org.eclipse.lsp4j.jsonrpc.RemoteEndpoint handleCancellation
+WARNING: Unmatched cancel notification for request id 1076
+set. 21, 2026 2:22:56 P. M. org.eclipse.lsp4j.jsonrpc.RemoteEndpoint handleCancellation
+WARNING: Unmatched cancel notification for request id 1077
+2026.09.21 14:22:58 INFO  time: compiled backend in 4.07s
+2026.09.21 14:23:00 INFO  compiling backend (1 java source)
+2026.09.21 14:23:05 WARN  Unexpected javac output: WARNING: A terminally deprecated method in sun.misc.Unsafe has been called
+WARNING: sun.misc.Unsafe::arrayBaseOffset has been called by com.sourcegraph.shaded.com.google.protobuf.UnsafeUtil$MemoryAccessor (file:/C:/Users/hp/AppData/Local/bloop/cache/semanticdb/com.sourcegraph.semanticdb-javac.0.12.3/semanticdb-javac-0.12.3.jar)
+WARNING: Please consider reporting this to the maintainers of class com.sourcegraph.shaded.com.google.protobuf.UnsafeUtil$MemoryAccessor
+WARNING: sun.misc.Unsafe::arrayBaseOffset will be removed in a future release.
+2026.09.21 14:23:05 INFO  time: compiled backend in 4.55s
+2026.09.21 14:23:21 INFO  compiling backend (1 java source)
+2026.09.21 14:23:23 WARN  Unexpected javac output: WARNING: A terminally deprecated method in sun.misc.Unsafe has been called
+WARNING: sun.misc.Unsafe::arrayBaseOffset has been called by com.sourcegraph.shaded.com.google.protobuf.UnsafeUtil$MemoryAccessor (file:/C:/Users/hp/AppData/Local/bloop/cache/semanticdb/com.sourcegraph.semanticdb-javac.0.12.3/semanticdb-javac-0.12.3.jar)
+WARNING: Please consider reporting this to the maintainers of class com.sourcegraph.shaded.com.google.protobuf.UnsafeUtil$MemoryAccessor
+WARNING: sun.misc.Unsafe::arrayBaseOffset will be removed in a future release.
+2026.09.21 14:23:23 INFO  time: compiled backend in 2.11s
+2026.09.21 14:23:26 INFO  compiling backend (1 java source)
+2026.09.21 14:23:28 WARN  Unexpected javac output: WARNING: A terminally deprecated method in sun.misc.Unsafe has been called
+WARNING: sun.misc.Unsafe::arrayBaseOffset has been called by com.sourcegraph.shaded.com.google.protobuf.UnsafeUtil$MemoryAccessor (file:/C:/Users/hp/AppData/Local/bloop/cache/semanticdb/com.sourcegraph.semanticdb-javac.0.12.3/semanticdb-javac-0.12.3.jar)
+WARNING: Please consider reporting this to the maintainers of class com.sourcegraph.shaded.com.google.protobuf.UnsafeUtil$MemoryAccessor
+WARNING: sun.misc.Unsafe::arrayBaseOffset will be removed in a future release.
+2026.09.21 14:23:28 INFO  time: compiled backend in 2.18s
+2026.09.21 14:23:59 INFO  compiling backend (1 java source)
+2026.09.21 14:24:01 WARN  Unexpected javac output: WARNING: A terminally deprecated method in sun.misc.Unsafe has been called
+WARNING: sun.misc.Unsafe::arrayBaseOffset has been called by com.sourcegraph.shaded.com.google.protobuf.UnsafeUtil$MemoryAccessor (file:/C:/Users/hp/AppData/Local/bloop/cache/semanticdb/com.sourcegraph.semanticdb-javac.0.12.3/semanticdb-javac-0.12.3.jar)
+WARNING: Please consider reporting this to the maintainers of class com.sourcegraph.shaded.com.google.protobuf.UnsafeUtil$MemoryAccessor
+WARNING: sun.misc.Unsafe::arrayBaseOffset will be removed in a future release.
+2026.09.21 14:24:01 INFO  time: compiled backend in 1.83s
+set. 21, 2026 2:25:15 P. M. org.eclipse.lsp4j.jsonrpc.RemoteEndpoint handleCancellation
+WARNING: Unmatched cancel notification for request id 1189
+2026.09.21 14:29:51 INFO  compiling backend (1 java source)
+2026.09.21 14:29:54 WARN  javac exited with exit code 1
+2026.09.21 14:29:54 INFO  time: compiled backend in 2.56s
+2026.09.21 14:30:04 INFO  compiling backend (1 java source)
+set. 21, 2026 2:30:05 P. M. org.eclipse.lsp4j.jsonrpc.RemoteEndpoint handleCancellation
+WARNING: Unmatched cancel notification for request id 1256
+2026.09.21 14:30:06 WARN  javac exited with exit code 1
+2026.09.21 14:30:06 INFO  time: compiled backend in 2.4s
+2026.09.21 14:30:15 INFO  compiling backend (1 java source)
+2026.09.21 14:30:17 WARN  javac exited with exit code 1
+2026.09.21 14:30:17 INFO  time: compiled backend in 2.5s
+2026.09.21 14:31:40 INFO  compiling backend (1 java source)
+2026.09.21 14:31:41 WARN  Unexpected javac output: WARNING: A terminally deprecated method in sun.misc.Unsafe has been called
+WARNING: sun.misc.Unsafe::arrayBaseOffset has been called by com.sourcegraph.shaded.com.google.protobuf.UnsafeUtil$MemoryAccessor (file:/C:/Users/hp/AppData/Local/bloop/cache/semanticdb/com.sourcegraph.semanticdb-javac.0.12.3/semanticdb-javac-0.12.3.jar)
+WARNING: Please consider reporting this to the maintainers of class com.sourcegraph.shaded.com.google.protobuf.UnsafeUtil$MemoryAccessor
+WARNING: sun.misc.Unsafe::arrayBaseOffset will be removed in a future release.
+2026.09.21 14:31:41 INFO  time: compiled backend in 1.89s
+set. 21, 2026 2:31:52 P. M. org.eclipse.lsp4j.jsonrpc.RemoteEndpoint handleCancellation
+WARNING: Unmatched cancel notification for request id 1341
+2026.09.21 14:31:53 INFO  compiling backend (1 java source)
+2026.09.21 14:31:55 WARN  Unexpected javac output: WARNING: A terminally deprecated method in sun.misc.Unsafe has been called
+WARNING: sun.misc.Unsafe::arrayBaseOffset has been called by com.sourcegraph.shaded.com.google.protobuf.UnsafeUtil$MemoryAccessor (file:/C:/Users/hp/AppData/Local/bloop/cache/semanticdb/com.sourcegraph.semanticdb-javac.0.12.3/semanticdb-javac-0.12.3.jar)
+WARNING: Please consider reporting this to the maintainers of class com.sourcegraph.shaded.com.google.protobuf.UnsafeUtil$MemoryAccessor
+WARNING: sun.misc.Unsafe::arrayBaseOffset will be removed in a future release.
+2026.09.21 14:31:55 INFO  time: compiled backend in 2.14s
+2026.09.21 14:38:31 INFO  compiling backend (1 java source)
+2026.09.21 14:38:33 WARN  Unexpected javac output: WARNING: A terminally deprecated method in sun.misc.Unsafe has been called
+WARNING: sun.misc.Unsafe::arrayBaseOffset has been called by com.sourcegraph.shaded.com.google.protobuf.UnsafeUtil$MemoryAccessor (file:/C:/Users/hp/AppData/Local/bloop/cache/semanticdb/com.sourcegraph.semanticdb-javac.0.12.3/semanticdb-javac-0.12.3.jar)
+WARNING: Please consider reporting this to the maintainers of class com.sourcegraph.shaded.com.google.protobuf.UnsafeUtil$MemoryAccessor
+WARNING: sun.misc.Unsafe::arrayBaseOffset will be removed in a future release.
+2026.09.21 14:38:33 INFO  time: compiled backend in 1.85s
+set. 21, 2026 2:38:41 P. M. org.eclipse.lsp4j.jsonrpc.RemoteEndpoint handleCancellation
+WARNING: Unmatched cancel notification for request id 1396
+2026.09.21 14:38:43 INFO  compiling backend (1 java source)
+2026.09.21 14:38:44 WARN  javac exited with exit code 1
+2026.09.21 14:38:44 INFO  time: compiled backend in 1.26s
+2026.09.21 14:38:49 INFO  file:///C:/CARMOVO_PROY/CARMOVO/backend/src/main/java/com/carmovo/modulos/integraciones/identidad/ReniecController.java:23:42: stale bloop error:  error: unclosed string literal
+            headers.set("Authorization", "package com.carmovo.modulos.integraciones.identidad;
+                                         ^
+2026.09.21 14:38:49 INFO  file:///C:/CARMOVO_PROY/CARMOVO/backend/src/main/java/com/carmovo/modulos/integraciones/identidad/ReniecController.java:25:33: stale bloop error:  error: <identifier> expected
+import org.springframework.http.*;
+                                ^
+2026.09.21 14:38:49 INFO  file:///C:/CARMOVO_PROY/CARMOVO/backend/src/main/java/com/carmovo/modulos/integraciones/identidad/ReniecController.java:25:34: stale bloop error:  error: illegal start of expression
+import org.springframework.http.*;
+                                 ^
+2026.09.21 14:38:49 INFO  file:///C:/CARMOVO_PROY/CARMOVO/backend/src/main/java/com/carmovo/modulos/integraciones/identidad/ReniecController.java:26:50: stale bloop error:  error: illegal start of expression
+import org.springframework.web.bind.annotation.*;
+                                                 ^
+2026.09.21 14:38:49 INFO  file:///C:/CARMOVO_PROY/CARMOVO/backend/src/main/java/com/carmovo/modulos/integraciones/identidad/ReniecController.java:26:48: stale bloop error:  error: <identifier> expected
+import org.springframework.web.bind.annotation.*;
+                                               ^
+2026.09.21 14:38:49 INFO  file:///C:/CARMOVO_PROY/CARMOVO/backend/src/main/java/com/carmovo/modulos/integraciones/identidad/ReniecController.java:26:49: stale bloop error:  error: illegal start of expression
+import org.springframework.web.bind.annotation.*;
+                                                ^
+2026.09.21 14:38:49 INFO  file:///C:/CARMOVO_PROY/CARMOVO/backend/src/main/java/com/carmovo/modulos/integraciones/identidad/ReniecController.java:27:52: stale bloop error:  error: illegal start of expression
+import org.springframework.web.client.RestTemplate;
+                                                   ^
+2026.09.21 14:38:49 INFO  file:///C:/CARMOVO_PROY/CARMOVO/backend/src/main/java/com/carmovo/modulos/integraciones/identidad/ReniecController.java:27:38: stale bloop error:  error: not a statement
+import org.springframework.web.client.RestTemplate;
+                                     ^
+2026.09.21 14:38:49 INFO  file:///C:/CARMOVO_PROY/CARMOVO/backend/src/main/java/com/carmovo/modulos/integraciones/identidad/ReniecController.java:28:67: stale bloop error:  error: illegal start of expression
+import org.springframework.web.client.RestClientResponseException;
+                                                                  ^
+2026.09.21 14:38:49 INFO  file:///C:/CARMOVO_PROY/CARMOVO/backend/src/main/java/com/carmovo/modulos/integraciones/identidad/ReniecController.java:28:38: stale bloop error:  error: not a statement
+import org.springframework.web.client.RestClientResponseException;
+                                     ^
+2026.09.21 14:38:49 INFO  file:///C:/CARMOVO_PROY/CARMOVO/backend/src/main/java/com/carmovo/modulos/integraciones/identidad/ReniecController.java:63:2: stale bloop error:  error: illegal start of expression
+}); 
+ ^
+2026.09.21 14:39:00 INFO  file:///C:/CARMOVO_PROY/CARMOVO/backend/src/main/java/com/carmovo/modulos/integraciones/identidad/ReniecController.java:23:42: stale bloop error:  error: unclosed string literal
+            headers.set("Authorization", "package com.carmovo.modulos.integraciones.identidad;
+                                         ^
+2026.09.21 14:39:00 INFO  file:///C:/CARMOVO_PROY/CARMOVO/backend/src/main/java/com/carmovo/modulos/integraciones/identidad/ReniecController.java:25:33: stale bloop error:  error: <identifier> expected
+import org.springframework.http.*;
+                                ^
+2026.09.21 14:39:00 INFO  file:///C:/CARMOVO_PROY/CARMOVO/backend/src/main/java/com/carmovo/modulos/integraciones/identidad/ReniecController.java:25:34: stale bloop error:  error: illegal start of expression
+import org.springframework.http.*;
+                                 ^
+2026.09.21 14:39:00 INFO  file:///C:/CARMOVO_PROY/CARMOVO/backend/src/main/java/com/carmovo/modulos/integraciones/identidad/ReniecController.java:26:50: stale bloop error:  error: illegal start of expression
+import org.springframework.web.bind.annotation.*;
+                                                 ^
+2026.09.21 14:39:00 INFO  file:///C:/CARMOVO_PROY/CARMOVO/backend/src/main/java/com/carmovo/modulos/integraciones/identidad/ReniecController.java:26:48: stale bloop error:  error: <identifier> expected
+import org.springframework.web.bind.annotation.*;
+                                               ^
+2026.09.21 14:39:00 INFO  file:///C:/CARMOVO_PROY/CARMOVO/backend/src/main/java/com/carmovo/modulos/integraciones/identidad/ReniecController.java:26:49: stale bloop error:  error: illegal start of expression
+import org.springframework.web.bind.annotation.*;
+                                                ^
+2026.09.21 14:39:00 INFO  file:///C:/CARMOVO_PROY/CARMOVO/backend/src/main/java/com/carmovo/modulos/integraciones/identidad/ReniecController.java:27:52: stale bloop error:  error: illegal start of expression
+import org.springframework.web.client.RestTemplate;
+                                                   ^
+2026.09.21 14:39:00 INFO  file:///C:/CARMOVO_PROY/CARMOVO/backend/src/main/java/com/carmovo/modulos/integraciones/identidad/ReniecController.java:27:38: stale bloop error:  error: not a statement
+import org.springframework.web.client.RestTemplate;
+                                     ^
+2026.09.21 14:39:00 INFO  file:///C:/CARMOVO_PROY/CARMOVO/backend/src/main/java/com/carmovo/modulos/integraciones/identidad/ReniecController.java:28:67: stale bloop error:  error: illegal start of expression
+import org.springframework.web.client.RestClientResponseException;
+                                                                  ^
+2026.09.21 14:39:00 INFO  file:///C:/CARMOVO_PROY/CARMOVO/backend/src/main/java/com/carmovo/modulos/integraciones/identidad/ReniecController.java:28:38: stale bloop error:  error: not a statement
+import org.springframework.web.client.RestClientResponseException;
+                                     ^
+2026.09.21 14:39:00 INFO  file:///C:/CARMOVO_PROY/CARMOVO/backend/src/main/java/com/carmovo/modulos/integraciones/identidad/ReniecController.java:63:2: stale bloop error:  error: illegal start of expression
+}); 
+ ^
+2026.09.21 14:39:01 INFO  compiling backend (1 java source)
+2026.09.21 14:39:03 WARN  Unexpected javac output: WARNING: A terminally deprecated method in sun.misc.Unsafe has been called
+WARNING: sun.misc.Unsafe::arrayBaseOffset has been called by com.sourcegraph.shaded.com.google.protobuf.UnsafeUtil$MemoryAccessor (file:/C:/Users/hp/AppData/Local/bloop/cache/semanticdb/com.sourcegraph.semanticdb-javac.0.12.3/semanticdb-javac-0.12.3.jar)
+WARNING: Please consider reporting this to the maintainers of class com.sourcegraph.shaded.com.google.protobuf.UnsafeUtil$MemoryAccessor
+WARNING: sun.misc.Unsafe::arrayBaseOffset will be removed in a future release.
+2026.09.21 14:39:03 INFO  time: compiled backend in 1.84s
+2026.09.21 14:39:57 INFO  compiling backend (1 java source)
+2026.09.21 14:39:59 WARN  Unexpected javac output: WARNING: A terminally deprecated method in sun.misc.Unsafe has been called
+WARNING: sun.misc.Unsafe::arrayBaseOffset has been called by com.sourcegraph.shaded.com.google.protobuf.UnsafeUtil$MemoryAccessor (file:/C:/Users/hp/AppData/Local/bloop/cache/semanticdb/com.sourcegraph.semanticdb-javac.0.12.3/semanticdb-javac-0.12.3.jar)
+WARNING: Please consider reporting this to the maintainers of class com.sourcegraph.shaded.com.google.protobuf.UnsafeUtil$MemoryAccessor
+WARNING: sun.misc.Unsafe::arrayBaseOffset will be removed in a future release.
+2026.09.21 14:39:59 INFO  time: compiled backend in 2.13s
+2026.09.21 14:41:14 INFO  compiling backend (1 java source)
+2026.09.21 14:41:16 WARN  Unexpected javac output: WARNING: A terminally deprecated method in sun.misc.Unsafe has been called
+WARNING: sun.misc.Unsafe::arrayBaseOffset has been called by com.sourcegraph.shaded.com.google.protobuf.UnsafeUtil$MemoryAccessor (file:/C:/Users/hp/AppData/Local/bloop/cache/semanticdb/com.sourcegraph.semanticdb-javac.0.12.3/semanticdb-javac-0.12.3.jar)
+WARNING: Please consider reporting this to the maintainers of class com.sourcegraph.shaded.com.google.protobuf.UnsafeUtil$MemoryAccessor
+WARNING: sun.misc.Unsafe::arrayBaseOffset will be removed in a future release.
+2026.09.21 14:41:16 INFO  time: compiled backend in 2.08s
+set. 21, 2026 2:47:11 P. M. org.eclipse.lsp4j.jsonrpc.RemoteEndpoint handleCancellation
+WARNING: Unmatched cancel notification for request id 1541
+set. 21, 2026 2:48:12 P. M. org.eclipse.lsp4j.jsonrpc.RemoteEndpoint handleCancellation
+WARNING: Unmatched cancel notification for request id 1619
+set. 21, 2026 5:18:21 P. M. org.eclipse.lsp4j.jsonrpc.RemoteEndpoint handleCancellation
+WARNING: Unmatched cancel notification for request id 1638
+set. 21, 2026 7:37:01 P. M. org.eclipse.lsp4j.jsonrpc.services.GenericEndpoint notify
+INFO: Unsupported notification method: $/setTrace
+set. 22, 2026 8:42:35 A. M. org.eclipse.lsp4j.jsonrpc.services.GenericEndpoint notify
+INFO: Unsupported notification method: $/setTrace
+set. 22, 2026 11:23:01 A. M. org.eclipse.lsp4j.jsonrpc.services.GenericEndpoint notify
+INFO: Unsupported notification method: $/setTrace
+2026.09.22 12:36:12 ERROR Bloop 'bsp' command exited with code 1. Something may be wrong with the current configuration.
+Running the [1mclean[0m sub-command to clear the working directory and remove caches might help.
+If the error persists, please report the issue as a bug and attach a log with increased verbosity by passing [1m-v -v -v[0m.
+2026.09.22 12:36:12 INFO  No running Bloop server found, starting one.
+2026.09.22 12:36:16 INFO  Starting compilation server
+2026.09.22 12:36:19 INFO  Tracing is disabled for protocol BSP. To enable tracing of incoming and outgoing JSON messages, create an empty file at C:\CARMOVO_PROY\CARMOVO\backend\.metals\bsp.trace.json or C:\Users\hp\AppData\Local\scalameta\metals\cache\bsp.trace.json
+2026.09.22 12:36:33 INFO  Started: Metals version 1.6.9 in folders 'C:\CARMOVO_PROY\CARMOVO\backend' for client Visual Studio Code 1.137.0.
+2026.09.22 12:36:33 INFO  Memory monitor started

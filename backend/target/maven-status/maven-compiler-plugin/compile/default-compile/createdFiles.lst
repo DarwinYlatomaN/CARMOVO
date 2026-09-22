@@ -1,10 +1,10 @@
-com\carmovo\controlador\TestControlador.class
-com\carmovo\modulos\roles\Opcion.class
-com\carmovo\modulos\vehiculos\Vehiculo.class
-com\carmovo\modulos\vehiculos\dto\VehiculoDTO.class
-com\carmovo\modulos\vehiculos\VehiculoController.class
 com\carmovo\modulos\usuarios\Usuario.class
 com\carmovo\modulos\vehiculos\VehiculoServicio.class
 com\carmovo\modulos\vehiculos\VehiculoRepositorio.class
 com\carmovo\BackendApplication.class
 com\carmovo\modulos\roles\Perfil.class
+com\carmovo\controlador\TestControlador.class
+com\carmovo\modulos\roles\Opcion.class
+com\carmovo\modulos\vehiculos\Vehiculo.class
+com\carmovo\modulos\vehiculos\dto\VehiculoDTO.class
+com\carmovo\modulos\vehiculos\VehiculoController.class

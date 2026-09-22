@@ -3,7 +3,6 @@ package com.carmovo.modulos.vehiculos;
 import jakarta.persistence.*;
 import java.math.BigDecimal;
 
-
 @Entity
 @Table(name = "vehiculos")
 public class Vehiculo {
@@ -22,6 +21,9 @@ public class Vehiculo {
     @Column(nullable = false, length = 50)
     private String categoria;
 
+    @Column(length = 50)
+    private String tipo;
+
     @Column(name = "precio_dia", nullable = false)
     private BigDecimal precioDia;
 
@@ -37,10 +39,15 @@ public class Vehiculo {
     @Column(length = 255)
     private String imagen;
 
+   
+    @Column(length = 1000)
+    private String descripcion;
+
     
     public Vehiculo() {
     }
 
+    // Getters y Setters
     public Long getIdVehiculo() { return idVehiculo; }
     public void setIdVehiculo(Long idVehiculo) { this.idVehiculo = idVehiculo; }
 
@@ -52,6 +59,9 @@ public class Vehiculo {
 
     public String getCategoria() { return categoria; }
     public void setCategoria(String categoria) { this.categoria = categoria; }
+
+    public String getTipo() { return tipo; }
+    public void setTipo(String tipo) { this.tipo = tipo; }
 
     public BigDecimal getPrecioDia() { return precioDia; }
     public void setPrecioDia(BigDecimal precioDia) { this.precioDia = precioDia; }
@@ -67,4 +77,7 @@ public class Vehiculo {
 
     public String getImagen() { return imagen; }
     public void setImagen(String imagen) { this.imagen = imagen; }
+
+    public String getDescripcion() { return descripcion; }
+    public void setDescripcion(String descripcion) { this.descripcion = descripcion; }
 }
