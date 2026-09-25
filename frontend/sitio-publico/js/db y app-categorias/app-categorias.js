@@ -1,7 +1,10 @@
 document.addEventListener('DOMContentLoaded', () => {
     inicializarCatalogoVehiculos();
-    crearEstructuraModalTecnico(); // Crea el modal dinámicamente si no existe
+    crearEstructuraModalTecnico(); 
 });
+
+
+window.autosGlobales = [];
 
 async function inicializarCatalogoVehiculos() {
     const contenedorAutos = document.getElementById('contenedor-autos');
@@ -14,6 +17,8 @@ async function inicializarCatalogoVehiculos() {
         if (!respuesta.ok) throw new Error('Error al conectar con el servidor');
 
         const autosDB = await respuesta.json();
+        window.autosGlobales = autosDB; // Guardamos globalmente
+
         const categoriasDB = ["Todos", ...new Set(autosDB.map(auto => auto.categoria))];
 
         if (contenedorCategorias) {
@@ -47,6 +52,30 @@ async function inicializarCatalogoVehiculos() {
     }
 }
 
+
+function obtenerEstilosDinamicos(categoria, transmision) {
+    const estilos = {
+        claseEtiqueta: 'naranja',
+        etiqueta: 'Recomendado',
+        iconoExtra: 'fa-gear'
+    };
+
+  
+    if (transmision && transmision.toLowerCase().includes('mec')) estilos.iconoExtra = 'fa-gear';
+    else if (transmision && transmision.toLowerCase().includes('auto')) estilos.iconoExtra = 'fa-wand-magic-sparkles';
+
+    switch(categoria) {
+        case 'Económicos': estilos.claseEtiqueta = 'azul'; estilos.etiqueta = 'Ciudad'; break;
+        case 'Sedanes': estilos.claseEtiqueta = 'verde'; estilos.etiqueta = 'Confort'; break;
+        case 'SUVs': estilos.claseEtiqueta = 'morada'; estilos.etiqueta = 'Familiar'; break;
+        case 'Pick-ups 4x4': estilos.claseEtiqueta = 'naranja'; estilos.etiqueta = 'Trabajo/Mina'; estilos.iconoExtra = 'fa-mountain'; break;
+        case 'Todoterreno': estilos.claseEtiqueta = 'naranja'; estilos.etiqueta = 'Aventura'; estilos.iconoExtra = 'fa-mountain'; break;
+        case 'Híbridos': estilos.claseEtiqueta = 'verde'; estilos.etiqueta = 'Eco'; estilos.iconoExtra = 'fa-leaf'; break;
+        case 'Premium / Lujo': estilos.claseEtiqueta = 'morada'; estilos.etiqueta = 'VIP'; estilos.iconoExtra = 'fa-gem'; break;
+    }
+    return estilos;
+}
+
 function renderizarAutos(listaAutos, contenedor) {
     contenedor.innerHTML = '';
 
@@ -56,20 +85,20 @@ function renderizarAutos(listaAutos, contenedor) {
     }
 
     listaAutos.forEach(auto => {
+       
+        const diseño = obtenerEstilosDinamicos(auto.categoria, auto.transmision);
+        
+      
         const tipo = auto.tipo || 'Vehículo Confiable';
-        const rating = auto.rating || '4.8';
+        const rating = '4.8';
         const pasajeros = auto.pasajeros || 5;
-        const caracteristicaExtra = auto.caracteristicaExtra || auto.transmision || 'Automático';
-        const iconoExtra = auto.iconoExtra || 'fa-gear';
-        const etiqueta = auto.etiqueta || 'Disponible';
-        const claseEtiqueta = auto.claseEtiqueta || 'naranja';
-        const precio = auto.precioDia ? Number(auto.precioDia).toFixed(2) : '150.00';
+        const precio = auto.precioDia ? Number(auto.precioDia).toFixed(2) : '0.00';
 
         const tarjetaHTML = `
             <div class="tarjeta-vehiculo">
                 <div class="imagen-contenedor">
-                    <span class="etiqueta-badge ${claseEtiqueta}">${etiqueta}</span>
-                    <img src="../recursos/imagenes/vehiculos/${auto.imagen}" alt="${auto.marca} ${auto.modelo}" onerror="this.src='../recursos/imagenes/carrusel/camioneta1.jpg'">
+                    <span class="etiqueta-badge ${diseño.claseEtiqueta}">${diseño.etiqueta}</span>
+                    <img src="../recursos/imagenes/vehiculos/${auto.imagen}" alt="${auto.marca} ${auto.modelo}" onerror="this.src='../recursos/imagenes/carrusel/camioneta2.jpg'">
                     <div class="rating-badge">
                         <i class="fa-solid fa-star"></i> ${rating}
                     </div>
@@ -81,7 +110,7 @@ function renderizarAutos(listaAutos, contenedor) {
                     
                     <div class="caracteristicas-grid">
                         <span><i class="fa-solid fa-users"></i> ${pasajeros} Pasajeros</span>
-                        <span><i class="fa-solid ${iconoExtra}"></i> ${caracteristicaExtra}</span>
+                        <span><i class="fa-solid ${diseño.iconoExtra}"></i> ${auto.transmision || 'Automático'}</span>
                     </div>
 
                     <!-- Botón de Información Técnica -->
@@ -94,8 +123,8 @@ function renderizarAutos(listaAutos, contenedor) {
                             <span class="etiqueta-precio">Precio por día</span>
                             <span class="precio">$${precio}</span>
                         </div>
-                        <a href="reservas.html" class="boton-accion-naranja">
-                            ${auto.estado === 'Disponible' ? 'Reservar' : 'No disponible'}
+                        <a href="reservas.html" class="boton-accion-naranja" ${auto.estado !== 'Disponible' ? 'style="pointer-events:none; background:#374151; color:#9ca3af;"' : ''}>
+                            ${auto.estado === 'Disponible' ? 'Reservar' : 'Ocupado'}
                         </a>
                     </div>
                 </div>
@@ -105,9 +134,7 @@ function renderizarAutos(listaAutos, contenedor) {
     });
 }
 
-// -------------------------------------------------------------------------
-// MODAL DINÁMICO DE INFORMACIÓN TÉCNICA
-// -------------------------------------------------------------------------
+
 function crearEstructuraModalTecnico() {
     if (document.getElementById('modalTecnico')) return;
 
@@ -137,7 +164,6 @@ function crearEstructuraModalTecnico() {
 
     // Eventos para cerrar el modal
     const modal = document.getElementById('modalTecnico');
-    const btnCerrar = document.getElementById('modalCerrarTecnico');
     
     document.getElementById('cerrarModalTecnico').addEventListener('click', () => {
         modal.classList.remove('activo');
