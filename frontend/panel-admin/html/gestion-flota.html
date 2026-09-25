@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de flota | CARMOVO</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+    <link rel="stylesheet" href="../css/variables.css">
+    <link rel="stylesheet" href="../css/base.css">
+    <link rel="stylesheet" href="../css/componentes/barra-lateral.css">
+    <link rel="stylesheet" href="../css/componentes/tabla-datos.css">
+    <link rel="stylesheet" href="../css/paginas/gestion-flota.css">
+
+    <script defer src="../js/servicios/admin-api.cliente.js"></script>
+    <script defer src="../js/guardias/rol.guardia.js"></script>
+    <script defer src="../js/componentes/barra-lateral.js"></script>
+    <script defer src="../js/principal.js"></script>
+    <script defer src="../js/paginas/gestion-flota.pagina.js"></script>
+</head>
+<body data-pagina="gestion-flota">
+    <div class="app-admin">
+        <aside id="barraLateral"></aside>
+        <div class="overlay-admin" id="overlayAdmin"></div>
+
+        <div class="contenido-admin">
+            <header class="cabecera-admin">
+                <div class="cabecera-admin__izquierda">
+                    <button class="boton-menu-admin" id="btnMenuAdmin" aria-label="Abrir menú"><i class="fa-solid fa-bars"></i></button>
+                    <div>
+                        <div class="cabecera-admin__titulo">Gestión de flota</div>
+                        <div class="cabecera-admin__subtitulo" id="fechaAdmin">Cargando fecha...</div>
+                    </div>
+                </div>
+                <div class="cabecera-admin__derecha">
+                    <div class="estado-api" id="estadoApi"><span>Comprobando API</span></div>
+                    <div class="perfil-admin">
+                        <div class="perfil-admin__avatar">AD</div>
+                        <div class="perfil-admin__datos">
+                            <div class="perfil-admin__nombre">Administrador</div>
+                            <div class="perfil-admin__rol">CARMOVO</div>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <main class="pagina-admin">
+                <section class="encabezado-pagina">
+                    <div>
+                        <h1>Vehículos</h1>
+                        <p>Registra, actualiza y controla los vehículos disponibles en CARMOVO.</p>
+                    </div>
+                    <button class="boton-primario" type="button" id="btnNuevoVehiculo">
+                        <i class="fa-solid fa-plus"></i> Nuevo vehículo
+                    </button>
+                </section>
+
+                <section class="resumen-flota">
+                    <div class="resumen-flota__dato"><span>Total</span><strong id="resumenTotal">0</strong></div>
+                    <div class="resumen-flota__dato"><span>Disponibles</span><strong id="resumenDisponibles">0</strong></div>
+                    <div class="resumen-flota__dato"><span>No disponibles</span><strong id="resumenNoDisponibles">0</strong></div>
+                </section>
+
+                <section class="panel-base">
+                    <div class="flota-herramientas">
+                        <div class="flota-buscador">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                            <input type="search" id="buscarVehiculo" placeholder="Buscar por marca, modelo, ID...">
+                        </div>
+                        <div class="flota-filtros">
+                            <select class="flota-filtro" id="filtroCategoria">
+                                <option value="">Todas las categorías</option>
+                            </select>
+                            <select class="flota-filtro" id="filtroEstado">
+                                <option value="">Todos los estados</option>
+                                <option value="Disponible">Disponible</option>
+                                <option value="Alquilado">Alquilado</option>
+                                <option value="Reservado">Reservado</option>
+                                <option value="Mantenimiento">Mantenimiento</option>
+                            </select>
+                            <button class="boton-secundario" type="button" id="btnRecargarFlota" title="Recargar datos"><i class="fa-solid fa-rotate"></i></button>
+                        </div>
+                    </div>
+
+                    <div class="panel-cabecera">
+                        <h3>Flota registrada</h3>
+                        <span id="cantidadResultados" style="color:var(--admin-texto-secundario);font-size:.75rem;">0 resultados</span>
+                    </div>
+
+                    <div class="tabla-contenedor">
+                        <table class="tabla-datos">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Vehículo</th>
+                                    <th>Categoría</th>
+                                    <th>Pasajeros</th>
+                                    <th>Precio/día</th>
+                                    <th>Estado</th>
+                                    <th>Transmisión</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tablaFlota">
+                                <tr><td colspan="8" class="estado-vacio">Cargando vehículos...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+            </main>
+        </div>
+    </div>
+
+    <div class="modal-admin" id="modalVehiculo" role="dialog" aria-modal="true" aria-labelledby="tituloModalVehiculo">
+        <div class="modal-admin__contenido">
+            <div class="modal-admin__cabecera">
+                <h2 id="tituloModalVehiculo">Registrar vehículo</h2>
+                <button class="modal-admin__cerrar" type="button" id="btnCerrarModal" aria-label="Cerrar"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+
+            <form class="formulario-vehiculo" id="formVehiculo">
+                <div class="formulario-grid">
+                    <div class="campo-formulario">
+                        <label for="vehiculoMarca">Marca</label>
+                        <input id="vehiculoMarca" type="text" maxlength="60" required placeholder="Ej. Toyota">
+                    </div>
+                    <div class="campo-formulario">
+                        <label for="vehiculoModelo">Modelo</label>
+                        <input id="vehiculoModelo" type="text" maxlength="80" required placeholder="Ej. Yaris">
+                    </div>
+                    <div class="campo-formulario">
+                        <label for="vehiculoCategoria">Categoría</label>
+                        <select id="vehiculoCategoria" required>
+                            <option value="" disabled selected>Seleccionar</option>
+                            <option>Económicos</option>
+                            <option>Sedanes</option>
+                            <option>SUVs</option>
+                            <option>Pick-ups 4x4</option>
+                            <option>Minivans</option>
+                            <option>Todoterreno</option>
+                            <option>Crossovers</option>
+                            <option>Furgonetas</option>
+                            <option>Híbridos</option>
+                            <option>Premium / Lujo</option>
+                            <option>Eventos</option>
+                        </select>
+                    </div>
+                    <div class="campo-formulario">
+                        <label for="vehiculoPrecio">Precio por día (S/)</label>
+                        <input id="vehiculoPrecio" type="number" min="0.01" step="0.01" required placeholder="150.00">
+                    </div>
+                    <div class="campo-formulario">
+                        <label for="vehiculoPasajeros">Pasajeros</label>
+                        <input id="vehiculoPasajeros" type="number" min="1" max="30" required placeholder="5">
+                    </div>
+                    <div class="campo-formulario">
+                        <label for="vehiculoTransmision">Transmisión</label>
+                        <select id="vehiculoTransmision" required>
+                            <option>Automático</option>
+                            <option>Mecánico</option>
+                        </select>
+                    </div>
+                    <div class="campo-formulario">
+                        <label for="vehiculoEstado">Estado</label>
+                        <select id="vehiculoEstado" required>
+                            <option>Disponible</option>
+                            <option>Alquilado</option>
+                            <option>Reservado</option>
+                            <option>Mantenimiento</option>
+                        </select>
+                    </div>
+                    <div class="campo-formulario campo-formulario--completo">
+                        <label for="vehiculoImagen">Ruta o URL de imagen (opcional)</label>
+                        <input id="vehiculoImagen" type="text" maxlength="255" placeholder="../recursos/imagenes/SUVs/Toyota-rav4.jpg">
+                    </div>
+                </div>
+
+                <div class="formulario-acciones">
+                    <button class="boton-secundario" type="button" id="btnCancelarVehiculo">Cancelar</button>
+                    <button class="boton-primario" type="submit" id="btnGuardarVehiculo"><i class="fa-solid fa-plus"></i> Registrar vehículo</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="notificacion-admin" id="notificacionAdmin"></div>
+</body>
+</html>

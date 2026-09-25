@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Acceso administrador | CARMOVO</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+    <link rel="stylesheet" href="../css/variables.css">
+    <link rel="stylesheet" href="../css/base.css">
+    <link rel="stylesheet" href="../css/paginas/login-admin.css">
+
+    <script defer src="../js/servicios/admin-api.cliente.js"></script>
+    <script defer src="../js/paginas/login-admin.pagina.js"></script>
+</head>
+<body class="login-admin">
+    <main class="login-admin__contenedor">
+        <section class="login-admin__tarjeta" aria-labelledby="tituloLoginAdmin">
+            <div class="login-admin__marca">
+                <img class="login-admin__logo" src="../../sitio-publico/recursos/imagenes/home/logo-carmovo4.jpg" alt="CARMOVO">
+                <div>
+                    <strong>CARMOVO</strong>
+                    <span>Panel administrador</span>
+                </div>
+            </div>
+
+            <div class="login-admin__encabezado">
+                <h1 id="tituloLoginAdmin">Iniciar sesión</h1>
+                <p>Acceso exclusivo para usuarios activos con el perfil Administrador registrado en CARMOVO.</p>
+            </div>
+
+            <form class="login-admin__formulario" id="formLoginAdmin">
+                <div class="login-admin__campo">
+                    <label for="correoAdmin">Correo electrónico</label>
+                    <div class="login-admin__input">
+                        <i class="fa-regular fa-envelope"></i>
+                        <input id="correoAdmin" type="email" autocomplete="username" placeholder="administrador@carmovo.com" required>
+                    </div>
+                </div>
+
+                <div class="login-admin__campo">
+                    <label for="contrasenaAdmin">Contraseña</label>
+                    <div class="login-admin__input">
+                        <i class="fa-solid fa-lock"></i>
+                        <input id="contrasenaAdmin" type="password" autocomplete="current-password" placeholder="Tu contraseña" required>
+                        <button class="login-admin__mostrar" id="btnMostrarContrasenaAdmin" type="button" aria-label="Mostrar contraseña">
+                            <i class="fa-regular fa-eye"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="login-admin__mensaje" id="mensajeLoginAdmin" role="alert"></div>
+
+                <button class="login-admin__boton" id="btnIngresarAdmin" type="submit">
+                    <i class="fa-solid fa-right-to-bracket"></i> Ingresar al panel
+                </button>
+            </form>
+
+            <p class="login-admin__nota">
+                La contraseña se valida en el backend contra el hash BCrypt almacenado en PostgreSQL. No se guarda la contraseña en el navegador.
+            </p>
+
+            <a class="login-admin__volver" href="../../sitio-publico/html/home.html">
+                <i class="fa-solid fa-arrow-left"></i> Volver al sitio web
+            </a>
+        </section>
+    </main>
+</body>
+</html>

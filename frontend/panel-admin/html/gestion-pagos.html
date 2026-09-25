@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pagos e ingresos | CARMOVO</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+    <link rel="stylesheet" href="../css/variables.css">
+    <link rel="stylesheet" href="../css/base.css">
+    <link rel="stylesheet" href="../css/componentes/barra-lateral.css">
+    <link rel="stylesheet" href="../css/componentes/tabla-datos.css">
+    <link rel="stylesheet" href="../css/paginas/gestion-pagos.css">
+
+    <script defer src="../js/servicios/admin-api.cliente.js"></script>
+    <script defer src="../js/guardias/rol.guardia.js"></script>
+    <script defer src="../js/componentes/barra-lateral.js"></script>
+    <script defer src="../js/principal.js"></script>
+    <script defer src="../js/paginas/gestion-pagos.pagina.js"></script>
+</head>
+<body data-pagina="gestion-pagos">
+    <div class="app-admin">
+        <aside id="barraLateral"></aside>
+        <div class="overlay-admin" id="overlayAdmin"></div>
+
+        <div class="contenido-admin">
+            <header class="cabecera-admin">
+                <div class="cabecera-admin__izquierda">
+                    <button class="boton-menu-admin" id="btnMenuAdmin" aria-label="Abrir menú">
+                        <i class="fa-solid fa-bars"></i>
+                    </button>
+                    <div>
+                        <div class="cabecera-admin__titulo">Pagos e ingresos</div>
+                        <div class="cabecera-admin__subtitulo" id="fechaAdmin">Cargando fecha...</div>
+                    </div>
+                </div>
+
+                <div class="cabecera-admin__derecha">
+                    <div class="estado-api" id="estadoApi"><span>Comprobando API</span></div>
+                    <div class="perfil-admin">
+                        <div class="perfil-admin__avatar">AD</div>
+                        <div class="perfil-admin__datos">
+                            <div class="perfil-admin__nombre">Administrador</div>
+                            <div class="perfil-admin__rol">CARMOVO</div>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <main class="pagina-admin">
+                <section class="encabezado-pagina">
+                    <div>
+                        <h1>Pagos e ingresos</h1>
+                        <p>Controla el estado de pago de cada alquiler y consulta los ingresos confirmados.</p>
+                    </div>
+                    <a class="boton-secundario" href="gestion-alquileres.html">
+                        <i class="fa-solid fa-calendar-check"></i> Ver alquileres
+                    </a>
+                </section>
+
+                <section class="resumen-pagos" aria-label="Resumen de pagos">
+                    <div class="resumen-pagos__dato">
+                        <span>Alquileres</span>
+                        <strong id="resumenPagosTotal">0</strong>
+                    </div>
+                    <div class="resumen-pagos__dato pendiente">
+                        <span>Pendientes</span>
+                        <strong id="resumenPagosPendientes">0</strong>
+                    </div>
+                    <div class="resumen-pagos__dato revision">
+                        <span>En revisión</span>
+                        <strong id="resumenPagosRevision">0</strong>
+                    </div>
+                    <div class="resumen-pagos__dato pagado">
+                        <span>Pagados</span>
+                        <strong id="resumenPagosPagados">0</strong>
+                    </div>
+                    <div class="resumen-pagos__dato ingresos">
+                        <span>Ingresos confirmados</span>
+                        <strong id="resumenIngresos">S/ 0.00</strong>
+                    </div>
+                </section>
+
+                <section class="panel-base">
+                    <div class="pagos-herramientas">
+                        <div class="pagos-buscador">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                            <input type="search" id="buscarPago" placeholder="Buscar por cliente, vehículo, correo o ID de alquiler...">
+                        </div>
+
+                        <div class="pagos-filtros">
+                            <select class="pagos-filtro" id="filtroEstadoPago">
+                                <option value="">Todos los estados</option>
+                                <option value="Pendiente">Pendiente</option>
+                                <option value="En revisión">En revisión</option>
+                                <option value="Pagado">Pagado</option>
+                                <option value="Rechazado">Rechazado</option>
+                            </select>
+                            <select class="pagos-filtro" id="filtroMetodoPago">
+                                <option value="">Todos los métodos</option>
+                                <option value="Tarjeta">Tarjeta</option>
+                                <option value="PayPal">PayPal</option>
+                                <option value="Yape">Yape</option>
+                                <option value="Plin">Plin</option>
+                                <option value="Sin especificar">Sin especificar</option>
+                            </select>
+                            <button class="boton-secundario" type="button" id="btnRecargarPagos" title="Recargar datos" aria-label="Recargar pagos">
+                                <i class="fa-solid fa-rotate"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="panel-cabecera pagos-panel-cabecera">
+                        <h3>Pagos asociados a alquileres</h3>
+                        <span id="cantidadPagos">0 resultados</span>
+                    </div>
+
+                    <div class="tabla-contenedor">
+                        <table class="tabla-datos tabla-pagos">
+                            <thead>
+                                <tr>
+                                    <th>Alquiler</th>
+                                    <th>Cliente</th>
+                                    <th>Vehículo</th>
+                                    <th>Método</th>
+                                    <th>Monto</th>
+                                    <th>Estado alquiler</th>
+                                    <th>Estado pago</th>
+                                    <th>Fecha de pago</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tablaPagos">
+                                <tr><td colspan="9" class="estado-vacio">Cargando pagos...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+            </main>
+        </div>
+    </div>
+
+    <div class="modal-pago-admin" id="modalPagoAdmin" role="dialog" aria-modal="true" aria-labelledby="tituloModalPagoAdmin">
+        <div class="modal-pago-admin__contenido">
+            <div class="modal-pago-admin__cabecera">
+                <h2 id="tituloModalPagoAdmin">Actualizar pago</h2>
+                <button class="modal-pago-admin__cerrar" type="button" id="btnCerrarModalPago" aria-label="Cerrar">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <form class="formulario-pago-admin" id="formPagoAdmin">
+                <div class="pago-resumen-modal" id="resumenPagoModal"></div>
+
+                <div class="formulario-pago-admin__grid">
+                    <div class="campo-pago-admin">
+                        <label for="pagoEstado">Estado del pago</label>
+                        <select id="pagoEstado" required>
+                            <option value="Pendiente">Pendiente</option>
+                            <option value="En revisión">En revisión</option>
+                            <option value="Pagado">Pagado</option>
+                            <option value="Rechazado">Rechazado</option>
+                        </select>
+                    </div>
+
+                    <div class="campo-pago-admin">
+                        <label for="pagoReferencia">Referencia / operación</label>
+                        <input id="pagoReferencia" type="text" maxlength="120" placeholder="Ej. operación Yape, Plin o referencia">
+                    </div>
+
+                    <div class="campo-pago-admin campo-pago-admin--completo">
+                        <label for="pagoObservaciones">Observaciones</label>
+                        <textarea id="pagoObservaciones" maxlength="500" placeholder="Observaciones administrativas del pago"></textarea>
+                    </div>
+                </div>
+
+                <div class="formulario-pago-admin__nota">
+                    <i class="fa-solid fa-circle-info"></i>
+                    <span>El monto y el método de pago provienen del alquiler. Este módulo solo registra el estado administrativo del pago, su referencia y la fecha de confirmación.</span>
+                </div>
+
+                <div class="formulario-pago-admin__acciones">
+                    <button class="boton-secundario" type="button" id="btnCancelarPago">Cancelar</button>
+                    <button class="boton-primario" type="submit" id="btnGuardarPago">
+                        <i class="fa-solid fa-floppy-disk"></i> Guardar estado
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="notificacion-pago-admin" id="notificacionPagoAdmin"></div>
+</body>
+</html>

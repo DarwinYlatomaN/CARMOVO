@@ -1,0 +1,110 @@
+.grid-estadisticas {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 16px;
+}
+
+.tarjeta-estadistica {
+    position: relative;
+    min-height: 145px;
+    padding: 20px;
+    overflow: hidden;
+    border: 1px solid var(--admin-borde);
+    border-radius: var(--admin-radio);
+    background: linear-gradient(145deg, #111827, #101724);
+    box-shadow: var(--admin-sombra);
+}
+
+.tarjeta-estadistica::after {
+    content: '';
+    position: absolute;
+    width: 95px;
+    height: 95px;
+    right: -25px;
+    bottom: -40px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, .025);
+}
+
+.tarjeta-estadistica__superior {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.tarjeta-estadistica__titulo {
+    color: var(--admin-texto-secundario);
+    font-size: .78rem;
+    font-weight: 700;
+}
+
+.tarjeta-estadistica__icono {
+    width: 42px;
+    height: 42px;
+    display: grid;
+    place-items: center;
+    border-radius: 11px;
+    font-size: 1rem;
+    background: rgba(59, 130, 246, .12);
+    color: var(--admin-azul);
+}
+
+.tarjeta-estadistica--disponible .tarjeta-estadistica__icono {
+    color: var(--admin-verde);
+    background: rgba(34, 197, 94, .12);
+}
+
+.tarjeta-estadistica--alquilado .tarjeta-estadistica__icono {
+    color: var(--admin-naranja);
+    background: rgba(255, 90, 54, .12);
+}
+
+.tarjeta-estadistica--mantenimiento .tarjeta-estadistica__icono {
+    color: var(--admin-amarillo);
+    background: rgba(245, 158, 11, .12);
+}
+
+.tarjeta-estadistica__valor {
+    margin-top: 16px;
+    font-size: 1.85rem;
+    line-height: 1;
+    font-weight: 800;
+}
+
+.tarjeta-estadistica__detalle {
+    margin-top: 9px;
+    color: #69788e;
+    font-size: .72rem;
+}
+
+@media (max-width: 1180px) {
+    .grid-estadisticas {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 560px) {
+    .grid-estadisticas {
+        grid-template-columns: 1fr;
+    }
+}
+
+
+/* Ajustes de dimensiones */
+.grid-estadisticas,
+.tarjeta-estadistica,
+.tarjeta-estadistica__superior {
+    min-width: 0;
+}
+
+.tarjeta-estadistica {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(145deg, var(--admin-superficie), #101622);
+}
+
+.tarjeta-estadistica__titulo,
+.tarjeta-estadistica__detalle {
+    overflow-wrap: anywhere;
+}

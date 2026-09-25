@@ -1,0 +1,432 @@
+.resumen-pagos {
+    margin-bottom: 18px;
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.resumen-pagos__dato {
+    min-width: 150px;
+    padding: 13px 15px;
+    border: 1px solid var(--admin-borde);
+    border-radius: 10px;
+    background: var(--admin-superficie);
+}
+
+.resumen-pagos__dato span {
+    display: block;
+    color: var(--admin-texto-secundario);
+    font-size: .68rem;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.resumen-pagos__dato strong {
+    display: block;
+    margin-top: 4px;
+    font-size: 1.15rem;
+}
+
+.resumen-pagos__dato.pendiente strong { color: #fbbf24; }
+.resumen-pagos__dato.revision strong { color: #60a5fa; }
+.resumen-pagos__dato.pagado strong,
+.resumen-pagos__dato.ingresos strong { color: #4ade80; }
+
+.pagos-herramientas {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    padding: 16px 18px;
+    border-bottom: 1px solid var(--admin-borde);
+}
+
+.pagos-buscador {
+    position: relative;
+    width: min(100%, 480px);
+}
+
+.pagos-buscador i {
+    position: absolute;
+    top: 50%;
+    left: 13px;
+    transform: translateY(-50%);
+    color: #64748b;
+    font-size: .82rem;
+}
+
+.pagos-buscador input,
+.pagos-filtro,
+.campo-pago-admin input,
+.campo-pago-admin select,
+.campo-pago-admin textarea {
+    border: 1px solid var(--admin-borde);
+    border-radius: 10px;
+    background: #0d1420;
+    color: var(--admin-texto);
+    outline: none;
+}
+
+.pagos-buscador input {
+    width: 100%;
+    min-height: 42px;
+    padding: 0 14px 0 38px;
+}
+
+.pagos-filtros {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.pagos-filtro {
+    min-width: 170px;
+    min-height: 42px;
+    padding: 0 12px;
+}
+
+.pagos-buscador input:focus,
+.pagos-filtro:focus,
+.campo-pago-admin input:focus,
+.campo-pago-admin select:focus,
+.campo-pago-admin textarea:focus {
+    border-color: var(--admin-naranja);
+}
+
+.pagos-panel-cabecera span {
+    color: var(--admin-texto-secundario);
+    font-size: .75rem;
+}
+
+.tabla-pagos {
+    min-width: 1250px;
+}
+
+.pago-cliente strong,
+.pago-vehiculo strong {
+    display: block;
+    color: #f1f5f9;
+    font-size: .79rem;
+}
+
+.pago-cliente small,
+.pago-vehiculo small {
+    display: block;
+    margin-top: 4px;
+    color: #718096;
+    font-size: .67rem;
+    line-height: 1.35;
+}
+
+.pago-monto {
+    color: #f8fafc;
+    font-weight: 800;
+    white-space: nowrap;
+}
+
+.badge-pago,
+.badge-alquiler-pago {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 9px;
+    border-radius: 999px;
+    font-size: .67rem;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.badge-pago::before,
+.badge-alquiler-pago::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: currentColor;
+}
+
+.badge-pago.pendiente {
+    color: #fbbf24;
+    background: rgba(245, 158, 11, .1);
+}
+
+.badge-pago.en-revision {
+    color: #60a5fa;
+    background: rgba(59, 130, 246, .1);
+}
+
+.badge-pago.pagado {
+    color: #4ade80;
+    background: rgba(34, 197, 94, .1);
+}
+
+.badge-pago.rechazado {
+    color: #f87171;
+    background: rgba(239, 68, 68, .1);
+}
+
+.badge-alquiler-pago {
+    color: #a5b4fc;
+    background: rgba(99, 102, 241, .1);
+}
+
+.pago-fecha {
+    color: #cbd5e1;
+    font-size: .74rem;
+    white-space: nowrap;
+}
+
+.pago-sin-dato {
+    color: #718096;
+}
+
+.acciones-pago {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+}
+
+.boton-pago-icono {
+    width: 34px;
+    height: 34px;
+    display: grid;
+    place-items: center;
+    border-radius: 8px;
+    border: 1px solid var(--admin-borde);
+    background: #151d2b;
+    color: #aab5c5;
+    cursor: pointer;
+    transition: .2s ease;
+}
+
+.boton-pago-icono:hover {
+    color: #fff;
+    border-color: #41506a;
+}
+
+.boton-pago-icono.editar:hover {
+    color: #60a5fa;
+    border-color: rgba(59, 130, 246, .4);
+}
+
+.modal-pago-admin {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 200;
+    padding: 24px;
+    align-items: center;
+    justify-content: center;
+    background: rgba(3, 7, 18, .78);
+    backdrop-filter: blur(5px);
+}
+
+.modal-pago-admin.abierto {
+    display: flex;
+}
+
+.modal-pago-admin__contenido {
+    width: min(100%, 720px);
+    max-height: calc(100vh - 48px);
+    overflow-y: auto;
+    border-radius: 16px;
+    border: 1px solid var(--admin-borde);
+    background: #101827;
+    box-shadow: 0 28px 70px rgba(0, 0, 0, .45);
+}
+
+.modal-pago-admin__cabecera {
+    min-height: 68px;
+    padding: 0 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    border-bottom: 1px solid var(--admin-borde);
+}
+
+.modal-pago-admin__cabecera h2 {
+    font-size: 1rem;
+}
+
+.modal-pago-admin__cerrar {
+    width: 36px;
+    height: 36px;
+    border-radius: 9px;
+    display: grid;
+    place-items: center;
+    background: #1b2535;
+    color: #9ca9bb;
+    cursor: pointer;
+}
+
+.formulario-pago-admin {
+    padding: 20px;
+}
+
+.pago-resumen-modal {
+    margin-bottom: 18px;
+    padding: 14px;
+    border: 1px solid var(--admin-borde);
+    border-radius: 11px;
+    background: #0b121e;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+}
+
+.pago-resumen-modal div {
+    min-width: 0;
+}
+
+.pago-resumen-modal span {
+    display: block;
+    color: #718096;
+    font-size: .65rem;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.pago-resumen-modal strong {
+    display: block;
+    margin-top: 4px;
+    color: #e5e7eb;
+    font-size: .8rem;
+    overflow-wrap: anywhere;
+}
+
+.formulario-pago-admin__grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+}
+
+.campo-pago-admin--completo {
+    grid-column: 1 / -1;
+}
+
+.campo-pago-admin label {
+    display: block;
+    margin-bottom: 7px;
+    color: #cbd5e1;
+    font-size: .73rem;
+    font-weight: 700;
+}
+
+.campo-pago-admin input,
+.campo-pago-admin select,
+.campo-pago-admin textarea {
+    width: 100%;
+    min-height: 43px;
+    padding: 0 12px;
+    background: #0b121e;
+}
+
+.campo-pago-admin textarea {
+    min-height: 90px;
+    padding-top: 11px;
+    padding-bottom: 11px;
+    resize: vertical;
+}
+
+.formulario-pago-admin__nota {
+    margin-top: 17px;
+    padding: 12px 14px;
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    border: 1px solid rgba(59, 130, 246, .18);
+    border-radius: 10px;
+    background: rgba(59, 130, 246, .06);
+    color: #9fb0c6;
+    font-size: .7rem;
+    line-height: 1.5;
+}
+
+.formulario-pago-admin__nota i {
+    margin-top: 2px;
+    color: #60a5fa;
+}
+
+.formulario-pago-admin__acciones {
+    margin-top: 20px;
+    padding-top: 16px;
+    border-top: 1px solid var(--admin-borde);
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+.notificacion-pago-admin {
+    position: fixed;
+    right: 22px;
+    bottom: 22px;
+    z-index: 300;
+    max-width: 410px;
+    padding: 13px 16px;
+    border-radius: 10px;
+    border: 1px solid var(--admin-borde);
+    background: #172033;
+    color: #e5e7eb;
+    box-shadow: var(--admin-sombra);
+    font-size: .78rem;
+    transform: translateY(22px);
+    opacity: 0;
+    pointer-events: none;
+    transition: .25s ease;
+}
+
+.notificacion-pago-admin.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.notificacion-pago-admin.exito { border-color: rgba(34, 197, 94, .35); }
+.notificacion-pago-admin.error { border-color: rgba(239, 68, 68, .4); }
+
+@media (max-width: 960px) {
+    .pagos-herramientas {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .pagos-buscador {
+        width: 100%;
+    }
+
+    .pagos-filtros {
+        align-items: stretch;
+    }
+
+    .pagos-filtro {
+        flex: 1;
+        min-width: 0;
+    }
+}
+
+@media (max-width: 620px) {
+    .pagos-filtros,
+    .formulario-pago-admin__grid,
+    .pago-resumen-modal {
+        grid-template-columns: 1fr;
+        flex-direction: column;
+    }
+
+    .campo-pago-admin--completo {
+        grid-column: auto;
+    }
+
+    .modal-pago-admin {
+        padding: 12px;
+    }
+}
+
+
+/* Ajuste final de dimensiones */
+.resumen-pagos__dato { flex: 1 1 150px; min-width: min(150px, 100%); }
+.pagos-herramientas, .pagos-filtros, .acciones-pago, .pago-detalle-grid, .formulario-pago__grid, .campo-pago { min-width: 0; }
+.pagos-herramientas, .pagos-filtros { flex-wrap: wrap; }
+.pagos-buscador { flex: 1 1 340px; min-width: 0; }
+.pagos-filtro { max-width: 100%; }
+.modal-pago__contenido { width: min(720px, calc(100vw - 32px)); max-width: 100%; }
+.notificacion-pago { max-width: calc(100vw - 32px); }

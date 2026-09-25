@@ -1,0 +1,332 @@
+.flota-herramientas {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    padding: 16px 18px;
+    border-bottom: 1px solid var(--admin-borde);
+}
+
+.flota-buscador {
+    position: relative;
+    width: min(100%, 390px);
+}
+
+.flota-buscador i {
+    position: absolute;
+    top: 50%;
+    left: 13px;
+    transform: translateY(-50%);
+    color: #64748b;
+    font-size: .82rem;
+}
+
+.flota-buscador input,
+.flota-filtro {
+    width: 100%;
+    min-height: 42px;
+    border: 1px solid var(--admin-borde);
+    border-radius: 10px;
+    background: #0d1420;
+    color: var(--admin-texto);
+    outline: none;
+}
+
+.flota-buscador input {
+    padding: 0 14px 0 38px;
+}
+
+.flota-buscador input:focus,
+.flota-filtro:focus,
+.campo-formulario input:focus,
+.campo-formulario select:focus {
+    border-color: var(--admin-naranja);
+}
+
+.flota-filtros {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.flota-filtro {
+    min-width: 170px;
+    padding: 0 12px;
+}
+
+.vehiculo-info {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+}
+
+.vehiculo-info__imagen {
+    width: 54px;
+    height: 38px;
+    border-radius: 8px;
+    object-fit: cover;
+    background: #202b3d;
+}
+
+.vehiculo-info__sin-imagen {
+    width: 54px;
+    height: 38px;
+    border-radius: 8px;
+    display: grid;
+    place-items: center;
+    background: #202b3d;
+    color: #69778b;
+}
+
+.vehiculo-info strong {
+    display: block;
+    color: #f1f5f9;
+    font-size: .79rem;
+}
+
+.vehiculo-info small {
+    display: block;
+    margin-top: 3px;
+    color: #6f7e93;
+    font-size: .68rem;
+}
+
+.acciones-tabla {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+}
+
+.boton-icono {
+    width: 34px;
+    height: 34px;
+    display: grid;
+    place-items: center;
+    border-radius: 8px;
+    border: 1px solid var(--admin-borde);
+    background: #151d2b;
+    color: #aab5c5;
+    cursor: pointer;
+    transition: .2s ease;
+}
+
+.boton-icono:hover {
+    color: #fff;
+    border-color: #41506a;
+}
+
+.boton-icono.editar:hover {
+    color: #60a5fa;
+    border-color: rgba(59, 130, 246, .4);
+}
+
+.boton-icono.eliminar:hover {
+    color: #f87171;
+    border-color: rgba(239, 68, 68, .4);
+}
+
+.resumen-flota {
+    margin-bottom: 18px;
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.resumen-flota__dato {
+    min-width: 150px;
+    padding: 13px 15px;
+    border: 1px solid var(--admin-borde);
+    border-radius: 10px;
+    background: var(--admin-superficie);
+}
+
+.resumen-flota__dato span {
+    display: block;
+    color: var(--admin-texto-secundario);
+    font-size: .68rem;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.resumen-flota__dato strong {
+    display: block;
+    margin-top: 4px;
+    font-size: 1.15rem;
+}
+
+.modal-admin {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 200;
+    padding: 24px;
+    align-items: center;
+    justify-content: center;
+    background: rgba(3, 7, 18, .78);
+    backdrop-filter: blur(5px);
+}
+
+.modal-admin.abierto {
+    display: flex;
+}
+
+.modal-admin__contenido {
+    width: min(100%, 720px);
+    max-height: calc(100vh - 48px);
+    overflow-y: auto;
+    border-radius: 16px;
+    border: 1px solid var(--admin-borde);
+    background: #101827;
+    box-shadow: 0 28px 70px rgba(0, 0, 0, .45);
+}
+
+.modal-admin__cabecera {
+    min-height: 68px;
+    padding: 0 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    border-bottom: 1px solid var(--admin-borde);
+}
+
+.modal-admin__cabecera h2 {
+    font-size: 1rem;
+}
+
+.modal-admin__cerrar {
+    width: 36px;
+    height: 36px;
+    border-radius: 9px;
+    display: grid;
+    place-items: center;
+    background: #1b2535;
+    color: #9ca9bb;
+    cursor: pointer;
+}
+
+.formulario-vehiculo {
+    padding: 20px;
+}
+
+.formulario-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+}
+
+.campo-formulario--completo {
+    grid-column: 1 / -1;
+}
+
+.campo-formulario label {
+    display: block;
+    margin-bottom: 7px;
+    color: #cbd5e1;
+    font-size: .73rem;
+    font-weight: 700;
+}
+
+.campo-formulario input,
+.campo-formulario select {
+    width: 100%;
+    min-height: 43px;
+    padding: 0 12px;
+    border: 1px solid var(--admin-borde);
+    border-radius: 9px;
+    background: #0b121e;
+    color: #f8fafc;
+    outline: none;
+}
+
+.formulario-acciones {
+    margin-top: 20px;
+    padding-top: 16px;
+    border-top: 1px solid var(--admin-borde);
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+.notificacion-admin {
+    position: fixed;
+    right: 22px;
+    bottom: 22px;
+    z-index: 300;
+    max-width: 360px;
+    padding: 13px 16px;
+    border-radius: 10px;
+    border: 1px solid var(--admin-borde);
+    background: #172033;
+    color: #e5e7eb;
+    box-shadow: var(--admin-sombra);
+    font-size: .78rem;
+    transform: translateY(22px);
+    opacity: 0;
+    pointer-events: none;
+    transition: .25s ease;
+}
+
+.notificacion-admin.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.notificacion-admin.exito {
+    border-color: rgba(34, 197, 94, .35);
+}
+
+.notificacion-admin.error {
+    border-color: rgba(239, 68, 68, .4);
+}
+
+@media (max-width: 820px) {
+    .flota-herramientas {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .flota-buscador {
+        width: 100%;
+    }
+
+    .flota-filtros {
+        align-items: stretch;
+    }
+
+    .flota-filtro {
+        flex: 1;
+        min-width: 0;
+    }
+}
+
+@media (max-width: 560px) {
+    .formulario-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .campo-formulario--completo {
+        grid-column: auto;
+    }
+
+    .flota-filtros {
+        flex-direction: column;
+    }
+
+    .modal-admin {
+        padding: 12px;
+    }
+}
+
+
+/* Ajuste final de dimensiones */
+.resumen-flota__dato { flex: 1 1 150px; min-width: min(150px, 100%); }
+.flota-herramientas, .flota-filtros, .acciones-tabla, .formulario-grid, .campo-formulario { min-width: 0; }
+.flota-herramientas, .flota-filtros { flex-wrap: wrap; }
+.flota-buscador { flex: 1 1 300px; min-width: 0; }
+.flota-filtro { max-width: 100%; }
+.vehiculo-info { min-width: 0; }
+.vehiculo-info > div:last-child { min-width: 0; }
+.vehiculo-info strong, .vehiculo-info small { overflow-wrap: anywhere; }
+.modal-admin__contenido { width: min(720px, calc(100vw - 32px)); max-width: 100%; }
+.notificacion-admin { max-width: calc(100vw - 32px); }

@@ -1,0 +1,18 @@
+# Compilación Java / Maven
+backend/target/
+
+# Herramientas de desarrollo Scala/Metals
+backend/.bloop/
+backend/.metals/
+
+# IntelliJ
+.idea/
+*.iml
+
+# Archivos del sistema
+Thumbs.db
+.DS_Store
+
+# Variables de entorno locales
+.env
+**/.env

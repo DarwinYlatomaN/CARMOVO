@@ -1,0 +1,209 @@
+.barra-lateral {
+    width: var(--admin-sidebar-ancho);
+    height: 100vh;
+    padding: 22px 16px 18px;
+    background: #0c1320;
+    border-right: 1px solid var(--admin-borde);
+    position: fixed;
+    inset: 0 auto 0 0;
+    z-index: 100;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    transition: transform .25s ease;
+}
+
+.barra-lateral__marca {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 0 8px 22px;
+    border-bottom: 1px solid var(--admin-borde);
+}
+
+.barra-lateral__logo {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    object-fit: cover;
+    box-shadow: none;
+}
+
+.barra-lateral__marca-texto strong {
+    display: block;
+    font-size: 1.08rem;
+    letter-spacing: .01em;
+}
+
+.barra-lateral__marca-texto span {
+    color: var(--admin-naranja);
+    font-size: .69rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .08em;
+}
+
+.barra-lateral__seccion {
+    margin-top: 20px;
+}
+
+.barra-lateral__etiqueta {
+    display: block;
+    padding: 0 11px 8px;
+    color: #64748b;
+    font-size: .66rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: .11em;
+}
+
+.barra-lateral__menu {
+    list-style: none;
+    display: grid;
+    gap: 5px;
+}
+
+.barra-lateral__enlace {
+    min-height: 45px;
+    padding: 0 12px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: #aab5c5;
+    font-size: .84rem;
+    font-weight: 600;
+    transition: .2s ease;
+}
+
+.barra-lateral__enlace i {
+    width: 20px;
+    text-align: center;
+    color: #718096;
+    font-size: .96rem;
+}
+
+.barra-lateral__enlace:hover {
+    color: #fff;
+    background: var(--admin-superficie-2);
+}
+
+.barra-lateral__enlace.activo {
+    color: #fff;
+    background: rgba(255, 90, 54, .12);
+    box-shadow: inset 3px 0 0 var(--admin-naranja);
+}
+
+.barra-lateral__enlace.activo i {
+    color: var(--admin-naranja);
+}
+
+.barra-lateral__pie {
+    margin-top: auto;
+    padding: 18px 8px 0;
+    border-top: 1px solid var(--admin-borde);
+}
+
+.barra-lateral__volver {
+    color: var(--admin-texto-secundario);
+    font-size: .78rem;
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    transition: color .2s ease;
+}
+
+.barra-lateral__volver:hover {
+    color: #fff;
+}
+
+@media (max-width: 980px) {
+    .barra-lateral {
+        transform: translateX(-100%);
+        box-shadow: 20px 0 45px rgba(0, 0, 0, .32);
+    }
+
+    body.menu-abierto .barra-lateral {
+        transform: translateX(0);
+    }
+}
+
+.barra-lateral__sesion {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    margin-bottom: 12px;
+    color: var(--admin-texto-secundario);
+}
+
+.barra-lateral__sesion > i {
+    margin-top: 2px;
+    color: var(--admin-naranja);
+    font-size: 1.15rem;
+}
+
+.barra-lateral__sesion strong,
+.barra-lateral__sesion span {
+    display: block;
+    max-width: 165px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.barra-lateral__sesion strong {
+    color: #fff;
+    font-size: .76rem;
+}
+
+.barra-lateral__sesion span {
+    margin-top: 3px;
+    font-size: .66rem;
+}
+
+.barra-lateral__salir {
+    width: 100%;
+    min-height: 38px;
+    margin-bottom: 11px;
+    padding: 0 10px;
+    border: 1px solid rgba(239, 68, 68, .22);
+    border-radius: 9px;
+    background: rgba(239, 68, 68, .07);
+    color: #fca5a5;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    font-size: .76rem;
+    font-weight: 700;
+    transition: .2s ease;
+}
+
+.barra-lateral__salir:hover {
+    border-color: rgba(239, 68, 68, .5);
+    background: rgba(239, 68, 68, .13);
+}
+
+
+/* Ajustes de consistencia visual */
+.barra-lateral {
+    max-width: 100vw;
+    background: #0c1320;
+}
+
+.barra-lateral__marca,
+.barra-lateral__seccion,
+.barra-lateral__menu,
+.barra-lateral__pie,
+.barra-lateral__enlace {
+    min-width: 0;
+}
+
+.barra-lateral__enlace {
+    width: 100%;
+}
+
+.barra-lateral__enlace span,
+.barra-lateral__marca-texto {
+    min-width: 0;
+}

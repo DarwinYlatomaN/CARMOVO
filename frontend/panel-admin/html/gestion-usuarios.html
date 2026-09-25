@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de usuarios | CARMOVO</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+    <link rel="stylesheet" href="../css/variables.css">
+    <link rel="stylesheet" href="../css/base.css">
+    <link rel="stylesheet" href="../css/componentes/barra-lateral.css">
+    <link rel="stylesheet" href="../css/componentes/tabla-datos.css">
+    <link rel="stylesheet" href="../css/paginas/gestion-usuarios.css">
+
+    <script defer src="../js/servicios/admin-api.cliente.js"></script>
+    <script defer src="../js/guardias/rol.guardia.js"></script>
+    <script defer src="../js/componentes/barra-lateral.js"></script>
+    <script defer src="../js/principal.js"></script>
+    <script defer src="../js/paginas/gestion-usuarios.pagina.js"></script>
+</head>
+<body data-pagina="gestion-usuarios">
+    <div class="app-admin">
+        <aside id="barraLateral"></aside>
+        <div class="overlay-admin" id="overlayAdmin"></div>
+
+        <div class="contenido-admin">
+            <header class="cabecera-admin">
+                <div class="cabecera-admin__izquierda">
+                    <button class="boton-menu-admin" id="btnMenuAdmin" aria-label="Abrir menú">
+                        <i class="fa-solid fa-bars"></i>
+                    </button>
+                    <div>
+                        <div class="cabecera-admin__titulo">Gestión de usuarios</div>
+                        <div class="cabecera-admin__subtitulo" id="fechaAdmin">Cargando fecha...</div>
+                    </div>
+                </div>
+
+                <div class="cabecera-admin__derecha">
+                    <div class="estado-api" id="estadoApi"><span>Comprobando API</span></div>
+                    <div class="perfil-admin">
+                        <div class="perfil-admin__avatar">AD</div>
+                        <div class="perfil-admin__datos">
+                            <div class="perfil-admin__nombre">Administrador</div>
+                            <div class="perfil-admin__rol">CARMOVO</div>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <main class="pagina-admin">
+                <section class="encabezado-pagina">
+                    <div>
+                        <h1>Usuarios</h1>
+                        <p>Administra cuentas, perfiles y estados de acceso del sistema.</p>
+                    </div>
+                    <button class="boton-primario" type="button" id="btnNuevoUsuario">
+                        <i class="fa-solid fa-user-plus"></i> Nuevo usuario
+                    </button>
+                </section>
+
+                <section class="resumen-usuarios" aria-label="Resumen de usuarios">
+                    <div class="resumen-usuarios__dato">
+                        <span>Total</span>
+                        <strong id="resumenUsuariosTotal">0</strong>
+                    </div>
+                    <div class="resumen-usuarios__dato">
+                        <span>Activos</span>
+                        <strong id="resumenUsuariosActivos">0</strong>
+                    </div>
+                    <div class="resumen-usuarios__dato">
+                        <span>Inactivos</span>
+                        <strong id="resumenUsuariosInactivos">0</strong>
+                    </div>
+                    <div class="resumen-usuarios__dato">
+                        <span>Perfiles</span>
+                        <strong id="resumenPerfiles">0</strong>
+                    </div>
+                </section>
+
+                <section class="panel-base">
+                    <div class="usuarios-herramientas">
+                        <div class="usuarios-buscador">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                            <input type="search" id="buscarUsuario" placeholder="Buscar por nombre, correo, teléfono o ID...">
+                        </div>
+
+                        <div class="usuarios-filtros">
+                            <select class="usuarios-filtro" id="filtroPerfil">
+                                <option value="">Todos los perfiles</option>
+                            </select>
+                            <select class="usuarios-filtro" id="filtroEstadoUsuario">
+                                <option value="">Todos los estados</option>
+                                <option value="activo">Activo</option>
+                                <option value="inactivo">Inactivo</option>
+                            </select>
+                            <button class="boton-secundario" type="button" id="btnRecargarUsuarios" title="Recargar datos" aria-label="Recargar usuarios">
+                                <i class="fa-solid fa-rotate"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="panel-cabecera usuarios-panel-cabecera">
+                        <h3>Usuarios registrados</h3>
+                        <span id="cantidadUsuarios">0 resultados</span>
+                    </div>
+
+                    <div class="tabla-contenedor">
+                        <table class="tabla-datos tabla-usuarios">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Usuario</th>
+                                    <th>Correo</th>
+                                    <th>Teléfono</th>
+                                    <th>Perfil</th>
+                                    <th>Estado</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tablaUsuarios">
+                                <tr><td colspan="7" class="estado-vacio">Cargando usuarios...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+            </main>
+        </div>
+    </div>
+
+    <div class="modal-usuario" id="modalUsuario" role="dialog" aria-modal="true" aria-labelledby="tituloModalUsuario">
+        <div class="modal-usuario__contenido">
+            <div class="modal-usuario__cabecera">
+                <h2 id="tituloModalUsuario">Registrar usuario</h2>
+                <button class="modal-usuario__cerrar" type="button" id="btnCerrarModalUsuario" aria-label="Cerrar">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <form class="formulario-usuario" id="formUsuario">
+                <div class="formulario-usuario__grid">
+                    <div class="campo-usuario">
+                        <label for="usuarioNombres">Nombres</label>
+                        <input id="usuarioNombres" type="text" maxlength="100" required placeholder="Ej. María Fernanda">
+                    </div>
+
+                    <div class="campo-usuario">
+                        <label for="usuarioApellidos">Apellidos</label>
+                        <input id="usuarioApellidos" type="text" maxlength="100" required placeholder="Ej. Pérez Torres">
+                    </div>
+
+                    <div class="campo-usuario">
+                        <label for="usuarioCorreo">Correo</label>
+                        <input id="usuarioCorreo" type="email" maxlength="120" required placeholder="usuario@carmovo.com">
+                    </div>
+
+                    <div class="campo-usuario">
+                        <label for="usuarioTelefono">Teléfono</label>
+                        <input id="usuarioTelefono" type="tel" maxlength="20" placeholder="Ej. 987654321">
+                    </div>
+
+                    <div class="campo-usuario">
+                        <label for="usuarioPerfil">Perfil</label>
+                        <select id="usuarioPerfil" required>
+                            <option value="" disabled selected>Seleccionar perfil</option>
+                        </select>
+                    </div>
+
+                    <div class="campo-usuario">
+                        <label for="usuarioEstado">Estado</label>
+                        <select id="usuarioEstado" required>
+                            <option value="true">Activo</option>
+                            <option value="false">Inactivo</option>
+                        </select>
+                    </div>
+
+                    <div class="campo-usuario campo-usuario--completo">
+                        <label for="usuarioContrasena">Contraseña</label>
+                        <div class="campo-contrasena">
+                            <input id="usuarioContrasena" type="password" minlength="8" maxlength="100" autocomplete="new-password" placeholder="Mínimo 8 caracteres">
+                            <button type="button" id="btnVerContrasena" aria-label="Mostrar u ocultar contraseña" title="Mostrar u ocultar contraseña">
+                                <i class="fa-solid fa-eye"></i>
+                            </button>
+                        </div>
+                        <small id="ayudaContrasena">Obligatoria al crear un usuario. Al editar, déjala vacía para conservar la contraseña actual.</small>
+                    </div>
+                </div>
+
+                <div class="formulario-usuario__nota">
+                    <i class="fa-solid fa-shield-halved"></i>
+                    <span>La contraseña no se devuelve al navegador y se guarda cifrada con BCrypt en el backend.</span>
+                </div>
+
+                <div class="formulario-usuario__acciones">
+                    <button class="boton-secundario" type="button" id="btnCancelarUsuario">Cancelar</button>
+                    <button class="boton-primario" type="submit" id="btnGuardarUsuario">
+                        <i class="fa-solid fa-user-plus"></i> Registrar usuario
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="notificacion-usuario" id="notificacionUsuario" role="status" aria-live="polite"></div>
+</body>
+</html>

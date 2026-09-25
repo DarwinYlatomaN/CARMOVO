@@ -1,0 +1,19 @@
+:root {
+    --admin-fondo: #090e17;
+    --admin-superficie: #121927;
+    --admin-superficie-2: #151e2e;
+    --admin-superficie-3: #1f2937;
+    --admin-borde: #1f2937;
+    --admin-texto: #ffffff;
+    --admin-texto-secundario: #8b95a5;
+    --admin-naranja: #ff5a36;
+    --admin-naranja-hover: #e04a29;
+    --admin-verde: #10b981;
+    --admin-amarillo: #f59e0b;
+    --admin-rojo: #ef4444;
+    --admin-azul: #1a56db;
+    --admin-sidebar-ancho: 270px;
+    --admin-contenido-max: 1500px;
+    --admin-radio: 14px;
+    --admin-sombra: 0 15px 35px rgba(0, 0, 0, .24);
+}

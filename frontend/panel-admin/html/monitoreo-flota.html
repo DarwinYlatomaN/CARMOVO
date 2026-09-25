@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Monitoreo de flota | CARMOVO</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+    <link rel="stylesheet" href="../css/variables.css">
+    <link rel="stylesheet" href="../css/base.css">
+    <link rel="stylesheet" href="../css/componentes/barra-lateral.css">
+    <link rel="stylesheet" href="../css/componentes/tabla-datos.css">
+    <link rel="stylesheet" href="../css/paginas/monitoreo-flota.css">
+
+    <script defer src="../js/servicios/admin-api.cliente.js"></script>
+    <script defer src="../js/guardias/rol.guardia.js"></script>
+    <script defer src="../js/componentes/barra-lateral.js"></script>
+    <script defer src="../js/principal.js"></script>
+    <script defer src="../js/paginas/monitoreo-flota.pagina.js"></script>
+</head>
+<body data-pagina="monitoreo-flota">
+    <div class="app-admin">
+        <aside id="barraLateral"></aside>
+        <div class="overlay-admin" id="overlayAdmin"></div>
+
+        <div class="contenido-admin">
+            <header class="cabecera-admin">
+                <div class="cabecera-admin__izquierda">
+                    <button class="boton-menu-admin" id="btnMenuAdmin" aria-label="Abrir menú">
+                        <i class="fa-solid fa-bars"></i>
+                    </button>
+                    <div>
+                        <div class="cabecera-admin__titulo">Monitoreo de flota</div>
+                        <div class="cabecera-admin__subtitulo" id="fechaAdmin">Cargando fecha...</div>
+                    </div>
+                </div>
+
+                <div class="cabecera-admin__derecha">
+                    <div class="estado-api" id="estadoApi"><span>Comprobando API</span></div>
+                    <div class="perfil-admin">
+                        <div class="perfil-admin__avatar">AD</div>
+                        <div class="perfil-admin__datos">
+                            <div class="perfil-admin__nombre">Administrador</div>
+                            <div class="perfil-admin__rol">CARMOVO</div>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <main class="pagina-admin">
+                <section class="encabezado-pagina">
+                    <div>
+                        <h1>Monitoreo de flota</h1>
+                        <p>Supervisa el estado operativo de los vehículos y su relación con los alquileres activos.</p>
+                    </div>
+                    <div class="monitoreo-acciones">
+                        <span class="monitoreo-actualizacion" id="ultimaActualizacion">Sin actualizar</span>
+                        <button class="boton-secundario" type="button" id="btnRecargarMonitoreo">
+                            <i class="fa-solid fa-rotate"></i> Actualizar
+                        </button>
+                    </div>
+                </section>
+
+                <section class="monitoreo-aviso" aria-label="Alcance del monitoreo">
+                    <i class="fa-solid fa-circle-info"></i>
+                    <div>
+                        <strong>Monitoreo operativo, no GPS.</strong>
+                        <span>Las ubicaciones mostradas provienen de las sedes de recogida y entrega registradas en los alquileres. CARMOVO todavía no almacena coordenadas ni posición GPS en tiempo real.</span>
+                    </div>
+                </section>
+
+                <section class="resumen-monitoreo" aria-label="Resumen de la flota">
+                    <div class="resumen-monitoreo__dato">
+                        <span>Total de vehículos</span>
+                        <strong id="resumenMonitoreoTotal">0</strong>
+                    </div>
+                    <div class="resumen-monitoreo__dato disponible">
+                        <span>Disponibles</span>
+                        <strong id="resumenMonitoreoDisponibles">0</strong>
+                    </div>
+                    <div class="resumen-monitoreo__dato reservado">
+                        <span>Reservados</span>
+                        <strong id="resumenMonitoreoReservados">0</strong>
+                    </div>
+                    <div class="resumen-monitoreo__dato alquilado">
+                        <span>Alquilados</span>
+                        <strong id="resumenMonitoreoAlquilados">0</strong>
+                    </div>
+                    <div class="resumen-monitoreo__dato mantenimiento">
+                        <span>Mantenimiento</span>
+                        <strong id="resumenMonitoreoMantenimiento">0</strong>
+                    </div>
+                </section>
+
+                <section class="panel-base monitoreo-panel">
+                    <div class="monitoreo-herramientas">
+                        <div class="monitoreo-buscador">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                            <input id="buscarMonitoreo" type="search" placeholder="Buscar por vehículo, categoría, cliente o sede...">
+                        </div>
+                        <div class="monitoreo-filtros">
+                            <select id="filtroEstadoMonitoreo" class="monitoreo-filtro">
+                                <option value="">Todos los estados</option>
+                                <option value="Disponible">Disponible</option>
+                                <option value="Reservado">Reservado</option>
+                                <option value="Alquilado">Alquilado</option>
+                                <option value="Mantenimiento">Mantenimiento</option>
+                            </select>
+                            <select id="filtroCategoriaMonitoreo" class="monitoreo-filtro">
+                                <option value="">Todas las categorías</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="panel-cabecera monitoreo-panel-cabecera">
+                        <div>
+                            <h3>Estado operativo de la flota</h3>
+                            <span id="cantidadMonitoreo">0 vehículos</span>
+                        </div>
+                        <span class="monitoreo-auto"><i class="fa-solid fa-clock"></i> Actualización automática cada 30 s</span>
+                    </div>
+
+                    <div class="tabla-contenedor">
+                        <table class="tabla-datos tabla-monitoreo">
+                            <thead>
+                                <tr>
+                                    <th>Vehículo</th>
+                                    <th>Estado</th>
+                                    <th>Alquiler relacionado</th>
+                                    <th>Cliente</th>
+                                    <th>Contexto operativo</th>
+                                    <th>Periodo</th>
+                                    <th>Control</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tablaMonitoreo">
+                                <tr><td colspan="7" class="estado-vacio">Cargando monitoreo...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <section class="monitoreo-grid-secundaria">
+                    <article class="panel-base monitoreo-alertas">
+                        <div class="monitoreo-seccion-cabecera">
+                            <div>
+                                <h3>Control de consistencia</h3>
+                                <span>Compara estados de flota y alquileres activos.</span>
+                            </div>
+                            <strong class="contador-alertas" id="contadorAlertas">0</strong>
+                        </div>
+                        <div id="listaAlertasMonitoreo" class="lista-alertas">
+                            <div class="estado-vacio">Cargando controles...</div>
+                        </div>
+                    </article>
+
+                    <article class="panel-base monitoreo-operaciones">
+                        <div class="monitoreo-seccion-cabecera">
+                            <div>
+                                <h3>Operaciones activas</h3>
+                                <span>Reservas confirmadas y alquileres en curso.</span>
+                            </div>
+                        </div>
+                        <div id="listaOperacionesMonitoreo" class="lista-operaciones">
+                            <div class="estado-vacio">Cargando operaciones...</div>
+                        </div>
+                    </article>
+                </section>
+            </main>
+        </div>
+    </div>
+</body>
+</html>

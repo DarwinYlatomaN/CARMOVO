@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reportes | CARMOVO</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+    <link rel="stylesheet" href="../css/variables.css">
+    <link rel="stylesheet" href="../css/base.css">
+    <link rel="stylesheet" href="../css/componentes/barra-lateral.css">
+    <link rel="stylesheet" href="../css/componentes/tarjeta-estadistica.css">
+    <link rel="stylesheet" href="../css/componentes/tabla-datos.css">
+    <link rel="stylesheet" href="../css/componentes/widget-grafico.css">
+    <link rel="stylesheet" href="../css/paginas/reportes.css">
+
+    <script defer src="../js/servicios/admin-api.cliente.js"></script>
+    <script defer src="../js/guardias/rol.guardia.js"></script>
+    <script defer src="../js/componentes/barra-lateral.js"></script>
+    <script defer src="../js/componentes/widget-grafico.js"></script>
+    <script defer src="../js/principal.js"></script>
+    <script defer src="../js/paginas/reportes.pagina.js"></script>
+</head>
+<body data-pagina="reportes">
+    <div class="app-admin">
+        <aside id="barraLateral"></aside>
+        <div class="overlay-admin" id="overlayAdmin"></div>
+
+        <div class="contenido-admin">
+            <header class="cabecera-admin">
+                <div class="cabecera-admin__izquierda">
+                    <button class="boton-menu-admin" id="btnMenuAdmin" aria-label="Abrir menú">
+                        <i class="fa-solid fa-bars"></i>
+                    </button>
+                    <div>
+                        <div class="cabecera-admin__titulo">Reportes</div>
+                        <div class="cabecera-admin__subtitulo" id="fechaAdmin">Cargando fecha...</div>
+                    </div>
+                </div>
+
+                <div class="cabecera-admin__derecha">
+                    <div class="estado-api" id="estadoApi"><span>Comprobando API</span></div>
+                    <div class="perfil-admin">
+                        <div class="perfil-admin__avatar">AD</div>
+                        <div class="perfil-admin__datos">
+                            <div class="perfil-admin__nombre">Administrador</div>
+                            <div class="perfil-admin__rol">CARMOVO</div>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <main class="pagina-admin">
+                <section class="encabezado-pagina reportes-encabezado">
+                    <div>
+                        <h1>Reportes administrativos</h1>
+                        <p>Indicadores consolidados de alquileres, pagos e ingresos usando la información real de CARMOVO.</p>
+                    </div>
+                    <button class="boton-secundario" id="btnActualizarReportes" type="button">
+                        <i class="fa-solid fa-rotate"></i>
+                        Actualizar
+                    </button>
+                </section>
+
+                <section class="panel-base reportes-filtros">
+                    <div class="reportes-filtros__texto">
+                        <strong>Periodo del reporte</strong>
+                        <span>El periodo se aplica según la fecha de inicio del alquiler. Los ingresos corresponden a pagos confirmados de esos alquileres.</span>
+                    </div>
+                    <div class="reportes-filtros__campos">
+                        <label>
+                            <span>Desde</span>
+                            <input type="date" id="reporteFechaDesde">
+                        </label>
+                        <label>
+                            <span>Hasta</span>
+                            <input type="date" id="reporteFechaHasta">
+                        </label>
+                        <button class="boton-primario" id="btnAplicarPeriodo" type="button">
+                            <i class="fa-solid fa-filter"></i>
+                            Aplicar
+                        </button>
+                        <button class="boton-secundario" id="btnLimpiarPeriodo" type="button">
+                            Limpiar
+                        </button>
+                    </div>
+                </section>
+
+                <div class="mensaje-api" id="mensajeReportesApi">
+                    <i class="fa-solid fa-triangle-exclamation"></i>
+                    No se pudo cargar la información de reportes. Verifica que Spring Boot esté ejecutándose en <strong>localhost:8080</strong>.
+                </div>
+
+                <section class="grid-estadisticas reportes-resumen">
+                    <article class="tarjeta-estadistica">
+                        <div class="tarjeta-estadistica__superior">
+                            <span class="tarjeta-estadistica__titulo">Alquileres del periodo</span>
+                            <span class="tarjeta-estadistica__icono"><i class="fa-solid fa-calendar-check"></i></span>
+                        </div>
+                        <div class="tarjeta-estadistica__valor" id="reporteTotalAlquileres">0</div>
+                        <div class="tarjeta-estadistica__detalle" id="reporteDetallePeriodo">Todos los registros</div>
+                    </article>
+
+                    <article class="tarjeta-estadistica tarjeta-estadistica--disponible">
+                        <div class="tarjeta-estadistica__superior">
+                            <span class="tarjeta-estadistica__titulo">Alquileres finalizados</span>
+                            <span class="tarjeta-estadistica__icono"><i class="fa-solid fa-circle-check"></i></span>
+                        </div>
+                        <div class="tarjeta-estadistica__valor" id="reporteFinalizados">0</div>
+                        <div class="tarjeta-estadistica__detalle">Operaciones finalizadas dentro del periodo</div>
+                    </article>
+
+                    <article class="tarjeta-estadistica tarjeta-estadistica--disponible">
+                        <div class="tarjeta-estadistica__superior">
+                            <span class="tarjeta-estadistica__titulo">Ingresos confirmados</span>
+                            <span class="tarjeta-estadistica__icono"><i class="fa-solid fa-sack-dollar"></i></span>
+                        </div>
+                        <div class="tarjeta-estadistica__valor reporte-valor-monetario" id="reporteIngresos">S/ 0.00</div>
+                        <div class="tarjeta-estadistica__detalle">Solo pagos con estado Pagado</div>
+                    </article>
+
+                    <article class="tarjeta-estadistica tarjeta-estadistica--alquilado">
+                        <div class="tarjeta-estadistica__superior">
+                            <span class="tarjeta-estadistica__titulo">Ticket promedio pagado</span>
+                            <span class="tarjeta-estadistica__icono"><i class="fa-solid fa-receipt"></i></span>
+                        </div>
+                        <div class="tarjeta-estadistica__valor reporte-valor-monetario" id="reporteTicketPromedio">S/ 0.00</div>
+                        <div class="tarjeta-estadistica__detalle" id="reporteCantidadPagos">0 pagos confirmados</div>
+                    </article>
+                </section>
+
+                <section class="reportes-grid-graficos">
+                    <article class="panel-base reporte-panel">
+                        <div class="reporte-panel__cabecera">
+                            <div>
+                                <h2>Alquileres por estado</h2>
+                                <p>Distribución de los alquileres dentro del periodo seleccionado.</p>
+                            </div>
+                        </div>
+                        <div id="graficoEstadosAlquiler" class="widget-grafico"></div>
+                    </article>
+
+                    <article class="panel-base reporte-panel">
+                        <div class="reporte-panel__cabecera">
+                            <div>
+                                <h2>Estado actual de la flota</h2>
+                                <p>Situación actual de todos los vehículos. Este indicador no depende del periodo.</p>
+                            </div>
+                        </div>
+                        <div id="graficoEstadoFlota" class="widget-grafico"></div>
+                    </article>
+
+                    <article class="panel-base reporte-panel">
+                        <div class="reporte-panel__cabecera">
+                            <div>
+                                <h2>Ingresos por método de pago</h2>
+                                <p>Importes de pagos confirmados vinculados a alquileres del periodo.</p>
+                            </div>
+                        </div>
+                        <div id="graficoMetodosPago" class="widget-grafico"></div>
+                    </article>
+
+                    <article class="panel-base reporte-panel">
+                        <div class="reporte-panel__cabecera">
+                            <div>
+                                <h2>Alquileres por categoría</h2>
+                                <p>Categorías de vehículos utilizadas en los alquileres del periodo.</p>
+                            </div>
+                        </div>
+                        <div id="graficoCategorias" class="widget-grafico"></div>
+                    </article>
+                </section>
+
+                <section class="panel-base reporte-panel reporte-panel--tabla">
+                    <div class="reporte-panel__cabecera">
+                        <div>
+                            <h2>Vehículos con más alquileres</h2>
+                            <p>Ranking basado en los alquileres incluidos en el periodo del reporte.</p>
+                        </div>
+                        <span class="reporte-panel__contador" id="contadorTopVehiculos">0 vehículos</span>
+                    </div>
+                    <div class="tabla-contenedor">
+                        <table class="tabla-datos tabla-reportes">
+                            <thead>
+                                <tr>
+                                    <th>Vehículo</th>
+                                    <th>Categoría</th>
+                                    <th>Alquileres</th>
+                                    <th>Días contratados</th>
+                                    <th>Total contratado</th>
+                                    <th>Ingresos confirmados</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tablaTopVehiculos">
+                                <tr><td colspan="6" class="estado-vacio">Cargando información...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <section class="panel-base reporte-panel reporte-panel--tabla">
+                    <div class="reporte-panel__cabecera reporte-panel__cabecera--acciones">
+                        <div>
+                            <h2>Detalle consolidado de alquileres</h2>
+                            <p>Incluye el estado del alquiler y el estado de pago relacionado.</p>
+                        </div>
+                        <div class="reporte-panel__acciones">
+                            <span class="reporte-panel__contador" id="contadorDetalleReporte">0 registros</span>
+                            <button class="boton-secundario" id="btnExportarReporte" type="button">
+                                <i class="fa-solid fa-file-csv"></i>
+                                Exportar CSV
+                            </button>
+                        </div>
+                    </div>
+                    <div class="tabla-contenedor">
+                        <table class="tabla-datos tabla-reportes tabla-reportes--detalle">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Cliente</th>
+                                    <th>Vehículo</th>
+                                    <th>Periodo</th>
+                                    <th>Estado alquiler</th>
+                                    <th>Estado pago</th>
+                                    <th>Método</th>
+                                    <th>Total</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tablaDetalleReporte">
+                                <tr><td colspan="8" class="estado-vacio">Cargando información...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <div class="reporte-actualizacion" id="reporteUltimaActualizacion">Sin actualizar todavía.</div>
+            </main>
+        </div>
+    </div>
+</body>
+</html>

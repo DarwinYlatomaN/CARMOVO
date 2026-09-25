@@ -1,0 +1,124 @@
+.tablero-bienvenida {
+    border: 1px solid rgba(255, 90, 54, .24);
+    border-radius: var(--admin-radio);
+    padding: 22px 24px;
+    margin-bottom: 20px;
+    background:
+        radial-gradient(circle at 90% 20%, rgba(255, 90, 54, .15), transparent 28%),
+        linear-gradient(135deg, #121927, #0f1622);
+}
+
+.tablero-bienvenida h2 {
+    font-size: 1.25rem;
+}
+
+.tablero-bienvenida p {
+    margin-top: 8px;
+    color: var(--admin-texto-secundario);
+    max-width: 720px;
+    font-size: .86rem;
+    line-height: 1.6;
+}
+
+.tablero-seccion {
+    margin-top: 20px;
+}
+
+.tablero-grid-inferior {
+    display: grid;
+    grid-template-columns: minmax(0, 1.7fr) minmax(260px, .7fr);
+    gap: 18px;
+}
+
+.panel-cabecera {
+    min-height: 64px;
+    padding: 0 18px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+    border-bottom: 1px solid var(--admin-borde);
+}
+
+.panel-cabecera h3 {
+    font-size: .92rem;
+}
+
+.panel-cabecera a {
+    color: var(--admin-naranja);
+    font-size: .75rem;
+    font-weight: 700;
+}
+
+.acciones-rapidas {
+    padding: 14px;
+    display: grid;
+    gap: 9px;
+}
+
+.accion-rapida {
+    padding: 13px;
+    border-radius: 10px;
+    background: #151e2e;
+    border: 1px solid transparent;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    transition: .2s ease;
+}
+
+.accion-rapida:hover {
+    border-color: #35435a;
+    transform: translateX(2px);
+}
+
+.accion-rapida__icono {
+    width: 38px;
+    height: 38px;
+    border-radius: 9px;
+    display: grid;
+    place-items: center;
+    color: var(--admin-naranja);
+    background: rgba(255, 90, 54, .1);
+}
+
+.accion-rapida strong {
+    display: block;
+    font-size: .78rem;
+}
+
+.accion-rapida span {
+    display: block;
+    margin-top: 3px;
+    color: var(--admin-texto-secundario);
+    font-size: .68rem;
+}
+
+.mensaje-api {
+    display: none;
+    margin-top: 16px;
+    padding: 12px 14px;
+    border-radius: 10px;
+    border: 1px solid rgba(239, 68, 68, .25);
+    background: rgba(239, 68, 68, .07);
+    color: #fca5a5;
+    font-size: .78rem;
+}
+
+.mensaje-api.visible {
+    display: block;
+}
+
+@media (max-width: 960px) {
+    .tablero-grid-inferior {
+        grid-template-columns: 1fr;
+    }
+}
+
+
+/* Ajuste final de dimensiones */
+.tablero-bienvenida, .tablero-grid-inferior, .tablero-grid-inferior > *, .panel-cabecera, .acciones-rapidas, .accion-rapida { min-width: 0; max-width: 100%; }
+.tablero-bienvenida { width: 100%; }
+.panel-cabecera { flex-wrap: wrap; }
+.accion-rapida > div:last-child { min-width: 0; }
+.accion-rapida strong, .accion-rapida span { overflow-wrap: anywhere; }

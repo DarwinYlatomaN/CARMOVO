@@ -15,7 +15,7 @@ public class Perfil {
     @Column(nullable = false, unique = true, length = 50)
     private String nombre;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
         name = "perfil_opcion",
         joinColumns = @JoinColumn(name = "id_perfil"),
@@ -23,7 +23,30 @@ public class Perfil {
     )
     private List<Opcion> opciones;
 
-    public Perfil() {}
+    public Perfil() {
+    }
 
-    // Genera los Getters y Setters
+    public Long getIdPerfil() {
+        return idPerfil;
+    }
+
+    public void setIdPerfil(Long idPerfil) {
+        this.idPerfil = idPerfil;
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    public List<Opcion> getOpciones() {
+        return opciones;
+    }
+
+    public void setOpciones(List<Opcion> opciones) {
+        this.opciones = opciones;
+    }
 }

@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de alquileres | CARMOVO</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+    <link rel="stylesheet" href="../css/variables.css">
+    <link rel="stylesheet" href="../css/base.css">
+    <link rel="stylesheet" href="../css/componentes/barra-lateral.css">
+    <link rel="stylesheet" href="../css/componentes/tabla-datos.css">
+    <link rel="stylesheet" href="../css/paginas/gestion-alquileres.css">
+
+    <script defer src="../js/servicios/admin-api.cliente.js"></script>
+    <script defer src="../js/guardias/rol.guardia.js"></script>
+    <script defer src="../js/componentes/barra-lateral.js"></script>
+    <script defer src="../js/principal.js"></script>
+    <script defer src="../js/paginas/gestion-alquileres.pagina.js"></script>
+</head>
+<body data-pagina="gestion-alquileres">
+    <div class="app-admin">
+        <aside id="barraLateral"></aside>
+        <div class="overlay-admin" id="overlayAdmin"></div>
+
+        <div class="contenido-admin">
+            <header class="cabecera-admin">
+                <div class="cabecera-admin__izquierda">
+                    <button class="boton-menu-admin" id="btnMenuAdmin" aria-label="Abrir menú">
+                        <i class="fa-solid fa-bars"></i>
+                    </button>
+                    <div>
+                        <div class="cabecera-admin__titulo">Gestión de alquileres</div>
+                        <div class="cabecera-admin__subtitulo" id="fechaAdmin">Cargando fecha...</div>
+                    </div>
+                </div>
+
+                <div class="cabecera-admin__derecha">
+                    <div class="estado-api" id="estadoApi"><span>Comprobando API</span></div>
+                    <div class="perfil-admin">
+                        <div class="perfil-admin__avatar">AD</div>
+                        <div class="perfil-admin__datos">
+                            <div class="perfil-admin__nombre">Administrador</div>
+                            <div class="perfil-admin__rol">CARMOVO</div>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <main class="pagina-admin">
+                <section class="encabezado-pagina">
+                    <div>
+                        <h1>Alquileres y reservas</h1>
+                        <p>Controla reservas, entregas, devoluciones, pagos y disponibilidad de la flota.</p>
+                    </div>
+                    <button class="boton-primario" type="button" id="btnNuevoAlquiler">
+                        <i class="fa-solid fa-calendar-plus"></i> Nuevo alquiler
+                    </button>
+                </section>
+
+                <section class="resumen-alquileres" aria-label="Resumen de alquileres">
+                    <div class="resumen-alquileres__dato">
+                        <span>Total</span>
+                        <strong id="resumenAlquileresTotal">0</strong>
+                    </div>
+                    <div class="resumen-alquileres__dato pendiente">
+                        <span>Pendientes</span>
+                        <strong id="resumenAlquileresPendientes">0</strong>
+                    </div>
+                    <div class="resumen-alquileres__dato activo">
+                        <span>En curso</span>
+                        <strong id="resumenAlquileresCurso">0</strong>
+                    </div>
+                    <div class="resumen-alquileres__dato finalizado">
+                        <span>Finalizados</span>
+                        <strong id="resumenAlquileresFinalizados">0</strong>
+                    </div>
+                </section>
+
+                <section class="panel-base">
+                    <div class="alquileres-herramientas">
+                        <div class="alquileres-buscador">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                            <input type="search" id="buscarAlquiler" placeholder="Buscar por cliente, vehículo, correo o ID...">
+                        </div>
+
+                        <div class="alquileres-filtros">
+                            <select class="alquileres-filtro" id="filtroEstadoAlquiler">
+                                <option value="">Todos los estados</option>
+                                <option value="Pendiente">Pendiente</option>
+                                <option value="Confirmado">Confirmado</option>
+                                <option value="En curso">En curso</option>
+                                <option value="Finalizado">Finalizado</option>
+                                <option value="Cancelado">Cancelado</option>
+                            </select>
+                            <button class="boton-secundario" type="button" id="btnRecargarAlquileres" title="Recargar datos" aria-label="Recargar alquileres">
+                                <i class="fa-solid fa-rotate"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="panel-cabecera alquileres-panel-cabecera">
+                        <h3>Alquileres registrados</h3>
+                        <span id="cantidadAlquileres">0 resultados</span>
+                    </div>
+
+                    <div class="tabla-contenedor">
+                        <table class="tabla-datos tabla-alquileres">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Cliente</th>
+                                    <th>Vehículo</th>
+                                    <th>Periodo</th>
+                                    <th>Sedes</th>
+                                    <th>Total</th>
+                                    <th>Estado</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tablaAlquileres">
+                                <tr><td colspan="8" class="estado-vacio">Cargando alquileres...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+            </main>
+        </div>
+    </div>
+
+    <div class="modal-alquiler" id="modalAlquiler" role="dialog" aria-modal="true" aria-labelledby="tituloModalAlquiler">
+        <div class="modal-alquiler__contenido">
+            <div class="modal-alquiler__cabecera">
+                <h2 id="tituloModalAlquiler">Registrar alquiler</h2>
+                <button class="modal-alquiler__cerrar" type="button" id="btnCerrarModalAlquiler" aria-label="Cerrar">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <form class="formulario-alquiler" id="formAlquiler">
+                <div class="formulario-alquiler__grid">
+                    <div class="campo-alquiler campo-alquiler--completo">
+                        <label for="alquilerUsuario">Cliente</label>
+                        <select id="alquilerUsuario" required>
+                            <option value="" disabled selected>Seleccionar cliente</option>
+                        </select>
+                        <small>Solo se muestran usuarios activos con perfil Cliente.</small>
+                    </div>
+
+                    <div class="campo-alquiler campo-alquiler--completo">
+                        <label for="alquilerVehiculo">Vehículo</label>
+                        <select id="alquilerVehiculo" required>
+                            <option value="" disabled selected>Seleccionar vehículo</option>
+                        </select>
+                    </div>
+
+                    <div class="campo-alquiler">
+                        <label for="alquilerFechaInicio">Fecha de inicio</label>
+                        <input id="alquilerFechaInicio" type="date" required>
+                    </div>
+
+                    <div class="campo-alquiler">
+                        <label for="alquilerFechaFin">Fecha de fin</label>
+                        <input id="alquilerFechaFin" type="date" required>
+                    </div>
+
+                    <div class="campo-alquiler">
+                        <label for="alquilerLugarRecogida">Lugar de recogida</label>
+                        <select id="alquilerLugarRecogida" required>
+                            <option value="" disabled selected>Seleccionar sede</option>
+                            <option value="Lima - Miraflores">Lima - Miraflores</option>
+                            <option value="Lima - Aeropuerto Jorge Chávez">Lima - Aeropuerto Jorge Chávez</option>
+                            <option value="Chiclayo, Lambayeque">Chiclayo, Lambayeque</option>
+                            <option value="Trujillo, La Libertad">Trujillo, La Libertad</option>
+                            <option value="Piura, Piura">Piura, Piura</option>
+                            <option value="Arequipa, Arequipa">Arequipa, Arequipa</option>
+                            <option value="Cusco, Cusco">Cusco, Cusco</option>
+                            <option value="Cajamarca, Cajamarca">Cajamarca, Cajamarca</option>
+                            <option value="Tarapoto, San Martín">Tarapoto, San Martín</option>
+                            <option value="Iquitos, Loreto">Iquitos, Loreto</option>
+                        </select>
+                    </div>
+
+                    <div class="campo-alquiler">
+                        <label for="alquilerLugarEntrega">Lugar de entrega</label>
+                        <select id="alquilerLugarEntrega" required>
+                            <option value="" disabled selected>Seleccionar sede</option>
+                            <option value="Lima - Miraflores">Lima - Miraflores</option>
+                            <option value="Lima - Aeropuerto Jorge Chávez">Lima - Aeropuerto Jorge Chávez</option>
+                            <option value="Chiclayo, Lambayeque">Chiclayo, Lambayeque</option>
+                            <option value="Trujillo, La Libertad">Trujillo, La Libertad</option>
+                            <option value="Piura, Piura">Piura, Piura</option>
+                            <option value="Arequipa, Arequipa">Arequipa, Arequipa</option>
+                            <option value="Cusco, Cusco">Cusco, Cusco</option>
+                            <option value="Cajamarca, Cajamarca">Cajamarca, Cajamarca</option>
+                            <option value="Tarapoto, San Martín">Tarapoto, San Martín</option>
+                            <option value="Iquitos, Loreto">Iquitos, Loreto</option>
+                        </select>
+                    </div>
+
+                    <div class="campo-alquiler">
+                        <label for="alquilerMetodoPago">Método de pago</label>
+                        <select id="alquilerMetodoPago">
+                            <option value="">Sin especificar</option>
+                            <option value="Tarjeta">Tarjeta</option>
+                            <option value="PayPal">PayPal</option>
+                            <option value="Yape">Yape</option>
+                            <option value="Plin">Plin</option>
+                        </select>
+                    </div>
+
+                    <div class="campo-alquiler">
+                        <label for="alquilerEstado">Estado</label>
+                        <select id="alquilerEstado" required>
+                            <option value="Pendiente">Pendiente</option>
+                            <option value="Confirmado">Confirmado</option>
+                            <option value="En curso">En curso</option>
+                            <option value="Finalizado">Finalizado</option>
+                            <option value="Cancelado">Cancelado</option>
+                        </select>
+                    </div>
+
+                    <div class="campo-alquiler campo-alquiler--completo">
+                        <label for="alquilerObservaciones">Observaciones</label>
+                        <textarea id="alquilerObservaciones" maxlength="500" rows="3" placeholder="Observaciones opcionales del alquiler"></textarea>
+                    </div>
+                </div>
+
+                <div class="formulario-alquiler__nota">
+                    <i class="fa-solid fa-calculator"></i>
+                    <span>El total se calcula en el backend usando la tarifa diaria del vehículo, S/ 120 de seguro y 18% de impuestos, igual que el flujo de reservas del sitio público.</span>
+                </div>
+
+                <div class="formulario-alquiler__acciones">
+                    <button class="boton-secundario" type="button" id="btnCancelarAlquiler">Cancelar</button>
+                    <button class="boton-primario" type="submit" id="btnGuardarAlquiler">
+                        <i class="fa-solid fa-floppy-disk"></i> Registrar alquiler
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="notificacion-alquiler" id="notificacionAlquiler" role="status" aria-live="polite"></div>
+</body>
+</html>

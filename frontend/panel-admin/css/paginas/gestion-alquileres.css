@@ -1,0 +1,387 @@
+.resumen-alquileres {
+    margin-bottom: 18px;
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.resumen-alquileres__dato {
+    min-width: 150px;
+    padding: 13px 15px;
+    border: 1px solid var(--admin-borde);
+    border-radius: 10px;
+    background: var(--admin-superficie);
+}
+
+.resumen-alquileres__dato span {
+    display: block;
+    color: var(--admin-texto-secundario);
+    font-size: .68rem;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.resumen-alquileres__dato strong {
+    display: block;
+    margin-top: 4px;
+    font-size: 1.15rem;
+}
+
+.resumen-alquileres__dato.pendiente strong { color: #fbbf24; }
+.resumen-alquileres__dato.activo strong { color: #fb923c; }
+.resumen-alquileres__dato.finalizado strong { color: #4ade80; }
+
+.alquileres-herramientas {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    padding: 16px 18px;
+    border-bottom: 1px solid var(--admin-borde);
+}
+
+.alquileres-buscador {
+    position: relative;
+    width: min(100%, 460px);
+}
+
+.alquileres-buscador i {
+    position: absolute;
+    top: 50%;
+    left: 13px;
+    transform: translateY(-50%);
+    color: #64748b;
+    font-size: .82rem;
+}
+
+.alquileres-buscador input,
+.alquileres-filtro,
+.campo-alquiler input,
+.campo-alquiler select,
+.campo-alquiler textarea {
+    border: 1px solid var(--admin-borde);
+    border-radius: 10px;
+    background: #0d1420;
+    color: var(--admin-texto);
+    outline: none;
+}
+
+.alquileres-buscador input {
+    width: 100%;
+    min-height: 42px;
+    padding: 0 14px 0 38px;
+}
+
+.alquileres-filtros {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.alquileres-filtro {
+    min-width: 180px;
+    min-height: 42px;
+    padding: 0 12px;
+}
+
+.alquileres-buscador input:focus,
+.alquileres-filtro:focus,
+.campo-alquiler input:focus,
+.campo-alquiler select:focus,
+.campo-alquiler textarea:focus {
+    border-color: var(--admin-naranja);
+}
+
+.alquileres-panel-cabecera span {
+    color: var(--admin-texto-secundario);
+    font-size: .75rem;
+}
+
+.tabla-alquileres {
+    min-width: 1180px;
+}
+
+.alquiler-cliente strong,
+.alquiler-vehiculo strong {
+    display: block;
+    color: #f1f5f9;
+    font-size: .79rem;
+}
+
+.alquiler-cliente small,
+.alquiler-vehiculo small,
+.alquiler-periodo small,
+.alquiler-sedes small {
+    display: block;
+    margin-top: 4px;
+    color: #718096;
+    font-size: .67rem;
+    line-height: 1.35;
+}
+
+.alquiler-total {
+    font-weight: 800;
+    color: #f8fafc;
+    white-space: nowrap;
+}
+
+.badge-estado.pendiente {
+    color: #fbbf24;
+    background: rgba(245, 158, 11, .1);
+}
+
+.badge-estado.confirmado {
+    color: #60a5fa;
+    background: rgba(59, 130, 246, .1);
+}
+
+.badge-estado.en-curso {
+    color: #fb923c;
+    background: rgba(249, 115, 22, .1);
+}
+
+.badge-estado.finalizado {
+    color: #4ade80;
+    background: rgba(34, 197, 94, .1);
+}
+
+.badge-estado.cancelado {
+    color: #f87171;
+    background: rgba(239, 68, 68, .1);
+}
+
+.acciones-alquiler {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+}
+
+.boton-alquiler-icono {
+    width: 34px;
+    height: 34px;
+    display: grid;
+    place-items: center;
+    border-radius: 8px;
+    border: 1px solid var(--admin-borde);
+    background: #151d2b;
+    color: #aab5c5;
+    cursor: pointer;
+    transition: .2s ease;
+}
+
+.boton-alquiler-icono:hover {
+    color: #fff;
+    border-color: #41506a;
+}
+
+.boton-alquiler-icono.editar:hover {
+    color: #60a5fa;
+    border-color: rgba(59, 130, 246, .4);
+}
+
+.boton-alquiler-icono.eliminar:hover {
+    color: #f87171;
+    border-color: rgba(239, 68, 68, .4);
+}
+
+.modal-alquiler {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 200;
+    padding: 24px;
+    align-items: center;
+    justify-content: center;
+    background: rgba(3, 7, 18, .78);
+    backdrop-filter: blur(5px);
+}
+
+.modal-alquiler.abierto {
+    display: flex;
+}
+
+.modal-alquiler__contenido {
+    width: min(100%, 820px);
+    max-height: calc(100vh - 48px);
+    overflow-y: auto;
+    border-radius: 16px;
+    border: 1px solid var(--admin-borde);
+    background: #101827;
+    box-shadow: 0 28px 70px rgba(0, 0, 0, .45);
+}
+
+.modal-alquiler__cabecera {
+    min-height: 68px;
+    padding: 0 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    border-bottom: 1px solid var(--admin-borde);
+}
+
+.modal-alquiler__cabecera h2 {
+    font-size: 1rem;
+}
+
+.modal-alquiler__cerrar {
+    width: 36px;
+    height: 36px;
+    border-radius: 9px;
+    display: grid;
+    place-items: center;
+    background: #1b2535;
+    color: #9ca9bb;
+    cursor: pointer;
+}
+
+.formulario-alquiler {
+    padding: 20px;
+}
+
+.formulario-alquiler__grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+}
+
+.campo-alquiler--completo {
+    grid-column: 1 / -1;
+}
+
+.campo-alquiler label {
+    display: block;
+    margin-bottom: 7px;
+    color: #cbd5e1;
+    font-size: .73rem;
+    font-weight: 700;
+}
+
+.campo-alquiler input,
+.campo-alquiler select,
+.campo-alquiler textarea {
+    width: 100%;
+    min-height: 43px;
+    padding: 0 12px;
+    background: #0b121e;
+}
+
+.campo-alquiler textarea {
+    min-height: 88px;
+    padding-top: 11px;
+    padding-bottom: 11px;
+    resize: vertical;
+}
+
+.campo-alquiler small {
+    display: block;
+    margin-top: 7px;
+    color: #718096;
+    font-size: .68rem;
+    line-height: 1.45;
+}
+
+.formulario-alquiler__nota {
+    margin-top: 17px;
+    padding: 12px 14px;
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    border: 1px solid rgba(59, 130, 246, .18);
+    border-radius: 10px;
+    background: rgba(59, 130, 246, .06);
+    color: #9fb0c6;
+    font-size: .7rem;
+    line-height: 1.5;
+}
+
+.formulario-alquiler__nota i {
+    margin-top: 2px;
+    color: #60a5fa;
+}
+
+.formulario-alquiler__acciones {
+    margin-top: 20px;
+    padding-top: 16px;
+    border-top: 1px solid var(--admin-borde);
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+.notificacion-alquiler {
+    position: fixed;
+    right: 22px;
+    bottom: 22px;
+    z-index: 300;
+    max-width: 410px;
+    padding: 13px 16px;
+    border-radius: 10px;
+    border: 1px solid var(--admin-borde);
+    background: #172033;
+    color: #e5e7eb;
+    box-shadow: var(--admin-sombra);
+    font-size: .78rem;
+    transform: translateY(22px);
+    opacity: 0;
+    pointer-events: none;
+    transition: .25s ease;
+}
+
+.notificacion-alquiler.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.notificacion-alquiler.exito { border-color: rgba(34, 197, 94, .35); }
+.notificacion-alquiler.error { border-color: rgba(239, 68, 68, .4); }
+
+@media (max-width: 860px) {
+    .alquileres-herramientas {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .alquileres-buscador {
+        width: 100%;
+    }
+
+    .alquileres-filtros {
+        align-items: stretch;
+    }
+
+    .alquileres-filtro {
+        flex: 1;
+        min-width: 0;
+    }
+}
+
+@media (max-width: 580px) {
+    .formulario-alquiler__grid {
+        grid-template-columns: 1fr;
+    }
+
+    .campo-alquiler--completo {
+        grid-column: auto;
+    }
+
+    .alquileres-filtros {
+        flex-direction: column;
+    }
+
+    .modal-alquiler {
+        padding: 12px;
+    }
+}
+
+
+/* Ajuste final de dimensiones */
+.resumen-alquileres__dato { flex: 1 1 150px; min-width: min(150px, 100%); }
+.alquileres-herramientas, .alquileres-filtros, .acciones-alquiler, .formulario-alquiler__grid, .campo-alquiler { min-width: 0; }
+.alquileres-herramientas, .alquileres-filtros { flex-wrap: wrap; }
+.alquileres-buscador { flex: 1 1 340px; min-width: 0; }
+.alquileres-filtro { max-width: 100%; }
+.alquiler-cliente, .alquiler-vehiculo, .alquiler-periodo, .alquiler-sedes { min-width: 0; }
+.alquiler-cliente strong, .alquiler-cliente small, .alquiler-vehiculo strong, .alquiler-vehiculo small, .alquiler-periodo small, .alquiler-sedes small { overflow-wrap: anywhere; }
+.modal-alquiler__contenido { width: min(820px, calc(100vw - 32px)); max-width: 100%; }
+.notificacion-alquiler { max-width: calc(100vw - 32px); }

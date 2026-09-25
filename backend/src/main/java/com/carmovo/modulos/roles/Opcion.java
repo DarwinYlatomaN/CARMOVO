@@ -17,7 +17,30 @@ public class Opcion {
     @Column(nullable = false, length = 150)
     private String ruta;
 
-    public Opcion() {}
+    public Opcion() {
+    }
 
-    // Genera los Getters y Setters
+    public Long getIdOpcion() {
+        return idOpcion;
+    }
+
+    public void setIdOpcion(Long idOpcion) {
+        this.idOpcion = idOpcion;
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    public String getRuta() {
+        return ruta;
+    }
+
+    public void setRuta(String ruta) {
+        this.ruta = ruta;
+    }
 }
