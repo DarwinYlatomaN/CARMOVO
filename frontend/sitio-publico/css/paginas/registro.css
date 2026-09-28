@@ -120,7 +120,8 @@ a {
     font-size: 1.1rem;
 }
 
-.campo-input-registro input {
+.campo-input-registro input,
+.campo-input-registro select {
     width: 100%;
     background-color: var(--fondo-principal);
     border: 1px solid var(--borde-oscuro);
@@ -134,13 +135,19 @@ a {
     color-scheme: dark;
 }
 
-.campo-input-registro input:focus {
+.campo-input-registro input:focus,
+.campo-input-registro select:focus {
     border-color: var(--color-naranja);
     box-shadow: 0 0 0 2px rgba(255, 90, 54, 0.2);
 }
 
 .campo-input-registro input::placeholder {
     color: #4b5563;
+}
+
+.campo-input-registro select option {
+    background-color: var(--fondo-principal);
+    color: var(--color-blanco);
 }
 
 .campo-input-error input {

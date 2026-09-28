@@ -106,6 +106,19 @@
                         <span class="label">Vencimiento Licencia:</span>
                         <span class="valor" id="lbl-vence">15/10/2030</span>
                     </div>
+                    <div class="item-dato">
+                        <span class="label">Departamento:</span>
+                        <span class="valor" id="lbl-departamento">Sin registrar</span>
+                    </div>
+                    <div class="item-dato">
+                        <span class="label">Provincia:</span>
+                        <span class="valor" id="lbl-provincia">Sin registrar</span>
+                    </div>
+                    <div class="item-dato">
+                        <span class="label">Distrito:</span>
+                        <span class="valor" id="lbl-distrito">Sin registrar</span>
+                    </div>
+
                     <div class="item-dato col-completa">
                         <span class="label">Domicilio:</span>
                         <span class="valor" id="lbl-domicilio">Av. Balta 123, Urb. La Primavera, Chiclayo</span>
@@ -114,7 +127,7 @@
             </section>
 
             <section class="tarjeta-cuenta estado-reserva">
-                <h3>Estado de tu Reserva y Pago</h3>
+                <h3>Estado de tu Reserva</h3>
                 
                 <div class="caja-estado-actual pendiente">
                     <div class="icono-estado">
@@ -131,19 +144,19 @@
                     <h4>Detalles del Alquiler Asociado</h4>
                     <div class="item-dato">
                         <span class="label">Vehículo:</span>
-                        <span class="valor">Toyota Hilux 4x4</span>
+                        <span class="valor" id="cuenta-vehiculo">Sin registrar</span>
                     </div>
                     <div class="item-dato">
                         <span class="label">Fechas:</span>
-                        <span class="valor">20 May, 2025 - 24 May, 2025</span>
+                        <span class="valor" id="cuenta-fechas">Sin registrar</span>
                     </div>
                     <div class="item-dato">
                         <span class="label">Método de Pago:</span>
-                        <span class="valor">Yape (Comprobante adjunto)</span>
+                        <span class="valor" id="cuenta-metodo-pago">Sin registrar</span>
                     </div>
                     <div class="item-dato">
-                        <span class="label">Total Pagado:</span>
-                        <span class="valor monto">S/ 480.00</span>
+                        <span class="label">Total del Alquiler:</span>
+                        <span class="valor monto" id="cuenta-total">S/ 0.00</span>
                     </div>
                 </div>
             </section>
@@ -209,6 +222,48 @@
                         <input type="date" id="edit-vence" required>
                     </div>
     
+                    <div class="grupo-input">
+                        <label>Departamento</label>
+                        <select id="edit-departamento" required>
+                            <option value="">Selecciona departamento</option>
+                            <option value="Amazonas">Amazonas</option>
+                            <option value="Áncash">Áncash</option>
+                            <option value="Apurímac">Apurímac</option>
+                            <option value="Arequipa">Arequipa</option>
+                            <option value="Ayacucho">Ayacucho</option>
+                            <option value="Cajamarca">Cajamarca</option>
+                            <option value="Callao">Callao</option>
+                            <option value="Cusco">Cusco</option>
+                            <option value="Huancavelica">Huancavelica</option>
+                            <option value="Huánuco">Huánuco</option>
+                            <option value="Ica">Ica</option>
+                            <option value="Junín">Junín</option>
+                            <option value="La Libertad">La Libertad</option>
+                            <option value="Lambayeque">Lambayeque</option>
+                            <option value="Lima">Lima</option>
+                            <option value="Loreto">Loreto</option>
+                            <option value="Madre de Dios">Madre de Dios</option>
+                            <option value="Moquegua">Moquegua</option>
+                            <option value="Pasco">Pasco</option>
+                            <option value="Piura">Piura</option>
+                            <option value="Puno">Puno</option>
+                            <option value="San Martín">San Martín</option>
+                            <option value="Tacna">Tacna</option>
+                            <option value="Tumbes">Tumbes</option>
+                            <option value="Ucayali">Ucayali</option>
+                        </select>
+                    </div>
+
+                    <div class="grupo-input">
+                        <label>Provincia</label>
+                        <input type="text" id="edit-provincia" placeholder="Ej: Chiclayo" required>
+                    </div>
+
+                    <div class="grupo-input">
+                        <label>Distrito</label>
+                        <input type="text" id="edit-distrito" placeholder="Ej: La Victoria" required>
+                    </div>
+
                     <div class="grupo-input col-completa">
                         <label>Domicilio (Calle / Urbanización)</label>
                         <input type="text" id="edit-domicilio" placeholder="Ej: Av. Balta 123, Urb. La Primavera" required>
@@ -293,6 +348,7 @@
         </div>
     </footer>
     
+    <script src="../js/servicios/api.cliente.js"></script>
     <script src="../js/paginas/miCuenta.js"></script>
     <script src="../js/paginas/experiencia.js"></script>
     <script src="../js/db y app-categorias/db.js"></script>

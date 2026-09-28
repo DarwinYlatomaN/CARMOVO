@@ -24,10 +24,18 @@
                 
                 <div class="grid-dos-columnas">
                     <div class="grupo-input">
-                        <label for="nombreCompleto">Nombre Completo</label>
+                        <label for="nombresRegistro">Nombres</label>
                         <div class="campo-input-registro">
                             <i class="fa-regular fa-user"></i>
-                            <input type="text" id="nombreCompleto" placeholder="Nombres y apellidos" required>
+                            <input type="text" id="nombresRegistro" placeholder="Tus nombres" required>
+                        </div>
+                    </div>
+
+                    <div class="grupo-input">
+                        <label for="apellidosRegistro">Apellidos</label>
+                        <div class="campo-input-registro">
+                            <i class="fa-regular fa-user"></i>
+                            <input type="text" id="apellidosRegistro" placeholder="Tus apellidos" required>
                         </div>
                     </div>
     
@@ -63,6 +71,57 @@
                         </div>
                     </div>
     
+                    <div class="grupo-input">
+                        <label for="departamentoRegistro">Departamento</label>
+                        <div class="campo-input-registro">
+                            <i class="fa-solid fa-map"></i>
+                            <select id="departamentoRegistro" required>
+                                <option value="" selected>Selecciona departamento</option>
+                                <option value="Amazonas">Amazonas</option>
+                                <option value="Áncash">Áncash</option>
+                                <option value="Apurímac">Apurímac</option>
+                                <option value="Arequipa">Arequipa</option>
+                                <option value="Ayacucho">Ayacucho</option>
+                                <option value="Cajamarca">Cajamarca</option>
+                                <option value="Callao">Callao</option>
+                                <option value="Cusco">Cusco</option>
+                                <option value="Huancavelica">Huancavelica</option>
+                                <option value="Huánuco">Huánuco</option>
+                                <option value="Ica">Ica</option>
+                                <option value="Junín">Junín</option>
+                                <option value="La Libertad">La Libertad</option>
+                                <option value="Lambayeque">Lambayeque</option>
+                                <option value="Lima">Lima</option>
+                                <option value="Loreto">Loreto</option>
+                                <option value="Madre de Dios">Madre de Dios</option>
+                                <option value="Moquegua">Moquegua</option>
+                                <option value="Pasco">Pasco</option>
+                                <option value="Piura">Piura</option>
+                                <option value="Puno">Puno</option>
+                                <option value="San Martín">San Martín</option>
+                                <option value="Tacna">Tacna</option>
+                                <option value="Tumbes">Tumbes</option>
+                                <option value="Ucayali">Ucayali</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="grupo-input">
+                        <label for="provinciaRegistro">Provincia</label>
+                        <div class="campo-input-registro">
+                            <i class="fa-solid fa-location-dot"></i>
+                            <input type="text" id="provinciaRegistro" placeholder="Ej: Chiclayo" required>
+                        </div>
+                    </div>
+
+                    <div class="grupo-input">
+                        <label for="distritoRegistro">Distrito</label>
+                        <div class="campo-input-registro">
+                            <i class="fa-solid fa-location-crosshairs"></i>
+                            <input type="text" id="distritoRegistro" placeholder="Ej: La Victoria" required>
+                        </div>
+                    </div>
+
                     <div class="grupo-input">
                         <label for="domicilioRegistro">Domicilio (Calle / Urb)</label>
                         <div class="campo-input-registro">
@@ -135,6 +194,7 @@
         </div>
     </div>
 
+    <script src="../js/servicios/api.cliente.js"></script>
     <script src="../js/paginas/registro.js"></script>
 </body>
 </html>

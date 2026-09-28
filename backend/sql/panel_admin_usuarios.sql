@@ -19,6 +19,15 @@ SELECT
     apellidos,
     correo,
     telefono,
+    documento,
+    fecha_nacimiento,
+    departamento,
+    provincia,
+    distrito,
+    domicilio,
+    numero_licencia,
+    categoria_licencia,
+    vencimiento_licencia,
     estado,
     id_perfil
 FROM usuarios

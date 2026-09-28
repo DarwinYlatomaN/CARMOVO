@@ -17,6 +17,7 @@ import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Locale;
+import java.util.Optional;
 import java.util.Set;
 
 @Service
@@ -57,6 +58,12 @@ public class AlquilerServicio {
     @Transactional(readOnly = true)
     public AlquilerDTO obtenerPorId(Long id) {
         return convertirADto(buscarAlquiler(id));
+    }
+
+    @Transactional(readOnly = true)
+    public Optional<AlquilerDTO> obtenerUltimoPorUsuario(Long idUsuario) {
+        return alquilerRepositorio.findFirstByIdUsuarioOrderByFechaRegistroDesc(idUsuario)
+                .map(this::convertirADto);
     }
 
     @Transactional

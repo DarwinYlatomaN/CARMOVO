@@ -1,11 +1,10 @@
 document.addEventListener('DOMContentLoaded', () => {
-
     const pantallaBloqueo = document.getElementById('pantalla-bloqueo-sesion');
     const btnCerrarBloqueo = document.getElementById('btn-cerrar-bloqueo');
     const selectorAuto = document.getElementById('selector-auto');
-    const inputDias = document.getElementById('dias-alquiler');
-    
- 
+    const inputFechaInicio = document.getElementById('fecha-inicio');
+    const inputFechaFin = document.getElementById('fecha-fin');
+
     const resumenImagen = document.getElementById('resumen-imagen');
     const resumenNombre = document.getElementById('resumen-nombre');
     const resumenTipo = document.getElementById('resumen-tipo');
@@ -14,125 +13,318 @@ document.addEventListener('DOMContentLoaded', () => {
     const resumenTotal = document.getElementById('resumen-total');
     const etiquetaDias = document.getElementById('etiqueta-dias');
 
-
     const inputDNI = document.getElementById('documento');
     const inputNombre = document.getElementById('nombre');
     const inputApellidos = document.getElementById('apellidos');
     const inputDomicilio = document.getElementById('domicilio');
-    const inputFechaNacimiento = document.getElementById('fecha-nacimiento') || document.getElementById('fecha_nacimiento');
+    const inputFechaNacimiento = document.getElementById('nacimiento');
     const inputLicencia = document.getElementById('licencia');
     const inputCategoria = document.getElementById('categoria');
     const inputVenceLicencia = document.getElementById('fecha-vence-licencia');
     const inputCorreo = document.getElementById('correo');
+    const inputTelefono = document.getElementById('telefono');
+    const selectDepartamento = document.getElementById('departamento');
+    const selectProvincia = document.getElementById('provincia');
+    const selectDistrito = document.getElementById('distrito');
 
-    let autoActual = null;
-    let totalPagar = 0; 
-
-   
-    if (typeof Culqi !== 'undefined') {
-        Culqi.publicKey = 'pk_test_TU_LLAVE_PUBLICA_AQUI';
-    }
-
-  
-    if (btnCerrarBloqueo) {
-        btnCerrarBloqueo.addEventListener('click', () => {
-            pantallaBloqueo.classList.add('oculto');
-        });
-    }
-
-  
     const selectRecogida = document.getElementById('lugar-recogida');
     const selectEntrega = document.getElementById('lugar-entrega');
     const resumenTextoRecogida = document.getElementById('resumen-texto-recogida');
     const resumenTextoEntrega = document.getElementById('resumen-texto-entrega');
+
+    let autoActual = null;
+    let totalPagar = 0;
+    let enviandoReserva = false;
+    let perfilClienteActual = null;
+
+    if (typeof Culqi !== 'undefined') {
+        Culqi.publicKey = 'pk_test_TU_LLAVE_PUBLICA_AQUI';
+    }
+
+    function fechaLocalISO(fecha) {
+        const anio = fecha.getFullYear();
+        const mes = String(fecha.getMonth() + 1).padStart(2, '0');
+        const dia = String(fecha.getDate()).padStart(2, '0');
+        return `${anio}-${mes}-${dia}`;
+    }
+
+    function configurarFechas() {
+        if (!inputFechaInicio || !inputFechaFin) return;
+
+        const hoy = new Date();
+        const manana = new Date(hoy);
+        manana.setDate(manana.getDate() + 1);
+
+        const hoyISO = fechaLocalISO(hoy);
+        const mananaISO = fechaLocalISO(manana);
+
+        inputFechaInicio.min = hoyISO;
+        inputFechaFin.min = hoyISO;
+
+        if (!inputFechaInicio.value) inputFechaInicio.value = hoyISO;
+        if (!inputFechaFin.value) inputFechaFin.value = mananaISO;
+
+        inputFechaInicio.addEventListener('change', () => {
+            inputFechaFin.min = inputFechaInicio.value || hoyISO;
+            if (inputFechaFin.value && inputFechaFin.value < inputFechaInicio.value) {
+                inputFechaFin.value = inputFechaInicio.value;
+            }
+            actualizarResumen();
+        });
+
+        inputFechaFin.addEventListener('change', actualizarResumen);
+    }
+
+    function obtenerDias() {
+        if (!inputFechaInicio?.value || !inputFechaFin?.value) return 1;
+
+        const inicio = new Date(`${inputFechaInicio.value}T00:00:00`);
+        const fin = new Date(`${inputFechaFin.value}T00:00:00`);
+        const diferencia = Math.floor((fin - inicio) / 86400000);
+        return Math.max(1, diferencia);
+    }
+
+    function obtenerSesionCliente() {
+        try {
+            const raw = localStorage.getItem('carmovo_sesion');
+            if (!raw) return null;
+            const sesion = JSON.parse(raw);
+            if (!sesion?.logueado || !sesion?.idUsuario) return null;
+            return sesion;
+        } catch (error) {
+            console.error('No se pudo leer la sesión del cliente:', error);
+            return null;
+        }
+    }
+
+    async function completarDatosDesdePerfil() {
+        const sesion = obtenerSesionCliente();
+        if (!sesion) return;
+
+        const asignar = (campo, valor) => {
+            if (campo && valor && !campo.value) {
+                campo.value = valor;
+                campo.classList.add('campo-lleno');
+            }
+        };
+
+        const mostrarUbicacionPerfil = (campo, valor, etiqueta) => {
+            if (!campo) return;
+            campo.value = valor || '';
+            campo.placeholder = valor ? '' : `${etiqueta}: sin registrar`;
+            campo.readOnly = true;
+            if (valor) campo.classList.add('campo-lleno');
+            else campo.classList.remove('campo-lleno');
+        };
+
+        // Primero mostramos los datos básicos de sesión para que la interfaz responda de inmediato.
+        asignar(inputNombre, sesion.nombres);
+        asignar(inputApellidos, sesion.apellidos);
+        asignar(inputCorreo, sesion.correo);
+        asignar(inputTelefono, sesion.telefono);
+
+        if (!window.CarmovoClienteApi) {
+            mostrarUbicacionPerfil(selectDepartamento, '', 'Departamento');
+            mostrarUbicacionPerfil(selectProvincia, '', 'Provincia');
+            mostrarUbicacionPerfil(selectDistrito, '', 'Distrito');
+            return;
+        }
+
+        try {
+            const perfil = await window.CarmovoClienteApi.obtenerPerfil(sesion.idUsuario);
+            perfilClienteActual = perfil;
+            asignar(inputNombre, perfil.nombres);
+            asignar(inputApellidos, perfil.apellidos);
+            asignar(inputCorreo, perfil.correo);
+            asignar(inputTelefono, perfil.telefono);
+            asignar(inputDNI, perfil.documento);
+            asignar(inputFechaNacimiento, perfil.fechaNacimiento);
+            asignar(inputDomicilio, perfil.domicilio);
+            asignar(inputLicencia, perfil.numeroLicencia);
+            asignar(inputCategoria, perfil.categoriaLicencia);
+            asignar(inputVenceLicencia, perfil.vencimientoLicencia);
+            mostrarUbicacionPerfil(selectDepartamento, perfil.departamento, 'Departamento');
+            mostrarUbicacionPerfil(selectProvincia, perfil.provincia, 'Provincia');
+            mostrarUbicacionPerfil(selectDistrito, perfil.distrito, 'Distrito');
+        } catch (error) {
+            console.error('No se pudo cargar el perfil del cliente desde PostgreSQL:', error);
+            mostrarUbicacionPerfil(selectDepartamento, '', 'Departamento');
+            mostrarUbicacionPerfil(selectProvincia, '', 'Provincia');
+            mostrarUbicacionPerfil(selectDistrito, '', 'Distrito');
+        }
+    }
+
+    if (btnCerrarBloqueo) {
+        btnCerrarBloqueo.addEventListener('click', () => {
+            pantallaBloqueo?.classList.add('oculto');
+        });
+    }
 
     if (selectRecogida && resumenTextoRecogida) {
         selectRecogida.addEventListener('change', (e) => {
             resumenTextoRecogida.textContent = e.target.options[e.target.selectedIndex].text;
         });
     }
+
     if (selectEntrega && resumenTextoEntrega) {
         selectEntrega.addEventListener('change', (e) => {
             resumenTextoEntrega.textContent = e.target.options[e.target.selectedIndex].text;
         });
     }
 
-
     async function cargarVehiculosBackend() {
         try {
             const respuesta = await fetch('http://localhost:8080/api/v1/vehiculos');
             if (!respuesta.ok) throw new Error('Error al conectar con el servidor');
-            
-            const autosDB = await respuesta.json();
-            
+
+            const autosBackend = await respuesta.json();
+
             if (selectorAuto) {
                 selectorAuto.innerHTML = '<option value="">-- Selecciona un auto --</option>';
-                autosDB.forEach(auto => {
+                autosBackend.forEach(auto => {
                     const option = document.createElement('option');
-                    option.value = auto.idVehiculo; 
+                    option.value = auto.idVehiculo;
                     option.textContent = `${auto.marca} ${auto.modelo} (S/ ${Number(auto.precioDia).toFixed(2)}/día)`;
                     option.dataset.precio = auto.precioDia;
-                    option.dataset.tipo = auto.categoria;
-                    option.dataset.imagen = auto.imagen;
+                    option.dataset.tipo = auto.tipo || auto.categoria;
+                    option.dataset.categoria = auto.categoria || '';
+                    option.dataset.imagen = auto.imagen || '';
                     option.dataset.marca = auto.marca;
                     option.dataset.modelo = auto.modelo;
+                    option.dataset.estado = auto.estado || '';
+
+                    if (auto.estado && auto.estado !== 'Disponible') {
+                        option.disabled = true;
+                        option.textContent += ' - No disponible';
+                    }
+
                     selectorAuto.appendChild(option);
                 });
             }
+
             seleccionarAutoStorage();
         } catch (error) {
-            console.error("Error al cargar vehículos desde la BD:", error);
+            console.error('Error al cargar vehículos desde la BD:', error);
         }
     }
 
     function seleccionarAutoStorage() {
         const autoGuardado = localStorage.getItem('autoReserva');
-        if (autoGuardado && selectorAuto) {
-            try {
-                const auto = JSON.parse(autoGuardado);
-                const opcion = Array.from(selectorAuto.options).find(opt => 
-                    opt.value == auto.id || opt.text.includes(auto.marca)
-                );
-                
-                if (opcion) {
-                    selectorAuto.value = opcion.value;
-                    actualizarResumen();
-                }
-            } catch (error) {
-                console.error("Error leyendo localStorage", error);
+        if (!autoGuardado || !selectorAuto) return;
+
+        try {
+            const auto = JSON.parse(autoGuardado);
+            const idGuardado = Number(auto.idVehiculo ?? auto.id);
+            const nombreGuardado = `${auto.marca || ''} ${auto.modelo || ''}`.trim().toLowerCase();
+
+            const opcion = Array.from(selectorAuto.options).find(opt => {
+                if (!opt.value) return false;
+                if (Number(opt.value) === idGuardado) return true;
+
+                const nombreOpcion = `${opt.dataset.marca || ''} ${opt.dataset.modelo || ''}`.trim().toLowerCase();
+                return nombreGuardado && nombreOpcion === nombreGuardado;
+            });
+
+            if (opcion && !opcion.disabled) {
+                selectorAuto.value = opcion.value;
+                actualizarResumen();
+            } else if (idGuardado || nombreGuardado) {
+                localStorage.removeItem('autoReserva');
+                console.warn('El vehículo seleccionado anteriormente ya no está disponible en la flota actual.');
             }
+        } catch (error) {
+            console.error('Error leyendo la selección de vehículo:', error);
+            localStorage.removeItem('autoReserva');
         }
     }
 
-   
     function actualizarResumen() {
-        const dias = Math.max(1, parseInt(inputDias?.value) || 1);
+        const dias = obtenerDias();
 
         if (selectorAuto && selectorAuto.value !== '') {
             const opcion = selectorAuto.options[selectorAuto.selectedIndex];
             if (opcion && opcion.value !== '') {
                 autoActual = {
+                    idVehiculo: Number(opcion.value),
                     id: Number(opcion.value),
                     nombre: `${opcion.dataset.marca} ${opcion.dataset.modelo}`,
+                    marca: opcion.dataset.marca,
+                    modelo: opcion.dataset.modelo,
                     tipo: opcion.dataset.tipo,
+                    categoria: opcion.dataset.categoria,
                     imagen: opcion.dataset.imagen,
-                    precio: Number(opcion.dataset.precio)
+                    precio: Number(opcion.dataset.precio),
+                    estado: opcion.dataset.estado
                 };
             }
+        } else {
+            autoActual = null;
         }
 
         if (!autoActual) return;
 
         if (resumenNombre) resumenNombre.textContent = autoActual.nombre;
         if (resumenTipo) resumenTipo.textContent = autoActual.tipo;
+
         if (resumenImagen) {
-            resumenImagen.src = `../recursos/imagenes/vehiculos/${autoActual.imagen}`;
-            resumenImagen.onerror = () => resumenImagen.src = '../recursos/imagenes/home/logo-carmovo4.jpg'; 
+            const nombreActual = autoActual.nombre.toLowerCase();
+            let rutaImagen = '../recursos/imagenes/home/logo-carmovo4.jpg';
+
+            const carpetasNuevas = {
+                'crossovers': 'crossovers',
+                'furgonetas': 'furgonetas',
+                'hibridos': 'hibridos',
+                'premium / lujo': 'premiumLujo',
+                'eventos': 'eventos'
+            };
+
+            const normalizarCategoria = (texto) =>
+                String(texto || '')
+                    .normalize('NFD')
+                    .replace(/[\u0300-\u036f]/g, '')
+                    .trim()
+                    .toLowerCase();
+
+            const categoriaNormalizada = normalizarCategoria(autoActual.categoria);
+            const carpetaNueva = carpetasNuevas[categoriaNormalizada];
+            const imagenBD = String(autoActual.imagen || '').trim();
+
+            // Los 25 vehículos nuevos toman la imagen registrada en PostgreSQL.
+            if (carpetaNueva && imagenBD) {
+                if (/^(https?:|data:|blob:)/i.test(imagenBD)) {
+                    rutaImagen = imagenBD;
+                } else if (imagenBD.startsWith('../recursos/')) {
+                    rutaImagen = imagenBD;
+                } else if (imagenBD.startsWith('recursos/')) {
+                    rutaImagen = `../${imagenBD}`;
+                } else {
+                    rutaImagen = `../recursos/imagenes/${carpetaNueva}/${imagenBD}`;
+                }
+            } else {
+                // Vehículos antiguos: conservar exactamente la lógica que ya funciona.
+                if (typeof autosDB !== 'undefined' && Array.isArray(autosDB)) {
+                    const referenciaVisual = autosDB.find(
+                        auto => auto.nombre.toLowerCase() === nombreActual
+                    );
+
+                    if (referenciaVisual?.imagen) {
+                        rutaImagen = referenciaVisual.imagen;
+                    }
+                }
+            }
+
+            resumenImagen.src = rutaImagen;
+
+            resumenImagen.onerror = () => {
+                resumenImagen.onerror = null;
+                resumenImagen.src = '../recursos/imagenes/home/logo-carmovo4.jpg';
+            };
         }
+
         if (etiquetaDias) etiquetaDias.textContent = `Tarifa base (${dias} ${dias === 1 ? 'día' : 'días'})`;
 
         const tarifaBase = autoActual.precio * dias;
-        const costoSeguro = 120.00; 
+        const costoSeguro = 120.00;
         const impuestos = tarifaBase * 0.18;
         totalPagar = tarifaBase + costoSeguro + impuestos;
 
@@ -140,89 +332,19 @@ document.addEventListener('DOMContentLoaded', () => {
         if (resumenImpuestos) resumenImpuestos.textContent = `S/ ${impuestos.toFixed(2)}`;
         if (resumenTotal) resumenTotal.textContent = `S/ ${totalPagar.toFixed(2)}`;
 
-        document.querySelectorAll('.monto-dinamico-modal').forEach(span => span.textContent = `S/ ${totalPagar.toFixed(2)}`);
+        document.querySelectorAll('.monto-dinamico-modal')
+            .forEach(span => span.textContent = `S/ ${totalPagar.toFixed(2)}`);
     }
 
     if (selectorAuto) selectorAuto.addEventListener('change', actualizarResumen);
-    if (inputDias) inputDias.addEventListener('input', actualizarResumen);
 
-    //  INTEGRACIÓN API RENIEC 
-    if (inputDNI) {
-        inputDNI.addEventListener('input', async (e) => {
-            const dni = e.target.value.trim();
-            
-            if (dni.length === 8) {
-                console.log("Consultando DNI a través de Spring Boot:", dni); 
-                
-                try {
-                    const res = await fetch(`http://localhost:8080/api/v1/reniec/${dni}`);
-                    
-                    if (res.ok) {
-                        const data = await res.json();
-                        console.log("Datos recibidos:", data);
-                        
-                        if (data.success === true && data.data) {
-                            const nombreCompleto = data.data.nombre_completo || "";
-                            
-                            // Autocompletar Nombres y Apellidos
-                            if (inputNombre && inputApellidos) {
-                                const partes = nombreCompleto.split(',');
-                                if (partes.length >= 2) {
-                                    inputApellidos.value = partes[0].trim();
-                                    inputNombre.value = partes[1].trim();
-                                } else {
-                                    inputNombre.value = nombreCompleto;
-                                }
-                                inputNombre.classList.add('campo-lleno');
-                                inputApellidos.classList.add('campo-lleno');
-                            }
+    // Los datos del conductor se cargan desde el perfil persistido en PostgreSQL.
+    // En Reservas son solo de lectura; cualquier corrección se realiza desde Mi Cuenta.
 
-                           
-                            if (inputDomicilio && data.data.direccion) {
-                                inputDomicilio.value = data.data.direccion;
-                                inputDomicilio.classList.add('campo-lleno');
-                            }
-
-                      
-                            if (inputFechaNacimiento && data.data.fecha_nacimiento) {
-                                inputFechaNacimiento.value = data.data.fecha_nacimiento;
-                                inputFechaNacimiento.classList.add('campo-lleno');
-                            }
-
-                        } else {
-                            alert("DNI no encontrado en el padrón.");
-                        }
-                    } else {
-                        console.error("El backend no pudo resolver el DNI");
-                    }
-                } catch (error) { 
-                    console.error('Error al conectar con el backend:', error); 
-                }
-            }
-        });
-    }
-
-    if (inputLicencia) {
-        inputLicencia.addEventListener('blur', () => {
-            const brevete = inputLicencia.value.trim();
-            if (brevete.length >= 8) {
-                setTimeout(() => {
-                    if(inputCategoria) { inputCategoria.value = "A-I"; inputCategoria.classList.add('campo-lleno'); }
-                    if(inputVenceLicencia) {
-                        const f = new Date(); f.setFullYear(f.getFullYear() + 3);
-                        inputVenceLicencia.value = f.toISOString().split('T')[0];
-                        inputVenceLicencia.classList.add('campo-lleno');
-                    }
-                }, 800);
-            }
-        });
-    }
-
-  
     const formularioReserva = document.getElementById('formFinalizarReserva');
     if (formularioReserva) {
         const inputsTodos = formularioReserva.querySelectorAll('input, select');
-        
+
         const procesarEstiloCampo = (campo) => {
             if (campo.type !== 'radio' && campo.name !== 'pago') {
                 if (campo.value.trim() !== '') {
@@ -236,13 +358,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
         inputsTodos.forEach(input => {
             procesarEstiloCampo(input);
-            input.addEventListener('input', function() { procesarEstiloCampo(this); });
-            input.addEventListener('change', function() { procesarEstiloCampo(this); });
+            input.addEventListener('input', function () { procesarEstiloCampo(this); });
+            input.addEventListener('change', function () { procesarEstiloCampo(this); });
         });
     }
 
     const alertaErrores = document.getElementById('alertaErroresFormulario');
-    
+
     function validarFormulario() {
         if (!formularioReserva) return true;
         const inputsRequeridos = formularioReserva.querySelectorAll('input[required], select[required]');
@@ -259,13 +381,19 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
 
+        if (inputFechaInicio?.value && inputFechaFin?.value && inputFechaFin.value < inputFechaInicio.value) {
+            inputFechaInicio.classList.add('input-error');
+            inputFechaFin.classList.add('input-error');
+            formularioValido = false;
+        }
+
         if (!formularioValido) {
-            if(alertaErrores) alertaErrores.classList.remove('oculto');
+            alertaErrores?.classList.remove('oculto');
             setTimeout(() => {
-                if(alertaErrores) alertaErrores.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                alertaErrores?.scrollIntoView({ behavior: 'smooth', block: 'center' });
             }, 100);
         } else {
-            if(alertaErrores) alertaErrores.classList.add('oculto');
+            alertaErrores?.classList.add('oculto');
         }
 
         return formularioValido;
@@ -277,8 +405,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (btnValidar) {
         btnValidar.addEventListener('click', function () {
-            if (!localStorage.getItem('usuarioCarmovoLogueado')) {
-                if (pantallaBloqueo) pantallaBloqueo.classList.remove('oculto');
+            const sesion = obtenerSesionCliente();
+            if (!sesion) {
+                pantallaBloqueo?.classList.remove('oculto');
                 return;
             }
 
@@ -297,9 +426,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 boton.classList.add('validado');
                 if (icono) icono.className = 'fa-solid fa-check-double';
                 if (texto) texto.textContent = 'Datos Validados';
-                
-                if (btnProcesarPago) btnProcesarPago.classList.remove('oculto');
-            }, 1500);
+                btnProcesarPago?.classList.remove('oculto');
+            }, 700);
         });
     }
 
@@ -314,7 +442,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-  
     const radiosPago = document.querySelectorAll('input[name="pago"]');
     const modales = document.querySelectorAll('.modal-pago');
     const botonesCerrar = document.querySelectorAll('.btn-cerrar-modal');
@@ -328,8 +455,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     radiosPago.forEach(radio => {
         radio.addEventListener('click', function (e) {
-            e.preventDefault(); 
-            
+            e.preventDefault();
+
             if (!validarFormulario()) {
                 this.checked = false;
                 return;
@@ -338,18 +465,16 @@ document.addEventListener('DOMContentLoaded', () => {
             this.checked = true;
             cerrarTodosLosModales();
 
-            const nombreCompleto = `${inputNombre ? inputNombre.value : ''} ${inputApellidos ? inputApellidos.value : ''}`.trim();
+            const nombreCompleto = `${inputNombre?.value || ''} ${inputApellidos?.value || ''}`.trim();
             if (nombreCompleto !== '') {
                 document.querySelectorAll('.titular-auto-relleno').forEach(input => input.value = nombreCompleto);
             }
 
             const modalId = this.getAttribute('data-modal');
-            if (modalId) {
-                const modalSeleccionado = document.getElementById(modalId);
-                if (modalSeleccionado) {
-                    modalSeleccionado.classList.remove('oculto');
-                    modalSeleccionado.classList.add('activo');
-                }
+            const modalSeleccionado = modalId ? document.getElementById(modalId) : null;
+            if (modalSeleccionado) {
+                modalSeleccionado.classList.remove('oculto');
+                modalSeleccionado.classList.add('activo');
             }
         });
     });
@@ -362,13 +487,23 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
+    const btnCerrarExito = document.querySelector('.btn-cerrar-exito');
+    if (btnCerrarExito) {
+        btnCerrarExito.addEventListener('click', function () {
+            // La reserva ya fue registrada correctamente. Evitamos dejar al usuario
+            // atrapado en el modal y lo llevamos a Mi Cuenta para revisar su estado.
+            const modalExito = document.getElementById('modal-pago-exito');
+            modalExito?.classList.remove('activo');
+            modalExito?.classList.add('oculto');
+            window.location.href = 'miCuenta.html';
+        });
+    }
 
-    const botonesAbrirQR = document.querySelectorAll('.btn-abrir-qr');
-    botonesAbrirQR.forEach(btn => {
-        btn.addEventListener('click', function() {
+    document.querySelectorAll('.btn-abrir-qr').forEach(btn => {
+        btn.addEventListener('click', function () {
             const targetId = this.getAttribute('data-target');
             const contenedorQR = document.getElementById(targetId);
-            
+
             if (contenedorQR) {
                 if (contenedorQR.classList.contains('oculto')) {
                     contenedorQR.classList.remove('oculto');
@@ -381,30 +516,99 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    
+    function textoOpcion(select) {
+        if (!select?.value) return '';
+        return select.options[select.selectedIndex]?.text?.trim() || select.value;
+    }
+
+    function normalizarMetodoPago(metodo) {
+        const metodos = {
+            tarjeta: 'Tarjeta',
+            paypal: 'PayPal',
+            yape: 'Yape',
+            plin: 'Plin'
+        };
+        return metodos[metodo] || metodo;
+    }
+
+    function obtenerReferenciaPago(metodoPago) {
+        if (metodoPago === 'yape') {
+            return document.getElementById('operacion-yape')?.value?.trim() || '';
+        }
+        if (metodoPago === 'plin') {
+            return document.getElementById('operacion-plin')?.value?.trim() || '';
+        }
+        return '';
+    }
+
+    function validarDatosPago(metodoPago) {
+        if (metodoPago === 'yape' || metodoPago === 'plin') {
+            const referencia = obtenerReferenciaPago(metodoPago);
+            if (!referencia) {
+                alert(`Ingresa el número de operación de ${normalizarMetodoPago(metodoPago)}.`);
+                const campo = document.getElementById(metodoPago === 'yape' ? 'operacion-yape' : 'operacion-plin');
+                campo?.focus();
+                return false;
+            }
+        }
+        return true;
+    }
+
+    function estadoPagoInicial(metodoPago) {
+        return metodoPago === 'yape' || metodoPago === 'plin' ? 'En revisión' : 'Pendiente';
+    }
+
     window.enviarReservaBackend = async (metodoPago, tokenCulqi = null) => {
-        if (!autoActual) return alert("Debe seleccionar un vehículo");
+        if (enviandoReserva) return;
+        if (!autoActual) {
+            alert('Debe seleccionar un vehículo.');
+            return;
+        }
+        if (!validarFormulario()) return;
+
+        const sesion = obtenerSesionCliente();
+        if (!sesion) {
+            pantallaBloqueo?.classList.remove('oculto');
+            return;
+        }
+
+        if (!perfilClienteActual?.departamento || !perfilClienteActual?.provincia || !perfilClienteActual?.distrito) {
+            alert('Completa Departamento, Provincia y Distrito en Mi Cuenta antes de realizar una reserva.');
+            return;
+        }
+
+        if (!validarDatosPago(metodoPago)) return;
+
+        const referenciaPago = obtenerReferenciaPago(metodoPago);
 
         const reservaData = {
-            vehiculoId: autoActual.id,
-            dias: parseInt(inputDias.value),
-            lugarRecogida: selectRecogida.value,
-            lugarEntrega: selectEntrega.value,
-            metodoPago: metodoPago,
-            tokenPago: tokenCulqi, 
-            total: totalPagar,
+            idUsuario: Number(sesion.idUsuario),
+            vehiculoId: autoActual.idVehiculo,
+            fechaInicio: inputFechaInicio.value,
+            fechaFin: inputFechaFin.value,
+            lugarRecogida: textoOpcion(selectRecogida),
+            lugarEntrega: textoOpcion(selectEntrega),
+            metodoPago: normalizarMetodoPago(metodoPago),
+            referenciaPago: referenciaPago || null,
+            tokenPago: tokenCulqi,
             conductor: {
-                nombre: inputNombre.value,
-                apellidos: inputApellidos.value,
-                dni: inputDNI.value,
-                correo: inputCorreo.value,
-                telefono: document.getElementById('telefono').value,
-                licencia: inputLicencia.value,
-                categoriaLicencia: inputCategoria.value,
+                nombre: inputNombre.value.trim(),
+                apellidos: inputApellidos.value.trim(),
+                dni: inputDNI.value.trim(),
+                correo: inputCorreo.value.trim(),
+                telefono: inputTelefono.value.trim(),
+                fechaNacimiento: inputFechaNacimiento?.value || null,
+                licencia: inputLicencia.value.trim(),
+                categoriaLicencia: inputCategoria.value.trim(),
                 vencimientoLicencia: inputVenceLicencia.value,
-                domicilio: inputDomicilio ? inputDomicilio.value : ''
+                domicilio: inputDomicilio?.value.trim() || '',
+                departamento: perfilClienteActual?.departamento || '',
+                provincia: perfilClienteActual?.provincia || '',
+                distrito: perfilClienteActual?.distrito || ''
             }
         };
+
+        enviandoReserva = true;
 
         try {
             const res = await fetch('http://localhost:8080/api/v1/reservas', {
@@ -413,35 +617,81 @@ document.addEventListener('DOMContentLoaded', () => {
                 body: JSON.stringify(reservaData)
             });
 
-            if (res.ok) {
-                document.querySelectorAll('.modal-pago').forEach(m => m.classList.add('oculto'));
-                const modalExito = document.getElementById('modal-pago-exito');
-                document.getElementById('nombre-exito').textContent = inputNombre.value.split(' ')[0];
+            const tipoContenido = res.headers.get('content-type') || '';
+            const respuesta = tipoContenido.includes('application/json')
+                ? await res.json()
+                : await res.text();
+
+            if (!res.ok) {
+                const mensaje = typeof respuesta === 'string'
+                    ? respuesta
+                    : respuesta?.message || respuesta?.error || 'No se pudo registrar la reserva.';
+                throw new Error(mensaje);
+            }
+
+            const alquiler = respuesta;
+            if (typeof alquiler?.total === 'number') {
+                totalPagar = alquiler.total;
+                if (resumenTotal) resumenTotal.textContent = `S/ ${Number(alquiler.total).toFixed(2)}`;
+            }
+
+            localStorage.removeItem('autoReserva');
+            localStorage.setItem('ultimaReservaCarmovo', JSON.stringify({
+                idAlquiler: alquiler.idAlquiler,
+                estado: alquiler.estado,
+                total: alquiler.total,
+                vehiculo: alquiler.vehiculo,
+                fechaInicio: alquiler.fechaInicio,
+                fechaFin: alquiler.fechaFin,
+                metodoPago: normalizarMetodoPago(metodoPago),
+                estadoPago: estadoPagoInicial(metodoPago),
+                referenciaPago: referenciaPago || null
+            }));
+
+            document.querySelectorAll('.modal-pago').forEach(m => m.classList.add('oculto'));
+            const modalExito = document.getElementById('modal-pago-exito');
+            const nombreExito = document.getElementById('nombre-exito');
+            const textoValidacion = modalExito?.querySelector('.texto-validacion');
+
+            if (nombreExito) nombreExito.textContent = inputNombre.value.split(' ')[0];
+            if (textoValidacion) {
+                const estadoPago = estadoPagoInicial(metodoPago);
+                const detalleReferencia = referenciaPago
+                    ? `<br>Referencia: <strong>${referenciaPago}</strong>.`
+                    : '';
+                textoValidacion.innerHTML = `Reserva #${alquiler.idAlquiler} registrada como <strong>${alquiler.estado}</strong>.<br>Pago: <strong>${estadoPago}</strong>${detalleReferencia}<br>Total calculado por el servidor: S/ ${Number(alquiler.total).toFixed(2)}.`;
+            }
+            if (modalExito) {
                 modalExito.classList.remove('oculto');
                 modalExito.classList.add('activo');
-            } else {
-                throw new Error("Error procesando la reserva en el servidor");
             }
         } catch (error) {
-            console.error("Error al confirmar reserva:", error);
-            alert("Hubo un problema al procesar tu reserva. Revisa tu consola.");
+            console.error('Error al confirmar reserva:', error);
+            alert(error.message || 'Hubo un problema al procesar tu reserva.');
+        } finally {
+            enviandoReserva = false;
+            document.querySelectorAll('.btn-guardar-modal').forEach(boton => {
+                boton.style.pointerEvents = '';
+                if (boton.dataset.textoOriginal) {
+                    boton.innerHTML = boton.dataset.textoOriginal;
+                }
+            });
         }
     };
 
-    
     document.querySelectorAll('.btn-guardar-modal').forEach(boton => {
-        boton.addEventListener('click', function() {
+        boton.addEventListener('click', function () {
             const texto = this.textContent.toLowerCase();
-            
+
             if (texto.includes('tarjeta')) {
                 if (typeof Culqi !== 'undefined') {
                     Culqi.settings({
                         title: 'Carmovo Alquileres',
                         currency: 'PEN',
-                        description: `Reserva: ${autoActual.nombre}`,
-                        amount: Math.round(totalPagar * 100) 
+                        description: `Reserva: ${autoActual?.nombre || 'Vehículo'}`,
+                        amount: Math.round(totalPagar * 100)
                     });
-                    
+
                     Culqi.options({
                         lang: 'auto',
                         installments: false,
@@ -450,34 +700,62 @@ document.addEventListener('DOMContentLoaded', () => {
 
                     Culqi.open();
                 } else {
-                    alert("Culqi no está cargado. Revisa tu etiqueta script en el HTML.");
+                    alert('Culqi no está cargado.');
                 }
-                return; 
+                return;
             }
 
             let metodo = 'tarjeta';
             if (texto.includes('yape')) metodo = 'yape';
             if (texto.includes('plin')) metodo = 'plin';
             if (texto.includes('pay-pal') || texto.includes('paypal')) metodo = 'paypal';
-            
+
+            if (!validarDatosPago(metodo)) return;
+
+            if (!this.dataset.textoOriginal) {
+                this.dataset.textoOriginal = this.innerHTML;
+            }
             this.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Procesando...';
             this.style.pointerEvents = 'none';
-            enviarReservaBackend(metodo);
+            window.enviarReservaBackend(metodo);
         });
     });
 
- 
+
+    document.querySelectorAll('.input-comprobante').forEach(input => {
+        input.addEventListener('change', function () {
+            const archivo = this.files?.[0];
+            const previewId = this.dataset.preview;
+            const preview = previewId ? document.getElementById(previewId) : null;
+            if (!archivo || !preview) return;
+
+            if (!archivo.type.startsWith('image/')) {
+                alert('Selecciona una imagen válida como comprobante.');
+                this.value = '';
+                preview.classList.add('oculto');
+                return;
+            }
+
+            const lector = new FileReader();
+            lector.onload = evento => {
+                preview.src = evento.target.result;
+                preview.classList.remove('oculto');
+            };
+            lector.readAsDataURL(archivo);
+        });
+    });
+
+    configurarFechas();
+    completarDatosDesdePerfil();
     cargarVehiculosBackend();
 });
 
-
-window.culqi = function() {
-    if (Culqi.token) { 
+window.culqi = function () {
+    if (Culqi.token) {
         const tokenCulqi = Culqi.token.id;
-        console.log('Se generó el token de Culqi exitosamente:', tokenCulqi);
         window.enviarReservaBackend('tarjeta', tokenCulqi);
-    } else { 
+    } else {
         console.error(Culqi.error);
-        alert(Culqi.error.user_message);
+        alert(Culqi.error?.user_message || 'No se pudo generar el token de pago.');
     }
 };

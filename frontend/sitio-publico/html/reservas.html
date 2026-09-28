@@ -100,8 +100,12 @@
                                 </select>
                             </div>
                             <div class="grupo-input">
-                                <label for="dias-alquiler">Cantidad de días</label>
-                                <input type="number" id="dias-alquiler" min="1" max="30" value="1" required>
+                                <label for="fecha-inicio">Fecha de recogida</label>
+                                <input type="date" id="fecha-inicio" required>
+                            </div>
+                            <div class="grupo-input">
+                                <label for="fecha-fin">Fecha de entrega</label>
+                                <input type="date" id="fecha-fin" required>
                             </div>
                             <div class="grupo-input">
                                 <div class="grupo-campo">
@@ -150,78 +154,67 @@
 
                     <div class="tarjeta-reserva">
                         <h3>2. Datos del Conductor</h3>
+                        <p style="margin: 0 0 16px; color: #666; font-size: 0.95rem;">
+                            Estos datos se cargan desde tu perfil y son solo de lectura. Si necesitas corregirlos, actualízalos desde Mi Cuenta.
+                        </p>
                         <div class="grid-inputs">
                             <div class="grupo-input">
                                 <label for="nombre">Nombre</label>
-                                <input type="text" id="nombre" placeholder="Tu nombre" required>
+                                <input type="text" id="nombre" placeholder="Tu nombre" required readonly>
                             </div>
                             <div class="grupo-input">
                                 <label for="apellidos">Apellidos</label>
-                                <input type="text" id="apellidos" placeholder="Tus apellidos" required>
+                                <input type="text" id="apellidos" placeholder="Tus apellidos" required readonly>
                             </div>
                             <div class="grupo-input">
                                 <label for="nacimiento">Fecha de Nacimiento</label>
-                                <input type="date" id="nacimiento" required>
+                                <input type="date" id="nacimiento" required readonly>
                             </div>
                             <div class="grupo-input">
                                 <label for="correo">Correo Electrónico</label>
-                                <input type="email" id="correo" placeholder="Correo Electrónico" required>
+                                <input type="email" id="correo" placeholder="Correo Electrónico" required readonly>
                             </div>
                             <div class="grupo-input">
                                 <label for="licencia">Número de Licencia</label>
-                                <input type="text" id="licencia" placeholder="Número de Licencia" required>
+                                <input type="text" id="licencia" placeholder="Número de Licencia" required readonly>
                             </div>
                             <div class="grupo-input">
                                 <label for="categoria">Categoría de Licencia</label>
-                                <input type="text" id="categoria" placeholder="Categoría de Licencia" required>
+                                <input type="text" id="categoria" placeholder="Categoría de Licencia" required readonly>
                             </div>
                             <div class="grupo-input">
                                 <label for="fecha-vence-licencia">Fecha de vencimiento de Licencia</label>
-                                <input type="date" id="fecha-vence-licencia" required>
+                                <input type="date" id="fecha-vence-licencia" required readonly>
                             </div>
                             <div class="grupo-input">
                                 <label for="telefono">Teléfono</label>
-                                <input type="tel" id="telefono" placeholder="Tu número" required>
+                                <input type="tel" id="telefono" placeholder="Tu número" required readonly>
                             </div>
                             <div class="grupo-input">
                                 <label for="documento">DNI / Pasaporte</label>
-                                <input type="text" id="documento" placeholder="Número de documento" minlength="8" maxlength="9" required>
+                                <input type="text" id="documento" placeholder="Número de documento" minlength="8" maxlength="9" required readonly>
                             </div>
                             
                             <div class="grupo-input col-completa">
                                 <label for="domicilio">Domicilio del solicitante (Calle / Urbanización)</label>
-                                <input type="text" id="domicilio" placeholder="Ej: Av. Balta 123, Urb. La Primavera" required>
+                                <input type="text" id="domicilio" placeholder="Ej: Av. Balta 123, Urb. La Primavera" required readonly>
                             </div>
 
                             <div class="grupo-input">
                                 <label for="departamento">Departamento</label>
-                                <select id="departamento" required>
-                                    <option value="">Selecciona departamento</option>
-                                    <option value="Lambayeque">Lambayeque</option>
-                                    <option value="La Libertad">La Libertad</option>
-                                    <option value="Lima">Lima</option>
-                                </select>
+                                <input type="text" id="departamento" placeholder="Cargando desde tu perfil..." readonly>
                             </div>
 
                             <div class="grupo-input">
                                 <label for="provincia">Provincia</label>
-                                <select id="provincia" required>
-                                    <option value="">Selecciona provincia</option>
-                                    <option value="Chiclayo">Chiclayo</option>
-                                    <option value="San Pedro de Lloc">San Pedro de LLoc</option>
-                                    <option value="San Antonio">San Antonio</option>
-                                </select>
+                                <input type="text" id="provincia" placeholder="Cargando desde tu perfil..." readonly>
                             </div>
 
                             <div class="grupo-input">
                                 <label for="distrito">Distrito</label>
-                                <select id="distrito" required>
-                                    <option value="">Selecciona distrito</option>
-                                    <option value="Chiclayo">La Victoria</option>
-                                    <option value="Pacasmayo">Pacasmayo</option>
-                                    <option value="Miraflores">Miraflores</option>
-                                </select>
+                                <input type="text" id="distrito" placeholder="Cargando desde tu perfil..." readonly>
                             </div>
+
                         </div>
                         
                         <div class="validar-datos" style="display: flex; flex-direction: column; align-items: flex-start;">
@@ -337,25 +330,8 @@
                 <div class="pago-tarjeta" style="margin-bottom: 20px;">
                     <img src="../recursos/pagos/visa.jpg" alt="tarjeta " class="tarjeta-visa">
                 </div>
-                <div class="grid-inputs text-left">
-                    <div class="grupo-input col-completa">
-                        <label>Número de Tarjeta</label>
-                        <input type="text" placeholder="0000 0000 0000 0000" maxlength="19">
-                    </div>
-                    <div class="grupo-input col-completa">
-                        <label>Titular de la Tarjeta</label>
-                        <input type="text" class="titular-auto-relleno" placeholder="Nombre completo">
-                    </div>
-                    <div class="grupo-input">
-                        <label>Vencimiento</label>
-                        <input type="text" placeholder="MM/AA" maxlength="5">
-                    </div>
-                    <div class="grupo-input">
-                        <label>CVV</label>
-                        <input type="password" placeholder="123" maxlength="4">
-                    </div>
-                </div>
-                <button type="button" class="boton-accion-naranja boton-bloque btn-guardar-modal mt-20">Confirmar Pago con Tarjeta</button>
+                <p class="texto-instruccion">Los datos de tu tarjeta se ingresarán únicamente en la ventana segura de Culqi. CARMOVO no almacena número de tarjeta ni CVV.</p>
+                <button type="button" class="boton-accion-naranja boton-bloque btn-guardar-modal mt-20">Continuar con Tarjeta</button>
             </div>
         </div>
 
@@ -367,7 +343,7 @@
                 </div>
                 <h3 class="monto-modal-destacado">Total: <span class="monto-dinamico-modal">S/ 0.00</span></h3>
                 <img src="../recursos/pagos/Pay-Pal.webp" alt="PayPal" class="logo-modal" style="margin-bottom: 15px;">
-                <p class="texto-instruccion">Serás redirigido a la plataforma de PayPal.</p>
+                <p class="texto-instruccion">PayPal está disponible como método de reserva, pero el cobro real aún no está integrado. El pago quedará Pendiente hasta su validación.</p>
                 <div class="grupo-input text-left mt-15">
                     <label>Nombre del titular de la cuenta</label>
                     <input type="text" class="titular-auto-relleno" placeholder="Nombre completo">
@@ -398,7 +374,7 @@
                 </div>
                 <div class="grupo-input text-left mt-15">
                     <label>Número de Operación</label>
-                    <input type="text" placeholder="Ej: 12345678">
+                    <input type="text" id="operacion-yape" placeholder="Ej: 12345678" maxlength="40">
                 </div>
                 <div class="grupo-input text-left mt-15">
                 <label>Sube tu comprobante de pago</label>
@@ -437,17 +413,17 @@
                 </div>
                 <div class="grupo-input text-left mt-15">
                     <label>Número de Operación</label>
-                    <input type="text" placeholder="Ej: 12345678">
+                    <input type="text" id="operacion-plin" placeholder="Ej: 12345678" maxlength="40">
                 </div>
                 <div class="grupo-input text-left mt-15">
                 <label>Sube tu comprobante de pago</label>
                 <div class="contenedor-subir-archivo">
-                    <input type="file" class="input-comprobante" id="comprobante-yape" accept="image/png, image/jpeg, image/jpg" data-preview="preview-yape">
-                    <label for="comprobante-yape" class="label-archivo">
+                    <input type="file" class="input-comprobante" id="comprobante-plin" accept="image/png, image/jpeg, image/jpg" data-preview="preview-plin">
+                    <label for="comprobante-plin" class="label-archivo">
                         <i class="fa-solid fa-cloud-arrow-up"></i> <span>Seleccionar imagen</span>
                     </label>
                 </div>
-                  <img id="preview-yape" class="vista-previa-imagen oculto" alt="Vista previa">
+                  <img id="preview-plin" class="vista-previa-imagen oculto" alt="Vista previa">
                 </div>
 
                 <button type="button" class="boton-accion-naranja boton-bloque btn-guardar-modal mt-20">Confirmar Pago Plin</button>
@@ -459,10 +435,9 @@
                 <div class="icono-exito">
                     <i class="fa-solid fa-circle-check"></i>
                 </div>
-                <h4 class="titulo-exito">¡Pago Realizado, <span id="nombre-exito"></span>!</h4>
-                <p class="texto-validacion">Nuestro equipo validará el pago.<br>Espere un momento, por favor...</p>
-                <div class="cargando-spinner"></div>
-                <button type="button" class="boton-accion-naranja boton-bloque btn-cerrar-exito mt-20">Entendido</button>
+                <h4 class="titulo-exito">¡Reserva registrada, <span id="nombre-exito"></span>!</h4>
+                <p class="texto-validacion">Tu reserva quedó registrada como Pendiente.<br>El pago será validado en la siguiente etapa del proceso.</p>
+                <button type="button" class="boton-accion-naranja boton-bloque btn-cerrar-exito mt-20">Ver mi reserva</button>
             </div>
         </div>
     </div>
@@ -528,6 +503,7 @@
     <script src="../js/db y app-categorias/db.js"></script>
     <script src="../js/db y app-categorias/app-categorias.js"></script>
     <script src="../js/paginas/busqueda.js"></script>
+    <script src="../js/servicios/api.cliente.js"></script>
     <script src="../js/paginas/reserva.pagina.js"></script>
     <script src="https://checkout.culqi.com/js/v4"></script>
 

@@ -1,20 +1,22 @@
-document.addEventListener('DOMContentLoaded', () => {
-
+document.addEventListener('DOMContentLoaded', async () => {
     const sesionActual = JSON.parse(localStorage.getItem('carmovo_sesion'));
     const botonLogin = document.querySelector('.boton-login');
 
-    if (sesionActual && sesionActual.logueado) {
-        if (botonLogin) {
-            const primerNombre = sesionActual.nombre.split(' ')[0];
-            botonLogin.innerHTML = `<i class="fa-solid fa-user"></i> Hola, ${primerNombre}`;
-            botonLogin.href = 'miCuenta.html';
+    if (sesionActual && sesionActual.logueado && botonLogin) {
+        const nombreSesion = sesionActual.nombre || sesionActual.nombres || 'Cliente';
+        const primerNombre = nombreSesion.split(' ')[0];
 
+        botonLogin.innerHTML = `<i class="fa-solid fa-user"></i> Hola, ${primerNombre}`;
+        botonLogin.href = 'miCuenta.html';
+
+        if (!document.getElementById('btn-cerrar-sesion-carmovo')) {
             const btnCerrar = document.createElement('a');
+            btnCerrar.id = 'btn-cerrar-sesion-carmovo';
             btnCerrar.href = '#';
             btnCerrar.className = 'enlace-telefono';
             btnCerrar.style.marginLeft = '15px';
             btnCerrar.style.color = '#ef4444';
-            btnCerrar.innerHTML = `<i class="fa-solid fa-right-from-bracket"></i> Salir`;
+            btnCerrar.innerHTML = '<i class="fa-solid fa-right-from-bracket"></i> Salir';
 
             btnCerrar.addEventListener('click', (e) => {
                 e.preventDefault();
@@ -43,121 +45,159 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-
     const inputBusqueda = document.getElementById('inputBusqueda');
     const formBusqueda = document.getElementById('formBusqueda');
     const modalResultados = document.getElementById('modalResultados');
     const listaCoincidencias = document.getElementById('listaCoincidencias');
     const errorBusqueda = document.getElementById('errorBusqueda');
 
-    if (inputBusqueda && modalResultados && listaCoincidencias) {
+    let vehiculosBusqueda = [];
+    let buscadorDisponible = false;
 
-        if (typeof autosDB === 'undefined') {
-            console.warn('Carmovo: falta cargar "db.js" antes de "principal.js" para que el buscador funcione en esta página.');
-        } else {
+    const quitarAcentos = (texto) => String(texto || '')
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .toLowerCase();
 
-            const quitarAcentos = (texto) =>
-                texto.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+    function resolverImagenBusqueda(vehiculo) {
+        const nombreReal = quitarAcentos(`${vehiculo.marca || ''} ${vehiculo.modelo || ''}`).trim();
 
-            function buscarAutos(texto) {
-                const termino = quitarAcentos(texto.trim());
-                if (!termino) return [];
-                return autosDB.filter(auto =>
-                    quitarAcentos(auto.nombre).includes(termino) ||
-                    quitarAcentos(auto.tipo).includes(termino) ||
-                    quitarAcentos(auto.categoria).includes(termino)
-                ).slice(0, 6);
-            }
-
-            function irAResultado(auto) {
-                sessionStorage.setItem('carmovo_busqueda', JSON.stringify({
-                    categoria: auto.categoria,
-                    nombre: auto.nombre
-                }));
-                window.location.href =
-                    'categorias.html?categoria=' + encodeURIComponent(auto.categoria) +
-                    '&auto=' + encodeURIComponent(auto.nombre);
-            }
-
-            function pintarResultados(resultados) {
-                listaCoincidencias.innerHTML = '';
-
-                if (resultados.length === 0) {
-                    modalResultados.classList.add('oculto');
-                    return;
-                }
-
-                resultados.forEach(auto => {
-                    const li = document.createElement('li');
-                    li.className = 'item-coincidencia';
-                    li.innerHTML = `
-                        <img src="${auto.imagen}" alt="${auto.nombre}">
-                        <div>
-                            <strong>${auto.nombre}</strong>
-                            <span>${auto.categoria} · S/ ${auto.precio.toFixed(2)} / día</span>
-                        </div>
-                    `;
-                    li.addEventListener('click', () => irAResultado(auto));
-                    listaCoincidencias.appendChild(li);
-                });
-
-                modalResultados.classList.remove('oculto');
-            }
-
-            function ejecutarBusqueda() {
-                const resultados = buscarAutos(inputBusqueda.value);
-
-                if (resultados.length === 0) {
-                    if (errorBusqueda) {
-                        errorBusqueda.textContent = inputBusqueda.value.trim()
-                            ? 'No encontramos vehículos con ese nombre.'
-                            : 'Escribe el auto que buscas.';
-                    }
-                    modalResultados.classList.add('oculto');
-                    return;
-                }
-
-                if (errorBusqueda) errorBusqueda.textContent = '';
-                irAResultado(resultados[0]);
-            }
-
-            inputBusqueda.addEventListener('input', () => {
-                if (errorBusqueda) errorBusqueda.textContent = '';
-                pintarResultados(buscarAutos(inputBusqueda.value));
-            });
-
-            inputBusqueda.addEventListener('focus', () => {
-                if (inputBusqueda.value.trim()) {
-                    pintarResultados(buscarAutos(inputBusqueda.value));
-                }
-            });
-
-            inputBusqueda.addEventListener('keydown', (e) => {
-                if (e.key === 'Enter') {
-                    e.preventDefault();
-                    ejecutarBusqueda();
-                }
-            });
-
-            if (formBusqueda) {
-                const botonBuscar = formBusqueda.querySelector('.boton-buscar');
-                if (botonBuscar) {
-                    botonBuscar.addEventListener('click', (e) => {
-                        e.preventDefault();
-                        ejecutarBusqueda();
-                    });
-                }
-            }
-
-            document.addEventListener('click', (e) => {
-                if (!modalResultados.contains(e.target) && e.target !== inputBusqueda) {
-                    modalResultados.classList.add('oculto');
-                }
-            });
+        if (typeof autosDB !== 'undefined' && Array.isArray(autosDB)) {
+            const referencia = autosDB.find(auto => quitarAcentos(auto.nombre).trim() === nombreReal);
+            if (referencia && referencia.imagen) return referencia.imagen;
         }
+
+        return '../recursos/imagenes/carrusel/camioneta2.jpg';
     }
 
-    
+    if (inputBusqueda && modalResultados && listaCoincidencias) {
+        try {
+            const respuesta = await fetch('http://localhost:8080/api/v1/vehiculos');
+            if (!respuesta.ok) throw new Error('No se pudo consultar la flota');
+
+            const datos = await respuesta.json();
+            vehiculosBusqueda = (Array.isArray(datos) ? datos : []).map(auto => ({
+                idVehiculo: Number(auto.idVehiculo),
+                nombre: `${auto.marca || ''} ${auto.modelo || ''}`.trim(),
+                tipo: auto.tipo || auto.categoria || 'Vehículo',
+                categoria: auto.categoria || '',
+                precio: Number(auto.precioDia || 0),
+                imagen: resolverImagenBusqueda(auto),
+                estado: auto.estado || ''
+            }));
+            buscadorDisponible = true;
+        } catch (error) {
+            console.error('Carmovo: no se pudo cargar el buscador desde PostgreSQL.', error);
+            if (errorBusqueda) {
+                errorBusqueda.textContent = 'No se pudo consultar la flota en este momento.';
+            }
+        }
+
+        function buscarAutos(texto) {
+            const termino = quitarAcentos(texto.trim());
+            if (!termino || !buscadorDisponible) return [];
+
+            return vehiculosBusqueda.filter(auto =>
+                quitarAcentos(auto.nombre).includes(termino) ||
+                quitarAcentos(auto.tipo).includes(termino) ||
+                quitarAcentos(auto.categoria).includes(termino)
+            ).slice(0, 6);
+        }
+
+        function irAResultado(auto) {
+            sessionStorage.setItem('carmovo_busqueda', JSON.stringify({
+                idVehiculo: auto.idVehiculo,
+                categoria: auto.categoria,
+                nombre: auto.nombre
+            }));
+
+            window.location.href =
+                'categorias.html?categoria=' + encodeURIComponent(auto.categoria) +
+                '&auto=' + encodeURIComponent(auto.nombre);
+        }
+
+        function pintarResultados(resultados) {
+            listaCoincidencias.innerHTML = '';
+
+            if (!resultados.length) {
+                modalResultados.classList.add('oculto');
+                return;
+            }
+
+            resultados.forEach(auto => {
+                const li = document.createElement('li');
+                li.className = 'item-coincidencia';
+                li.innerHTML = `
+                    <img src="${auto.imagen}" alt="${auto.nombre}" onerror="this.src='../recursos/imagenes/carrusel/camioneta2.jpg'">
+                    <div>
+                        <strong>${auto.nombre}</strong>
+                        <span>${auto.categoria} · S/ ${auto.precio.toFixed(2)} / día</span>
+                    </div>
+                `;
+                li.addEventListener('click', () => irAResultado(auto));
+                listaCoincidencias.appendChild(li);
+            });
+
+            modalResultados.classList.remove('oculto');
+        }
+
+        function ejecutarBusqueda() {
+            if (!buscadorDisponible) {
+                if (errorBusqueda) errorBusqueda.textContent = 'No se pudo consultar la flota en este momento.';
+                return;
+            }
+
+            const resultados = buscarAutos(inputBusqueda.value);
+
+            if (!resultados.length) {
+                if (errorBusqueda) {
+                    errorBusqueda.textContent = inputBusqueda.value.trim()
+                        ? 'No encontramos vehículos disponibles con ese nombre.'
+                        : 'Escribe el auto que buscas.';
+                }
+                modalResultados.classList.add('oculto');
+                return;
+            }
+
+            if (errorBusqueda) errorBusqueda.textContent = '';
+            irAResultado(resultados[0]);
+        }
+
+        inputBusqueda.addEventListener('input', () => {
+            if (errorBusqueda) errorBusqueda.textContent = '';
+            pintarResultados(buscarAutos(inputBusqueda.value));
+        });
+
+        inputBusqueda.addEventListener('focus', () => {
+            if (inputBusqueda.value.trim()) {
+                pintarResultados(buscarAutos(inputBusqueda.value));
+            }
+        });
+
+        inputBusqueda.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                ejecutarBusqueda();
+            }
+        });
+
+        if (formBusqueda) {
+            const botonBuscar = formBusqueda.querySelector('.boton-buscar');
+            if (botonBuscar) {
+                botonBuscar.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    ejecutarBusqueda();
+                });
+            }
+        }
+
+        document.addEventListener('click', (e) => {
+            if (!modalResultados.contains(e.target) && e.target !== inputBusqueda) {
+                modalResultados.classList.add('oculto');
+            }
+        });
+    }
+
     const contenedorCategorias = document.getElementById('contenedor-categorias');
     const contenedorAutos = document.getElementById('contenedor-autos');
 
@@ -168,26 +208,26 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (categoriaBuscada) {
             setTimeout(() => {
-                const pestañas = contenedorCategorias.querySelectorAll('button, .pestaña, [data-categoria]');
-                pestañas.forEach(pestaña => {
-                    if (pestaña.textContent.trim() === categoriaBuscada) {
-                        pestaña.click();
+                const pestanas = contenedorCategorias.querySelectorAll('button, .pestana, [data-categoria]');
+                pestanas.forEach(pestana => {
+                    if (pestana.textContent.trim() === categoriaBuscada) {
+                        pestana.click();
                     }
                 });
 
                 if (autoBuscado) {
                     setTimeout(() => {
-                        const nodos = contenedorAutos.querySelectorAll('*');
-                        nodos.forEach(nodo => {
-                            if (nodo.children.length === 0 && nodo.textContent.trim() === autoBuscado) {
-                                const tarjeta = nodo.closest('.tarjeta-auto, article, .card-auto') || nodo;
+                        const tarjetas = contenedorAutos.querySelectorAll('.tarjeta-vehiculo, .tarjeta-auto, article, .card-auto');
+                        tarjetas.forEach(tarjeta => {
+                            const titulo = tarjeta.querySelector('h3');
+                            if (titulo && titulo.textContent.trim() === autoBuscado) {
                                 tarjeta.scrollIntoView({ behavior: 'smooth', block: 'center' });
                                 tarjeta.classList.add('resaltado-busqueda');
                             }
                         });
-                    }, 400);
+                    }, 500);
                 }
-            }, 300);
+            }, 500);
         }
     }
-});s
+});

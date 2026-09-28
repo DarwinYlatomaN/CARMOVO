@@ -1,5 +1,7 @@
 package com.carmovo.modulos.usuarios.dto;
 
+import java.time.LocalDate;
+
 public class UsuarioGuardarDTO {
 
     private String nombres;
@@ -7,65 +9,66 @@ public class UsuarioGuardarDTO {
     private String correo;
     private String contrasena;
     private String telefono;
+    private String documento;
+    private LocalDate fechaNacimiento;
+    private String domicilio;
+    private String departamento;
+    private String provincia;
+    private String distrito;
+    private String numeroLicencia;
+    private String categoriaLicencia;
+    private LocalDate vencimientoLicencia;
     private Boolean estado;
     private Long idPerfil;
 
     public UsuarioGuardarDTO() {
     }
 
-    public String getNombres() {
-        return nombres;
-    }
+    public String getNombres() { return nombres; }
+    public void setNombres(String nombres) { this.nombres = nombres; }
 
-    public void setNombres(String nombres) {
-        this.nombres = nombres;
-    }
+    public String getApellidos() { return apellidos; }
+    public void setApellidos(String apellidos) { this.apellidos = apellidos; }
 
-    public String getApellidos() {
-        return apellidos;
-    }
+    public String getCorreo() { return correo; }
+    public void setCorreo(String correo) { this.correo = correo; }
 
-    public void setApellidos(String apellidos) {
-        this.apellidos = apellidos;
-    }
+    public String getContrasena() { return contrasena; }
+    public void setContrasena(String contrasena) { this.contrasena = contrasena; }
 
-    public String getCorreo() {
-        return correo;
-    }
+    public String getTelefono() { return telefono; }
+    public void setTelefono(String telefono) { this.telefono = telefono; }
 
-    public void setCorreo(String correo) {
-        this.correo = correo;
-    }
+    public String getDocumento() { return documento; }
+    public void setDocumento(String documento) { this.documento = documento; }
 
-    public String getContrasena() {
-        return contrasena;
-    }
+    public LocalDate getFechaNacimiento() { return fechaNacimiento; }
+    public void setFechaNacimiento(LocalDate fechaNacimiento) { this.fechaNacimiento = fechaNacimiento; }
 
-    public void setContrasena(String contrasena) {
-        this.contrasena = contrasena;
-    }
+    public String getDomicilio() { return domicilio; }
+    public void setDomicilio(String domicilio) { this.domicilio = domicilio; }
 
-    public String getTelefono() {
-        return telefono;
-    }
+    public String getDepartamento() { return departamento; }
+    public void setDepartamento(String departamento) { this.departamento = departamento; }
 
-    public void setTelefono(String telefono) {
-        this.telefono = telefono;
-    }
+    public String getProvincia() { return provincia; }
+    public void setProvincia(String provincia) { this.provincia = provincia; }
 
-    public Boolean getEstado() {
-        return estado;
-    }
+    public String getDistrito() { return distrito; }
+    public void setDistrito(String distrito) { this.distrito = distrito; }
 
-    public void setEstado(Boolean estado) {
-        this.estado = estado;
-    }
+    public String getNumeroLicencia() { return numeroLicencia; }
+    public void setNumeroLicencia(String numeroLicencia) { this.numeroLicencia = numeroLicencia; }
 
-    public Long getIdPerfil() {
-        return idPerfil;
-    }
+    public String getCategoriaLicencia() { return categoriaLicencia; }
+    public void setCategoriaLicencia(String categoriaLicencia) { this.categoriaLicencia = categoriaLicencia; }
 
-    public void setIdPerfil(Long idPerfil) {
-        this.idPerfil = idPerfil;
-    }
+    public LocalDate getVencimientoLicencia() { return vencimientoLicencia; }
+    public void setVencimientoLicencia(LocalDate vencimientoLicencia) { this.vencimientoLicencia = vencimientoLicencia; }
+
+    public Boolean getEstado() { return estado; }
+    public void setEstado(Boolean estado) { this.estado = estado; }
+
+    public Long getIdPerfil() { return idPerfil; }
+    public void setIdPerfil(Long idPerfil) { this.idPerfil = idPerfil; }
 }

@@ -51,6 +51,74 @@ public class PagoServicio {
         return convertirADto(alquiler, pago);
     }
 
+
+    @Transactional
+    public PagoDTO registrarDesdeReserva(
+            Long idAlquiler,
+            String metodoPago,
+            String referencia,
+            String tokenPago
+    ) {
+        if (idAlquiler == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "El alquiler es obligatorio para registrar el pago.");
+        }
+
+        AlquilerDTO alquiler = alquilerServicio.obtenerPorId(idAlquiler);
+        String metodo = esVacio(metodoPago) ? "" : metodoPago.trim().toLowerCase(Locale.ROOT);
+
+        Pago pago = pagoRepositorio.findByIdAlquiler(idAlquiler).orElseGet(() -> {
+            Pago nuevo = new Pago();
+            nuevo.setIdAlquiler(idAlquiler);
+            return nuevo;
+        });
+
+        switch (metodo) {
+            case "yape", "plin" -> {
+                if (esVacio(referencia)) {
+                    throw new ResponseStatusException(
+                            HttpStatus.BAD_REQUEST,
+                            "Ingresa el número de operación del pago con " + metodoPago.trim() + "."
+                    );
+                }
+                pago.setEstado("En revisión");
+                pago.setReferencia(referencia.trim());
+                pago.setObservaciones(
+                        "Pago reportado desde el sitio público. Pendiente de validación administrativa."
+                );
+                pago.setFechaPago(null);
+            }
+            case "tarjeta" -> {
+                if (esVacio(tokenPago)) {
+                    throw new ResponseStatusException(
+                            HttpStatus.BAD_REQUEST,
+                            "No se recibió un token válido para el pago con tarjeta."
+                    );
+                }
+                pago.setEstado("Pendiente");
+                pago.setReferencia(null);
+                pago.setObservaciones(
+                        "Token de Culqi generado desde el sitio público. El cobro aún requiere confirmación del proveedor."
+                );
+                pago.setFechaPago(null);
+            }
+            case "paypal" -> {
+                pago.setEstado("Pendiente");
+                pago.setReferencia(null);
+                pago.setObservaciones(
+                        "PayPal seleccionado desde el sitio público. La integración de cobro real aún no está confirmada."
+                );
+                pago.setFechaPago(null);
+            }
+            default -> throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    "Método de pago no válido para la reserva."
+            );
+        }
+
+        Pago guardado = pagoRepositorio.save(pago);
+        return convertirADto(alquiler, guardado);
+    }
+
     @Transactional
     public PagoDTO actualizarPago(Long idAlquiler, PagoActualizarDTO dto) {
         if (dto == null) {

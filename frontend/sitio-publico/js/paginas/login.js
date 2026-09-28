@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
         btnMostrarPassword.addEventListener('click', () => {
             const tipoActual = inputPassword.getAttribute('type');
             const icono = btnMostrarPassword.querySelector('i');
-            
+
             if (tipoActual === 'password') {
                 inputPassword.setAttribute('type', 'text');
                 icono.classList.remove('fa-eye');
@@ -20,44 +20,70 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    function mostrarError(mensaje) {
+        let errorLogin = document.getElementById('errorLoginMsg');
+        if (!errorLogin) {
+            errorLogin = document.createElement('div');
+            errorLogin.id = 'errorLoginMsg';
+            errorLogin.style.color = '#ef4444';
+            errorLogin.style.fontSize = '0.9rem';
+            errorLogin.style.fontWeight = '600';
+            errorLogin.style.textAlign = 'center';
+            errorLogin.style.padding = '10px';
+            errorLogin.style.backgroundColor = 'rgba(239, 68, 68, 0.1)';
+            errorLogin.style.border = '1px solid #ef4444';
+            errorLogin.style.borderRadius = '8px';
+
+            const btnSubmit = formularioLogin.querySelector('button[type="submit"]');
+            formularioLogin.insertBefore(errorLogin, btnSubmit);
+        }
+        errorLogin.textContent = mensaje;
+    }
+
     if (formularioLogin) {
-        formularioLogin.addEventListener('submit', (e) => {
+        formularioLogin.addEventListener('submit', async (e) => {
             e.preventDefault();
-            
+
             const correo = document.getElementById('correo').value.trim();
-            const password = inputPassword.value.trim();
+            const password = inputPassword.value;
+            const btnSubmit = formularioLogin.querySelector('button[type="submit"]');
 
             if (correo === '' || password === '') {
+                mostrarError('Completa tu correo y contraseña.');
                 return;
             }
 
-            let usuariosDB = JSON.parse(localStorage.getItem('carmovo_usuarios')) || [];
-            const usuarioValido = usuariosDB.find(u => u.correo === correo && u.password === password);
+            if (!window.CarmovoClienteApi) {
+                mostrarError('No se pudo cargar el servicio de clientes de CARMOVO.');
+                return;
+            }
 
-            if (usuarioValido) {
-                const sesion = { logueado: true, nombre: usuarioValido.nombre, correo: usuarioValido.correo };
+            try {
+                if (btnSubmit) btnSubmit.disabled = true;
+
+                const usuario = await window.CarmovoClienteApi.iniciarSesion(correo, password);
+                const nombreCompleto = `${usuario.nombres || ''} ${usuario.apellidos || ''}`.trim();
+
+                const sesion = {
+                    logueado: true,
+                    idUsuario: usuario.idUsuario,
+                    nombre: nombreCompleto || usuario.correo,
+                    nombres: usuario.nombres || '',
+                    apellidos: usuario.apellidos || '',
+                    correo: usuario.correo,
+                    telefono: usuario.telefono || '',
+                    perfil: usuario.nombrePerfil || 'Cliente'
+                };
+
                 localStorage.setItem('carmovo_sesion', JSON.stringify(sesion));
                 localStorage.setItem('usuarioCarmovoLogueado', 'true');
-                
+                localStorage.removeItem('carmovo_usuarios');
+
                 window.location.href = 'reservas.html';
-            } else {
-                let errorLogin = document.getElementById('errorLoginMsg');
-                if (!errorLogin) {
-                    errorLogin = document.createElement('div');
-                    errorLogin.id = 'errorLoginMsg';
-                    errorLogin.style.color = '#ef4444';
-                    errorLogin.style.fontSize = '0.9rem';
-                    errorLogin.style.fontWeight = '600';
-                    errorLogin.style.textAlign = 'center';
-                    errorLogin.style.padding = '10px';
-                    errorLogin.style.backgroundColor = 'rgba(239, 68, 68, 0.1)';
-                    errorLogin.style.border = '1px solid #ef4444';
-                    errorLogin.style.borderRadius = '8px';
-                    
-                    const btnSubmit = formularioLogin.querySelector('button[type="submit"]');
-                    formularioLogin.insertBefore(errorLogin, btnSubmit);
-                }
-                errorLogin.textContent = 'Correo o contraseña incorrectos';
+            } catch (error) {
+                mostrarError(error.message || 'Correo o contraseña incorrectos.');
+            } finally {
+                if (btnSubmit) btnSubmit.disabled = false;
             }
         });
     }
