@@ -1,0 +1,226 @@
+:root {
+    --fondo-principal: #090e17;
+    --fondo-tarjeta: #121927;
+    --color-naranja: #ff5a36;
+    --color-blanco: #ffffff;
+    --texto-gris: #8b95a5;
+    --texto-secundario: #94a3b8;
+    --borde-oscuro: #1f2937;
+    --rojo-error: #ef4444;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Montserrat', sans-serif;
+    background-color: var(--fondo-principal);
+    color: var(--color-blanco);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+    transition: 0.3s;
+}
+
+.pantalla-centrada {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
+    background-image: radial-gradient(circle at top left, #147a5920, transparent 40%),
+                      radial-gradient(circle at bottom right, #ff5a3615, transparent 40%);
+}
+
+.tarjeta-registro {
+    background-color: var(--fondo-tarjeta);
+    width: 100%;
+    max-width: 800px; 
+    border-radius: 16px;
+    padding: 40px;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.5);
+    border: 1px solid var(--borde-oscuro);
+}
+
+.cabecera-registro {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.logo-registro {
+    width: 140px;
+    height: auto;
+    margin-bottom: 20px;
+    box-shadow: 0px 2px 12px var(--color-naranja);
+    border-radius: 8px;
+}
+
+.titulo-registro {
+    font-family: 'Outfit', sans-serif;
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--color-blanco);
+    margin-bottom: 8px;
+}
+
+.subtitulo-registro {
+    color: var(--texto-secundario);
+    font-size: 0.95rem;
+}
+
+.formulario-acceso {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.grid-dos-columnas {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+.separador-registro {
+    border: 0;
+    height: 1px;
+    background: var(--borde-oscuro);
+    margin: 10px 0;
+}
+
+.grupo-input {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.grupo-input label {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--texto-secundario);
+}
+
+.campo-input-registro {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.campo-input-registro i:first-child {
+    position: absolute;
+    left: 15px;
+    color: var(--texto-gris);
+    font-size: 1.1rem;
+}
+
+.campo-input-registro input,
+.campo-input-registro select {
+    width: 100%;
+    background-color: var(--fondo-principal);
+    border: 1px solid var(--borde-oscuro);
+    border-radius: 8px;
+    padding: 14px 15px 14px 45px;
+    color: var(--color-blanco);
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1rem;
+    outline: none;
+    transition: 0.3s;
+    color-scheme: dark;
+}
+
+.campo-input-registro input:focus,
+.campo-input-registro select:focus {
+    border-color: var(--color-naranja);
+    box-shadow: 0 0 0 2px rgba(255, 90, 54, 0.2);
+}
+
+.campo-input-registro input::placeholder {
+    color: #4b5563;
+}
+
+.campo-input-registro select option {
+    background-color: var(--fondo-principal);
+    color: var(--color-blanco);
+}
+
+.campo-input-error input {
+    border-color: var(--rojo-error);
+}
+
+.btn-mostrar-password {
+    position: absolute;
+    right: 15px;
+    background: transparent;
+    border: none;
+    color: var(--texto-gris);
+    cursor: pointer;
+    font-size: 1.1rem;
+    transition: 0.3s;
+}
+
+.btn-mostrar-password:hover {
+    color: var(--color-blanco);
+}
+
+.mensaje-error-oculto {
+    display: none;
+    color: var(--rojo-error);
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-align: center;
+}
+
+.boton-accion-naranja {
+    background-color: var(--color-naranja);
+    color: var(--color-blanco);
+    border: none;
+    padding: 16px;
+    border-radius: 8px;
+    font-weight: 700;
+    font-size: 1.1rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    transition: 0.3s;
+    font-family: 'Montserrat', sans-serif;
+    margin-top: 10px;
+}
+
+.boton-accion-naranja:hover {
+    background-color: #e04a29;
+}
+
+.boton-bloque {
+    width: 100%;
+}
+
+.pie-registro {
+    margin-top: 30px;
+    text-align: center;
+    font-size: 0.95rem;
+    color: var(--texto-secundario);
+}
+
+.enlace-login {
+    color: var(--color-blanco);
+    font-weight: 700;
+}
+
+.enlace-login:hover {
+    color: var(--color-naranja);
+}
+
+@media (max-width: 768px) {
+    .grid-dos-columnas {
+        grid-template-columns: 1fr;
+    }
+}

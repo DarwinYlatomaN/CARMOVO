@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${tituloPagina}">Categorías de Vehículos | Carmovo</title>
+    <!-- Tus tipografías -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    
+    
+    
+    <link rel="stylesheet" href="/css/paginas/home.css" th:href="@{/css/paginas/home.css}">
+    <link rel="stylesheet" href="/css/paginas/footer.css" th:href="@{/css/paginas/footer.css}">
+    <link rel="stylesheet" href="/css/paginas/responsive.css" th:href="@{/css/paginas/responsive.css}">
+    
+
+    <link rel="stylesheet" href="/css/paginas/categorias.css" th:href="@{/css/paginas/categorias.css}">
+</head>
+<body>
+    
+   
+    <header class="cabecera">
+        <div class="cabecera-superior contenedor">
+            <div class="caja-logo">
+                <div class="logo-icono"><img src="/recursos/imagenes/home/logo-carmovo4.jpg" th:src="@{/recursos/imagenes/home/logo-carmovo4.jpg}" alt="logo-carmovo"></div>
+                <div class="logo-texto">
+                    <span class="logo-titulo">!Conduce Hoy!</span>
+                    <span class="logo-subtitulo">La llave de tu próxima aventura</span>
+                </div>
+            </div>
+
+            <div class="contenedor-buscador-principal">
+                <div class="barra-busqueda" id="formBusqueda">
+                    <input type="text" class="campo-busqueda" id="inputBusqueda" placeholder="Buscar tu compañero de aventura">
+                    <button type="submit" class="boton-buscar">Buscar</button>
+                </div>
+
+                <div id="modalResultados" class="modal-resultados oculto">
+                    <ul id="listaCoincidencias"></ul>
+                </div>
+                <div class="mensaje-error" id="errorBusqueda"></div>
+            </div>
+
+            <div class="cabecera-acciones">
+               
+                <a href="/login" th:href="@{/login}" class="boton-login">Iniciar sesión</a>
+                
+                <button class="menu-toggle oculto-desktop" id="btnMenu" aria-label="Abrir menú de navegación">
+                    <i class="fa-solid fa-bars"></i>
+                </button>
+            </div>
+        </div>
+
+        <nav class="navegacion-principal" id="navegacionPrincipal">
+            <ul class="lista-enlaces contenedor">
+                <li><a href="/" th:href="@{/}" class="enlace">Home</a></li>
+                <li><a href="/categorias" th:href="@{/categorias}" class="enlace activo">Categorías</a></li>
+                <li><a href="/reservas" th:href="@{/reservas}" class="enlace">Reservas</a></li>
+                <li><a href="/ofertas" th:href="@{/ofertas}" class="enlace">Ofertas y Promociones</a></li>
+                <li><a href="/experiencia" th:href="@{/experiencia}" class="enlace">Experiencias</a></li>
+                <li><a href="/soporte" th:href="@{/soporte}" class="enlace">Soporte</a></li>
+                <li><a href="/miCuenta" th:href="@{/miCuenta}" class="enlace">Mi Cuenta</a></li>
+            </ul>
+        </nav>
+    </header>
+<main class = "contenido-principal contenedor">
+    <section class="seccion-flota">
+        <div class="cabecera-coleccion">
+            <div>
+                <h2>Nuestra Flota</h2>
+                <p>Encuentra el vehículo ideal para tú próxima aventura en Perú</p>
+            </div>
+        </div>
+        <div class="barra-filtros">
+            <!--aquis epone un contendor vacio donde JS dibujará los botones-->
+            <div class="pestañas" id ="contenedor-categorias"></div>
+        </div>
+        <!--contenedor vacio don js dibujará las tarjetas de los autos-->
+        <div class="grid-autos" id="contenedor-autos"></div>
+         
+    </section>
+
+</main>
+    
+    <footer class="pie-pagina-nuevo">
+        <div class="contenedor pie-principal">
+            <div class="pie-logo-info">
+                
+            </div>
+            
+            <div class="pie-enlaces">
+                <div class="pie-columna">
+                    <h4>Navegación</h4>
+                    <ul>
+                        <li><a href="/" th:href="@{/}">Inicio</a></li>
+                        <li><a href="/categorias" th:href="@{/categorias}">Categorías</a></li>
+                        <li><a href="/ofertas" th:href="@{/ofertas}">Ofertas</a></li>
+                        <li><a href="/experiencia" th:href="@{/experiencia}">Experiencias</a></li>
+                        <li><a href="/reservas" th:href="@{/reservas}">Reservas</a></li>
+                    </ul>
+                </div>
+                <div class="pie-columna">
+                    <h4>Recursos</h4>
+                    <ul>
+                        <li><a href="/miCuenta" th:href="@{/miCuenta}">Mi Cuenta</a></li>
+                        <li><a href="/soporte" th:href="@{/soporte}">Soporte</a></li>
+                        <li><a href="#">Ubicación</a></li>
+                        <li><a href="https://wa.me/51999999999" target="_blank">Llamar</a></li>
+                    </ul>
+                </div>
+                <div class="pie-columna">
+                    <h4>Legal</h4>
+                    <ul>
+                        <li><a href="#">Privacidad</a></li>
+                        <li><a href="#">Términos</a></li>
+                        <li><a href="#">Cookies</a></li>
+                        <li><a href="#">Preguntas</a></li>
+                    </ul>
+                </div>
+                <div class="pie-columna pie-suscripcion">
+                    <h4>Suscribirse</h4>
+                    <p>Recibe noticias directo en tu correo.</p>
+                    <form class="form-suscripcion">
+                        <input type="email" placeholder="Tu correo aquí" required>
+                        <button type="submit">Suscribir</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        
+        <div class="pie-inferior contenedor">
+            <p>&copy; <span th:text="${anioActual}">2026</span> Carmovo. Todos los derechos reservados.</p>
+            
+            <div class="iconos-redes">
+                <a href="https://facebook.com" target="_blank"><i class="fa-brands fa-facebook"></i></a>
+                <a href="https://instagram.com" target="_blank"><i class="fa-brands fa-instagram"></i></a>
+                <a href="https://wa.me/51999999999" target="_blank"><i class="fa-brands fa-whatsapp"></i></a>
+            </div>
+        </div>
+    </footer>
+    <script src="/js/paginas/experiencia.js" th:src="@{/js/paginas/experiencia.js}"></script>
+    <script src="/js/db y app-categorias/db.js" th:src="@{/js/db%20y%20app-categorias/db.js}"></script>
+    <script src="/js/db y app-categorias/app-categorias.js" th:src="@{/js/db%20y%20app-categorias/app-categorias.js}"></script>
+    <script src="/js/paginas/busqueda.js" th:src="@{/js/paginas/busqueda.js}"></script>
+    <script src="/js/paginas/categorias.js" th:src="@{/js/paginas/categorias.js}"></script>
+</body>
+</html>

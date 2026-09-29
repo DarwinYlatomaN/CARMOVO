@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${tituloPagina}">Registro | Carmovo</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/css/paginas/registro.css" th:href="@{/css/paginas/registro.css}">
+</head>
+<body>
+    <div class="pantalla-centrada container-fluid">
+        <div class="tarjeta-registro">
+            <div class="cabecera-registro">
+                <a href="/" th:href="@{/}">
+                    <img src="/recursos/imagenes/home/logo-carmovo4.jpg" th:src="@{/recursos/imagenes/home/logo-carmovo4.jpg}" alt="Logo Carmovo" class="logo-registro">
+                </a>
+                <h1 class="titulo-registro">Crea tu cuenta</h1>
+                <p class="subtitulo-registro">Únete a Carmovo y empieza tu próxima aventura</p>
+            </div>
+
+            <form id="formularioRegistro"
+                  class="formulario-acceso needs-validation"
+                  th:action="@{/registro}"
+                  th:object="${registroForm}"
+                  method="post">
+
+                <div class="grid-dos-columnas">
+                    <div class="grupo-input">
+                        <label for="nombres">Nombres</label>
+                        <div class="campo-input-registro">
+                            <i class="fa-regular fa-user"></i>
+                            <input type="text" class="form-control" th:field="*{nombres}" placeholder="Tus nombres" required>
+                        </div>
+                    </div>
+
+                    <div class="grupo-input">
+                        <label for="apellidos">Apellidos</label>
+                        <div class="campo-input-registro">
+                            <i class="fa-regular fa-user"></i>
+                            <input type="text" class="form-control" th:field="*{apellidos}" placeholder="Tus apellidos" required>
+                        </div>
+                    </div>
+
+                    <div class="grupo-input">
+                        <label for="correo">Correo Electrónico</label>
+                        <div class="campo-input-registro">
+                            <i class="fa-regular fa-envelope"></i>
+                            <input type="email" class="form-control" th:field="*{correo}" placeholder="ejemplo@correo.com" required>
+                        </div>
+                    </div>
+
+                    <div class="grupo-input">
+                        <label for="telefono">Teléfono</label>
+                        <div class="campo-input-registro">
+                            <i class="fa-solid fa-phone"></i>
+                            <input type="tel" class="form-control" th:field="*{telefono}" placeholder="Tu número" required>
+                        </div>
+                    </div>
+
+                    <div class="grupo-input">
+                        <label for="documento">DNI / Pasaporte</label>
+                        <div class="campo-input-registro">
+                            <i class="fa-regular fa-id-card"></i>
+                            <input type="text" class="form-control" th:field="*{documento}" placeholder="N° de documento" required>
+                        </div>
+                    </div>
+
+                    <div class="grupo-input">
+                        <label for="fechaNacimiento">Fecha de Nacimiento</label>
+                        <div class="campo-input-registro">
+                            <i class="fa-regular fa-calendar-days"></i>
+                            <input type="date" class="form-control" th:field="*{fechaNacimiento}" required>
+                        </div>
+                    </div>
+
+                    <div class="grupo-input">
+                        <label for="departamento">Departamento</label>
+                        <div class="campo-input-registro">
+                            <i class="fa-solid fa-map"></i>
+                            <select class="form-select" th:field="*{departamento}" required>
+                                <option value="">Selecciona departamento</option>
+                                <option th:each="departamentoItem : ${departamentos}"
+                                        th:value="${departamentoItem}"
+                                        th:text="${departamentoItem}">Lambayeque</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="grupo-input">
+                        <label for="provincia">Provincia</label>
+                        <div class="campo-input-registro">
+                            <i class="fa-solid fa-location-dot"></i>
+                            <input type="text" class="form-control" th:field="*{provincia}" placeholder="Ej: Chiclayo" required>
+                        </div>
+                    </div>
+
+                    <div class="grupo-input">
+                        <label for="distrito">Distrito</label>
+                        <div class="campo-input-registro">
+                            <i class="fa-solid fa-location-crosshairs"></i>
+                            <input type="text" class="form-control" th:field="*{distrito}" placeholder="Ej: La Victoria" required>
+                        </div>
+                    </div>
+
+                    <div class="grupo-input">
+                        <label for="domicilio">Domicilio (Calle / Urb)</label>
+                        <div class="campo-input-registro">
+                            <i class="fa-solid fa-location-dot"></i>
+                            <input type="text" class="form-control" th:field="*{domicilio}" placeholder="Ej: Av. Balta 123" required>
+                        </div>
+                    </div>
+
+                    <div class="grupo-input">
+                        <label for="numeroLicencia">N° de Licencia (Brevete)</label>
+                        <div class="campo-input-registro">
+                            <i class="fa-solid fa-id-badge"></i>
+                            <input type="text" class="form-control" th:field="*{numeroLicencia}" placeholder="Ej: Q-89237461" required>
+                        </div>
+                    </div>
+
+                    <div class="grupo-input">
+                        <label for="categoriaLicencia">Categoría Licencia</label>
+                        <div class="campo-input-registro">
+                            <i class="fa-solid fa-car"></i>
+                            <input type="text" class="form-control" th:field="*{categoriaLicencia}" placeholder="Ej: A-I" required>
+                        </div>
+                    </div>
+
+                    <div class="grupo-input">
+                        <label for="vencimientoLicencia">Vencimiento Licencia</label>
+                        <div class="campo-input-registro">
+                            <i class="fa-solid fa-calendar-xmark"></i>
+                            <input type="date" class="form-control" th:field="*{vencimientoLicencia}" required>
+                        </div>
+                    </div>
+                </div>
+
+                <hr class="separador-registro">
+
+                <div class="grid-dos-columnas">
+                    <div class="grupo-input">
+                        <label for="contrasena">Contraseña</label>
+                        <div class="campo-input-registro">
+                            <i class="fa-solid fa-lock"></i>
+                            <input type="password" class="form-control" th:field="*{contrasena}" placeholder="Crea una contraseña" required>
+                            <button type="button" class="btn-mostrar-password" id="btnMostrarPassword1">
+                                <i class="fa-regular fa-eye"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="grupo-input">
+                        <label for="confirmarContrasena">Confirmar Contraseña</label>
+                        <div class="campo-input-registro">
+                            <i class="fa-solid fa-lock"></i>
+                            <input type="password" class="form-control" id="confirmarContrasena" name="confirmarContrasena" placeholder="Repite tu contraseña" required>
+                            <button type="button" class="btn-mostrar-password" id="btnMostrarPassword2">
+                                <i class="fa-regular fa-eye"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="alert alert-danger py-2 mb-0" role="alert" th:if="${errorRegistro}" th:text="${errorRegistro}">
+                    No se pudo registrar la cuenta.
+                </div>
+                <div id="mensajeErrorRegistro" class="mensaje-error-oculto">Las contraseñas no coinciden</div>
+
+                <button type="submit" class="boton-accion-naranja boton-bloque btn">
+                    Registrarme <i class="fa-solid fa-arrow-right"></i>
+                </button>
+            </form>
+
+            <div class="pie-registro">
+                <p>¿Ya tienes una cuenta? <a href="/login" th:href="@{/login}" class="enlace-login">Inicia sesión aquí</a></p>
+            </div>
+        </div>
+    </div>
+
+    <script th:if="${usuarioRegistrado != null}" th:inline="javascript">
+        const usuarioThymeleaf = {
+            logueado: true,
+            idUsuario: /*[[${usuarioRegistrado.idUsuario}]]*/ null,
+            nombre: /*[[${usuarioRegistrado.nombres + ' ' + usuarioRegistrado.apellidos}]]*/ '',
+            nombres: /*[[${usuarioRegistrado.nombres}]]*/ '',
+            apellidos: /*[[${usuarioRegistrado.apellidos}]]*/ '',
+            correo: /*[[${usuarioRegistrado.correo}]]*/ '',
+            telefono: /*[[${usuarioRegistrado.telefono}]]*/ '',
+            perfil: /*[[${usuarioRegistrado.nombrePerfil}]]*/ 'Cliente'
+        };
+        localStorage.setItem('carmovo_sesion', JSON.stringify(usuarioThymeleaf));
+        localStorage.setItem('usuarioCarmovoLogueado', 'true');
+        window.location.replace('/miCuenta');
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/js/servicios/api.cliente.js" th:src="@{/js/servicios/api.cliente.js}"></script>
+    <script src="/js/paginas/registro.js" th:src="@{/js/paginas/registro.js}"></script>
+</body>
+</html>

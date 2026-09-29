@@ -1,0 +1,242 @@
+:root {
+    --fondo-principal: #090e17;
+    --fondo-tarjeta: #121927;
+    --color-naranja: #ff5a36;
+    --color-blanco: #ffffff;
+    --texto-gris: #8b95a5;
+    --texto-secundario: #94a3b8;
+    --borde-oscuro: #1f2937;
+    --rojo-error: #ef4444;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Montserrat', sans-serif;
+    background-color: var(--fondo-principal);
+    color: var(--color-blanco);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+    transition: 0.3s;
+}
+
+.pantalla-centrada {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
+    background-image: radial-gradient(circle at top right, #147a5920, transparent 40%),
+                      radial-gradient(circle at bottom left, #ff5a3615, transparent 40%);
+}
+
+.tarjeta-login {
+    background-color: var(--fondo-tarjeta);
+    width: 100%;
+    max-width: 480px;
+    border-radius: 16px;
+    padding: 40px;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.5);
+    border: 1px solid var(--borde-oscuro);
+    position: relative;
+}
+
+.btn-volver {
+    position: absolute;
+    top: 25px;
+    left: 25px;
+    color: var(--texto-secundario);
+    font-size: 1.3rem;
+    transition: 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    background-color: var(--fondo-principal);
+    border: 1px solid var(--borde-oscuro);
+}
+
+.btn-volver:hover {
+    color: var(--color-blanco);
+    background-color: var(--color-naranja);
+    border-color: var(--color-naranja);
+}
+
+.cabecera-login {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.logo-login {
+    width: 140px;
+    height: auto;
+    margin-bottom: 20px;
+    box-shadow: 0px 2px 12px var(--color-naranja);
+    border-radius: 8px;
+}
+
+.titulo-login {
+    font-family: 'Outfit', sans-serif;
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--color-blanco);
+    margin-bottom: 8px;
+}
+
+.subtitulo-login {
+    color: var(--texto-secundario);
+    font-size: 0.95rem;
+}
+
+.formulario-acceso {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.grupo-input {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.grupo-input label {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--texto-secundario);
+}
+
+.campo-input-login {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.campo-input-login i:first-child {
+    position: absolute;
+    left: 15px;
+    color: var(--texto-gris);
+    font-size: 1.1rem;
+}
+
+.campo-input-login input {
+    width: 100%;
+    background-color: var(--fondo-principal);
+    border: 1px solid var(--borde-oscuro);
+    border-radius: 8px;
+    padding: 14px 15px 14px 45px;
+    color: var(--color-blanco);
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1rem;
+    outline: none;
+    transition: 0.3s;
+}
+
+.campo-input-login input:focus {
+    border-color: var(--color-naranja);
+    box-shadow: 0 0 0 2px rgba(255, 90, 54, 0.2);
+}
+
+.campo-input-login input::placeholder {
+    color: #4b5563;
+}
+
+.btn-mostrar-password {
+    position: absolute;
+    right: 15px;
+    background: transparent;
+    border: none;
+    color: var(--texto-gris);
+    cursor: pointer;
+    font-size: 1.1rem;
+    transition: 0.3s;
+}
+
+.btn-mostrar-password:hover {
+    color: var(--color-blanco);
+}
+
+.opciones-extra {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.9rem;
+}
+
+.checkbox-recordar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--texto-secundario);
+    cursor: pointer;
+}
+
+.checkbox-recordar input[type="checkbox"] {
+    accent-color: var(--color-naranja);
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+}
+
+.enlace-olvido {
+    color: var(--color-naranja);
+    font-weight: 600;
+}
+
+.enlace-olvido:hover {
+    color: #e04a29;
+}
+
+.boton-accion-naranja {
+    background-color: var(--color-naranja);
+    color: var(--color-blanco);
+    border: none;
+    padding: 16px;
+    border-radius: 8px;
+    font-weight: 700;
+    font-size: 1.1rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    transition: 0.3s;
+    font-family: 'Montserrat', sans-serif;
+    margin-top: 10px;
+}
+
+.boton-accion-naranja:hover {
+    background-color: #e04a29;
+}
+
+.boton-bloque {
+    width: 100%;
+}
+
+.pie-login {
+    margin-top: 30px;
+    text-align: center;
+    font-size: 0.95rem;
+    color: var(--texto-secundario);
+}
+
+.enlace-registro {
+    color: var(--color-blanco);
+    font-weight: 700;
+}
+
+.enlace-registro:hover {
+    color: var(--color-naranja);
+}

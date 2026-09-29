@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${titulo}">CARMOVO - Thymeleaf</title>
+    <link rel="stylesheet" th:href="@{/css/thymeleaf-prueba.css}">
+</head>
+<body>
+    <main class="contenedor">
+        <section class="tarjeta">
+            <p class="etiqueta">Segundo avance APF2</p>
+            <h1 th:text="${titulo}">CARMOVO - Thymeleaf activo</h1>
+            <p th:text="${mensaje}">Spring Boot está renderizando una vista Thymeleaf.</p>
+            <p class="ruta">Ruta de prueba: <strong>/thymeleaf-prueba</strong></p>
+        </section>
+    </main>
+</body>
+</html>
