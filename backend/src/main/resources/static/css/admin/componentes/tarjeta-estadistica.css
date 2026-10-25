@@ -1,0 +1,212 @@
+
+/* ==========================================================================
+   CARMOVO - ADMINISTRADOR
+   TARJETAS DE ESTADISTICAS - PALETA AZUL PASTEL
+   ========================================================================== */
+
+/* ==========================================================================
+   DISTRIBUCION DE TARJETAS
+   ========================================================================== */
+
+.grid-estadisticas {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 16px;
+    min-width: 0;
+}
+
+/* ==========================================================================
+   TARJETA PRINCIPAL
+   ========================================================================== */
+
+.tarjeta-estadistica {
+    position: relative;
+
+    width: 100%;
+    height: 100%;
+    min-width: 0;
+    min-height: 145px;
+
+    padding: 20px;
+    overflow: hidden;
+
+    border: 1px solid var(--admin-borde);
+    border-radius: var(--admin-radio);
+
+    background: linear-gradient(
+            145deg,
+            #FFFFFF 0%,
+            #F3F8FC 100%
+    );
+
+    box-shadow: var(--admin-sombra);
+
+    color: var(--admin-texto);
+
+    transition:
+            border-color 0.2s ease,
+            box-shadow 0.2s ease,
+            transform 0.2s ease;
+}
+
+.tarjeta-estadistica:hover {
+    border-color: #A9D1EA;
+    box-shadow: 0 10px 25px rgba(49, 90, 117, 0.12);
+    transform: translateY(-2px);
+}
+
+/* Decoracion suave en la esquina inferior */
+.tarjeta-estadistica::after {
+    content: '';
+
+    position: absolute;
+    width: 95px;
+    height: 95px;
+
+    right: -25px;
+    bottom: -40px;
+
+    border-radius: 50%;
+    background: rgba(169, 209, 234, 0.16);
+
+    pointer-events: none;
+}
+
+/* ==========================================================================
+   PARTE SUPERIOR
+   ========================================================================== */
+
+.tarjeta-estadistica__superior {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+
+    min-width: 0;
+}
+
+/* ==========================================================================
+   TITULO DE LA ESTADISTICA
+   ========================================================================== */
+
+.tarjeta-estadistica__titulo {
+    color: #587284;
+    font-size: 0.78rem;
+    font-weight: 700;
+    overflow-wrap: anywhere;
+}
+
+/* ==========================================================================
+   ICONO GENERAL
+   ========================================================================== */
+
+.tarjeta-estadistica__icono {
+    width: 42px;
+    height: 42px;
+    flex-shrink: 0;
+
+    display: grid;
+    place-items: center;
+
+    border-radius: 11px;
+    font-size: 1rem;
+
+    background: #DCECF7;
+    color: #315A75;
+}
+
+/* ==========================================================================
+   VEHICULOS DISPONIBLES
+   ========================================================================== */
+
+.tarjeta-estadistica--disponible .tarjeta-estadistica__icono {
+    color: #376B50;
+    background: #E4F3E9;
+}
+
+/* ==========================================================================
+   VEHICULOS ALQUILADOS / RESERVADOS
+   ========================================================================== */
+
+.tarjeta-estadistica--alquilado .tarjeta-estadistica__icono {
+    color: #527F9C;
+    background: #DCECF7;
+}
+
+/* ==========================================================================
+   VEHICULOS EN MANTENIMIENTO
+   ========================================================================== */
+
+.tarjeta-estadistica--mantenimiento .tarjeta-estadistica__icono {
+    color: #A0782F;
+    background: #FFF2D8;
+}
+
+/* ==========================================================================
+   VALOR PRINCIPAL
+   ========================================================================== */
+
+.tarjeta-estadistica__valor {
+    margin-top: 16px;
+
+    color: #315A75;
+    font-size: 1.85rem;
+    line-height: 1;
+    font-weight: 800;
+}
+
+/* ==========================================================================
+   TEXTO DE DETALLE
+   ========================================================================== */
+
+.tarjeta-estadistica__detalle {
+    margin-top: 9px;
+
+    color: #587284;
+    font-size: 0.72rem;
+
+    overflow-wrap: anywhere;
+}
+
+/* ==========================================================================
+   RESPONSIVE - TABLETAS
+   ========================================================================== */
+
+@media (max-width: 1180px) {
+    .grid-estadisticas {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+/* ==========================================================================
+   RESPONSIVE - CELULARES
+   ========================================================================== */
+
+@media (max-width: 560px) {
+    .grid-estadisticas {
+        grid-template-columns: 1fr;
+    }
+
+    .tarjeta-estadistica {
+        min-height: 135px;
+        padding: 18px;
+    }
+
+    .tarjeta-estadistica__valor {
+        font-size: 1.7rem;
+    }
+}
+
+/* ==========================================================================
+   ACCESIBILIDAD
+   ========================================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+    .tarjeta-estadistica {
+        transition: none;
+    }
+
+    .tarjeta-estadistica:hover {
+        transform: none;
+    }
+}

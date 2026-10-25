@@ -11,192 +11,436 @@
     <link rel="stylesheet" href="/css/paginas/registro.css" th:href="@{/css/paginas/registro.css}">
 </head>
 <body>
-    <div class="pantalla-centrada container-fluid">
-        <div class="tarjeta-registro">
-            <div class="cabecera-registro">
-                <a href="/" th:href="@{/}">
-                    <img src="/recursos/imagenes/home/logo-carmovo4.jpg" th:src="@{/recursos/imagenes/home/logo-carmovo4.jpg}" alt="Logo Carmovo" class="logo-registro">
+<div class="pantalla-centrada container-fluid">
+    <div class="tarjeta-registro">
+        <div class="cabecera-registro">
+            <a href="/" th:href="@{/}">
+                <img src="/recursos/imagenes/home/logo-carmovo-transparente.png"
+                     th:src="@{/recursos/imagenes/home/logo-carmovo-transparente.png}"
+                     alt="Logo CARMOVO"
+                     class="logo-registro" style="width: 200px; max-width: 100%; height: auto; object-fit: contain;">
+            </a>
+            <h1 class="titulo-registro">Crea tu cuenta</h1>
+            <p class="subtitulo-registro">Únete a Carmovo y empieza tu próxima aventura</p>
+        </div>
+
+        <form id="formularioRegistro"
+              class="formulario-acceso needs-validation"
+              th:action="@{/registro}"
+              th:object="${registroForm}"
+              method="post">
+
+            <div class="grid-dos-columnas">
+
+                <div class="grupo-input">
+                    <label for="nombres">Nombres</label>
+                    <div class="campo-input-registro">
+                        <i class="fa-regular fa-user"></i>
+                        <input type="text"
+                               id="nombres"
+                               class="form-control"
+                               th:field="*{nombres}"
+                               th:classappend="${#fields.hasErrors('nombres')} ? 'is-invalid' : ''"
+                               placeholder="Tus nombres"
+                               minlength="3"
+                               maxlength="100"
+                               required>
+                    </div>
+                    <div class="text-danger small mt-1"
+                         th:if="${#fields.hasErrors('nombres')}"
+                         th:errors="*{nombres}">
+                        Ingresa nombres válidos.
+                    </div>
+                </div>
+
+                <div class="grupo-input">
+                    <label for="apellidos">Apellidos</label>
+                    <div class="campo-input-registro">
+                        <i class="fa-regular fa-user"></i>
+                        <input type="text"
+                               id="apellidos"
+                               class="form-control"
+                               th:field="*{apellidos}"
+                               th:classappend="${#fields.hasErrors('apellidos')} ? 'is-invalid' : ''"
+                               placeholder="Tus apellidos"
+                               minlength="3"
+                               maxlength="100"
+                               required>
+                    </div>
+                    <div class="text-danger small mt-1"
+                         th:if="${#fields.hasErrors('apellidos')}"
+                         th:errors="*{apellidos}">
+                        Ingresa apellidos válidos.
+                    </div>
+                </div>
+
+                <div class="grupo-input">
+                    <label for="correo">Correo Electrónico</label>
+                    <div class="campo-input-registro">
+                        <i class="fa-regular fa-envelope"></i>
+                        <input type="email"
+                               id="correo"
+                               class="form-control"
+                               th:field="*{correo}"
+                               th:classappend="${#fields.hasErrors('correo')} ? 'is-invalid' : ''"
+                               placeholder="ejemplo@gmail.com"
+                               required>
+                    </div>
+                    <div class="text-danger small mt-1"
+                         th:if="${#fields.hasErrors('correo')}"
+                         th:errors="*{correo}">
+                        Ingresa un correo Gmail válido.
+                    </div>
+                </div>
+
+                <div class="grupo-input">
+                    <label for="telefono">Teléfono</label>
+                    <div class="campo-input-registro">
+                        <i class="fa-solid fa-phone"></i>
+                        <input type="tel"
+                               id="telefono"
+                               class="form-control"
+                               th:field="*{telefono}"
+                               th:classappend="${#fields.hasErrors('telefono')} ? 'is-invalid' : ''"
+                               placeholder="Ej: 987654321"
+                               inputmode="numeric"
+                               pattern="9[0-9]{8}"
+                               minlength="9"
+                               maxlength="9"
+                               title="Debe tener 9 números y comenzar con 9."
+                               required>
+                    </div>
+                    <div class="text-danger small mt-1"
+                         th:if="${#fields.hasErrors('telefono')}"
+                         th:errors="*{telefono}">
+                        Ingresa un teléfono válido.
+                    </div>
+                </div>
+
+                <div class="grupo-input">
+                    <label for="documento">DNI</label>
+                    <div class="campo-input-registro">
+                        <i class="fa-regular fa-id-card"></i>
+                        <input type="text"
+                               id="documento"
+                               class="form-control"
+                               th:field="*{documento}"
+                               th:classappend="${#fields.hasErrors('documento')} ? 'is-invalid' : ''"
+                               placeholder="Ej: 12345678"
+                               inputmode="numeric"
+                               pattern="[0-9]{8}"
+                               minlength="8"
+                               maxlength="8"
+                               title="El DNI debe tener exactamente 8 números."
+                               required>
+                    </div>
+                    <div class="text-danger small mt-1"
+                         th:if="${#fields.hasErrors('documento')}"
+                         th:errors="*{documento}">
+                        Ingresa un DNI válido.
+                    </div>
+                </div>
+
+                <div class="grupo-input">
+                    <label for="fechaNacimiento">Fecha de Nacimiento</label>
+                    <div class="campo-input-registro">
+                        <i class="fa-regular fa-calendar-days"></i>
+                        <input type="date"
+                               id="fechaNacimiento"
+                               class="form-control"
+                               th:field="*{fechaNacimiento}"
+                               th:classappend="${#fields.hasErrors('fechaNacimiento')} ? 'is-invalid' : ''"
+                               th:attr="max=${#temporals.format(#temporals.createToday(), 'yyyy-MM-dd')}"
+                               required>
+                    </div>
+                    <div class="text-danger small mt-1"
+                         th:if="${#fields.hasErrors('fechaNacimiento')}"
+                         th:errors="*{fechaNacimiento}">
+                        Ingresa una fecha de nacimiento válida.
+                    </div>
+                </div>
+
+                <div class="grupo-input">
+                    <label for="departamento">Departamento</label>
+                    <div class="campo-input-registro">
+                        <i class="fa-solid fa-map"></i>
+                        <select id="departamento"
+                                class="form-select"
+                                th:field="*{departamento}"
+                                th:classappend="${#fields.hasErrors('departamento')} ? 'is-invalid' : ''"
+                                required>
+                            <option value="">Selecciona departamento</option>
+                            <option th:each="departamentoItem : ${departamentos}"
+                                    th:value="${departamentoItem}"
+                                    th:text="${departamentoItem}">Lambayeque</option>
+                        </select>
+                    </div>
+                    <div class="text-danger small mt-1"
+                         th:if="${#fields.hasErrors('departamento')}"
+                         th:errors="*{departamento}">
+                        Selecciona un departamento.
+                    </div>
+                </div>
+
+                <div class="grupo-input">
+                    <label for="provincia">Provincia</label>
+                    <div class="campo-input-registro">
+                        <i class="fa-solid fa-location-dot"></i>
+                        <select id="provincia"
+                                class="form-select"
+                                th:field="*{provincia}"
+                                th:classappend="${#fields.hasErrors('provincia')} ? 'is-invalid' : ''"
+                                required>
+                            <option value="">Selecciona primero un departamento</option>
+                            <option th:if="${registroForm.provincia != null and !#strings.isEmpty(registroForm.provincia)}"
+                                    th:value="${registroForm.provincia}"
+                                    th:text="${registroForm.provincia}">
+                            </option>
+                        </select>
+                    </div>
+                    <div class="text-danger small mt-1"
+                         th:if="${#fields.hasErrors('provincia')}"
+                         th:errors="*{provincia}">
+                        Selecciona una provincia.
+                    </div>
+                </div>
+
+                <div class="grupo-input">
+                    <label for="distrito">Distrito</label>
+                    <div class="campo-input-registro">
+                        <i class="fa-solid fa-location-crosshairs"></i>
+                        <select id="distrito"
+                                class="form-select"
+                                th:field="*{distrito}"
+                                th:classappend="${#fields.hasErrors('distrito')} ? 'is-invalid' : ''"
+                                required>
+                            <option value="">Selecciona primero una provincia</option>
+                            <option th:if="${registroForm.distrito != null and !#strings.isEmpty(registroForm.distrito)}"
+                                    th:value="${registroForm.distrito}"
+                                    th:text="${registroForm.distrito}">
+                            </option>
+                        </select>
+                    </div>
+                    <div class="text-danger small mt-1"
+                         th:if="${#fields.hasErrors('distrito')}"
+                         th:errors="*{distrito}">
+                        Selecciona un distrito.
+                    </div>
+                </div>
+
+                <div class="grupo-input">
+                    <label for="domicilio">Domicilio (Calle / Urb)</label>
+                    <div class="campo-input-registro">
+                        <i class="fa-solid fa-location-dot"></i>
+                        <input type="text"
+                               id="domicilio"
+                               class="form-control"
+                               th:field="*{domicilio}"
+                               th:classappend="${#fields.hasErrors('domicilio')} ? 'is-invalid' : ''"
+                               placeholder="Ej: Av. Balta 123"
+                               maxlength="200"
+                               required>
+                    </div>
+                    <div class="text-danger small mt-1"
+                         th:if="${#fields.hasErrors('domicilio')}"
+                         th:errors="*{domicilio}">
+                        Ingresa tu domicilio.
+                    </div>
+                </div>
+
+                <div class="grupo-input">
+                    <label for="numeroLicencia">N° de Licencia (Brevete)</label>
+                    <div class="campo-input-registro">
+                        <i class="fa-solid fa-id-badge"></i>
+                        <input type="text"
+                               id="numeroLicencia"
+                               class="form-control"
+                               th:field="*{numeroLicencia}"
+                               th:classappend="${#fields.hasErrors('numeroLicencia')} ? 'is-invalid' : ''"
+                               placeholder="Ej: Q-89237461"
+                               minlength="7"
+                               maxlength="15"
+                               pattern="[A-Za-z]-?[0-9]{6,12}[Ee]?"
+                               title="Debe comenzar con una letra, continuar con 6 a 12 números y puede terminar en E."
+                               required>
+                    </div>
+                    <div class="text-danger small mt-1"
+                         th:if="${#fields.hasErrors('numeroLicencia')}"
+                         th:errors="*{numeroLicencia}">
+                        Ingresa un número de licencia válido.
+                    </div>
+                </div>
+
+                <div class="grupo-input">
+                    <label for="categoriaLicencia">Categoría Licencia</label>
+                    <div class="campo-input-registro">
+                        <i class="fa-solid fa-car"></i>
+                        <select id="categoriaLicencia"
+                                class="form-select"
+                                th:field="*{categoriaLicencia}"
+                                th:classappend="${#fields.hasErrors('categoriaLicencia')} ? 'is-invalid' : ''"
+                                required>
+                            <option value="">Selecciona una categoría</option>
+                            <option value="A-I">A-I</option>
+                            <option value="A-IIa">A-IIa</option>
+                            <option value="A-IIb">A-IIb</option>
+                            <option value="A-IIIa">A-IIIa</option>
+                            <option value="A-IIIb">A-IIIb</option>
+                            <option value="A-IIIc">A-IIIc</option>
+                        </select>
+                    </div>
+                    <div class="text-danger small mt-1"
+                         th:if="${#fields.hasErrors('categoriaLicencia')}"
+                         th:errors="*{categoriaLicencia}">
+                        Selecciona una categoría válida.
+                    </div>
+                </div>
+
+                <div class="grupo-input">
+                    <label for="vencimientoLicencia">Vencimiento Licencia</label>
+                    <div class="campo-input-registro">
+                        <i class="fa-solid fa-calendar-xmark"></i>
+                        <input type="date"
+                               id="vencimientoLicencia"
+                               class="form-control"
+                               th:field="*{vencimientoLicencia}"
+                               th:classappend="${#fields.hasErrors('vencimientoLicencia')} ? 'is-invalid' : ''"
+                               th:attr="min=${#temporals.format(#temporals.createToday(), 'yyyy-MM-dd')}"
+                               required>
+                    </div>
+                    <div class="text-danger small mt-1"
+                         th:if="${#fields.hasErrors('vencimientoLicencia')}"
+                         th:errors="*{vencimientoLicencia}">
+                        La licencia no debe estar vencida.
+                    </div>
+                </div>
+
+            </div>
+
+            <hr class="separador-registro">
+
+            <div class="grid-dos-columnas">
+
+                <div class="grupo-input">
+                    <label for="contrasena">Contraseña</label>
+                    <div class="campo-input-registro campo-password-registro">
+                        <input type="password"
+                               id="contrasena"
+                               class="form-control"
+                               th:field="*{contrasena}"
+                               th:classappend="${#fields.hasErrors('contrasena')} ? 'is-invalid' : ''"
+                               placeholder="Crea una contraseña"
+                               minlength="8"
+                               maxlength="12"
+                               title="Entre 8 y 12 caracteres, con mayúscula, minúscula, número y símbolo. No debe incluir datos personales."
+                               autocomplete="new-password"
+                               aria-describedby="requisitosContrasena"
+                               required>
+                        <button type="button"
+                                class="btn-mostrar-password"
+                                id="btnMostrarPassword1"
+                                aria-label="Mostrar u ocultar contraseña">
+                            <i class="fa-regular fa-eye"></i>
+                        </button>
+                    </div>
+                    <div class="text-danger small mt-1"
+                         th:if="${#fields.hasErrors('contrasena')}"
+                         th:errors="*{contrasena}">
+                        La contraseña debe cumplir los requisitos de seguridad.
+                    </div>
+                    <div class="text-danger small mt-1"
+                         th:if="${#fields.hasErrors('contrasenaSinDatosPersonales')}"
+                         th:errors="*{contrasenaSinDatosPersonales}">
+                        La contraseña no debe incluir datos personales.
+                    </div>
+                    <div id="requisitosContrasena"
+                         class="form-text"
+                         style="display: none;"
+                         aria-live="polite">
+                        Usa entre 8 y 12 caracteres, al menos una mayúscula,
+                        una minúscula, un número y un símbolo (@, #, $, %, *, _ o -).
+                        No incluyas tu DNI, nombres, apellidos ni fecha de nacimiento.
+                    </div>
+                </div>
+
+                <div class="grupo-input">
+                    <label for="confirmarContrasena">Confirmar Contraseña</label>
+                    <div class="campo-input-registro campo-password-registro">
+                        <input type="password"
+                               class="form-control"
+                               id="confirmarContrasena"
+                               name="confirmarContrasena"
+                               placeholder="Repite tu contraseña"
+                               minlength="8"
+                               maxlength="12"
+                               autocomplete="new-password"
+                               required>
+                        <button type="button"
+                                class="btn-mostrar-password"
+                                id="btnMostrarPassword2"
+                                aria-label="Mostrar u ocultar confirmación de contraseña">
+                            <i class="fa-regular fa-eye"></i>
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="alert alert-danger py-2 mb-0"
+                 role="alert"
+                 th:if="${errorRegistro}"
+                 th:text="${errorRegistro}">
+                No se pudo registrar la cuenta.
+            </div>
+
+            <div id="mensajeErrorRegistro"
+                 class="mensaje-error-oculto"
+                 role="alert"
+                 aria-live="polite">
+                No se pudo completar el registro.
+            </div>
+
+            <button type="submit"
+                    class="boton-accion-naranja boton-bloque btn">
+                Registrarme <i class="fa-solid fa-arrow-right"></i>
+            </button>
+
+        </form>
+
+        <div class="pie-registro">
+            <p>
+                ¿Ya tienes una cuenta?
+                <a href="/login"
+                   th:href="@{/login}"
+                   class="enlace-login">
+                    Inicia sesión aquí
                 </a>
-                <h1 class="titulo-registro">Crea tu cuenta</h1>
-                <p class="subtitulo-registro">Únete a Carmovo y empieza tu próxima aventura</p>
-            </div>
-
-            <form id="formularioRegistro"
-                  class="formulario-acceso needs-validation"
-                  th:action="@{/registro}"
-                  th:object="${registroForm}"
-                  method="post">
-
-                <div class="grid-dos-columnas">
-                    <div class="grupo-input">
-                        <label for="nombres">Nombres</label>
-                        <div class="campo-input-registro">
-                            <i class="fa-regular fa-user"></i>
-                            <input type="text" class="form-control" th:field="*{nombres}" placeholder="Tus nombres" required>
-                        </div>
-                    </div>
-
-                    <div class="grupo-input">
-                        <label for="apellidos">Apellidos</label>
-                        <div class="campo-input-registro">
-                            <i class="fa-regular fa-user"></i>
-                            <input type="text" class="form-control" th:field="*{apellidos}" placeholder="Tus apellidos" required>
-                        </div>
-                    </div>
-
-                    <div class="grupo-input">
-                        <label for="correo">Correo Electrónico</label>
-                        <div class="campo-input-registro">
-                            <i class="fa-regular fa-envelope"></i>
-                            <input type="email" class="form-control" th:field="*{correo}" placeholder="ejemplo@correo.com" required>
-                        </div>
-                    </div>
-
-                    <div class="grupo-input">
-                        <label for="telefono">Teléfono</label>
-                        <div class="campo-input-registro">
-                            <i class="fa-solid fa-phone"></i>
-                            <input type="tel" class="form-control" th:field="*{telefono}" placeholder="Tu número" required>
-                        </div>
-                    </div>
-
-                    <div class="grupo-input">
-                        <label for="documento">DNI / Pasaporte</label>
-                        <div class="campo-input-registro">
-                            <i class="fa-regular fa-id-card"></i>
-                            <input type="text" class="form-control" th:field="*{documento}" placeholder="N° de documento" required>
-                        </div>
-                    </div>
-
-                    <div class="grupo-input">
-                        <label for="fechaNacimiento">Fecha de Nacimiento</label>
-                        <div class="campo-input-registro">
-                            <i class="fa-regular fa-calendar-days"></i>
-                            <input type="date" class="form-control" th:field="*{fechaNacimiento}" required>
-                        </div>
-                    </div>
-
-                    <div class="grupo-input">
-                        <label for="departamento">Departamento</label>
-                        <div class="campo-input-registro">
-                            <i class="fa-solid fa-map"></i>
-                            <select class="form-select" th:field="*{departamento}" required>
-                                <option value="">Selecciona departamento</option>
-                                <option th:each="departamentoItem : ${departamentos}"
-                                        th:value="${departamentoItem}"
-                                        th:text="${departamentoItem}">Lambayeque</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <div class="grupo-input">
-                        <label for="provincia">Provincia</label>
-                        <div class="campo-input-registro">
-                            <i class="fa-solid fa-location-dot"></i>
-                            <input type="text" class="form-control" th:field="*{provincia}" placeholder="Ej: Chiclayo" required>
-                        </div>
-                    </div>
-
-                    <div class="grupo-input">
-                        <label for="distrito">Distrito</label>
-                        <div class="campo-input-registro">
-                            <i class="fa-solid fa-location-crosshairs"></i>
-                            <input type="text" class="form-control" th:field="*{distrito}" placeholder="Ej: La Victoria" required>
-                        </div>
-                    </div>
-
-                    <div class="grupo-input">
-                        <label for="domicilio">Domicilio (Calle / Urb)</label>
-                        <div class="campo-input-registro">
-                            <i class="fa-solid fa-location-dot"></i>
-                            <input type="text" class="form-control" th:field="*{domicilio}" placeholder="Ej: Av. Balta 123" required>
-                        </div>
-                    </div>
-
-                    <div class="grupo-input">
-                        <label for="numeroLicencia">N° de Licencia (Brevete)</label>
-                        <div class="campo-input-registro">
-                            <i class="fa-solid fa-id-badge"></i>
-                            <input type="text" class="form-control" th:field="*{numeroLicencia}" placeholder="Ej: Q-89237461" required>
-                        </div>
-                    </div>
-
-                    <div class="grupo-input">
-                        <label for="categoriaLicencia">Categoría Licencia</label>
-                        <div class="campo-input-registro">
-                            <i class="fa-solid fa-car"></i>
-                            <input type="text" class="form-control" th:field="*{categoriaLicencia}" placeholder="Ej: A-I" required>
-                        </div>
-                    </div>
-
-                    <div class="grupo-input">
-                        <label for="vencimientoLicencia">Vencimiento Licencia</label>
-                        <div class="campo-input-registro">
-                            <i class="fa-solid fa-calendar-xmark"></i>
-                            <input type="date" class="form-control" th:field="*{vencimientoLicencia}" required>
-                        </div>
-                    </div>
-                </div>
-
-                <hr class="separador-registro">
-
-                <div class="grid-dos-columnas">
-                    <div class="grupo-input">
-                        <label for="contrasena">Contraseña</label>
-                        <div class="campo-input-registro">
-                            <i class="fa-solid fa-lock"></i>
-                            <input type="password" class="form-control" th:field="*{contrasena}" placeholder="Crea una contraseña" required>
-                            <button type="button" class="btn-mostrar-password" id="btnMostrarPassword1">
-                                <i class="fa-regular fa-eye"></i>
-                            </button>
-                        </div>
-                    </div>
-
-                    <div class="grupo-input">
-                        <label for="confirmarContrasena">Confirmar Contraseña</label>
-                        <div class="campo-input-registro">
-                            <i class="fa-solid fa-lock"></i>
-                            <input type="password" class="form-control" id="confirmarContrasena" name="confirmarContrasena" placeholder="Repite tu contraseña" required>
-                            <button type="button" class="btn-mostrar-password" id="btnMostrarPassword2">
-                                <i class="fa-regular fa-eye"></i>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="alert alert-danger py-2 mb-0" role="alert" th:if="${errorRegistro}" th:text="${errorRegistro}">
-                    No se pudo registrar la cuenta.
-                </div>
-                <div id="mensajeErrorRegistro" class="mensaje-error-oculto">Las contraseñas no coinciden</div>
-
-                <button type="submit" class="boton-accion-naranja boton-bloque btn">
-                    Registrarme <i class="fa-solid fa-arrow-right"></i>
-                </button>
-            </form>
-
-            <div class="pie-registro">
-                <p>¿Ya tienes una cuenta? <a href="/login" th:href="@{/login}" class="enlace-login">Inicia sesión aquí</a></p>
-            </div>
+            </p>
         </div>
     </div>
+</div>
 
-    <script th:if="${usuarioRegistrado != null}" th:inline="javascript">
-        const usuarioThymeleaf = {
-            logueado: true,
-            idUsuario: /*[[${usuarioRegistrado.idUsuario}]]*/ null,
-            nombre: /*[[${usuarioRegistrado.nombres + ' ' + usuarioRegistrado.apellidos}]]*/ '',
-            nombres: /*[[${usuarioRegistrado.nombres}]]*/ '',
-            apellidos: /*[[${usuarioRegistrado.apellidos}]]*/ '',
-            correo: /*[[${usuarioRegistrado.correo}]]*/ '',
-            telefono: /*[[${usuarioRegistrado.telefono}]]*/ '',
-            perfil: /*[[${usuarioRegistrado.nombrePerfil}]]*/ 'Cliente'
-        };
-        localStorage.setItem('carmovo_sesion', JSON.stringify(usuarioThymeleaf));
-        localStorage.setItem('usuarioCarmovoLogueado', 'true');
-        window.location.replace('/miCuenta');
-    </script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="/js/servicios/api.cliente.js" th:src="@{/js/servicios/api.cliente.js}"></script>
-    <script src="/js/paginas/registro.js" th:src="@{/js/paginas/registro.js}"></script>
+<script th:if="${usuarioRegistrado != null}" th:inline="javascript">
+    const usuarioThymeleaf = {
+        logueado: true,
+        idUsuario: /*[[${usuarioRegistrado.idUsuario}]]*/ null,
+        nombre: /*[[${usuarioRegistrado.nombres + ' ' + usuarioRegistrado.apellidos}]]*/ '',
+        nombres: /*[[${usuarioRegistrado.nombres}]]*/ '',
+        apellidos: /*[[${usuarioRegistrado.apellidos}]]*/ '',
+        correo: /*[[${usuarioRegistrado.correo}]]*/ '',
+        telefono: /*[[${usuarioRegistrado.telefono}]]*/ '',
+        perfil: /*[[${usuarioRegistrado.nombrePerfil}]]*/ 'Cliente'
+    };
+
+    localStorage.setItem('carmovo_sesion', JSON.stringify(usuarioThymeleaf));
+    localStorage.setItem('usuarioCarmovoLogueado', 'true');
+    window.location.replace('/miCuenta');
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="/js/servicios/api.cliente.js"
+        th:src="@{/js/servicios/api.cliente.js}"></script>
+<script src="/js/paginas/registro.js"
+        th:src="@{/js/paginas/registro.js}"></script>
 </body>
 </html>

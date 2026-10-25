@@ -1,145 +1,236 @@
-.mt-60 { margin-top: 60px; }
-.mb-60 { margin-bottom: 60px; }
-.text-center { text-align: center; }
 
-/* Hero Soporte */
+/* ==========================================================================
+   CARMOVO - SOPORTE
+   PALETA VERDE MENTA PASTEL
+   ========================================================================== */
+
+/* ==========================================================================
+   CLASES AUXILIARES
+   ========================================================================== */
+
+.mt-60 {
+    margin-top: 60px;
+}
+
+.mb-60 {
+    margin-bottom: 60px;
+}
+
+.text-center {
+    text-align: center;
+}
+
+/* ==========================================================================
+   HERO SOPORTE
+   ========================================================================== */
+
 .hero-soporte h1 {
-    color: #ffffff;
+    color: #376B50;
     font-family: 'Montserrat', sans-serif;
     font-size: 2.5rem;
     margin-bottom: 10px;
 }
+
 .hero-soporte p {
-    color: #94a3b8;
+    color: #526B5D;
     margin-bottom: 30px;
 }
+
+/* ==========================================================================
+   BUSCADOR DE SOPORTE
+   ========================================================================== */
+
 .caja-busqueda {
     position: relative;
     max-width: 600px;
     margin: 0 auto;
 }
+
 .caja-busqueda i {
     position: absolute;
     left: 20px;
     top: 50%;
     transform: translateY(-50%);
-    color: #94a3b8;
+    color: #5B9C76;
     font-size: 1.2rem;
+    pointer-events: none;
 }
+
 .caja-busqueda input {
     width: 100%;
     padding: 18px 20px 18px 50px;
+    border: 1px solid #D8EEDF;
     border-radius: 30px;
-   
-    background: rgba(255, 255, 255, 0.05);
-    color: #fff;
+    background: #FFFFFF;
+    color: #263B30;
     font-family: 'Montserrat', sans-serif;
     font-size: 1rem;
     outline: none;
-    transition: all 0.3s;
-}
-.caja-busqueda input:focus {
-  
-    background: rgba(255, 255, 255, 0.08);
+    box-sizing: border-box;
+    box-shadow: 0 5px 20px rgba(55, 107, 80, 0.06);
+    transition: all 0.3s ease;
 }
 
-/* Tarjeta SOS */
+.caja-busqueda input::placeholder {
+    color: #789184;
+}
+
+.caja-busqueda input:focus {
+    border-color: #8BC9A3;
+    background: #FFFFFF;
+    box-shadow: 0 0 0 4px rgba(168, 213, 186, 0.25);
+}
+
+/* ==========================================================================
+   TARJETA SOS
+   ========================================================================== */
+
 .tarjeta-sos {
-    background: linear-gradient(135deg, rgba(234, 35, 35, 0.15), rgba(248, 10, 10, 0));
-   
+    background: linear-gradient(
+            135deg,
+            #FFF4F2 0%,
+            #FFF9EF 100%
+    );
+    border: 1px solid #F2C8C3;
     border-radius: 16px;
     padding: 30px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    box-shadow: 0 0 20px rgba(239, 68, 68, 0.1);
+    gap: 25px;
+    box-shadow: 0 8px 24px rgba(170, 75, 75, 0.07);
     animation: pulsoSOS 3s infinite;
 }
+
 @keyframes pulsoSOS {
-    0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4); }
-    25% { box-shadow: 0 0 0 25px rgba(227, 0, 0, 0); }
-    50% { box-shadow: 0 0 0 25px rgba(215, 16, 16, 0); }
-    75% { box-shadow: 0 0 0 25px rgba(239, 68, 68, 0); }
-    100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+    0% {
+        box-shadow: 0 0 0 0 rgba(210, 100, 100, 0.18);
+    }
+
+    50% {
+        box-shadow: 0 0 0 15px rgba(210, 100, 100, 0);
+    }
+
+    100% {
+        box-shadow: 0 0 0 0 rgba(210, 100, 100, 0);
+    }
 }
+
 .sos-info {
     display: flex;
     align-items: center;
     gap: 20px;
 }
+
 .sos-icono {
     font-size: 2.5rem;
-    color: #ef4444;
+    color: #C65C5C;
 }
+
 .sos-info h3 {
-    color: #fff;
+    color: #963F3F;
     font-family: 'Montserrat', sans-serif;
     margin: 0 0 5px 0;
     font-size: 1.4rem;
 }
+
 .sos-info p {
-    color: #cbd5e1;
+    color: #765B59;
     margin: 0;
     font-size: 0.95rem;
+    line-height: 1.5;
 }
+
 .btn-llamar-sos {
-    background: #ef4444;
-    color: white;
+    background: #C65C5C;
+    color: #FFFFFF;
     padding: 14px 24px;
     border-radius: 8px;
     text-decoration: none;
     font-weight: 700;
     display: flex;
     align-items: center;
+    justify-content: center;
     gap: 10px;
-    transition: background 0.3s;
+    transition: background 0.3s ease, transform 0.3s ease;
     white-space: nowrap;
 }
-.btn-llamar-sos:hover { background: #dc2626; }
 
-/* Categorías de Ayuda */
+.btn-llamar-sos:hover {
+    background: #AD4747;
+    transform: translateY(-2px);
+    color: #FFFFFF;
+}
+
+/* ==========================================================================
+   CATEGORIAS DE AYUDA
+   ========================================================================== */
+
 .grid-ayuda {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 350px), 1fr));
     gap: 25px;
 }
-.tarjeta-ayuda {
-    background: rgba(255, 255, 255, 0.03);
 
+.tarjeta-ayuda {
+    background: #FFFFFF;
+    border: 1px solid #D8EEDF;
     border-radius: 16px;
     padding: 30px 20px;
     text-align: center;
-    transition: transform 0.3s, border-color 0.3s;
+    transition: transform 0.3s ease,
+    border-color 0.3s ease,
+    box-shadow 0.3s ease;
     cursor: pointer;
+    box-shadow: 0 6px 20px rgba(55, 107, 80, 0.06);
 }
+
 .tarjeta-ayuda:hover {
     transform: translateY(-5px);
-    border-color: var(--acento-naranja, #ff5a36);
+    border-color: #8BC9A3;
+    box-shadow: 0 12px 28px rgba(55, 107, 80, 0.12);
 }
+
 .tarjeta-ayuda i {
     font-size: 2.5rem;
-    color: var(--acento-naranja, #ff5a36);
+    color: #5B9C76;
     margin-bottom: 15px;
 }
+
 .tarjeta-ayuda h4 {
-    color: #fff;
+    color: #376B50;
     font-family: 'Montserrat', sans-serif;
     font-size: 1.2rem;
     margin: 0 0 10px 0;
 }
+
 .tarjeta-ayuda p {
-    color: #94a3b8;
+    color: #526B5D;
     font-size: 0.9rem;
+    line-height: 1.5;
     margin: 0;
 }
 
+/* ==========================================================================
+   TITULOS DE SECCIONES
+   ========================================================================== */
 
 .titulo-seccion {
-    color: #fff;
-    font-family: 'Outfit';
+    color: #376B50;
+    font-family: 'Outfit', sans-serif;
     font-size: 2.2rem;
     margin-bottom: 30px;
 }
+
+.subtitulo-seccion {
+    color: #526B5D;
+    margin-bottom: 40px;
+}
+
+/* ==========================================================================
+   PREGUNTAS FRECUENTES - ACORDEON
+   ========================================================================== */
+
 .acordeon-faq {
     max-width: 800px;
     margin: 0 auto;
@@ -147,17 +238,27 @@
     flex-direction: column;
     gap: 15px;
 }
+
 .item-faq {
-    background: rgba(255, 255, 255, 0.03);
-   
+    background: #FFFFFF;
+    border: 1px solid #D8EEDF;
     border-radius: 12px;
     overflow: hidden;
+    box-shadow: 0 5px 18px rgba(55, 107, 80, 0.05);
+    transition: border-color 0.3s ease,
+    box-shadow 0.3s ease;
 }
+
+.item-faq.activo {
+    border-color: #A8D5BA;
+    box-shadow: 0 8px 24px rgba(55, 107, 80, 0.1);
+}
+
 .pregunta-faq {
     width: 100%;
-    background: none;
+    background: transparent;
     border: none;
-    color: #fff;
+    color: #376B50;
     font-family: 'Outfit', sans-serif;
     font-size: 1.1rem;
     font-weight: 600;
@@ -166,71 +267,175 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    gap: 15px;
     cursor: pointer;
-    transition: background 0.3s;
+    transition: background 0.3s ease;
 }
-.pregunta-faq:hover { background: rgba(255, 255, 255, 0.05); }
+
+.pregunta-faq:hover {
+    background: #F5FAF6;
+}
+
+.pregunta-faq:focus-visible {
+    outline: 3px solid #8BC9A3;
+    outline-offset: -3px;
+}
+
 .pregunta-faq i {
-    color: var(--acento-naranja, #ff5a36);
-    transition: transform 0.3s;
+    color: #5B9C76;
+    transition: transform 0.3s ease;
+    flex-shrink: 0;
 }
-.item-faq.activo .pregunta-faq i { transform: rotate(180deg); }
+
+.item-faq.activo .pregunta-faq {
+    background: #E4F3E9;
+}
+
+.item-faq.activo .pregunta-faq i {
+    transform: rotate(180deg);
+}
+
 .respuesta-faq {
     max-height: 0;
     overflow: hidden;
     transition: max-height 0.4s ease;
 }
+
 .respuesta-faq p {
     padding: 0 20px 20px 20px;
     margin: 0;
-    color: #cbd5e1;
+    color: #526B5D;
     line-height: 1.6;
 }
 
-/* Contacto Directo */
+/* ==========================================================================
+   CONTACTO DIRECTO
+   ========================================================================== */
+
 .grid-contacto {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
     gap: 30px;
     max-width: 800px;
     margin: 0 auto;
 }
+
 .tarjeta-contacto {
-    background: rgba(255, 255, 255, 0.03);
-    
+    background: #FFFFFF;
+    border: 1px solid #D8EEDF;
     border-radius: 16px;
     padding: 40px;
     text-align: center;
+    box-shadow: 0 6px 20px rgba(55, 107, 80, 0.06);
+    transition: transform 0.3s ease,
+    box-shadow 0.3s ease;
 }
+
+.tarjeta-contacto:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 28px rgba(55, 107, 80, 0.1);
+}
+
 .tarjeta-contacto i {
     font-size: 3rem;
     margin-bottom: 15px;
 }
-.tarjeta-contacto.wssp i { color: #22c55e; }
-.tarjeta-contacto.email i { color: #3b82f6; }
+
+.tarjeta-contacto.wssp i {
+    color: #329A61;
+}
+
+.tarjeta-contacto.email i {
+    color: #679CBF;
+}
+
+.tarjeta-contacto.oficina i {
+    color: #C59B55;
+}
+
+.tarjeta-contacto.reclamo i {
+    color: #C65C5C;
+}
+
 .tarjeta-contacto h3 {
-    color: #fff;
-    font-family: 'Outfit';
+    color: #376B50;
+    font-family: 'Outfit', sans-serif;
     margin: 0 0 10px 0;
 }
+
 .tarjeta-contacto p {
-    color: #94a3b8;
+    color: #526B5D;
     margin-bottom: 25px;
+    line-height: 1.5;
 }
-.btn-contacto-wssp, .btn-contacto-email {
+
+/* ==========================================================================
+   BOTONES DE CONTACTO
+   ========================================================================== */
+
+.btn-contacto-wssp,
+.btn-contacto-email,
+.btn-contacto-oficina,
+.btn-contacto-reclamo {
     display: inline-block;
     padding: 12px 24px;
     border-radius: 8px;
-    color: white;
+    color: #FFFFFF;
     text-decoration: none;
+    font-family: 'Outfit', sans-serif;
+    font-size: 1rem;
     font-weight: 600;
-    transition: transform 0.3s;
+    border: none;
+    cursor: pointer;
+    transition: transform 0.3s ease,
+    background 0.3s ease;
 }
-.btn-contacto-wssp { background: #22c55e; }
-.btn-contacto-email { background: #3b82f6; }
-.btn-contacto-wssp:hover, .btn-contacto-email:hover { transform: scale(1.05); }
 
-/* --- Etiquetas de Búsqueda --- */
+.btn-contacto-wssp {
+    background: #329A61;
+}
+
+.btn-contacto-wssp:hover {
+    background: #267D4D;
+}
+
+.btn-contacto-email {
+    background: #679CBF;
+}
+
+.btn-contacto-email:hover {
+    background: #4E84A8;
+}
+
+.btn-contacto-oficina {
+    background: #C59B55;
+}
+
+.btn-contacto-oficina:hover {
+    background: #AB8240;
+}
+
+.btn-contacto-reclamo {
+    background: #C65C5C;
+    width: auto;
+}
+
+.btn-contacto-reclamo:hover {
+    background: #AD4747;
+}
+
+.btn-contacto-wssp:hover,
+.btn-contacto-email:hover,
+.btn-contacto-oficina:hover,
+.btn-contacto-reclamo:hover {
+    transform: scale(1.05);
+    color: #FFFFFF;
+}
+
+/* ==========================================================================
+   ETIQUETAS DE BUSQUEDA
+   ========================================================================== */
+
 .tags-busqueda {
     display: flex;
     justify-content: center;
@@ -238,52 +443,67 @@
     flex-wrap: wrap;
     gap: 10px;
 }
+
 .etiqueta-titulo {
-    color: #94a3b8;
+    color: #526B5D;
     font-size: 0.9rem;
     margin-right: 5px;
 }
+
 .tags-busqueda .tag {
-    background: rgba(255, 255, 255, 0.05);
-   
-    color: #cbd5e1;
+    background: #E4F3E9;
+    border: 1px solid #D8EEDF;
+    color: #376B50;
     padding: 6px 15px;
     border-radius: 20px;
     font-size: 0.85rem;
     text-decoration: none;
     transition: all 0.3s ease;
 }
+
 .tags-busqueda .tag:hover {
-    background: var(--acento-naranja, #ff5a36);
-    color: #fff;
-   
+    background: #A8D5BA;
+    border-color: #8BC9A3;
+    color: #263B30;
 }
 
-/* --- Nueva Sección: Guías Rápidas --- */
-.subtitulo-seccion {
-    color: #94a3b8;
-    margin-bottom: 40px;
-}
+/* ==========================================================================
+   GUIAS RAPIDAS
+   ========================================================================== */
+
 .grid-guias {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
     gap: 25px;
 }
+
 .tarjeta-guia {
-    background: linear-gradient(145deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.01) 100%);
-  
+    background: linear-gradient(
+            145deg,
+            #FFFFFF 0%,
+            #F5FAF6 100%
+    );
+    border: 1px solid #D8EEDF;
     border-radius: 16px;
     padding: 30px;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    transition: transform 0.3s;
+    cursor: pointer;
+    box-shadow: 0 6px 20px rgba(55, 107, 80, 0.06);
+    transition: transform 0.3s ease,
+    box-shadow 0.3s ease,
+    border-color 0.3s ease;
 }
+
 .tarjeta-guia:hover {
     transform: translateY(-5px);
+    border-color: #8BC9A3;
+    box-shadow: 0 12px 28px rgba(55, 107, 80, 0.12);
 }
+
 .guia-icono {
-    background: rgba(255, 90, 54, 0.1);
+    background: #E4F3E9;
     width: 60px;
     height: 60px;
     border-radius: 12px;
@@ -291,56 +511,47 @@
     justify-content: center;
     align-items: center;
     font-size: 1.8rem;
-    color: var(--acento-naranja, #ff5a36);
+    color: #5B9C76;
     margin-bottom: 20px;
 }
+
 .tarjeta-guia h4 {
-    color: #fff;
-    font-family: 'Outfit';
+    color: #376B50;
+    font-family: 'Outfit', sans-serif;
     font-size: 1.3rem;
     margin: 0 0 10px 0;
 }
+
 .tarjeta-guia p {
-    color: #94a3b8;
+    color: #526B5D;
     font-size: 0.95rem;
     line-height: 1.5;
     margin: 0 0 20px 0;
-    flex-grow: 1; /* Empuja el botón al fondo si los textos varían en altura */
+    flex-grow: 1;
 }
+
 .enlace-guia {
-    color: var(--acento-naranja, #ff5a36);
+    color: #376B50;
     text-decoration: none;
     font-weight: 700;
-    font-family: 'Outfit';
+    font-family: 'Outfit', sans-serif;
     display: flex;
     align-items: center;
     gap: 8px;
-    transition: gap 0.3s;
+    transition: gap 0.3s ease, color 0.3s ease;
 }
+
+.enlace-guia:hover {
+    color: #5B9C76;
+}
+
 .tarjeta-guia:hover .enlace-guia {
-    gap: 12px; 
+    gap: 12px;
 }
 
-
-.tarjeta-contacto.oficina i { color: #f59e0b; }
-.btn-contacto-oficina {
-    display: inline-block;
-    padding: 12px 24px;
-    border-radius: 8px;
-    color: white;
-    text-decoration: none;
-    font-weight: 600;
-    background: #f59e0b;
-    transition: transform 0.3s;
-}
-.btn-contacto-oficina:hover {
-    transform: scale(1.05);
-}
-
-/*MODALES*/
-.tarjeta-guia, .tarjeta-ayuda {
-    cursor: pointer;
-}
+/* ==========================================================================
+   MODALES DE GUIAS Y AYUDA
+   ========================================================================== */
 
 .modal-guia {
     position: fixed;
@@ -348,7 +559,7 @@
     left: 0;
     width: 100vw;
     height: 100vh;
-    background: rgba(11, 17, 30, 0.85);
+    background: rgba(38, 59, 48, 0.55);
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
     z-index: 99999;
@@ -366,15 +577,16 @@
 }
 
 .modal-guia-contenido {
-    background: #0f172a;
-    
+    background: #FFF9EF;
+    border: 1px solid #D8EEDF;
     width: 90%;
     max-width: 580px;
     max-height: 85vh;
     border-radius: 20px;
     position: relative;
     overflow-y: auto;
-    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.6);
+    box-sizing: border-box;
+    box-shadow: 0 25px 50px rgba(38, 59, 48, 0.22);
     transform: scale(0.92);
     transition: transform 0.3s ease;
     padding: 30px;
@@ -388,9 +600,9 @@
     position: absolute;
     top: 20px;
     right: 20px;
-    background: rgba(255, 255, 255, 0.08);
-    border: none;
-    color: #ffffff;
+    background: #E4F3E9;
+    border: 1px solid #D8EEDF;
+    color: #376B50;
     width: 36px;
     height: 36px;
     border-radius: 50%;
@@ -399,11 +611,13 @@
     justify-content: center;
     align-items: center;
     font-size: 1.1rem;
-    transition: background 0.3s ease, transform 0.3s ease;
+    transition: background 0.3s ease,
+    transform 0.3s ease;
 }
 
 .btn-cerrar-guia:hover {
-    background: var(--acento-naranja, #ff5a36);
+    background: #A8D5BA;
+    color: #263B30;
     transform: rotate(90deg);
 }
 
@@ -412,13 +626,14 @@
     align-items: center;
     gap: 15px;
     padding-bottom: 20px;
-    
+    border-bottom: 1px solid #D8EEDF;
     margin-bottom: 20px;
+    padding-right: 35px;
 }
 
 .guia-modal-icono {
-    background: rgba(255, 90, 54, 0.15);
-    color: var(--acento-naranja, #ff5a36);
+    background: #E4F3E9;
+    color: #5B9C76;
     width: 55px;
     height: 55px;
     border-radius: 14px;
@@ -430,28 +645,28 @@
 }
 
 .etiqueta-guia-modal {
-    color: var(--acento-naranja, #ff5a36);
+    color: #5B9C76;
     font-size: 0.75rem;
     font-weight: 700;
     letter-spacing: 1px;
 }
 
 .guia-modal-header h3 {
-    color: #ffffff;
+    color: #376B50;
     font-family: 'Outfit', sans-serif;
     font-size: 1.4rem;
     margin: 4px 0 0 0;
 }
 
 .guia-desc-intro {
-    color: #cbd5e1;
+    color: #526B5D;
     font-size: 0.95rem;
     line-height: 1.6;
     margin-bottom: 25px;
 }
 
 .pasos-contenedor h4 {
-    color: #ffffff;
+    color: #376B50;
     font-family: 'Outfit', sans-serif;
     font-size: 1.1rem;
     margin-bottom: 15px;
@@ -461,7 +676,7 @@
 }
 
 .pasos-contenedor h4 i {
-    color: var(--acento-naranja, #ff5a36);
+    color: #5B9C76;
 }
 
 .lista-pasos-guia {
@@ -470,22 +685,26 @@
 }
 
 .lista-pasos-guia li {
-    color: #cbd5e1;
+    color: #526B5D;
     font-size: 0.9rem;
     line-height: 1.6;
     margin-bottom: 12px;
 }
 
 .lista-pasos-guia li::marker {
-    color: var(--acento-naranja, #ff5a36);
+    color: #5B9C76;
     font-weight: bold;
 }
 
 .guia-modal-footer {
     margin-top: 30px;
     padding-top: 20px;
-  
+    border-top: 1px solid #D8EEDF;
 }
+
+/* ==========================================================================
+   BOTON SOS EN MODALES
+   ========================================================================== */
 
 .btn-sos-modal {
     display: flex;
@@ -493,89 +712,95 @@
     align-items: center;
     gap: 10px;
     width: 100%;
-    background: #ef4444;
-    color: #ffffff;
+    background: #C65C5C;
+    color: #FFFFFF;
     padding: 14px;
     border-radius: 10px;
     text-decoration: none;
     font-family: 'Outfit', sans-serif;
     font-weight: 700;
     font-size: 0.95rem;
+    box-sizing: border-box;
     transition: background 0.3s ease;
 }
 
 .btn-sos-modal:hover {
-    background: #dc2626;
-}
-.tarjeta-contacto.reclamo i { 
-    color: #ef4444; 
+    background: #AD4747;
+    color: #FFFFFF;
 }
 
-.btn-contacto-reclamo {
-    display: inline-block;
-    padding: 12px 24px;
-    border-radius: 8px;
-    color: white;
-    border: none;
-    cursor: pointer;
-    font-family: 'Outfit', sans-serif;
-    font-size: 1rem;
-    font-weight: 600;
-    background: #ef4444;
-    transition: transform 0.3s;
-    width: auto;
-}
+/* ==========================================================================
+   FORMULARIO DE RECLAMOS
+   ========================================================================== */
 
-.btn-contacto-reclamo:hover {
-    transform: scale(1.05);
-}
-
-/* Formulario de Reclamos */
 .formulario-reclamo {
     display: flex;
     flex-direction: column;
     gap: 15px;
 }
+
 .fila-form {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 15px;
 }
+
 .grupo-form {
     display: flex;
     flex-direction: column;
     gap: 5px;
+    min-width: 0;
 }
+
 .grupo-form label {
-    color: #cbd5e1;
+    color: #376B50;
     font-size: 0.9rem;
     font-weight: 600;
 }
+
 .grupo-form input,
 .grupo-form select,
 .grupo-form textarea {
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    color: #fff;
+    background: #FFFFFF;
+    border: 1px solid #D8EEDF;
+    color: #263B30;
     padding: 12px;
     border-radius: 8px;
     font-family: 'Montserrat', sans-serif;
+    font-size: 0.95rem;
     outline: none;
-    transition: border-color 0.3s;
+    width: 100%;
+    box-sizing: border-box;
+    transition: border-color 0.3s ease,
+    box-shadow 0.3s ease;
 }
+
+.grupo-form input::placeholder,
+.grupo-form textarea::placeholder {
+    color: #789184;
+}
+
 .grupo-form input:focus,
 .grupo-form select:focus,
 .grupo-form textarea:focus {
-    border-color: var(--acento-naranja, #ff5a36);
+    border-color: #8BC9A3;
+    box-shadow: 0 0 0 3px rgba(168, 213, 186, 0.22);
 }
+
 .grupo-form select option {
-    background: #0f172a;
-    color: #fff;
+    background: #FFFFFF;
+    color: #263B30;
 }
+
+.grupo-form textarea {
+    resize: vertical;
+    min-height: 100px;
+}
+
 .btn-enviar-reclamo {
-    background: var(--acento-naranja, #ff5a36);
-    color: white;
-    border: none;
+    background: #A8D5BA;
+    color: #263B30;
+    border: 1px solid #8BC9A3;
     padding: 14px;
     border-radius: 8px;
     font-family: 'Outfit', sans-serif;
@@ -583,8 +808,123 @@
     font-weight: 700;
     cursor: pointer;
     margin-top: 10px;
-    transition: background 0.3s;
+    transition: background 0.3s ease,
+    transform 0.3s ease;
 }
+
 .btn-enviar-reclamo:hover {
-    background: #e6512e;
+    background: #8BC9A3;
+    transform: translateY(-2px);
+}
+
+/* ==========================================================================
+   ACCESIBILIDAD Y RESPONSIVE
+   ========================================================================== */
+
+.tarjeta-guia:focus-visible,
+.tarjeta-ayuda:focus-visible,
+.btn-cerrar-guia:focus-visible,
+.btn-enviar-reclamo:focus-visible,
+.btn-contacto-reclamo:focus-visible {
+    outline: 3px solid #8BC9A3;
+    outline-offset: 3px;
+}
+
+@media (max-width: 768px) {
+    .hero-soporte h1 {
+        font-size: 2rem;
+    }
+
+    .titulo-seccion {
+        font-size: 1.8rem;
+    }
+
+    .tarjeta-sos {
+        flex-direction: column;
+        align-items: stretch;
+        text-align: center;
+        padding: 25px 20px;
+    }
+
+    .sos-info {
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .btn-llamar-sos {
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    .tarjeta-contacto {
+        padding: 30px 20px;
+    }
+
+    .modal-guia-contenido {
+        padding: 25px 20px;
+    }
+
+    .fila-form {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 480px) {
+    .hero-soporte h1 {
+        font-size: 1.7rem;
+    }
+
+    .caja-busqueda input {
+        font-size: 0.9rem;
+        padding: 15px 15px 15px 45px;
+    }
+
+    .caja-busqueda i {
+        left: 16px;
+    }
+
+    .tarjeta-ayuda,
+    .tarjeta-guia {
+        padding: 25px 18px;
+    }
+
+    .pregunta-faq {
+        padding: 16px;
+        font-size: 1rem;
+    }
+
+    .respuesta-faq p {
+        padding: 0 16px 16px;
+    }
+
+    .guia-modal-header {
+        gap: 10px;
+    }
+
+    .guia-modal-header h3 {
+        font-size: 1.2rem;
+    }
+
+    .guia-modal-icono {
+        width: 45px;
+        height: 45px;
+        font-size: 1.4rem;
+    }
+
+    .modal-guia-contenido {
+        max-height: 90vh;
+        padding: 22px 16px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .tarjeta-sos {
+        animation: none;
+    }
+
+    .modal-guia,
+    .modal-guia-contenido,
+    .respuesta-faq {
+        transition: none;
+    }
 }

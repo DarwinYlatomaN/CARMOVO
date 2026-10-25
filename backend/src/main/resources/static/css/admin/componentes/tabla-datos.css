@@ -1,0 +1,201 @@
+
+/* ==========================================================================
+   CARMOVO - ADMINISTRADOR
+   TABLAS DE DATOS - PALETA AZUL PASTEL
+   ========================================================================== */
+
+/* ==========================================================================
+   CONTENEDOR DE TABLAS
+   ========================================================================== */
+
+.tabla-contenedor {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+
+    overflow-x: auto;
+    overscroll-behavior-inline: contain;
+
+    background: #FFFFFF;
+
+    scrollbar-width: thin;
+    scrollbar-color: #A9D1EA #F3F8FC;
+}
+
+/* Barra de desplazamiento - Chrome, Edge y Safari */
+.tabla-contenedor::-webkit-scrollbar {
+    height: 9px;
+}
+
+.tabla-contenedor::-webkit-scrollbar-track {
+    background: #F3F8FC;
+}
+
+.tabla-contenedor::-webkit-scrollbar-thumb {
+    border: 2px solid #F3F8FC;
+    border-radius: 999px;
+    background: #A9D1EA;
+}
+
+.tabla-contenedor::-webkit-scrollbar-thumb:hover {
+    background: #7CB5D9;
+}
+
+/* ==========================================================================
+   TABLA PRINCIPAL
+   ========================================================================== */
+
+.tabla-datos {
+    width: 100%;
+    max-width: none;
+    min-width: 680px;
+
+    border-collapse: collapse;
+
+    background: #FFFFFF;
+    color: #293E4D;
+}
+
+/* ==========================================================================
+   CELDAS Y ENCABEZADOS
+   ========================================================================== */
+
+.tabla-datos th,
+.tabla-datos td {
+    padding: 14px 18px;
+
+    text-align: left;
+    vertical-align: middle;
+
+    border-bottom: 1px solid #DCECF7;
+
+    font-size: 0.8rem;
+}
+
+/* ==========================================================================
+   ENCABEZADOS DE COLUMNAS
+   ========================================================================== */
+
+.tabla-datos th {
+    background: #EAF4FA;
+    color: #315A75;
+
+    font-size: 0.69rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    font-weight: 800;
+}
+
+/* ==========================================================================
+   DATOS DE LA TABLA
+   ========================================================================== */
+
+.tabla-datos td {
+    color: #293E4D;
+    background: transparent;
+    overflow-wrap: anywhere;
+}
+
+/* Filas alternadas suaves */
+.tabla-datos tbody tr:nth-child(even) {
+    background: #F8FBFD;
+}
+
+/* Eliminar borde inferior de la ultima fila */
+.tabla-datos tbody tr:last-child td {
+    border-bottom: 0;
+}
+
+/* ==========================================================================
+   EFECTO HOVER EN FILAS
+   ========================================================================== */
+
+.tabla-datos tbody tr {
+    transition: background-color 0.2s ease;
+}
+
+.tabla-datos tbody tr:hover {
+    background: #EAF4FA;
+}
+
+/* ==========================================================================
+   INDICADOR GENERAL DE ESTADO
+   ========================================================================== */
+
+.badge-estado {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+
+    border-radius: 999px;
+    padding: 6px 9px;
+
+    font-size: 0.68rem;
+    font-weight: 700;
+
+    background: #EDF2F6;
+    color: #587284;
+
+    white-space: nowrap;
+}
+
+/* Punto indicador */
+.badge-estado::before {
+    content: '';
+
+    width: 6px;
+    height: 6px;
+    flex-shrink: 0;
+
+    border-radius: 50%;
+    background: currentColor;
+}
+
+/* ==========================================================================
+   ESTADO: DISPONIBLE
+   ========================================================================== */
+
+.badge-estado.disponible {
+    color: #376B50;
+    background: #E4F3E9;
+}
+
+/* ==========================================================================
+   ESTADO: ALQUILADO / RESERVADO
+   ========================================================================== */
+
+.badge-estado.alquilado,
+.badge-estado.reservado {
+    color: #527F9C;
+    background: #DCECF7;
+}
+
+/* ==========================================================================
+   ESTADO: MANTENIMIENTO
+   ========================================================================== */
+
+.badge-estado.mantenimiento {
+    color: #9A722C;
+    background: #FFF2D8;
+}
+
+/* ==========================================================================
+   RESPONSIVE
+   ========================================================================== */
+
+@media (max-width: 680px) {
+    .tabla-datos th,
+    .tabla-datos td {
+        padding: 12px 14px;
+    }
+}
+
+/* ==========================================================================
+   ACCESIBILIDAD
+   ========================================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+    .tabla-datos tbody tr {
+        transition: none;
+    }
+}

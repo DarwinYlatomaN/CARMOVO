@@ -1,0 +1,574 @@
+
+/* ==========================================================================
+   CARMOVO - ADMINISTRADOR
+   GESTION DE FLOTA - PALETA AZUL PASTEL
+   ========================================================================== */
+
+/* ==========================================================================
+   HERRAMIENTAS DE BUSQUEDA Y FILTRADO
+   ========================================================================== */
+
+.flota-herramientas {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    padding: 16px 18px;
+    border-bottom: 1px solid var(--admin-borde);
+    background: var(--admin-superficie);
+    min-width: 0;
+    flex-wrap: nowrap;
+}
+
+/* ==========================================================================
+   BUSCADOR
+   ========================================================================== */
+
+.flota-buscador {
+    position: relative;
+    width: auto;
+    flex: 1 1 0;
+    min-width: 0;
+}
+
+.flota-buscador i {
+    position: absolute;
+    top: 50%;
+    left: 13px;
+    transform: translateY(-50%);
+    color: #7198B3;
+    font-size: .82rem;
+}
+
+.flota-buscador input,
+.flota-filtro {
+    width: 100%;
+    min-height: 42px;
+    border: 1px solid var(--admin-borde);
+    border-radius: 10px;
+    background: #FFFFFF;
+    color: var(--admin-texto);
+    outline: none;
+    transition: border-color .2s ease, box-shadow .2s ease;
+}
+
+.flota-buscador input {
+    padding: 0 14px 0 38px;
+}
+
+.flota-buscador input::placeholder {
+    color: #8198A8;
+}
+
+/* ==========================================================================
+   ENFOQUE DE CAMPOS
+   ========================================================================== */
+
+.flota-buscador input:focus,
+.flota-filtro:focus,
+.campo-formulario input:focus,
+.campo-formulario select:focus {
+    border-color: #7CB5D9;
+    box-shadow: 0 0 0 3px rgba(124, 181, 217, .16);
+}
+
+/* ==========================================================================
+   FILTROS
+   ========================================================================== */
+
+.flota-filtros {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 0;
+    flex: 0 0 auto;
+    flex-wrap: nowrap;
+}
+
+.flota-filtro {
+    width: 180px;
+    min-width: 0;
+    max-width: 100%;
+    padding: 0 12px;
+    cursor: pointer;
+}
+
+.flota-filtros .boton-secundario {
+    flex: 0 0 auto;
+}
+
+/* ==========================================================================
+   CABECERA DE FLOTA REGISTRADA
+   ========================================================================== */
+
+.flota-panel-cabecera {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 16px;
+    padding: 15px 18px;
+    min-width: 0;
+    border-bottom: 1px solid var(--admin-borde);
+    background: #F3F8FC;
+}
+
+.flota-panel-cabecera__informacion {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 5px;
+    min-width: 0;
+}
+
+.flota-panel-cabecera__informacion h3 {
+    display: block;
+    margin: 0;
+    color: #315A75;
+    font-size: .95rem;
+    font-weight: 700;
+    line-height: 1.35;
+}
+
+.flota-panel-cabecera__informacion span {
+    display: block;
+    margin: 0;
+    color: var(--admin-texto-secundario);
+    font-size: .7rem;
+    font-weight: 400;
+    line-height: 1.4;
+}
+
+/* ==========================================================================
+   INFORMACION DEL VEHICULO
+   ========================================================================== */
+
+.vehiculo-info {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    min-width: 0;
+}
+
+.vehiculo-info__imagen {
+    width: 54px;
+    height: 38px;
+    border-radius: 8px;
+    object-fit: cover;
+    background: #EAF4FA;
+}
+
+.vehiculo-info__sin-imagen {
+    width: 54px;
+    height: 38px;
+    border-radius: 8px;
+    display: grid;
+    place-items: center;
+    background: #EAF4FA;
+    color: #7198B3;
+}
+
+.vehiculo-info > div:last-child {
+    min-width: 0;
+}
+
+.vehiculo-info strong {
+    display: block;
+    color: #315A75;
+    font-size: .79rem;
+    overflow-wrap: anywhere;
+}
+
+.vehiculo-info small {
+    display: block;
+    margin-top: 3px;
+    color: #587284;
+    font-size: .68rem;
+    overflow-wrap: anywhere;
+}
+
+/* ==========================================================================
+   ACCIONES DE LA TABLA
+   ========================================================================== */
+
+.acciones-tabla {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    min-width: 0;
+}
+
+/* ==========================================================================
+   BOTONES DE ICONO
+   ========================================================================== */
+
+.boton-icono {
+    width: 34px;
+    height: 34px;
+    display: grid;
+    place-items: center;
+    border-radius: 8px;
+    border: 1px solid var(--admin-borde);
+    background: #F3F8FC;
+    color: #527F9C;
+    cursor: pointer;
+    transition: .2s ease;
+}
+
+.boton-icono:hover {
+    color: #315A75;
+    background: #DCECF7;
+    border-color: #A9D1EA;
+}
+
+/* Editar */
+.boton-icono.editar:hover {
+    color: #315A75;
+    background: #DCECF7;
+    border-color: #7CB5D9;
+}
+
+/* Eliminar */
+.boton-icono.eliminar:hover {
+    color: #A64545;
+    background: #FFF1F1;
+    border-color: #E9B8B8;
+}
+
+/* ==========================================================================
+   RESUMEN DE FLOTA
+   ========================================================================== */
+
+.resumen-flota {
+    margin-bottom: 18px;
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.resumen-flota__dato {
+    flex: 1 1 150px;
+    min-width: min(150px, 100%);
+    padding: 13px 15px;
+    border: 1px solid var(--admin-borde);
+    border-radius: 10px;
+    background: var(--admin-superficie);
+    box-shadow: 0 4px 14px rgba(49, 90, 117, .05);
+}
+
+.resumen-flota__dato span {
+    display: block;
+    color: var(--admin-texto-secundario);
+    font-size: .68rem;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.resumen-flota__dato strong {
+    display: block;
+    margin-top: 4px;
+    color: #315A75;
+    font-size: 1.15rem;
+}
+
+/* ==========================================================================
+   VENTANA MODAL
+   ========================================================================== */
+
+.modal-admin {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 200;
+    padding: 24px;
+    align-items: center;
+    justify-content: center;
+    background: rgba(41, 62, 77, .45);
+    backdrop-filter: blur(5px);
+}
+
+.modal-admin.abierto {
+    display: flex;
+}
+
+/* ==========================================================================
+   CONTENIDO DEL MODAL
+   ========================================================================== */
+
+.modal-admin__contenido {
+    width: min(720px, calc(100vw - 32px));
+    max-width: 100%;
+    max-height: calc(100vh - 48px);
+    overflow-y: auto;
+    border-radius: 16px;
+    border: 1px solid var(--admin-borde);
+    background: #FFFFFF;
+    box-shadow: 0 28px 70px rgba(49, 90, 117, .22);
+    color: var(--admin-texto);
+}
+
+/* ==========================================================================
+   CABECERA DEL MODAL
+   ========================================================================== */
+
+.modal-admin__cabecera {
+    min-height: 68px;
+    padding: 0 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    border-bottom: 1px solid var(--admin-borde);
+    background: #F3F8FC;
+}
+
+.modal-admin__cabecera h2 {
+    color: #315A75;
+    font-size: 1rem;
+}
+
+/* ==========================================================================
+   BOTON CERRAR MODAL
+   ========================================================================== */
+
+.modal-admin__cerrar {
+    width: 36px;
+    height: 36px;
+    border: 1px solid var(--admin-borde);
+    border-radius: 9px;
+    display: grid;
+    place-items: center;
+    background: #EAF4FA;
+    color: #527F9C;
+    cursor: pointer;
+    transition: .2s ease;
+}
+
+.modal-admin__cerrar:hover {
+    background: #DCECF7;
+    color: #315A75;
+    border-color: #A9D1EA;
+}
+
+/* ==========================================================================
+   FORMULARIO DE VEHICULO
+   ========================================================================== */
+
+.formulario-vehiculo {
+    padding: 20px;
+}
+
+.formulario-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+    min-width: 0;
+}
+
+.campo-formulario {
+    min-width: 0;
+}
+
+.campo-formulario--completo {
+    grid-column: 1 / -1;
+}
+
+/* ==========================================================================
+   ETIQUETAS DE CAMPOS
+   ========================================================================== */
+
+.campo-formulario label {
+    display: block;
+    margin-bottom: 7px;
+    color: #315A75;
+    font-size: .73rem;
+    font-weight: 700;
+}
+
+/* ==========================================================================
+   CAMPOS DE FORMULARIO
+   ========================================================================== */
+
+.campo-formulario input,
+.campo-formulario select {
+    width: 100%;
+    min-height: 43px;
+    padding: 0 12px;
+    border: 1px solid var(--admin-borde);
+    border-radius: 9px;
+    background: #FFFFFF;
+    color: #293E4D;
+    outline: none;
+    transition: border-color .2s ease, box-shadow .2s ease;
+}
+
+.campo-formulario input::placeholder {
+    color: #8198A8;
+}
+
+/* ==========================================================================
+   VALIDACION DE CAMPOS - SPRING VALIDATOR
+   ========================================================================== */
+
+.campo-formulario input[aria-invalid="true"],
+.campo-formulario select[aria-invalid="true"] {
+    border-color: #C65C5C;
+    background: #FFF5F5;
+}
+
+.campo-formulario input[aria-invalid="true"]:focus,
+.campo-formulario select[aria-invalid="true"]:focus {
+    border-color: #C65C5C;
+    box-shadow: 0 0 0 3px rgba(198, 92, 92, .14);
+}
+
+.mensaje-error-campo {
+    display: block;
+    margin-top: 6px;
+    color: #A64545;
+    font-size: .72rem;
+    font-weight: 500;
+    line-height: 1.45;
+    overflow-wrap: anywhere;
+}
+
+.mensaje-error-campo[hidden] {
+    display: none;
+}
+
+/* ==========================================================================
+   ACCIONES DEL FORMULARIO
+   ========================================================================== */
+
+.formulario-acciones {
+    margin-top: 20px;
+    padding-top: 16px;
+    border-top: 1px solid var(--admin-borde);
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+/* ==========================================================================
+   NOTIFICACIONES DEL ADMINISTRADOR
+   ========================================================================== */
+
+.notificacion-admin {
+    position: fixed;
+    right: 22px;
+    bottom: 22px;
+    z-index: 300;
+
+    max-width: calc(100vw - 32px);
+    padding: 13px 16px;
+
+    border-radius: 10px;
+    border: 1px solid var(--admin-borde);
+
+    background: #FFFFFF;
+    color: #293E4D;
+
+    box-shadow: 0 10px 30px rgba(49, 90, 117, .15);
+
+    font-size: .78rem;
+
+    transform: translateY(22px);
+    opacity: 0;
+    pointer-events: none;
+    transition: .25s ease;
+}
+
+.notificacion-admin.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Notificacion de exito */
+.notificacion-admin.exito {
+    border-color: #A8D5BA;
+    background: #E4F3E9;
+    color: #376B50;
+}
+
+/* Notificacion de error */
+.notificacion-admin.error {
+    border-color: #E9B8B8;
+    background: #FFF1F1;
+    color: #A64545;
+}
+
+/* ==========================================================================
+   RESPONSIVE - TABLETAS
+   ========================================================================== */
+
+@media (max-width: 820px) {
+    .flota-herramientas {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .flota-buscador {
+        width: 100%;
+        flex: 0 0 auto;
+    }
+
+    .flota-filtros {
+        align-items: stretch;
+        flex: 0 0 auto;
+        flex-wrap: wrap;
+    }
+
+    .flota-filtro {
+        flex: 1;
+        min-width: 0;
+        width: auto;
+    }
+}
+
+/* ==========================================================================
+   RESPONSIVE - CELULARES
+   ========================================================================== */
+
+@media (max-width: 560px) {
+    .formulario-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .campo-formulario--completo {
+        grid-column: auto;
+    }
+
+    .flota-filtros {
+        flex-direction: column;
+    }
+
+    .flota-filtro {
+        width: 100%;
+        flex: 0 0 auto;
+    }
+
+    .modal-admin {
+        padding: 12px;
+    }
+}
+
+/* ==========================================================================
+   ACCESIBILIDAD
+   ========================================================================== */
+
+.boton-icono:focus-visible,
+.modal-admin__cerrar:focus-visible {
+    outline: 2px solid #7CB5D9;
+    outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .boton-icono,
+    .modal-admin__cerrar,
+    .notificacion-admin,
+    .campo-formulario input,
+    .campo-formulario select,
+    .flota-buscador input,
+    .flota-filtro {
+        transition: none;
+    }
+}

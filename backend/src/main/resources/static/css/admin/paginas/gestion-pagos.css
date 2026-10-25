@@ -1,0 +1,637 @@
+
+/* ==========================================================================
+   CARMOVO - ADMINISTRADOR
+   GESTION DE PAGOS - PALETA AZUL PASTEL
+   ========================================================================== */
+
+/* ==========================================================================
+   RESUMEN DE PAGOS
+   ========================================================================== */
+
+.resumen-pagos {
+    margin-bottom: 18px;
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.resumen-pagos__dato {
+    flex: 1 1 150px;
+    min-width: min(150px, 100%);
+    padding: 13px 15px;
+    border: 1px solid var(--admin-borde);
+    border-radius: 10px;
+    background: var(--admin-superficie);
+}
+
+.resumen-pagos__dato span {
+    display: block;
+    color: var(--admin-texto-secundario);
+    font-size: .68rem;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.resumen-pagos__dato strong {
+    display: block;
+    margin-top: 4px;
+    color: #315A75;
+    font-size: 1.15rem;
+}
+
+.resumen-pagos__dato.pendiente strong {
+    color: #9A722C;
+}
+
+.resumen-pagos__dato.revision strong {
+    color: #527F9C;
+}
+
+.resumen-pagos__dato.pagado strong,
+.resumen-pagos__dato.ingresos strong {
+    color: #376B50;
+}
+
+/* ==========================================================================
+   HERRAMIENTAS DE PAGOS
+   ========================================================================== */
+
+.pagos-herramientas {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    padding: 16px 18px;
+    border-bottom: 1px solid var(--admin-borde);
+    min-width: 0;
+    flex-wrap: wrap;
+}
+
+/* ==========================================================================
+   BUSCADOR
+   ========================================================================== */
+
+.pagos-buscador {
+    position: relative;
+    width: min(100%, 480px);
+    flex: 1 1 340px;
+    min-width: 0;
+}
+
+.pagos-buscador i {
+    position: absolute;
+    top: 50%;
+    left: 13px;
+    transform: translateY(-50%);
+    color: #7198B3;
+    font-size: .82rem;
+}
+
+/* ==========================================================================
+   CAMPOS Y FILTROS
+   ========================================================================== */
+
+.pagos-buscador input,
+.pagos-filtro,
+.campo-pago-admin input,
+.campo-pago-admin select,
+.campo-pago-admin textarea {
+    border: 1px solid var(--admin-borde);
+    border-radius: 10px;
+    background: #FFFFFF;
+    color: var(--admin-texto);
+    outline: none;
+    transition: border-color .2s ease, box-shadow .2s ease;
+}
+
+.pagos-buscador input {
+    width: 100%;
+    min-height: 42px;
+    padding: 0 14px 0 38px;
+}
+
+.pagos-buscador input::placeholder,
+.campo-pago-admin input::placeholder,
+.campo-pago-admin textarea::placeholder {
+    color: #8198A8;
+}
+
+.pagos-filtros {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 0;
+    flex-wrap: wrap;
+}
+
+.pagos-filtro {
+    min-width: 170px;
+    max-width: 100%;
+    min-height: 42px;
+    padding: 0 12px;
+}
+
+/* ==========================================================================
+   ENFOQUE DE CAMPOS
+   ========================================================================== */
+
+.pagos-buscador input:focus,
+.pagos-filtro:focus,
+.campo-pago-admin input:focus,
+.campo-pago-admin select:focus,
+.campo-pago-admin textarea:focus {
+    border-color: #7CB5D9;
+    box-shadow: 0 0 0 3px rgba(124, 181, 217, .16);
+}
+
+/* ==========================================================================
+   CABECERA DEL PANEL - CORREGIDA
+   ========================================================================== */
+
+.pagos-panel-cabecera {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 16px;
+    padding: 15px 18px;
+    border-bottom: 1px solid var(--admin-borde);
+    background: #F3F8FC;
+    min-width: 0;
+}
+
+.pagos-panel-cabecera__informacion {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 5px;
+    min-width: 0;
+}
+
+.pagos-panel-cabecera__informacion h3 {
+    display: block;
+    margin: 0;
+    color: #315A75;
+    font-size: .95rem;
+    font-weight: 700;
+    line-height: 1.35;
+}
+
+.pagos-panel-cabecera__informacion span {
+    display: block;
+    margin: 0;
+    color: var(--admin-texto-secundario);
+    font-size: .7rem;
+    line-height: 1.4;
+}
+
+/* ==========================================================================
+   TABLA DE PAGOS
+   ========================================================================== */
+
+.tabla-pagos {
+    min-width: 1250px;
+}
+
+.pago-cliente strong,
+.pago-vehiculo strong {
+    display: block;
+    color: #315A75;
+    font-size: .79rem;
+}
+
+.pago-cliente small,
+.pago-vehiculo small {
+    display: block;
+    margin-top: 4px;
+    color: #587284;
+    font-size: .67rem;
+    line-height: 1.35;
+}
+
+.pago-monto {
+    color: #315A75;
+    font-weight: 800;
+    white-space: nowrap;
+}
+
+/* ==========================================================================
+   INDICADORES DE ESTADO
+   ========================================================================== */
+
+.badge-pago,
+.badge-alquiler-pago {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 9px;
+    border-radius: 999px;
+    font-size: .67rem;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.badge-pago::before,
+.badge-alquiler-pago::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: currentColor;
+}
+
+.badge-pago.pendiente {
+    color: #9A722C;
+    background: #FFF2D8;
+}
+
+.badge-pago.en-revision {
+    color: #527F9C;
+    background: #EAF4FA;
+}
+
+.badge-pago.pagado {
+    color: #376B50;
+    background: #E4F3E9;
+}
+
+.badge-pago.rechazado {
+    color: #A64545;
+    background: #FFF1F1;
+}
+
+.badge-alquiler-pago {
+    color: #527F9C;
+    background: #DCECF7;
+}
+
+/* ==========================================================================
+   FECHAS Y DATOS
+   ========================================================================== */
+
+.pago-fecha {
+    color: #587284;
+    font-size: .74rem;
+    white-space: nowrap;
+}
+
+.pago-sin-dato {
+    color: #8198A8;
+}
+
+/* ==========================================================================
+   ACCIONES DE PAGO
+   ========================================================================== */
+
+.acciones-pago {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    min-width: 0;
+}
+
+.boton-pago-icono {
+    width: 34px;
+    height: 34px;
+    display: grid;
+    place-items: center;
+    border-radius: 8px;
+    border: 1px solid var(--admin-borde);
+    background: #F3F8FC;
+    color: #527F9C;
+    cursor: pointer;
+    transition: .2s ease;
+}
+
+.boton-pago-icono:hover {
+    color: #315A75;
+    background: #DCECF7;
+    border-color: #A9D1EA;
+}
+
+.boton-pago-icono.editar:hover {
+    color: #315A75;
+    background: #DCECF7;
+    border-color: #7CB5D9;
+}
+
+/* ==========================================================================
+   MODAL DE PAGOS
+   ========================================================================== */
+
+.modal-pago-admin {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 200;
+    padding: 24px;
+    align-items: center;
+    justify-content: center;
+    background: rgba(41, 62, 77, .45);
+    backdrop-filter: blur(5px);
+}
+
+.modal-pago-admin.abierto {
+    display: flex;
+}
+
+/* ==========================================================================
+   CONTENIDO DEL MODAL
+   ========================================================================== */
+
+.modal-pago-admin__contenido {
+    width: min(100%, 720px);
+    max-height: calc(100vh - 48px);
+    overflow-y: auto;
+    border-radius: 16px;
+    border: 1px solid var(--admin-borde);
+    background: #FFFFFF;
+    box-shadow: 0 28px 70px rgba(49, 90, 117, .22);
+}
+
+/* ==========================================================================
+   CABECERA DEL MODAL
+   ========================================================================== */
+
+.modal-pago-admin__cabecera {
+    min-height: 68px;
+    padding: 0 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    border-bottom: 1px solid var(--admin-borde);
+    background: #F3F8FC;
+}
+
+.modal-pago-admin__cabecera h2 {
+    color: #315A75;
+    font-size: 1rem;
+}
+
+.modal-pago-admin__cerrar {
+    width: 36px;
+    height: 36px;
+    border: 1px solid var(--admin-borde);
+    border-radius: 9px;
+    display: grid;
+    place-items: center;
+    background: #EAF4FA;
+    color: #527F9C;
+    cursor: pointer;
+}
+
+.modal-pago-admin__cerrar:hover {
+    background: #DCECF7;
+    color: #315A75;
+}
+
+/* ==========================================================================
+   FORMULARIO DE PAGOS
+   ========================================================================== */
+
+.formulario-pago-admin {
+    padding: 20px;
+}
+
+/* ==========================================================================
+   RESUMEN DEL MODAL
+   ========================================================================== */
+
+.pago-resumen-modal {
+    margin-bottom: 18px;
+    padding: 14px;
+    border: 1px solid var(--admin-borde);
+    border-radius: 11px;
+    background: #F3F8FC;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+}
+
+.pago-resumen-modal div {
+    min-width: 0;
+}
+
+.pago-resumen-modal span {
+    display: block;
+    color: #587284;
+    font-size: .65rem;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.pago-resumen-modal strong {
+    display: block;
+    margin-top: 4px;
+    color: #315A75;
+    font-size: .8rem;
+    overflow-wrap: anywhere;
+}
+
+/* ==========================================================================
+   CAMPOS DEL FORMULARIO
+   ========================================================================== */
+
+.formulario-pago-admin__grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+}
+
+.campo-pago-admin--completo {
+    grid-column: 1 / -1;
+}
+
+.campo-pago-admin label {
+    display: block;
+    margin-bottom: 7px;
+    color: #315A75;
+    font-size: .73rem;
+    font-weight: 700;
+}
+
+.campo-pago-admin input,
+.campo-pago-admin select,
+.campo-pago-admin textarea {
+    width: 100%;
+    min-height: 43px;
+    padding: 0 12px;
+    background: #FFFFFF;
+}
+
+.campo-pago-admin textarea {
+    min-height: 90px;
+    padding-top: 11px;
+    padding-bottom: 11px;
+    resize: vertical;
+}
+
+/* ==========================================================================
+   NOTA DEL FORMULARIO
+   ========================================================================== */
+
+.formulario-pago-admin__nota {
+    margin-top: 17px;
+    padding: 12px 14px;
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    border: 1px solid #C5DFEF;
+    border-radius: 10px;
+    background: #EAF4FA;
+    color: #49677D;
+    font-size: .7rem;
+    line-height: 1.5;
+}
+
+.formulario-pago-admin__nota i {
+    margin-top: 2px;
+    color: #527F9C;
+}
+
+/* ==========================================================================
+   ACCIONES DEL FORMULARIO
+   ========================================================================== */
+
+.formulario-pago-admin__acciones {
+    margin-top: 20px;
+    padding-top: 16px;
+    border-top: 1px solid var(--admin-borde);
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+/* ==========================================================================
+   NOTIFICACIONES
+   ========================================================================== */
+
+.notificacion-pago-admin {
+    position: fixed;
+    right: 22px;
+    bottom: 22px;
+    z-index: 300;
+    max-width: min(410px, calc(100vw - 32px));
+    padding: 13px 16px;
+    border-radius: 10px;
+    border: 1px solid var(--admin-borde);
+    background: #FFFFFF;
+    color: #293E4D;
+    box-shadow: var(--admin-sombra);
+    font-size: .78rem;
+    transform: translateY(22px);
+    opacity: 0;
+    pointer-events: none;
+    transition: .25s ease;
+}
+
+.notificacion-pago-admin.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.notificacion-pago-admin.exito {
+    border-color: #A8D5BA;
+    background: #E4F3E9;
+    color: #376B50;
+}
+
+.notificacion-pago-admin.error {
+    border-color: #E9B8B8;
+    background: #FFF1F1;
+    color: #A64545;
+}
+
+/* ==========================================================================
+   RESPONSIVE
+   ========================================================================== */
+
+@media (max-width: 960px) {
+    .pagos-herramientas {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .pagos-buscador {
+        width: 100%;
+    }
+
+    .pagos-filtros {
+        align-items: stretch;
+    }
+
+    .pagos-filtro {
+        flex: 1;
+        min-width: 0;
+    }
+}
+
+@media (max-width: 620px) {
+    .pagos-filtros,
+    .formulario-pago-admin__grid,
+    .pago-resumen-modal {
+        grid-template-columns: 1fr;
+        flex-direction: column;
+    }
+
+    .campo-pago-admin--completo {
+        grid-column: auto;
+    }
+
+    .modal-pago-admin {
+        padding: 12px;
+    }
+}
+
+/* ==========================================================================
+   AJUSTES FINALES DE DIMENSIONES
+   ========================================================================== */
+
+.pagos-herramientas,
+.pagos-filtros,
+.acciones-pago,
+.pago-detalle-grid,
+.formulario-pago__grid,
+.campo-pago {
+    min-width: 0;
+}
+
+.pagos-herramientas,
+.pagos-filtros {
+    flex-wrap: wrap;
+}
+
+.pagos-filtro {
+    max-width: 100%;
+}
+
+.modal-pago__contenido {
+    width: min(720px, calc(100vw - 32px));
+    max-width: 100%;
+}
+
+.notificacion-pago {
+    max-width: calc(100vw - 32px);
+}
+
+/* ==========================================================================
+   ACCESIBILIDAD
+   ========================================================================== */
+
+.boton-pago-icono:focus-visible,
+.modal-pago-admin__cerrar:focus-visible {
+    outline: 2px solid #7CB5D9;
+    outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .boton-pago-icono,
+    .notificacion-pago-admin,
+    .pagos-buscador input,
+    .pagos-filtro,
+    .campo-pago-admin input,
+    .campo-pago-admin select,
+    .campo-pago-admin textarea {
+        transition: none;
+    }
+}

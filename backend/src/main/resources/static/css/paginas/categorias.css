@@ -1,23 +1,40 @@
+
 /* ==========================================================================
-   VARIABLES GLOBALES (Tema Carmovo)
+   VARIABLES GLOBALES - CARMOVO PASTEL
    ========================================================================== */
+
 :root {
-    --badge-orange: rgba(255, 90, 54, 0.15);
-    --badge-orange-text: #ff5a36;
-    --badge-blue: rgba(59, 130, 246, 0.15);
-    --badge-blue-text: #60a5fa;
-    --badge-purple: rgba(168, 85, 247, 0.15);
-    --badge-purple-text: #c084fc;
-    --badge-green: rgba(34, 197, 94, 0.15);
-    --badge-green-text: #4ade80;
-    
-    --fondo-principal: #090e17;
-    --fondo-tarjeta: #121927;
-    --borde-oscuro: #1f2937;
-    --color-naranja: #ff5a36;
-    --color-blanco: #ffffff;
-    --texto-gris: #8b95a5;
+    --badge-orange: #FCE5D8;
+    --badge-orange-text: #855D49;
+
+    --badge-blue: #DDEEF7;
+    --badge-blue-text: #466D86;
+
+    --badge-purple: #EDE2F7;
+    --badge-purple-text: #73598D;
+
+    --badge-green: #D8EEDF;
+    --badge-green-text: #376B50;
+
+    --fondo-principal: #F5FAF6;
+    --fondo-tarjeta: #FFFFFF;
+    --borde-oscuro: #C4DDCD;
+    --color-naranja: #A8D5BA;
+    --color-blanco: #263B30;
+    --texto-gris: #526B5D;
+
+    --verde-hover: #8BC9A3;
+    --verde-suave: #E4F3E9;
+    --verde-claro: #D8EEDF;
+    --crema-pastel: #FFF9EF;
+    --rosa-pastel: #F6DCE5;
+    --lavanda-pastel: #EDE2F7;
+    --celeste-pastel: #DDEEF7;
 }
+
+/* ==========================================================================
+   SECCION DE FLOTA
+   ========================================================================== */
 
 .seccion-flota {
     padding: 40px 0 80px 0;
@@ -32,7 +49,7 @@
     font-size: 2.4rem;
     font-weight: 800;
     margin-bottom: 8px;
-    color: var(--color-blanco);
+    color: #376B50;
 }
 
 .cabecera-coleccion p {
@@ -40,32 +57,49 @@
     color: var(--texto-gris);
 }
 
+/* ==========================================================================
+   FILTROS DE CATEGORIAS
+   ========================================================================== */
+
 .barra-filtros {
     margin-bottom: 40px;
 }
 
 .pestañas {
     display: flex;
-    
     gap: 12px;
     overflow-x: auto;
-    padding:12px;
-    border-radius: 14px;;
+    padding: 12px;
+    border-radius: 14px;
     padding-bottom: 15px;
     scroll-behavior: smooth;
     -webkit-overflow-scrolling: touch;
+    background-color: #E4F3E9;
 }
 
-.pestañas::-webkit-scrollbar { height: 6px; }
-.pestañas::-webkit-scrollbar-track { background: var(--fondo-principal); border-radius: 10px; }
-.pestañas::-webkit-scrollbar-thumb { background: var(--borde-oscuro); border-radius: 10px; }
-.pestañas::-webkit-scrollbar-thumb:hover { background: var(--texto-gris); }
+.pestañas::-webkit-scrollbar {
+    height: 6px;
+}
+
+.pestañas::-webkit-scrollbar-track {
+    background: #F5FAF6;
+    border-radius: 10px;
+}
+
+.pestañas::-webkit-scrollbar-thumb {
+    background: #C4DDCD;
+    border-radius: 10px;
+}
+
+.pestañas::-webkit-scrollbar-thumb:hover {
+    background: #A8D5BA;
+}
 
 .pestana {
     font-family: 'Montserrat', sans-serif;
-    background: var(--fondo-tarjeta);
-    border:none;
-    color: var(--texto-gris);
+    background: #FFFFFF;
+    border: 1px solid #C4DDCD;
+    color: #526B5D;
     padding: 10px 22px;
     border-radius: 25px;
     font-size: 1.1rem;
@@ -76,17 +110,26 @@
 }
 
 .pestana.activo {
-    background: var(--color-naranja); 
-    color: var(--color-blanco);
-    border-color: var(--color-naranja);
-    box-shadow: 0 4px 15px rgba(255, 90, 54, 0.3);
+    background: #A8D5BA;
+    color: #263B30;
+    border-color: #8BC9A3;
+    box-shadow: 0 4px 15px rgba(85, 145, 108, 0.16);
 }
 
 .pestana:hover:not(.activo) {
-    background: var(--borde-oscuro);
-    color: var(--color-blanco);
+    background: #D8EEDF;
+    color: #376B50;
+    border-color: #A8D5BA;
 }
 
+.pestana:focus-visible {
+    outline: 3px solid #8BC9A3;
+    outline-offset: 3px;
+}
+
+/* ==========================================================================
+   GRID DE VEHICULOS
+   ========================================================================== */
 
 .grid-autos {
     display: grid;
@@ -94,24 +137,34 @@
     gap: 25px;
 }
 
+/* ==========================================================================
+   TARJETAS DE VEHICULOS
+   ========================================================================== */
 
 .tarjeta-vehiculo {
-    background-color: var(--fondo-tarjeta);
-    
+    background-color: #FFFFFF;
+    border: 1px solid #D8EEDF;
     border-radius: 20px;
     padding: 16px;
     display: flex;
     flex-direction: column;
-    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+    transition:
+            transform 0.3s ease,
+            box-shadow 0.3s ease,
+            border-color 0.3s ease;
     overflow: hidden;
+    box-shadow: 0 8px 25px rgba(85, 145, 108, 0.07);
 }
 
 .tarjeta-vehiculo:hover {
     transform: translateY(-8px);
-    box-shadow: 0 20px 40px rgba(0,0,0,0.4);
-    
+    box-shadow: 0 20px 40px rgba(85, 145, 108, 0.14);
+    border-color: #A8D5BA;
 }
 
+/* ==========================================================================
+   IMAGEN DEL VEHICULO
+   ========================================================================== */
 
 .imagen-contenedor {
     position: relative;
@@ -120,7 +173,7 @@
     border-radius: 14px;
     overflow: hidden;
     margin-bottom: 15px;
-    background-color: #0d121c; 
+    background-color: #E4F3E9;
 }
 
 .imagen-contenedor img {
@@ -132,9 +185,12 @@
 }
 
 .tarjeta-vehiculo:hover .imagen-contenedor img {
-    transform: scale(1.09); 
+    transform: scale(1.09);
 }
 
+/* ==========================================================================
+   ETIQUETAS PASTEL
+   ========================================================================== */
 
 .etiqueta-badge {
     position: absolute;
@@ -150,19 +206,41 @@
     z-index: 2;
 }
 
-.etiqueta-badge.naranja { background: var(--badge-orange); color: var(--badge-orange-text); border: 1px solid rgba(255, 90, 54, 0.2); }
-.etiqueta-badge.azul { background: var(--badge-blue); color: var(--badge-blue-text); border: 1px solid rgba(59, 130, 246, 0.2); }
-.etiqueta-badge.morada { background: var(--badge-purple); color: var(--badge-purple-text); border: 1px solid rgba(168, 85, 247, 0.2); }
-.etiqueta-badge.verde { background: var(--badge-green); color: var(--badge-green-text); border: 1px solid rgba(34, 197, 94, 0.2); }
+.etiqueta-badge.naranja {
+    background: var(--badge-orange);
+    color: var(--badge-orange-text);
+    border: 1px solid #EFCDBB;
+}
+
+.etiqueta-badge.azul {
+    background: var(--badge-blue);
+    color: var(--badge-blue-text);
+    border: 1px solid #C2DDEA;
+}
+
+.etiqueta-badge.morada {
+    background: var(--badge-purple);
+    color: var(--badge-purple-text);
+    border: 1px solid #DCCAEF;
+}
+
+.etiqueta-badge.verde {
+    background: var(--badge-green);
+    color: var(--badge-green-text);
+    border: 1px solid #B8DCC5;
+}
+
+/* ==========================================================================
+   CALIFICACION DEL VEHICULO
+   ========================================================================== */
 
 .rating-badge {
     position: absolute;
     bottom: 12px;
     right: 12px;
-    background: rgba(9, 14, 23, 0.7);
+    background: rgba(255, 249, 239, 0.94);
     backdrop-filter: blur(5px);
-    
-    color: var(--color-blanco);
+    color: #526B5D;
     padding: 6px 10px;
     border-radius: 8px;
     font-size: 0.85rem;
@@ -171,12 +249,16 @@
     align-items: center;
     gap: 5px;
     z-index: 2;
+    border: 1px solid #F0E5D2;
 }
 
 .rating-badge i {
-    color: #f59e0b;
+    color: #B98B42;
 }
 
+/* ==========================================================================
+   INFORMACION DEL VEHICULO
+   ========================================================================== */
 
 .info-vehiculo {
     display: flex;
@@ -185,7 +267,7 @@
 }
 
 .subtipo-auto {
-    color: var(--texto-gris);
+    color: #648070;
     font-size: 0.85rem;
     font-weight: 600;
     text-transform: uppercase;
@@ -197,9 +279,13 @@
     font-family: 'Outfit', sans-serif;
     font-size: 1.4rem;
     font-weight: 700;
-    color: var(--color-blanco);
+    color: #376B50;
     margin-bottom: 15px;
 }
+
+/* ==========================================================================
+   CARACTERISTICAS DEL VEHICULO
+   ========================================================================== */
 
 .caracteristicas-grid {
     display: flex;
@@ -211,24 +297,27 @@
     display: flex;
     align-items: center;
     gap: 8px;
-    color: #9ca3af;
+    color: #526B5D;
     font-size: 0.85rem;
     font-weight: 500;
-    background: rgba(255,255,255,0.03);
+    background: #F5FAF6;
     padding: 6px 10px;
     border-radius: 6px;
-   
+    border: 1px solid #E4F3E9;
 }
 
 .caracteristicas-grid i {
-    color: var(--color-naranja);
+    color: #5B9C76;
 }
 
+/* ==========================================================================
+   BOTON DE INFORMACION TECNICA
+   ========================================================================== */
 
 .btn-info-tecnica {
-    background-color: transparent;
-    border: 1px dashed #4ade80;
-    color: var(--texto-gris);
+    background-color: #E4F3E9;
+    border: 1px dashed #A8D5BA;
+    color: #376B50;
     padding: 10px;
     border-radius: 10px;
     font-size: 0.9rem;
@@ -243,17 +332,26 @@
 }
 
 .btn-info-tecnica:hover {
-    background-color: rgba(255, 255, 255, 0.05);
-    border-color: var(--texto-gris);
-    color: var(--color-blanco);
+    background-color: #D8EEDF;
+    border-color: #8BC9A3;
+    color: #263B30;
 }
+
+.btn-info-tecnica:focus-visible {
+    outline: 3px solid #8BC9A3;
+    outline-offset: 3px;
+}
+
+/* ==========================================================================
+   PRECIO Y RESERVA
+   ========================================================================== */
 
 .precio-reserva {
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding-top: 15px;
-    border-top: 1px solid var(--borde-oscuro);
+    border-top: 1px solid #D8EEDF;
     margin-top: auto;
 }
 
@@ -264,7 +362,7 @@
 
 .etiqueta-precio {
     font-size: 0.75rem;
-    color: var(--texto-gris);
+    color: #648070;
     text-transform: uppercase;
 }
 
@@ -272,12 +370,16 @@
     font-family: 'Outfit', sans-serif;
     font-size: 1.5rem;
     font-weight: 800;
-    color: var(--color-blanco);
+    color: #376B50;
 }
 
+/* ==========================================================================
+   BOTON DE RESERVA
+   ========================================================================== */
+
 .boton-accion-naranja {
-    background-color: var(--color-naranja);
-    color: var(--color-blanco);
+    background-color: #A8D5BA;
+    color: #263B30;
     border: none;
     padding: 12px 20px;
     border-radius: 10px;
@@ -291,11 +393,20 @@
 }
 
 .boton-accion-naranja:hover {
-    background-color: #e04a29;
-    box-shadow: 0 4px 15px rgba(255, 90, 54, 0.4);
+    background-color: #8BC9A3;
+    color: #263B30;
+    box-shadow: 0 4px 15px rgba(85, 145, 108, 0.2);
     transform: translateY(-2px);
 }
 
+.boton-accion-naranja:focus-visible {
+    outline: 3px solid #8BC9A3;
+    outline-offset: 3px;
+}
+
+/* ==========================================================================
+   MODAL DE CUENTA
+   ========================================================================== */
 
 .modal-cuenta {
     position: fixed;
@@ -303,7 +414,7 @@
     left: 0;
     width: 100%;
     height: 100vh;
-    background-color: rgba(9, 14, 23, 0.85); 
+    background-color: rgba(168, 213, 186, 0.48);
     backdrop-filter: blur(8px);
     z-index: 9999;
     display: flex;
@@ -313,18 +424,25 @@
     transition: opacity 0.3s ease;
 }
 
-.modal-cuenta.oculto { display: none !important; }
-.modal-cuenta.activo { opacity: 1; }
+.modal-cuenta.oculto {
+    display: none !important;
+}
+
+.modal-cuenta.activo {
+    opacity: 1;
+}
 
 .modal-cuenta-contenido {
-    background-color: #121927; 
-    
+    background-color: #FFF9EF;
+    border: 1px solid #D8EEDF;
     border-radius: 20px;
     padding: 40px;
     width: 90%;
     max-width: 570px;
     position: relative;
-    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255,255,255,0.05) inset;
+    box-shadow:
+            0 25px 50px rgba(85, 145, 108, 0.17),
+            0 0 0 1px rgba(255, 255, 255, 0.65) inset;
     transform: scale(0.95) translateY(20px);
     transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
@@ -333,13 +451,17 @@
     transform: scale(1) translateY(0);
 }
 
+/* ==========================================================================
+   BOTON PARA CERRAR MODAL
+   ========================================================================== */
+
 .btn-cerrar-modal {
     position: absolute;
     top: 20px;
     right: 20px;
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255,255,255,0.1);
-    color: var(--texto-gris);
+    background: #E4F3E9;
+    border: 1px solid #C4DDCD;
+    color: #526B5D;
     width: 38px;
     height: 38px;
     border-radius: 50%;
@@ -352,27 +474,45 @@
 }
 
 .btn-cerrar-modal:hover {
-    background: var(--color-naranja);
-    color: var(--color-blanco);
-    border-color: var(--color-naranja);
-    transform: rotate(90deg); 
+    background: #A8D5BA;
+    color: #263B30;
+    border-color: #8BC9A3;
+    transform: rotate(90deg);
 }
 
+.btn-cerrar-modal:focus-visible {
+    outline: 3px solid #8BC9A3;
+    outline-offset: 3px;
+}
+
+/* ==========================================================================
+   DISEÑO RESPONSIVE
+   ========================================================================== */
 
 @media (min-width: 768px) {
-    .grid-autos { grid-template-columns: repeat(2, 1fr); }
-    .cabecera-coleccion { 
-        display: flex; 
-        justify-content: space-between; 
-        align-items: flex-end; 
+    .grid-autos {
+        grid-template-columns: repeat(2, 1fr);
     }
-    .cabecera-coleccion p { margin-bottom: 0; }
+
+    .cabecera-coleccion {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+    }
+
+    .cabecera-coleccion p {
+        margin-bottom: 0;
+    }
 }
 
 @media (min-width: 1024px) {
-    .grid-autos { grid-template-columns: repeat(3, 1fr); }
+    .grid-autos {
+        grid-template-columns: repeat(3, 1fr);
+    }
 }
 
 @media (min-width: 1250px) {
-    .grid-autos { grid-template-columns: repeat(4, 1fr); }
+    .grid-autos {
+        grid-template-columns: repeat(4, 1fr);
+    }
 }

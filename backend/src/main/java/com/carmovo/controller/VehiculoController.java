@@ -1,9 +1,10 @@
-package com.carmovo.controller;
 
+package com.carmovo.controller;
 
 import com.carmovo.service.VehiculoServicio;
 import com.carmovo.service.AuditoriaServicio;
 import com.carmovo.dto.VehiculoDTO;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,7 +19,10 @@ public class VehiculoController {
     private final VehiculoServicio vehiculoServicio;
     private final AuditoriaServicio auditoriaServicio;
 
-    public VehiculoController(VehiculoServicio vehiculoServicio, AuditoriaServicio auditoriaServicio) {
+    public VehiculoController(
+            VehiculoServicio vehiculoServicio,
+            AuditoriaServicio auditoriaServicio
+    ) {
         this.vehiculoServicio = vehiculoServicio;
         this.auditoriaServicio = auditoriaServicio;
     }
@@ -34,39 +38,75 @@ public class VehiculoController {
     }
 
     @PostMapping
-    public ResponseEntity<VehiculoDTO> crear(@RequestBody VehiculoDTO dto) {
+    public ResponseEntity<VehiculoDTO> crear(
+            @Valid @RequestBody VehiculoDTO dto
+    ) {
         VehiculoDTO nuevoVehiculo = vehiculoServicio.crearVehiculo(dto);
+
         auditoriaServicio.registrarSeguro(
-                "Flota", "CREAR", "Vehículo", nuevoVehiculo.getIdVehiculo(),
-                "Se registró el vehículo " + nombreVehiculo(nuevoVehiculo) + " con estado " + nuevoVehiculo.getEstado() + "."
+                "Flota",
+                "CREAR",
+                "Vehículo",
+                nuevoVehiculo.getIdVehiculo(),
+                "Se registró el vehículo "
+                        + nombreVehiculo(nuevoVehiculo)
+                        + " con estado "
+                        + nuevoVehiculo.getEstado()
+                        + "."
         );
+
         return new ResponseEntity<>(nuevoVehiculo, HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<VehiculoDTO> actualizar(@PathVariable Long id, @RequestBody VehiculoDTO dto) {
+    public ResponseEntity<VehiculoDTO> actualizar(
+            @PathVariable Long id,
+            @Valid @RequestBody VehiculoDTO dto
+    ) {
         VehiculoDTO anterior = vehiculoServicio.obtenerPorId(id);
         VehiculoDTO actualizado = vehiculoServicio.actualizarVehiculo(id, dto);
+
         auditoriaServicio.registrarSeguro(
-                "Flota", "ACTUALIZAR", "Vehículo", id,
-                "Se actualizó " + nombreVehiculo(actualizado) + ". Estado: " + anterior.getEstado() + " → " + actualizado.getEstado() + "."
+                "Flota",
+                "ACTUALIZAR",
+                "Vehículo",
+                id,
+                "Se actualizó "
+                        + nombreVehiculo(actualizado)
+                        + ". Estado: "
+                        + anterior.getEstado()
+                        + " → "
+                        + actualizado.getEstado()
+                        + "."
         );
+
         return ResponseEntity.ok(actualizado);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> eliminar(@PathVariable Long id) {
         VehiculoDTO vehiculo = vehiculoServicio.obtenerPorId(id);
+
         vehiculoServicio.eliminarVehiculo(id);
+
         auditoriaServicio.registrarSeguro(
-                "Flota", "ELIMINAR", "Vehículo", id,
-                "Se eliminó el vehículo " + nombreVehiculo(vehiculo) + "."
+                "Flota",
+                "ELIMINAR",
+                "Vehículo",
+                id,
+                "Se eliminó el vehículo "
+                        + nombreVehiculo(vehiculo)
+                        + "."
         );
+
         return ResponseEntity.noContent().build();
     }
 
     private String nombreVehiculo(VehiculoDTO vehiculo) {
-        return ((vehiculo.getMarca() == null ? "" : vehiculo.getMarca()) + " " +
-                (vehiculo.getModelo() == null ? "" : vehiculo.getModelo())).trim();
+        return (
+                (vehiculo.getMarca() == null ? "" : vehiculo.getMarca())
+                        + " "
+                        + (vehiculo.getModelo() == null ? "" : vehiculo.getModelo())
+        ).trim();
     }
 }

@@ -1,0 +1,469 @@
+
+/* ==========================================================================
+   CARMOVO - ADMINISTRADOR
+   REPORTES Y ESTADISTICAS - PALETA AZUL PASTEL
+   ========================================================================== */
+
+/* ==========================================================================
+   ENCABEZADO
+   ========================================================================== */
+
+.reportes-encabezado {
+    align-items: center;
+}
+
+/* ==========================================================================
+   FILTROS DE REPORTES
+   ========================================================================== */
+
+.reportes-filtros {
+    margin-bottom: 18px;
+    padding: 18px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+/* ==========================================================================
+   TEXTO INFORMATIVO DE FILTROS
+   ========================================================================== */
+
+.reportes-filtros__texto {
+    max-width: 620px;
+}
+
+.reportes-filtros__texto strong {
+    display: block;
+    color: #315A75;
+    font-size: .9rem;
+}
+
+.reportes-filtros__texto span {
+    display: block;
+    margin-top: 6px;
+    color: var(--admin-texto-secundario);
+    font-size: .72rem;
+    line-height: 1.5;
+}
+
+/* ==========================================================================
+   CAMPOS DE FILTROS
+   ========================================================================== */
+
+.reportes-filtros__campos {
+    display: flex;
+    align-items: flex-end;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.reportes-filtros__campos label {
+    display: grid;
+    gap: 6px;
+}
+
+.reportes-filtros__campos label span {
+    color: #587284;
+    font-size: .67rem;
+    font-weight: 700;
+}
+
+/* ==========================================================================
+   CAMPOS DE FECHA
+   ========================================================================== */
+
+.reportes-filtros__campos input {
+    min-height: 42px;
+    padding: 0 11px;
+    border: 1px solid var(--admin-borde);
+    border-radius: 10px;
+    outline: none;
+    background: #FFFFFF;
+    color: var(--admin-texto);
+    transition: border-color .2s ease, box-shadow .2s ease;
+}
+
+.reportes-filtros__campos input:focus {
+    border-color: #7CB5D9;
+    box-shadow: 0 0 0 3px rgba(124, 181, 217, .16);
+}
+
+/* ==========================================================================
+   MENSAJE DE ERROR DE API
+   ========================================================================== */
+
+.mensaje-api {
+    display: none;
+    margin-bottom: 18px;
+    padding: 14px 16px;
+    border: 1px solid #E9B8B8;
+    border-radius: 11px;
+    background: #FFF1F1;
+    color: #A64545;
+    font-size: .76rem;
+    line-height: 1.5;
+}
+
+.mensaje-api.visible {
+    display: block;
+}
+
+.mensaje-api i {
+    margin-right: 8px;
+}
+
+/* ==========================================================================
+   RESUMEN DE REPORTES
+   ========================================================================== */
+
+.reportes-resumen {
+    margin-bottom: 18px;
+}
+
+/* ==========================================================================
+   VALORES MONETARIOS
+   ========================================================================== */
+
+.reporte-valor-monetario {
+    font-size: clamp(1.25rem, 2vw, 1.7rem);
+}
+
+/* ==========================================================================
+   DISTRIBUCION DE GRAFICOS
+   ========================================================================== */
+
+.reportes-grid-graficos {
+    margin-bottom: 18px;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px;
+}
+
+/* ==========================================================================
+   PANELES DE REPORTES
+   ========================================================================== */
+
+.reporte-panel {
+    overflow: hidden;
+}
+
+.reporte-panel + .reporte-panel--tabla,
+.reporte-panel--tabla + .reporte-panel--tabla {
+    margin-top: 18px;
+}
+
+/* ==========================================================================
+   CABECERA DEL PANEL
+   ========================================================================== */
+
+.reporte-panel__cabecera {
+    min-height: 74px;
+    padding: 16px 18px;
+    border-bottom: 1px solid var(--admin-borde);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    background: #F3F8FC;
+}
+
+.reporte-panel__cabecera h2 {
+    color: #315A75;
+    font-size: .94rem;
+}
+
+.reporte-panel__cabecera p {
+    margin-top: 5px;
+    color: var(--admin-texto-secundario);
+    font-size: .69rem;
+    line-height: 1.45;
+}
+
+/* ==========================================================================
+   CONTENEDOR DE GRAFICOS
+   ========================================================================== */
+
+.reporte-panel .widget-grafico {
+    padding: 20px 18px 22px;
+}
+
+/* ==========================================================================
+   CONTADOR DEL PANEL
+   ========================================================================== */
+
+.reporte-panel__contador {
+    flex: 0 0 auto;
+    color: var(--admin-texto-secundario);
+    font-size: .7rem;
+    font-weight: 700;
+}
+
+/* ==========================================================================
+   CABECERA CON ACCIONES
+   ========================================================================== */
+
+.reporte-panel__cabecera--acciones {
+    align-items: center;
+}
+
+.reporte-panel__acciones {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+/* ==========================================================================
+   TABLAS DE REPORTES
+   ========================================================================== */
+
+.tabla-reportes {
+    min-width: 900px;
+}
+
+.tabla-reportes--detalle {
+    min-width: 1120px;
+}
+
+/* ==========================================================================
+   INFORMACION DE VEHICULOS, CLIENTES Y PERIODOS
+   ========================================================================== */
+
+.reporte-vehiculo strong,
+.reporte-cliente strong,
+.reporte-periodo strong {
+    display: block;
+    color: #315A75;
+    font-size: .79rem;
+}
+
+.reporte-vehiculo small,
+.reporte-cliente small,
+.reporte-periodo small {
+    display: block;
+    margin-top: 4px;
+    color: #587284;
+    font-size: .67rem;
+    line-height: 1.4;
+}
+
+/* ==========================================================================
+   VALORES NUMERICOS
+   ========================================================================== */
+
+.reporte-numero {
+    font-weight: 800;
+    color: #315A75;
+}
+
+/* ==========================================================================
+   MONTOS DE REPORTES
+   ========================================================================== */
+
+.reporte-monto {
+    white-space: nowrap;
+    color: #315A75;
+    font-weight: 800;
+}
+
+/* Ingresos */
+.reporte-monto--ingreso {
+    color: #376B50;
+}
+
+/* ==========================================================================
+   ETIQUETAS DE ESTADOS
+   ========================================================================== */
+
+.badge-reporte {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 9px;
+    border-radius: 999px;
+    font-size: .67rem;
+    font-weight: 700;
+    white-space: nowrap;
+    color: #587284;
+    background: #EDF2F6;
+}
+
+.badge-reporte::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    flex-shrink: 0;
+    border-radius: 50%;
+    background: currentColor;
+}
+
+/* ==========================================================================
+   ESTADO PENDIENTE
+   ========================================================================== */
+
+.badge-reporte.pendiente {
+    color: #9A722C;
+    background: #FFF2D8;
+}
+
+/* ==========================================================================
+   ESTADOS CONFIRMADO Y EN REVISION
+   ========================================================================== */
+
+.badge-reporte.confirmado,
+.badge-reporte.en-revision {
+    color: #315A75;
+    background: #DCECF7;
+}
+
+/* ==========================================================================
+   ESTADO EN CURSO
+   ========================================================================== */
+
+.badge-reporte.en-curso {
+    color: #527F9C;
+    background: #EAF4FA;
+}
+
+/* ==========================================================================
+   ESTADOS FINALIZADO Y PAGADO
+   ========================================================================== */
+
+.badge-reporte.finalizado,
+.badge-reporte.pagado {
+    color: #376B50;
+    background: #E4F3E9;
+}
+
+/* ==========================================================================
+   ESTADOS CANCELADO Y RECHAZADO
+   ========================================================================== */
+
+.badge-reporte.cancelado,
+.badge-reporte.rechazado {
+    color: #A64545;
+    background: #FFF1F1;
+}
+
+/* ==========================================================================
+   ULTIMA ACTUALIZACION
+   ========================================================================== */
+
+.reporte-actualizacion {
+    margin-top: 14px;
+    color: #587284;
+    text-align: right;
+    font-size: .67rem;
+}
+
+/* ==========================================================================
+   RESPONSIVE - PANTALLAS MEDIANAS
+   ========================================================================== */
+
+@media (max-width: 1180px) {
+    .reportes-filtros {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .reportes-grid-graficos {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* ==========================================================================
+   RESPONSIVE - TABLETAS Y CELULARES
+   ========================================================================== */
+
+@media (max-width: 760px) {
+    .reportes-filtros__campos {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .reportes-filtros__campos label,
+    .reportes-filtros__campos button {
+        width: 100%;
+    }
+
+    .reporte-panel__cabecera--acciones,
+    .reporte-panel__acciones {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .reporte-panel__acciones {
+        width: 100%;
+    }
+}
+
+/* ==========================================================================
+   PANELES CON TABLAS
+   ========================================================================== */
+
+.reporte-panel--tabla {
+    margin-top: 18px;
+}
+
+/* ==========================================================================
+   AJUSTES FINALES DE DIMENSIONES
+   ========================================================================== */
+
+.reportes-filtros,
+.reportes-filtros__texto,
+.reportes-filtros__campos,
+.reportes-grid-graficos,
+.reporte-panel,
+.reporte-panel__cabecera,
+.reporte-panel__acciones {
+    min-width: 0;
+    max-width: 100%;
+}
+
+.reportes-filtros__campos,
+.reporte-panel__cabecera,
+.reporte-panel__acciones {
+    flex-wrap: wrap;
+}
+
+.reportes-filtros__texto {
+    flex: 1 1 360px;
+}
+
+.reportes-filtros__campos {
+    flex: 1 1 520px;
+    justify-content: flex-end;
+}
+
+.reportes-filtros__campos label {
+    min-width: 0;
+}
+
+.reporte-panel {
+    width: 100%;
+}
+
+.reporte-vehiculo,
+.reporte-cliente,
+.reporte-periodo {
+    min-width: 0;
+}
+
+.reporte-vehiculo strong,
+.reporte-vehiculo small,
+.reporte-cliente strong,
+.reporte-cliente small,
+.reporte-periodo strong,
+.reporte-periodo small {
+    overflow-wrap: anywhere;
+}
+
+/* ==========================================================================
+   ACCESIBILIDAD
+   ========================================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+    .reportes-filtros__campos input {
+        transition: none;
+    }
+}

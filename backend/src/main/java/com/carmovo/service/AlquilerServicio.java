@@ -1,13 +1,11 @@
-package com.carmovo.service;
 
+package com.carmovo.service;
 
 import com.carmovo.model.Alquiler;
 import com.carmovo.repository.AlquilerRepositorio;
 import com.carmovo.dto.AlquilerDTO;
 import com.carmovo.dto.AlquilerGuardarDTO;
-import com.carmovo.service.UsuarioServicio;
 import com.carmovo.dto.UsuarioDTO;
-import com.carmovo.service.VehiculoServicio;
 import com.carmovo.dto.VehiculoDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -65,7 +63,8 @@ public class AlquilerServicio {
 
     @Transactional(readOnly = true)
     public Optional<AlquilerDTO> obtenerUltimoPorUsuario(Long idUsuario) {
-        return alquilerRepositorio.findFirstByIdUsuarioOrderByFechaRegistroDesc(idUsuario)
+        return alquilerRepositorio
+                .findFirstByIdUsuarioOrderByFechaRegistroDesc(idUsuario)
                 .map(this::convertirADto);
     }
 
@@ -75,14 +74,24 @@ public class AlquilerServicio {
 
         UsuarioDTO usuario = usuarioServicio.obtenerPorId(dto.getIdUsuario());
         VehiculoDTO vehiculo = vehiculoServicio.obtenerPorId(dto.getIdVehiculo());
+
         validarCliente(usuario);
 
         String estado = normalizarEstado(dto.getEstado());
-        validarDisponibilidad(dto.getIdVehiculo(), dto.getFechaInicio(), dto.getFechaFin(), null, estado);
+
+        validarDisponibilidad(
+                dto.getIdVehiculo(),
+                dto.getFechaInicio(),
+                dto.getFechaFin(),
+                null,
+                estado
+        );
 
         Alquiler alquiler = new Alquiler();
         mapear(alquiler, dto, estado, vehiculo);
+
         Alquiler guardado = alquilerRepositorio.save(alquiler);
+
         sincronizarEstadoVehiculo(vehiculo, estado);
 
         return convertirADto(guardado);
@@ -91,38 +100,56 @@ public class AlquilerServicio {
     @Transactional
     public AlquilerDTO actualizar(Long id, AlquilerGuardarDTO dto) {
         Alquiler alquiler = buscarAlquiler(id);
+
         validar(dto, id);
 
         UsuarioDTO usuario = usuarioServicio.obtenerPorId(dto.getIdUsuario());
         VehiculoDTO vehiculo = vehiculoServicio.obtenerPorId(dto.getIdVehiculo());
+
         validarCliente(usuario);
 
         String estadoAnterior = alquiler.getEstado();
         Long vehiculoAnteriorId = alquiler.getIdVehiculo();
         String estadoNuevo = normalizarEstado(dto.getEstado());
 
-        validarDisponibilidad(dto.getIdVehiculo(), dto.getFechaInicio(), dto.getFechaFin(), id, estadoNuevo);
+        validarDisponibilidad(
+                dto.getIdVehiculo(),
+                dto.getFechaInicio(),
+                dto.getFechaFin(),
+                id,
+                estadoNuevo
+        );
+
         mapear(alquiler, dto, estadoNuevo, vehiculo);
+
         Alquiler actualizado = alquilerRepositorio.save(alquiler);
 
         if (!vehiculoAnteriorId.equals(dto.getIdVehiculo())) {
             try {
-                VehiculoDTO anterior = vehiculoServicio.obtenerPorId(vehiculoAnteriorId);
+                VehiculoDTO anterior =
+                        vehiculoServicio.obtenerPorId(vehiculoAnteriorId);
+
                 liberarVehiculoSiCorresponde(anterior, estadoAnterior);
+
             } catch (RuntimeException ignored) {
-                // Si el vehículo anterior ya no existe, no interrumpimos la actualización del alquiler.
+                // Conservamos el comportamiento existente:
+                // no interrumpir si el vehículo anterior ya no existe.
             }
         }
 
         sincronizarEstadoVehiculo(vehiculo, estadoNuevo);
+
         return convertirADto(actualizado);
     }
 
     @Transactional
     public AlquilerDTO cambiarEstado(Long id, String estadoSolicitado) {
         Alquiler alquiler = buscarAlquiler(id);
+
         String estado = normalizarEstado(estadoSolicitado);
-        VehiculoDTO vehiculo = vehiculoServicio.obtenerPorId(alquiler.getIdVehiculo());
+
+        VehiculoDTO vehiculo =
+                vehiculoServicio.obtenerPorId(alquiler.getIdVehiculo());
 
         if (ESTADOS_QUE_BLOQUEAN.contains(estado)) {
             validarDisponibilidad(
@@ -135,51 +162,97 @@ public class AlquilerServicio {
         }
 
         alquiler.setEstado(estado);
+
         Alquiler actualizado = alquilerRepositorio.save(alquiler);
+
         sincronizarEstadoVehiculo(vehiculo, estado);
+
         return convertirADto(actualizado);
     }
 
     @Transactional
     public void eliminar(Long id) {
         Alquiler alquiler = buscarAlquiler(id);
-        if (!"Pendiente".equals(alquiler.getEstado()) && !"Cancelado".equals(alquiler.getEstado())) {
+
+        if (
+                !"Pendiente".equals(alquiler.getEstado()) &&
+                        !"Cancelado".equals(alquiler.getEstado())
+        ) {
             throw new ResponseStatusException(
                     HttpStatus.CONFLICT,
                     "Solo se pueden eliminar alquileres pendientes o cancelados."
             );
         }
 
-        VehiculoDTO vehiculo = vehiculoServicio.obtenerPorId(alquiler.getIdVehiculo());
+        VehiculoDTO vehiculo =
+                vehiculoServicio.obtenerPorId(alquiler.getIdVehiculo());
+
+        String estadoAnterior = alquiler.getEstado();
+
         alquilerRepositorio.delete(alquiler);
-        liberarVehiculoSiCorresponde(vehiculo, alquiler.getEstado());
+        alquilerRepositorio.flush();
+
+        liberarVehiculoSiCorresponde(vehiculo, estadoAnterior);
     }
 
     private void validar(AlquilerGuardarDTO dto, Long idActual) {
         if (dto == null) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Los datos del alquiler son obligatorios.");
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    "Los datos del alquiler son obligatorios."
+            );
         }
+
         if (dto.getIdUsuario() == null || dto.getIdVehiculo() == null) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Debes seleccionar un cliente y un vehículo.");
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    "Debes seleccionar un cliente y un vehículo."
+            );
         }
+
         if (dto.getFechaInicio() == null || dto.getFechaFin() == null) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Las fechas de inicio y fin son obligatorias.");
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    "Las fechas de inicio y fin son obligatorias."
+            );
         }
+
         if (dto.getFechaFin().isBefore(dto.getFechaInicio())) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "La fecha de fin no puede ser anterior a la fecha de inicio.");
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    "La fecha de fin no puede ser anterior a la fecha de inicio."
+            );
         }
-        if (esVacio(dto.getLugarRecogida()) || esVacio(dto.getLugarEntrega())) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Los lugares de recogida y entrega son obligatorios.");
+
+        if (
+                esVacio(dto.getLugarRecogida()) ||
+                        esVacio(dto.getLugarEntrega())
+        ) {
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    "Los lugares de recogida y entrega son obligatorios."
+            );
         }
+
         normalizarEstado(dto.getEstado());
     }
 
     private void validarCliente(UsuarioDTO usuario) {
         if (usuario.getEstado() == null || !usuario.getEstado()) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "El cliente seleccionado está inactivo.");
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    "El cliente seleccionado está inactivo."
+            );
         }
-        if (usuario.getNombrePerfil() != null && !"cliente".equals(normalizar(usuario.getNombrePerfil()))) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "El alquiler debe estar asociado a un usuario con perfil Cliente.");
+
+        if (
+                usuario.getNombrePerfil() != null &&
+                        !"cliente".equals(normalizar(usuario.getNombrePerfil()))
+        ) {
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    "El alquiler debe estar asociado a un usuario con perfil Cliente."
+            );
         }
     }
 
@@ -190,12 +263,22 @@ public class AlquilerServicio {
             Long idActual,
             String estado
     ) {
-        if (!ESTADOS_QUE_BLOQUEAN.contains(estado)) return;
+        if (!ESTADOS_QUE_BLOQUEAN.contains(estado)) {
+            return;
+        }
 
         boolean conflicto = alquilerRepositorio
-                .buscarConflictos(idVehiculo, fechaInicio, fechaFin, ESTADOS_QUE_BLOQUEAN)
+                .buscarConflictos(
+                        idVehiculo,
+                        fechaInicio,
+                        fechaFin,
+                        ESTADOS_QUE_BLOQUEAN
+                )
                 .stream()
-                .anyMatch(item -> idActual == null || !item.getIdAlquiler().equals(idActual));
+                .anyMatch(
+                        item -> idActual == null ||
+                                !item.getIdAlquiler().equals(idActual)
+                );
 
         if (conflicto) {
             throw new ResponseStatusException(
@@ -205,7 +288,12 @@ public class AlquilerServicio {
         }
     }
 
-    private void mapear(Alquiler alquiler, AlquilerGuardarDTO dto, String estado, VehiculoDTO vehiculo) {
+    private void mapear(
+            Alquiler alquiler,
+            AlquilerGuardarDTO dto,
+            String estado,
+            VehiculoDTO vehiculo
+    ) {
         alquiler.setIdUsuario(dto.getIdUsuario());
         alquiler.setIdVehiculo(dto.getIdVehiculo());
         alquiler.setFechaInicio(dto.getFechaInicio());
@@ -215,52 +303,171 @@ public class AlquilerServicio {
         alquiler.setMetodoPago(limpiarOpcional(dto.getMetodoPago()));
         alquiler.setEstado(estado);
         alquiler.setObservaciones(limpiarOpcional(dto.getObservaciones()));
-        alquiler.setTotal(calcularTotal(vehiculo.getPrecioDia(), dto.getFechaInicio(), dto.getFechaFin()));
+
+        alquiler.setTotal(
+                calcularTotal(
+                        vehiculo.getPrecioDia(),
+                        dto.getFechaInicio(),
+                        dto.getFechaFin()
+                )
+        );
     }
 
-    private BigDecimal calcularTotal(BigDecimal precioDia, LocalDate inicio, LocalDate fin) {
+    private BigDecimal calcularTotal(
+            BigDecimal precioDia,
+            LocalDate inicio,
+            LocalDate fin
+    ) {
         long dias = Math.max(1, ChronoUnit.DAYS.between(inicio, fin));
-        BigDecimal tarifaBase = precioDia.multiply(BigDecimal.valueOf(dias));
+
+        BigDecimal tarifaBase =
+                precioDia.multiply(BigDecimal.valueOf(dias));
+
         BigDecimal impuestos = tarifaBase.multiply(IGV);
-        return tarifaBase.add(SEGURO_FIJO).add(impuestos).setScale(2, RoundingMode.HALF_UP);
+
+        return tarifaBase
+                .add(SEGURO_FIJO)
+                .add(impuestos)
+                .setScale(2, RoundingMode.HALF_UP);
     }
 
-    private void sincronizarEstadoVehiculo(VehiculoDTO vehiculo, String estadoAlquiler) {
+    private void sincronizarEstadoVehiculo(
+            VehiculoDTO vehiculo,
+            String estadoAlquiler
+    ) {
+        if (
+                "Finalizado".equals(estadoAlquiler) ||
+                        "Cancelado".equals(estadoAlquiler)
+        ) {
+            liberarVehiculoSiCorresponde(vehiculo, estadoAlquiler);
+            return;
+        }
+
         String nuevoEstado = switch (estadoAlquiler) {
             case "Confirmado" -> "Reservado";
             case "En curso" -> "Alquilado";
-            case "Finalizado", "Cancelado" -> "Disponible";
             default -> vehiculo.getEstado();
         };
 
-        if (nuevoEstado != null && !nuevoEstado.equalsIgnoreCase(vehiculo.getEstado())) {
+        if (
+                nuevoEstado != null &&
+                        !nuevoEstado.equalsIgnoreCase(vehiculo.getEstado())
+        ) {
             vehiculo.setEstado(nuevoEstado);
-            vehiculoServicio.actualizarVehiculo(vehiculo.getIdVehiculo(), vehiculo);
+
+            vehiculoServicio.actualizarVehiculo(
+                    vehiculo.getIdVehiculo(),
+                    vehiculo
+            );
         }
     }
 
-    private void liberarVehiculoSiCorresponde(VehiculoDTO vehiculo, String estadoAlquiler) {
-        if ("Confirmado".equals(estadoAlquiler) || "En curso".equals(estadoAlquiler)) {
-            vehiculo.setEstado("Disponible");
-            vehiculoServicio.actualizarVehiculo(vehiculo.getIdVehiculo(), vehiculo);
+    private void liberarVehiculoSiCorresponde(
+            VehiculoDTO vehiculo,
+            String estadoAlquiler
+    ) {
+        if (
+                !"Confirmado".equals(estadoAlquiler) &&
+                        !"En curso".equals(estadoAlquiler) &&
+                        !"Finalizado".equals(estadoAlquiler) &&
+                        !"Cancelado".equals(estadoAlquiler)
+        ) {
+            return;
+        }
+
+        List<Alquiler> alquileresBloqueantes =
+                alquilerRepositorio.findAll()
+                        .stream()
+                        .filter(
+                                alquiler ->
+                                        vehiculo.getIdVehiculo().equals(
+                                                alquiler.getIdVehiculo()
+                                        )
+                        )
+                        .filter(
+                                alquiler ->
+                                        ESTADOS_QUE_BLOQUEAN.contains(
+                                                alquiler.getEstado()
+                                        )
+                        )
+                        .toList();
+
+        String nuevoEstado;
+
+        boolean tieneAlquilerEnCurso = alquileresBloqueantes
+                .stream()
+                .anyMatch(
+                        alquiler -> "En curso".equals(alquiler.getEstado())
+                );
+
+        boolean tieneReservaConfirmada = alquileresBloqueantes
+                .stream()
+                .anyMatch(
+                        alquiler -> "Confirmado".equals(alquiler.getEstado())
+                );
+
+        if (tieneAlquilerEnCurso) {
+            nuevoEstado = "Alquilado";
+
+        } else if (tieneReservaConfirmada) {
+            nuevoEstado = "Reservado";
+
+        } else if (alquileresBloqueantes.isEmpty()) {
+            nuevoEstado = "Disponible";
+
+        } else {
+            // Un alquiler pendiente no cambia por sí solo
+            // el estado general del vehículo.
+            return;
+        }
+
+        if (!nuevoEstado.equalsIgnoreCase(vehiculo.getEstado())) {
+            vehiculo.setEstado(nuevoEstado);
+
+            vehiculoServicio.actualizarVehiculo(
+                    vehiculo.getIdVehiculo(),
+                    vehiculo
+            );
         }
     }
 
     private AlquilerDTO convertirADto(Alquiler alquiler) {
-        UsuarioDTO usuario = usuarioServicio.obtenerPorId(alquiler.getIdUsuario());
-        VehiculoDTO vehiculo = vehiculoServicio.obtenerPorId(alquiler.getIdVehiculo());
+        UsuarioDTO usuario =
+                usuarioServicio.obtenerPorId(alquiler.getIdUsuario());
+
+        VehiculoDTO vehiculo =
+                vehiculoServicio.obtenerPorId(alquiler.getIdVehiculo());
 
         AlquilerDTO dto = new AlquilerDTO();
+
         dto.setIdAlquiler(alquiler.getIdAlquiler());
         dto.setIdUsuario(alquiler.getIdUsuario());
-        dto.setCliente((usuario.getNombres() + " " + usuario.getApellidos()).trim());
+
+        dto.setCliente(
+                (usuario.getNombres() + " " + usuario.getApellidos()).trim()
+        );
+
         dto.setCorreoCliente(usuario.getCorreo());
         dto.setIdVehiculo(alquiler.getIdVehiculo());
-        dto.setVehiculo((vehiculo.getMarca() + " " + vehiculo.getModelo()).trim());
+
+        dto.setVehiculo(
+                (vehiculo.getMarca() + " " + vehiculo.getModelo()).trim()
+        );
+
         dto.setCategoriaVehiculo(vehiculo.getCategoria());
         dto.setFechaInicio(alquiler.getFechaInicio());
         dto.setFechaFin(alquiler.getFechaFin());
-        dto.setDias(Math.max(1, ChronoUnit.DAYS.between(alquiler.getFechaInicio(), alquiler.getFechaFin())));
+
+        dto.setDias(
+                Math.max(
+                        1,
+                        ChronoUnit.DAYS.between(
+                                alquiler.getFechaInicio(),
+                                alquiler.getFechaFin()
+                        )
+                )
+        );
+
         dto.setLugarRecogida(alquiler.getLugarRecogida());
         dto.setLugarEntrega(alquiler.getLugarEntrega());
         dto.setMetodoPago(alquiler.getMetodoPago());
@@ -268,20 +475,36 @@ public class AlquilerServicio {
         dto.setTotal(alquiler.getTotal());
         dto.setObservaciones(alquiler.getObservaciones());
         dto.setFechaRegistro(alquiler.getFechaRegistro());
+
         return dto;
     }
 
     private Alquiler buscarAlquiler(Long id) {
         return alquilerRepositorio.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Alquiler no encontrado con ID: " + id));
+                .orElseThrow(
+                        () -> new ResponseStatusException(
+                                HttpStatus.NOT_FOUND,
+                                "Alquiler no encontrado con ID: " + id
+                        )
+                );
     }
 
     private String normalizarEstado(String estado) {
-        String valor = esVacio(estado) ? "Pendiente" : estado.trim();
+        String valor = esVacio(estado)
+                ? "Pendiente"
+                : estado.trim();
+
         return ESTADOS_VALIDOS.stream()
-                .filter(permitido -> permitido.equalsIgnoreCase(valor))
+                .filter(
+                        permitido -> permitido.equalsIgnoreCase(valor)
+                )
                 .findFirst()
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Estado de alquiler no válido."));
+                .orElseThrow(
+                        () -> new ResponseStatusException(
+                                HttpStatus.BAD_REQUEST,
+                                "Estado de alquiler no válido."
+                        )
+                );
     }
 
     private boolean esVacio(String valor) {
@@ -293,6 +516,8 @@ public class AlquilerServicio {
     }
 
     private String normalizar(String valor) {
-        return valor == null ? "" : valor.trim().toLowerCase(Locale.ROOT);
+        return valor == null
+                ? ""
+                : valor.trim().toLowerCase(Locale.ROOT);
     }
 }

@@ -1,14 +1,15 @@
+
 .pie-pagina-nuevo {
-    background-color: var(--fondo-tarjeta, #121927);
-    border-top: 1px solid rgba(255, 255, 255, 0.05);
-    color: var(--texto-gris, #8b95a5);
+    background-color: #E4F3E9;
+    border-top: 1px solid #C4DDCD;
+    color: #526B5D;
     padding: 70px 0 30px 0;
     margin-top: 80px;
 }
 
 .pie-principal {
     padding-bottom: 50px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    border-bottom: 1px solid #C4DDCD;
 }
 
 .pie-enlaces {
@@ -18,7 +19,7 @@
 }
 
 .pie-columna h4 {
-    color: var(--color-blanco, #ffffff);
+    color: #376B50;
     font-family: 'Outfit', sans-serif;
     font-size: 1.15rem;
     font-weight: 700;
@@ -36,7 +37,7 @@
 }
 
 .pie-columna ul li a {
-    color: var(--texto-gris, #8b95a5);
+    color: #526B5D;
     font-family: 'Montserrat', sans-serif;
     font-size: 0.95rem;
     transition: color 0.3s ease, transform 0.3s ease;
@@ -44,11 +45,12 @@
 }
 
 .pie-columna ul li a:hover {
-    color: var(--color-naranja, #ff5a36);
+    color: #376B50;
     transform: translateX(6px);
 }
 
 .pie-suscripcion p {
+    color: #526B5D;
     font-size: 0.95rem;
     margin-bottom: 20px;
     line-height: 1.5;
@@ -61,39 +63,53 @@
 }
 
 .form-suscripcion input {
-    background: rgba(0, 0, 0, 0.2);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: #FFFFFF;
+    border: 1px solid #C4DDCD;
     padding: 14px 16px;
     border-radius: 10px;
-    color: var(--color-blanco, #ffffff);
+    color: #263B30;
     font-family: 'Montserrat', sans-serif;
     font-size: 0.95rem;
     outline: none;
     transition: all 0.3s ease;
 }
 
+.form-suscripcion input::placeholder {
+    color: #708579;
+}
+
 .form-suscripcion input:focus {
-    border-color: var(--color-naranja, #ff5a36);
-    background: rgba(0, 0, 0, 0.4);
-    box-shadow: 0 0 10px rgba(255, 90, 54, 0.1);
+    border-color: #8BC9A3;
+    background: #FFFFFF;
+    box-shadow: 0 0 0 3px rgba(168, 213, 186, 0.35);
 }
 
 .form-suscripcion button {
-    background: linear-gradient(45deg, #ff5a36, #ff8c00);
-    color: var(--color-blanco, #ffffff);
-    border: none;
+    background: #A8D5BA;
+    color: #263B30;
+    border: 1px solid #8BC9A3;
     font-size: 1rem;
     padding: 14px;
     border-radius: 10px;
     font-family: 'Outfit', sans-serif;
     font-weight: 700;
     cursor: pointer;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    transition:
+            background-color 0.3s ease,
+            transform 0.3s ease,
+            box-shadow 0.3s ease;
 }
 
 .form-suscripcion button:hover {
+    background: #8BC9A3;
+    color: #263B30;
     transform: translateY(-2px);
-    box-shadow: 0 8px 20px rgba(255, 90, 54, 0.3);
+    box-shadow: 0 8px 20px rgba(55, 107, 80, 0.15);
+}
+
+.form-suscripcion button:focus-visible {
+    outline: 3px solid #376B50;
+    outline-offset: 3px;
 }
 
 .pie-inferior {
@@ -107,6 +123,7 @@
 }
 
 .pie-inferior p {
+    color: #526B5D;
     font-family: 'Montserrat', sans-serif;
     margin: 0;
 }
@@ -117,13 +134,13 @@
 }
 
 .pie-inferior-enlaces a {
-    color: var(--texto-gris, #8b95a5);
+    color: #526B5D;
     font-weight: 600;
     transition: color 0.3s ease;
 }
 
 .pie-inferior-enlaces a:hover {
-    color: var(--color-blanco, #ffffff);
+    color: #376B50;
 }
 
 .pie-inferior .iconos-redes {
@@ -133,31 +150,37 @@
 }
 
 .pie-inferior .iconos-redes a {
-    background: rgba(255, 255, 255, 0.05);
+    background: #D8EEDF;
     width: 42px;
     height: 42px;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    color: var(--color-blanco, #ffffff);
-    border: 1px solid transparent;
+    color: #376B50;
+    border: 1px solid #C4DDCD;
     transition: all 0.3s ease;
 }
 
 .pie-inferior .iconos-redes a:hover {
-    background: var(--color-naranja, #ff5a36);
-    border-color: var(--color-naranja, #ff5a36);
+    background: #A8D5BA;
+    color: #263B30;
+    border-color: #8BC9A3;
     transform: translateY(-4px);
-    box-shadow: 0 5px 15px rgba(255, 90, 54, 0.4);
+    box-shadow: 0 5px 15px rgba(55, 107, 80, 0.15);
+}
+
+.pie-inferior .iconos-redes a:focus-visible {
+    outline: 3px solid #376B50;
+    outline-offset: 3px;
 }
 
 .btn-whatsapp-flotante {
     position: fixed;
     bottom: 30px;
     right: 30px;
-    background-color: #25d366;
-    color: #ffffff;
+    background-color: #A8D5BA;
+    color: #263B30;
     width: 60px;
     height: 60px;
     border-radius: 50%;
@@ -165,14 +188,22 @@
     align-items: center;
     justify-content: center;
     font-size: 2rem;
-    box-shadow: 0 10px 25px rgba(37, 211, 102, 0.4);
+    box-shadow: 0 10px 25px rgba(55, 107, 80, 0.18);
     z-index: 99999;
-    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), background-color 0.3s ease;
+    transition:
+            transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275),
+            background-color 0.3s ease;
 }
 
 .btn-whatsapp-flotante:hover {
-    background-color: #20ba5a;
+    background-color: #8BC9A3;
+    color: #263B30;
     transform: scale(1.1) rotate(-5deg);
+}
+
+.btn-whatsapp-flotante:focus-visible {
+    outline: 3px solid #376B50;
+    outline-offset: 3px;
 }
 
 @media (max-width: 1024px) {
@@ -186,20 +217,24 @@
     .pie-pagina-nuevo {
         padding: 50px 0 20px 0;
     }
+
     .pie-enlaces {
         grid-template-columns: 1fr;
         gap: 35px;
     }
+
     .pie-inferior {
         flex-direction: column;
         text-align: center;
         gap: 20px;
     }
+
     .pie-inferior-enlaces {
         justify-content: center;
         flex-wrap: wrap;
         gap: 15px;
     }
+
     .btn-whatsapp-flotante {
         width: 50px;
         height: 50px;
