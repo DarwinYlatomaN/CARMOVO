@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             const btnCerrar = document.createElement('a');
             btnCerrar.id = 'btn-cerrar-sesion-carmovo';
             btnCerrar.href = '#';
-            btnCerrar.className = 'enlace-telefono';
+            btnCerrar.className = 'boton-cerrar-sesion';
             btnCerrar.style.marginLeft = '15px';
             btnCerrar.style.color = '#ef4444';
             btnCerrar.innerHTML = '<i class="fa-solid fa-right-from-bracket"></i> Salir';
@@ -230,4 +230,93 @@ document.addEventListener('DOMContentLoaded', async () => {
             }, 500);
         }
     }
+});
+// =====================================================
+// CARMOVO - FORMULARIO DE RESERVAS DE HOME
+// =====================================================
+
+document.addEventListener('DOMContentLoaded', () => {
+
+    const formReserva = document.getElementById('formReserva');
+    const fechaRecogida = document.getElementById('fechaRecogida');
+    const fechaEntrega = document.getElementById('fechaEntrega');
+
+    if (!formReserva || !fechaRecogida || !fechaEntrega) {
+        return;
+    }
+
+    // Obtener la fecha actual del navegador.
+    function obtenerFechaActual() {
+        const hoy = new Date();
+        const anio = hoy.getFullYear();
+        const mes = String(hoy.getMonth() + 1).padStart(2, '0');
+        const dia = String(hoy.getDate()).padStart(2, '0');
+
+        return `${anio}-${mes}-${dia}`;
+    }
+
+    function actualizarFechas() {
+        const hoy = obtenerFechaActual();
+
+        fechaRecogida.min = hoy;
+
+        // No permitir una fecha de recogida anterior a hoy.
+        if (fechaRecogida.value && fechaRecogida.value < hoy) {
+            fechaRecogida.value = '';
+        }
+
+        // La entrega no puede ser anterior a la recogida.
+        const fechaMinimaEntrega = fechaRecogida.value || hoy;
+        fechaEntrega.min = fechaMinimaEntrega;
+
+        if (fechaEntrega.value && fechaEntrega.value < fechaMinimaEntrega) {
+            fechaEntrega.value = '';
+        }
+    }
+
+    actualizarFechas();
+
+    fechaRecogida.addEventListener('change', actualizarFechas);
+
+    fechaEntrega.addEventListener('change', actualizarFechas);
+
+    formReserva.addEventListener('submit', (evento) => {
+
+        evento.preventDefault();
+
+        actualizarFechas();
+
+        // Comprobar los campos obligatorios.
+        if (!formReserva.reportValidity()) {
+            return;
+        }
+
+        const recogida = fechaRecogida.value;
+        const entrega = fechaEntrega.value;
+        const hoy = obtenerFechaActual();
+
+        if (recogida < hoy || entrega < recogida) {
+            alert('Selecciona fechas v\u00e1lidas para tu reserva.');
+            return;
+        }
+
+        const sedes = formReserva.querySelectorAll('select');
+
+        if (sedes.length < 2) {
+            return;
+        }
+
+        // Conservar temporalmente los datos seleccionados.
+        sessionStorage.setItem('carmovo_reserva_home', JSON.stringify({
+            lugarRecogida: sedes[0].value,
+            lugarEntrega: sedes[1].value,
+            fechaRecogida: recogida,
+            fechaEntrega: entrega
+        }));
+
+        // Dirigir a la p\u00e1gina de Reservas.
+        window.location.href = '/reservas';
+
+    });
+
 });

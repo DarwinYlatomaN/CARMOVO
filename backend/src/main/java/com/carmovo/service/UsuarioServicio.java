@@ -1,5 +1,5 @@
-package com.carmovo.service;
 
+package com.carmovo.service;
 
 import com.carmovo.model.Usuario;
 import com.carmovo.repository.UsuarioRepositorio;
@@ -59,6 +59,8 @@ public class UsuarioServicio {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Ya existe un usuario registrado con ese correo.");
         }
 
+        validarDatosUnicos(dto, null);
+
         Usuario usuario = new Usuario();
         usuario.setNombres(dto.getNombres().trim());
         usuario.setApellidos(dto.getApellidos().trim());
@@ -80,6 +82,8 @@ public class UsuarioServicio {
         if (usuarioRepositorio.existsByCorreoIgnoreCase(correo)) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Este correo ya está registrado. Inicia sesión.");
         }
+
+        validarDatosUnicos(dto, null);
 
         Usuario usuario = new Usuario();
         usuario.setNombres(dto.getNombres().trim());
@@ -143,6 +147,8 @@ public class UsuarioServicio {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Ya existe otro usuario registrado con ese correo.");
         }
 
+        validarDatosUnicos(dto, id);
+
         usuario.setNombres(dto.getNombres().trim());
         usuario.setApellidos(dto.getApellidos().trim());
         usuario.setCorreo(correo);
@@ -174,6 +180,8 @@ public class UsuarioServicio {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Ya existe otro usuario registrado con ese correo.");
         }
 
+        validarDatosUnicos(dto, id);
+
         usuario.setNombres(dto.getNombres().trim());
         usuario.setApellidos(dto.getApellidos().trim());
         usuario.setCorreo(correo);
@@ -191,7 +199,10 @@ public class UsuarioServicio {
 
     private Usuario buscarUsuario(Long id) {
         return usuarioRepositorio.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuario no encontrado con ID: " + id));
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,
+                        "Usuario no encontrado con ID: " + id
+                ));
     }
 
     private Perfil buscarPerfil(Long idPerfil) {
@@ -200,7 +211,10 @@ public class UsuarioServicio {
         }
 
         return perfilRepositorio.findById(idPerfil)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "El perfil seleccionado no existe."));
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.BAD_REQUEST,
+                        "El perfil seleccionado no existe."
+                ));
     }
 
     private Perfil buscarPerfilCliente() {
@@ -212,8 +226,64 @@ public class UsuarioServicio {
     }
 
     private void validarQueSeaCliente(Usuario usuario) {
-        if (usuario.getPerfil() == null || !PERFIL_CLIENTE.equalsIgnoreCase(usuario.getPerfil().getNombre())) {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Esta cuenta no corresponde a un cliente de CARMOVO.");
+        if (usuario.getPerfil() == null ||
+                !PERFIL_CLIENTE.equalsIgnoreCase(usuario.getPerfil().getNombre())) {
+            throw new ResponseStatusException(
+                    HttpStatus.FORBIDDEN,
+                    "Esta cuenta no corresponde a un cliente de CARMOVO."
+            );
+        }
+    }
+
+    /**
+     * Verifica que DNI, teléfono y licencia no estén registrados
+     * en otra cuenta.
+     *
+     * En un registro nuevo, idUsuario es null.
+     * En una actualización, se excluye al usuario actual.
+     */
+    private void validarDatosUnicos(UsuarioGuardarDTO dto, Long idUsuario) {
+        String documento = limpiarOpcional(dto.getDocumento());
+        String telefono = limpiarOpcional(dto.getTelefono());
+        String numeroLicencia = limpiarOpcional(dto.getNumeroLicencia());
+
+        if (documento != null) {
+            boolean existe = idUsuario == null
+                    ? usuarioRepositorio.existsByDocumento(documento)
+                    : usuarioRepositorio.existsByDocumentoAndIdUsuarioNot(documento, idUsuario);
+
+            if (existe) {
+                throw new ResponseStatusException(
+                        HttpStatus.CONFLICT,
+                        "Este DNI ya está registrado."
+                );
+            }
+        }
+
+        if (telefono != null) {
+            boolean existe = idUsuario == null
+                    ? usuarioRepositorio.existsByTelefono(telefono)
+                    : usuarioRepositorio.existsByTelefonoAndIdUsuarioNot(telefono, idUsuario);
+
+            if (existe) {
+                throw new ResponseStatusException(
+                        HttpStatus.CONFLICT,
+                        "Este número de teléfono ya está registrado."
+                );
+            }
+        }
+
+        if (numeroLicencia != null) {
+            boolean existe = idUsuario == null
+                    ? usuarioRepositorio.existsByNumeroLicencia(numeroLicencia)
+                    : usuarioRepositorio.existsByNumeroLicenciaAndIdUsuarioNot(numeroLicencia, idUsuario);
+
+            if (existe) {
+                throw new ResponseStatusException(
+                        HttpStatus.CONFLICT,
+                        "Este número de licencia ya está registrado."
+                );
+            }
         }
     }
 
@@ -258,8 +328,12 @@ public class UsuarioServicio {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Los datos del cliente son obligatorios.");
         }
 
-        if (esVacio(dto.getNombres()) || esVacio(dto.getApellidos()) || esVacio(dto.getCorreo()) || esVacio(dto.getTelefono())) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Nombres, apellidos, correo y teléfono son obligatorios.");
+        if (esVacio(dto.getNombres()) || esVacio(dto.getApellidos()) ||
+                esVacio(dto.getCorreo()) || esVacio(dto.getTelefono())) {
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    "Nombres, apellidos, correo y teléfono son obligatorios."
+            );
         }
 
         if (esVacio(dto.getDocumento())
@@ -283,11 +357,19 @@ public class UsuarioServicio {
 
     private void validarFechasPerfil(LocalDate fechaNacimiento, LocalDate vencimientoLicencia) {
         LocalDate hoy = LocalDate.now();
+
         if (fechaNacimiento.isAfter(hoy)) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "La fecha de nacimiento no puede estar en el futuro.");
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    "La fecha de nacimiento no puede estar en el futuro."
+            );
         }
+
         if (vencimientoLicencia.isBefore(hoy)) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "La licencia de conducir se encuentra vencida.");
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    "La licencia de conducir se encuentra vencida."
+            );
         }
     }
 
@@ -299,7 +381,10 @@ public class UsuarioServicio {
 
     private void validarLongitudContrasena(String contrasena) {
         if (contrasena.length() < 8) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "La contraseña debe tener al menos 8 caracteres.");
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    "La contraseña debe tener al menos 8 caracteres."
+            );
         }
     }
 

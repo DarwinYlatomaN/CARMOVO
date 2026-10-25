@@ -1,6 +1,5 @@
 package com.carmovo.model;
 
-import com.carmovo.model.Perfil;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
@@ -26,10 +25,10 @@ public class Usuario {
     @Column(nullable = false, length = 255)
     private String contrasena;
 
-    @Column(length = 20)
+    @Column(unique = true, length = 20)
     private String telefono;
 
-    @Column(length = 20)
+    @Column(unique = true, length = 20)
     private String documento;
 
     @Column(name = "fecha_nacimiento")
@@ -47,7 +46,7 @@ public class Usuario {
     @Column(length = 80)
     private String distrito;
 
-    @Column(name = "numero_licencia", length = 50)
+    @Column(name = "numero_licencia", unique = true, length = 50)
     private String numeroLicencia;
 
     @Column(name = "categoria_licencia", length = 30)

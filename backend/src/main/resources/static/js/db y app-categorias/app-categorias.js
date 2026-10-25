@@ -1,4 +1,11 @@
+
 document.addEventListener('DOMContentLoaded', () => {
+    const contenedorAutos = document.getElementById('contenedor-autos');
+
+    // El catálogo y su modal solo se inicializan en páginas
+    // que realmente contienen el catálogo de vehículos.
+    if (!contenedorAutos) return;
+
     inicializarCatalogoVehiculos();
     crearEstructuraModalTecnico();
 });
@@ -35,6 +42,7 @@ async function inicializarCatalogoVehiculos() {
                 boton.addEventListener('click', () => {
                     contenedorCategorias.querySelectorAll('.pestana')
                         .forEach(item => item.classList.remove('activo'));
+
                     boton.classList.add('activo');
 
                     const lista = categoria === 'Todos'
@@ -52,12 +60,13 @@ async function inicializarCatalogoVehiculos() {
         renderizarAutos(window.autosGlobales, contenedorAutos);
     } catch (error) {
         console.error('Error al cargar los vehículos:', error);
-        contenedorAutos.innerHTML = '<p style="color: #ff5a36; text-align: center; grid-column: 1/-1;">No se pudo conectar con la base de datos de Carmovo.</p>';
+        contenedorAutos.innerHTML = '<p style="color: #376B50; text-align: center; grid-column: 1/-1;">No se pudo conectar con la base de datos de Carmovo.</p>';
     }
 }
 
 function manejarAccionesCatalogo(evento) {
     const botonInfo = evento.target.closest('[data-accion="info"]');
+
     if (botonInfo) {
         const vehiculo = buscarVehiculoReal(botonInfo.dataset.idVehiculo);
         if (vehiculo) abrirModalTecnico(vehiculo);
@@ -65,6 +74,7 @@ function manejarAccionesCatalogo(evento) {
     }
 
     const botonReserva = evento.target.closest('[data-accion="reservar"]');
+
     if (botonReserva) {
         const vehiculo = buscarVehiculoReal(botonReserva.dataset.idVehiculo);
         if (vehiculo) prepararReservaVehiculo(vehiculo);
@@ -196,13 +206,12 @@ function resolverImagenVehiculo(auto) {
     const imagenBD = String(auto.imagen || '').trim();
 
     if (imagenBD) {
-
         // Imagen externa o generada.
         if (/^(https?:|data:|blob:)/i.test(imagenBD)) {
             return imagenBD;
         }
 
-        // Si PostgreSQL ya contiene una ruta completa relativa.
+        // Si la base de datos ya contiene una ruta completa relativa.
         if (imagenBD.startsWith('../recursos/')) {
             return imagenBD;
         }
@@ -211,7 +220,7 @@ function resolverImagenVehiculo(auto) {
             return `../${imagenBD}`;
         }
 
-        // Si PostgreSQL contiene solamente el nombre del archivo.
+        // Si la base de datos contiene solamente el nombre del archivo.
         const carpeta = carpetas[normalizarTexto(auto.categoria)];
 
         if (carpeta) {
@@ -246,7 +255,7 @@ function renderizarAutos(listaAutos, contenedor) {
     contenedor.innerHTML = '';
 
     if (!listaAutos.length) {
-        contenedor.innerHTML = '<p style="text-align: center; grid-column: 1/-1; color: #8b95a5;">No hay vehículos disponibles en esta categoría.</p>';
+        contenedor.innerHTML = '<p style="text-align: center; grid-column: 1/-1; color: #526B5D;">No hay vehículos disponibles en esta categoría.</p>';
         return;
     }
 
@@ -291,7 +300,7 @@ function renderizarAutos(listaAutos, contenedor) {
                                 data-accion="reservar"
                                 data-id-vehiculo="${auto.idVehiculo}"
                                 ${disponible ? '' : 'disabled'}
-                                ${disponible ? '' : 'style="background:#374151; color:#9ca3af; cursor:not-allowed;"'}>
+                                ${disponible ? '' : 'style="background:#E4F3E9; color:#648070; border:1px solid #C4DDCD; cursor:not-allowed;"'}>
                             ${disponible ? 'Reservar' : 'Ocupado'}
                         </button>
                     </div>
@@ -304,24 +313,27 @@ function renderizarAutos(listaAutos, contenedor) {
 }
 
 function crearEstructuraModalTecnico() {
+    // Evitar crear el modal en páginas sin catálogo.
+    if (!document.getElementById('contenedor-autos')) return;
+
     if (document.getElementById('modalTecnico')) return;
 
     const modalHTML = `
         <div id="modalTecnico" class="modal-cuenta oculto">
             <div class="modal-cuenta-contenido" style="max-width: 550px;">
                 <button type="button" class="btn-cerrar-modal" id="cerrarModalTecnico"><i class="fa-solid fa-xmark"></i></button>
-                <span id="modalCategoria" style="color: var(--color-naranja); font-weight: 700; text-transform: uppercase; font-size: 0.8rem;"></span>
-                <h3 id="modalTitulo" style="font-size: 1.8rem; margin: 5px 0 15px 0;"></h3>
+                <span id="modalCategoria" style="color: #5B9C76; font-weight: 700; text-transform: uppercase; font-size: 0.8rem;"></span>
+                <h3 id="modalTitulo" style="font-size: 1.8rem; margin: 5px 0 15px 0; color: #263B30;"></h3>
 
-                <div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); padding: 20px; border-radius: 12px; margin-bottom: 20px;">
-                    <h4 style="color: #fff; margin-bottom: 8px; font-size: 1rem;"><i class="fa-solid fa-gauge-high"></i> Especificaciones y Descripción</h4>
-                    <p id="modalDescripcion" style="color: var(--texto-gris); font-size: 0.95rem; line-height: 1.6;"></p>
+                <div style="background: #F5FAF6; border: 1px solid #D8EEDF; padding: 20px; border-radius: 12px; margin-bottom: 20px;">
+                    <h4 style="color: #376B50; margin-bottom: 8px; font-size: 1rem;"><i class="fa-solid fa-gauge-high"></i> Especificaciones y Descripción</h4>
+                    <p id="modalDescripcion" style="color: #526B5D; font-size: 0.95rem; line-height: 1.6;"></p>
                 </div>
 
-                <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid rgba(255,255,255,0.08); padding-top: 15px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #D8EEDF; padding-top: 15px;">
                     <div>
-                        <span style="font-size: 0.8rem; color: var(--texto-gris);">Transmisión: <strong id="modalTransmision" style="color:#fff"></strong></span><br>
-                        <span style="font-size: 0.8rem; color: var(--texto-gris);">Capacidad: <strong id="modalPasajeros" style="color:#fff"></strong> pasajeros</span>
+                        <span style="font-size: 0.8rem; color: #526B5D;">Transmisión: <strong id="modalTransmision" style="color: #376B50;"></strong></span><br>
+                        <span style="font-size: 0.8rem; color: #526B5D;">Capacidad: <strong id="modalPasajeros" style="color: #376B50;"></strong> pasajeros</span>
                     </div>
                     <button type="button" id="modalReservarVehiculo" class="boton-accion-naranja" style="padding: 10px 20px;">Ir a Reservar</button>
                 </div>
@@ -363,6 +375,7 @@ window.abrirModalTecnico = function(auto) {
     document.getElementById('modalPasajeros').textContent = auto.pasajeros || 5;
 
     const btnReservar = document.getElementById('modalReservarVehiculo');
+
     if (btnReservar) {
         btnReservar.dataset.idVehiculo = auto.idVehiculo;
         btnReservar.disabled = auto.estado !== 'Disponible';

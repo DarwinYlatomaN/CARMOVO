@@ -1,12 +1,24 @@
+
+/* ==========================================================================
+   CARMOVO - INICIO DE SESION
+   PALETA VERDE MENTA PASTEL
+   ========================================================================== */
+
 :root {
-    --fondo-principal: #090e17;
-    --fondo-tarjeta: #121927;
-    --color-naranja: #ff5a36;
-    --color-blanco: #ffffff;
-    --texto-gris: #8b95a5;
-    --texto-secundario: #94a3b8;
-    --borde-oscuro: #1f2937;
-    --rojo-error: #ef4444;
+    --fondo-principal: #F5FAF6;
+    --fondo-tarjeta: #FFFFFF;
+    --color-naranja: #A8D5BA;
+    --color-blanco: #263B30;
+    --texto-gris: #789184;
+    --texto-secundario: #526B5D;
+    --borde-oscuro: #D8EEDF;
+    --rojo-error: #C65C5C;
+
+    --verde-titulo: #376B50;
+    --verde-acento: #5B9C76;
+    --verde-hover: #8BC9A3;
+    --verde-suave: #E4F3E9;
+    --crema-suave: #FFF9EF;
 }
 
 * {
@@ -30,15 +42,34 @@ a {
     transition: 0.3s;
 }
 
+/* ==========================================================================
+   FONDO GENERAL
+   ========================================================================== */
+
 .pantalla-centrada {
     display: flex;
     justify-content: center;
     align-items: center;
     min-height: 100vh;
     padding: 20px;
-    background-image: radial-gradient(circle at top right, #147a5920, transparent 40%),
-                      radial-gradient(circle at bottom left, #ff5a3615, transparent 40%);
+
+    background-color: #F5FAF6;
+    background-image:
+            radial-gradient(
+                    circle at top right,
+                    rgba(168, 213, 186, 0.3),
+                    transparent 42%
+            ),
+            radial-gradient(
+                    circle at bottom left,
+                    rgba(255, 249, 239, 0.9),
+                    transparent 42%
+            );
 }
+
+/* ==========================================================================
+   TARJETA DE LOGIN
+   ========================================================================== */
 
 .tarjeta-login {
     background-color: var(--fondo-tarjeta);
@@ -46,33 +77,41 @@ a {
     max-width: 480px;
     border-radius: 16px;
     padding: 40px;
-    box-shadow: 0 15px 35px rgba(0,0,0,0.5);
+    box-shadow: 0 15px 35px rgba(55, 107, 80, 0.1);
     border: 1px solid var(--borde-oscuro);
     position: relative;
 }
+
+/* ==========================================================================
+   BOTON VOLVER
+   ========================================================================== */
 
 .btn-volver {
     position: absolute;
     top: 25px;
     left: 25px;
-    color: var(--texto-secundario);
+    color: #376B50;
     font-size: 1.3rem;
-    transition: 0.3s ease;
+    transition: all 0.3s ease;
     display: flex;
     align-items: center;
     justify-content: center;
     width: 35px;
     height: 35px;
     border-radius: 50%;
-    background-color: var(--fondo-principal);
-    border: 1px solid var(--borde-oscuro);
+    background-color: #E4F3E9;
+    border: 1px solid #D8EEDF;
 }
 
 .btn-volver:hover {
-    color: var(--color-blanco);
-    background-color: var(--color-naranja);
-    border-color: var(--color-naranja);
+    color: #263B30;
+    background-color: #A8D5BA;
+    border-color: #8BC9A3;
 }
+
+/* ==========================================================================
+   CABECERA DEL LOGIN
+   ========================================================================== */
 
 .cabecera-login {
     text-align: center;
@@ -83,7 +122,8 @@ a {
     width: 140px;
     height: auto;
     margin-bottom: 20px;
-    box-shadow: 0px 2px 12px var(--color-naranja);
+    box-shadow: 0 3px 15px rgba(91, 156, 118, 0.2);
+    border: 2px solid #D8EEDF;
     border-radius: 8px;
 }
 
@@ -91,14 +131,18 @@ a {
     font-family: 'Outfit', sans-serif;
     font-size: 2rem;
     font-weight: 700;
-    color: var(--color-blanco);
+    color: #376B50;
     margin-bottom: 8px;
 }
 
 .subtitulo-login {
-    color: var(--texto-secundario);
+    color: #526B5D;
     font-size: 0.95rem;
 }
+
+/* ==========================================================================
+   FORMULARIO
+   ========================================================================== */
 
 .formulario-acceso {
     display: flex;
@@ -115,63 +159,101 @@ a {
 .grupo-input label {
     font-size: 0.9rem;
     font-weight: 600;
-    color: var(--texto-secundario);
+    color: #376B50;
 }
+
+/* ==========================================================================
+   CAMPOS DEL LOGIN
+   ========================================================================== */
 
 .campo-input-login {
     position: relative;
     display: flex;
     align-items: center;
+    min-width: 0;
 }
 
 .campo-input-login i:first-child {
     position: absolute;
     left: 15px;
-    color: var(--texto-gris);
+    color: #5B9C76;
     font-size: 1.1rem;
+    pointer-events: none;
 }
 
 .campo-input-login input {
     width: 100%;
-    background-color: var(--fondo-principal);
-    border: 1px solid var(--borde-oscuro);
+    background-color: #FFFFFF;
+    border: 1px solid #D8EEDF;
     border-radius: 8px;
     padding: 14px 15px 14px 45px;
-    color: var(--color-blanco);
+    color: #263B30;
     font-family: 'Montserrat', sans-serif;
     font-size: 1rem;
     outline: none;
-    transition: 0.3s;
+    transition: border-color 0.3s ease,
+    box-shadow 0.3s ease,
+    background-color 0.3s ease;
+    color-scheme: light;
+}
+
+.campo-input-login input:hover {
+    border-color: #A8D5BA;
 }
 
 .campo-input-login input:focus {
-    border-color: var(--color-naranja);
-    box-shadow: 0 0 0 2px rgba(255, 90, 54, 0.2);
+    border-color: #8BC9A3;
+    box-shadow: 0 0 0 3px rgba(168, 213, 186, 0.25);
+    background-color: #FFFFFF;
 }
 
 .campo-input-login input::placeholder {
-    color: #4b5563;
+    color: #789184;
 }
+
+/* ==========================================================================
+   BOTON MOSTRAR CONTRASEÑA
+   ========================================================================== */
 
 .btn-mostrar-password {
     position: absolute;
     right: 15px;
     background: transparent;
     border: none;
-    color: var(--texto-gris);
+    color: #5B9C76;
     cursor: pointer;
     font-size: 1.1rem;
-    transition: 0.3s;
+    transition: color 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2;
 }
 
 .btn-mostrar-password:hover {
-    color: var(--color-blanco);
+    color: #376B50;
 }
+
+.btn-mostrar-password:focus-visible {
+    outline: 2px solid #8BC9A3;
+    outline-offset: 3px;
+    border-radius: 4px;
+}
+
+/* Evitar que la contraseña quede debajo del botón del ojo. */
+.campo-input-login input[type="password"] {
+    padding-right: 48px;
+}
+
+/* ==========================================================================
+   OPCIONES EXTRA
+   ========================================================================== */
 
 .opciones-extra {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    gap: 12px;
     font-size: 0.9rem;
 }
 
@@ -179,30 +261,37 @@ a {
     display: flex;
     align-items: center;
     gap: 8px;
-    color: var(--texto-secundario);
+    color: #526B5D;
     cursor: pointer;
 }
 
 .checkbox-recordar input[type="checkbox"] {
-    accent-color: var(--color-naranja);
+    accent-color: #5B9C76;
     width: 16px;
     height: 16px;
     cursor: pointer;
 }
 
 .enlace-olvido {
-    color: var(--color-naranja);
+    color: #376B50;
     font-weight: 600;
 }
 
 .enlace-olvido:hover {
-    color: #e04a29;
+    color: #5B9C76;
+    text-decoration: underline;
 }
 
+/* ==========================================================================
+   BOTON PRINCIPAL
+   Se mantiene la clase original para conservar
+   compatibilidad con el HTML y JavaScript.
+   ========================================================================== */
+
 .boton-accion-naranja {
-    background-color: var(--color-naranja);
-    color: var(--color-blanco);
-    border: none;
+    background-color: #A8D5BA;
+    color: #263B30;
+    border: 1px solid #8BC9A3;
     padding: 16px;
     border-radius: 8px;
     font-weight: 700;
@@ -212,31 +301,109 @@ a {
     align-items: center;
     justify-content: center;
     gap: 12px;
-    transition: 0.3s;
+    transition: background-color 0.3s ease,
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
     font-family: 'Montserrat', sans-serif;
     margin-top: 10px;
 }
 
 .boton-accion-naranja:hover {
-    background-color: #e04a29;
+    background-color: #8BC9A3;
+    color: #263B30;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(55, 107, 80, 0.15);
+}
+
+.boton-accion-naranja:focus-visible {
+    outline: 3px solid #5B9C76;
+    outline-offset: 3px;
 }
 
 .boton-bloque {
     width: 100%;
 }
 
+/* ==========================================================================
+   PIE DEL LOGIN
+   ========================================================================== */
+
 .pie-login {
     margin-top: 30px;
     text-align: center;
     font-size: 0.95rem;
-    color: var(--texto-secundario);
+    color: #526B5D;
 }
 
 .enlace-registro {
-    color: var(--color-blanco);
+    color: #376B50;
     font-weight: 700;
 }
 
 .enlace-registro:hover {
-    color: var(--color-naranja);
+    color: #5B9C76;
+    text-decoration: underline;
+}
+
+/* ==========================================================================
+   RESPONSIVE
+   ========================================================================== */
+
+@media (max-width: 600px) {
+    .pantalla-centrada {
+        padding: 15px;
+    }
+
+    .tarjeta-login {
+        padding: 35px 25px;
+    }
+
+    .btn-volver {
+        top: 18px;
+        left: 18px;
+    }
+
+    .titulo-login {
+        font-size: 1.8rem;
+    }
+
+    .logo-login {
+        width: 120px;
+    }
+}
+
+@media (max-width: 420px) {
+    .tarjeta-login {
+        padding: 30px 18px;
+    }
+
+    .titulo-login {
+        font-size: 1.6rem;
+    }
+
+    .subtitulo-login {
+        font-size: 0.85rem;
+    }
+
+    .opciones-extra {
+        flex-wrap: wrap;
+        gap: 12px;
+    }
+
+    .campo-input-login input {
+        font-size: 0.9rem;
+    }
+
+    .boton-accion-naranja {
+        font-size: 1rem;
+        padding: 14px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .btn-volver,
+    .boton-accion-naranja,
+    .campo-input-login input {
+        transition: none;
+    }
 }

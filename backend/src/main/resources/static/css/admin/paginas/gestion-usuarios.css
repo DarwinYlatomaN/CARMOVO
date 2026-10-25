@@ -1,0 +1,660 @@
+
+/* ==========================================================================
+   CARMOVO - ADMINISTRADOR
+   GESTION DE USUARIOS - PALETA AZUL PASTEL
+   ========================================================================== */
+
+/* ==========================================================================
+   RESUMEN DE USUARIOS
+   ========================================================================== */
+
+.resumen-usuarios {
+    margin-bottom: 18px;
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.resumen-usuarios__dato {
+    flex: 1 1 145px;
+    min-width: min(145px, 100%);
+    padding: 13px 15px;
+    border: 1px solid var(--admin-borde);
+    border-radius: 10px;
+    background: var(--admin-superficie);
+    box-shadow: 0 4px 14px rgba(49, 90, 117, .05);
+}
+
+.resumen-usuarios__dato span {
+    display: block;
+    color: var(--admin-texto-secundario);
+    font-size: .68rem;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.resumen-usuarios__dato strong {
+    display: block;
+    margin-top: 4px;
+    color: #315A75;
+    font-size: 1.15rem;
+}
+
+/* ==========================================================================
+   HERRAMIENTAS DE BUSQUEDA Y FILTRADO
+   ========================================================================== */
+
+.usuarios-herramientas {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    padding: 16px 18px;
+    border-bottom: 1px solid var(--admin-borde);
+    background: var(--admin-superficie);
+    min-width: 0;
+    flex-wrap: wrap;
+}
+
+/* ==========================================================================
+   BUSCADOR
+   ========================================================================== */
+
+.usuarios-buscador {
+    position: relative;
+    width: min(100%, 430px);
+    flex: 1 1 320px;
+    min-width: 0;
+}
+
+.usuarios-buscador i {
+    position: absolute;
+    top: 50%;
+    left: 13px;
+    transform: translateY(-50%);
+    color: #7198B3;
+    font-size: .82rem;
+}
+
+.usuarios-buscador input,
+.usuarios-filtro {
+    width: 100%;
+    min-height: 42px;
+    border: 1px solid var(--admin-borde);
+    border-radius: 10px;
+    background: #FFFFFF;
+    color: var(--admin-texto);
+    outline: none;
+    transition: border-color .2s ease, box-shadow .2s ease;
+}
+
+.usuarios-buscador input {
+    padding: 0 14px 0 38px;
+}
+
+.usuarios-buscador input::placeholder {
+    color: #8198A8;
+}
+
+/* ==========================================================================
+   ENFOQUE DE CAMPOS
+   ========================================================================== */
+
+.usuarios-buscador input:focus,
+.usuarios-filtro:focus,
+.campo-usuario input:focus,
+.campo-usuario select:focus {
+    border-color: #7CB5D9;
+    box-shadow: 0 0 0 3px rgba(124, 181, 217, .16);
+}
+
+/* ==========================================================================
+   FILTROS
+   ========================================================================== */
+
+.usuarios-filtros {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 0;
+    flex-wrap: wrap;
+}
+
+.usuarios-filtro {
+    min-width: 170px;
+    max-width: 100%;
+    padding: 0 12px;
+    cursor: pointer;
+}
+
+/* ==========================================================================
+   CABECERA DEL PANEL - CORREGIDA
+   ========================================================================== */
+
+.usuarios-panel-cabecera {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 16px;
+    padding: 15px 18px;
+    min-width: 0;
+    border-bottom: 1px solid var(--admin-borde);
+    background: #F3F8FC;
+}
+
+.usuarios-panel-cabecera__informacion {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 5px;
+    min-width: 0;
+}
+
+.usuarios-panel-cabecera__informacion h3 {
+    display: block;
+    margin: 0;
+    color: #315A75;
+    font-size: .95rem;
+    font-weight: 700;
+    line-height: 1.35;
+}
+
+.usuarios-panel-cabecera__informacion span {
+    display: block;
+    margin: 0;
+    color: var(--admin-texto-secundario);
+    font-size: .7rem;
+    font-weight: 400;
+    line-height: 1.4;
+}
+
+/* ==========================================================================
+   TABLA DE USUARIOS
+   ========================================================================== */
+
+.tabla-usuarios {
+    min-width: 900px;
+}
+
+/* ==========================================================================
+   IDENTIDAD DEL USUARIO
+   ========================================================================== */
+
+.usuario-identidad {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    min-width: 0;
+}
+
+.usuario-identidad > div:last-child {
+    min-width: 0;
+}
+
+/* ==========================================================================
+   AVATAR
+   ========================================================================== */
+
+.usuario-identidad__avatar {
+    width: 38px;
+    height: 38px;
+    flex: 0 0 38px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    background: linear-gradient(
+            135deg,
+            #DCECF7,
+            #C5DFEF
+    );
+    border: 1px solid #A9D1EA;
+    color: #315A75;
+    font-size: .72rem;
+    font-weight: 800;
+}
+
+/* ==========================================================================
+   NOMBRE Y DATOS DEL USUARIO
+   ========================================================================== */
+
+.usuario-identidad strong {
+    display: block;
+    color: #315A75;
+    font-size: .79rem;
+    overflow-wrap: anywhere;
+}
+
+.usuario-identidad small {
+    display: block;
+    margin-top: 3px;
+    color: #587284;
+    font-size: .68rem;
+    overflow-wrap: anywhere;
+}
+
+/* ==========================================================================
+   INDICADOR DE PERFIL
+   ========================================================================== */
+
+.badge-perfil {
+    display: inline-flex;
+    align-items: center;
+    padding: 6px 9px;
+    border-radius: 999px;
+    color: #315A75;
+    background: #DCECF7;
+    font-size: .68rem;
+    font-weight: 700;
+}
+
+/* ==========================================================================
+   ESTADOS DEL USUARIO
+   ========================================================================== */
+
+.badge-estado.activo {
+    color: #376B50;
+    background: #E4F3E9;
+}
+
+.badge-estado.inactivo {
+    color: #587284;
+    background: #EDF2F6;
+}
+
+/* ==========================================================================
+   ACCIONES DE USUARIO
+   ========================================================================== */
+
+.acciones-usuario {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    min-width: 0;
+}
+
+/* ==========================================================================
+   BOTONES DE ACCIONES
+   ========================================================================== */
+
+.boton-usuario-icono {
+    width: 34px;
+    height: 34px;
+    display: grid;
+    place-items: center;
+    border-radius: 8px;
+    border: 1px solid var(--admin-borde);
+    background: #F3F8FC;
+    color: #527F9C;
+    cursor: pointer;
+    transition: .2s ease;
+}
+
+.boton-usuario-icono:hover {
+    color: #315A75;
+    background: #DCECF7;
+    border-color: #A9D1EA;
+}
+
+.boton-usuario-icono.editar:hover {
+    color: #315A75;
+    background: #DCECF7;
+    border-color: #7CB5D9;
+}
+
+.boton-usuario-icono.eliminar:hover {
+    color: #A64545;
+    background: #FFF1F1;
+    border-color: #E9B8B8;
+}
+
+/* ==========================================================================
+   VENTANA MODAL DE USUARIO
+   ========================================================================== */
+
+.modal-usuario {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 200;
+    padding: 24px;
+    align-items: center;
+    justify-content: center;
+    background: rgba(41, 62, 77, .45);
+    backdrop-filter: blur(5px);
+}
+
+.modal-usuario.abierto {
+    display: flex;
+}
+
+/* ==========================================================================
+   CONTENIDO DEL MODAL
+   ========================================================================== */
+
+.modal-usuario__contenido {
+    width: min(760px, calc(100vw - 32px));
+    max-width: 100%;
+    max-height: calc(100vh - 48px);
+    overflow-y: auto;
+    border-radius: 16px;
+    border: 1px solid var(--admin-borde);
+    background: #FFFFFF;
+    color: var(--admin-texto);
+    box-shadow: 0 28px 70px rgba(49, 90, 117, .22);
+}
+
+/* ==========================================================================
+   CABECERA DEL MODAL
+   ========================================================================== */
+
+.modal-usuario__cabecera {
+    min-height: 68px;
+    padding: 0 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    border-bottom: 1px solid var(--admin-borde);
+    background: #F3F8FC;
+}
+
+.modal-usuario__cabecera h2 {
+    color: #315A75;
+    font-size: 1rem;
+}
+
+/* ==========================================================================
+   BOTON CERRAR MODAL
+   ========================================================================== */
+
+.modal-usuario__cerrar {
+    width: 36px;
+    height: 36px;
+    border: 1px solid var(--admin-borde);
+    border-radius: 9px;
+    display: grid;
+    place-items: center;
+    background: #EAF4FA;
+    color: #527F9C;
+    cursor: pointer;
+    transition: .2s ease;
+}
+
+.modal-usuario__cerrar:hover {
+    background: #DCECF7;
+    color: #315A75;
+    border-color: #A9D1EA;
+}
+
+/* ==========================================================================
+   FORMULARIO DE USUARIO
+   ========================================================================== */
+
+.formulario-usuario {
+    padding: 20px;
+}
+
+.formulario-usuario__grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+    min-width: 0;
+}
+
+.campo-usuario {
+    min-width: 0;
+}
+
+.campo-usuario--completo {
+    grid-column: 1 / -1;
+}
+
+/* ==========================================================================
+   ETIQUETAS DEL FORMULARIO
+   ========================================================================== */
+
+.campo-usuario label {
+    display: block;
+    margin-bottom: 7px;
+    color: #315A75;
+    font-size: .73rem;
+    font-weight: 700;
+}
+
+/* ==========================================================================
+   CAMPOS DEL FORMULARIO
+   ========================================================================== */
+
+.campo-usuario input,
+.campo-usuario select {
+    width: 100%;
+    min-height: 43px;
+    padding: 0 12px;
+    border: 1px solid var(--admin-borde);
+    border-radius: 9px;
+    background: #FFFFFF;
+    color: #293E4D;
+    outline: none;
+    transition: border-color .2s ease, box-shadow .2s ease;
+}
+
+.campo-usuario input::placeholder {
+    color: #8198A8;
+}
+
+.campo-usuario small {
+    display: block;
+    margin-top: 7px;
+    color: #587284;
+    font-size: .68rem;
+    line-height: 1.45;
+}
+
+/* ==========================================================================
+   VALIDACIONES DE LOS CAMPOS DE USUARIO
+   ========================================================================== */
+
+.campo-usuario input[aria-invalid="true"],
+.campo-usuario select[aria-invalid="true"] {
+    border-color: #C65C5C;
+    background-color: #FFF5F5;
+}
+
+.campo-usuario input[aria-invalid="true"]:focus,
+.campo-usuario select[aria-invalid="true"]:focus {
+    border-color: #C65C5C;
+    box-shadow: 0 0 0 3px rgba(198, 92, 92, .14);
+}
+
+.campo-usuario .mensaje-error-campo {
+    display: block;
+    margin-top: 7px;
+    color: #A64545;
+    font-size: .7rem;
+    font-weight: 600;
+    line-height: 1.45;
+    overflow-wrap: anywhere;
+}
+
+.campo-usuario .mensaje-error-campo[hidden] {
+    display: none;
+}
+
+/* ==========================================================================
+   CAMPO DE CONTRASENA
+   ========================================================================== */
+
+.campo-contrasena {
+    position: relative;
+}
+
+.campo-contrasena input {
+    padding-right: 48px;
+}
+
+.campo-contrasena button {
+    width: 40px;
+    height: 36px;
+    position: absolute;
+    right: 4px;
+    top: 50%;
+    transform: translateY(-50%);
+    display: grid;
+    place-items: center;
+    border-radius: 7px;
+    background: transparent;
+    color: #527F9C;
+    cursor: pointer;
+    transition: background-color .2s ease, color .2s ease;
+}
+
+.campo-contrasena button:hover {
+    background: #EAF4FA;
+    color: #315A75;
+}
+
+/* ==========================================================================
+   NOTA INFORMATIVA
+   ========================================================================== */
+
+.formulario-usuario__nota {
+    margin-top: 17px;
+    padding: 12px 14px;
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    border: 1px solid #C5DFEF;
+    border-radius: 10px;
+    background: #EAF4FA;
+    color: #49677D;
+    font-size: .7rem;
+    line-height: 1.5;
+}
+
+.formulario-usuario__nota i {
+    margin-top: 2px;
+    color: #527F9C;
+}
+
+/* ==========================================================================
+   ACCIONES DEL FORMULARIO
+   ========================================================================== */
+
+.formulario-usuario__acciones {
+    margin-top: 20px;
+    padding-top: 16px;
+    border-top: 1px solid var(--admin-borde);
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+/* ==========================================================================
+   NOTIFICACIONES
+   ========================================================================== */
+
+.notificacion-usuario {
+    position: fixed;
+    right: 22px;
+    bottom: 22px;
+    z-index: 300;
+    max-width: calc(100vw - 32px);
+    padding: 13px 16px;
+    border-radius: 10px;
+    border: 1px solid var(--admin-borde);
+    background: #FFFFFF;
+    color: #293E4D;
+    box-shadow: 0 10px 30px rgba(49, 90, 117, .15);
+    font-size: .78rem;
+    transform: translateY(22px);
+    opacity: 0;
+    pointer-events: none;
+    transition: .25s ease;
+}
+
+.notificacion-usuario.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.notificacion-usuario.exito {
+    border-color: #A8D5BA;
+    background: #E4F3E9;
+    color: #376B50;
+}
+
+.notificacion-usuario.error {
+    border-color: #E9B8B8;
+    background: #FFF1F1;
+    color: #A64545;
+}
+
+/* ==========================================================================
+   RESPONSIVE - TABLETAS
+   ========================================================================== */
+
+@media (max-width: 860px) {
+    .usuarios-herramientas {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .usuarios-buscador {
+        width: 100%;
+    }
+
+    .usuarios-filtros {
+        align-items: stretch;
+    }
+
+    .usuarios-filtro {
+        flex: 1;
+        min-width: 0;
+    }
+}
+
+/* ==========================================================================
+   RESPONSIVE - CELULARES
+   ========================================================================== */
+
+@media (max-width: 580px) {
+    .formulario-usuario__grid {
+        grid-template-columns: 1fr;
+    }
+
+    .campo-usuario--completo {
+        grid-column: auto;
+    }
+
+    .usuarios-filtros {
+        flex-direction: column;
+    }
+
+    .modal-usuario {
+        padding: 12px;
+    }
+}
+
+/* ==========================================================================
+   ACCESIBILIDAD
+   ========================================================================== */
+
+.boton-usuario-icono:focus-visible,
+.modal-usuario__cerrar:focus-visible,
+.campo-contrasena button:focus-visible {
+    outline: 2px solid #7CB5D9;
+    outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .boton-usuario-icono,
+    .modal-usuario__cerrar,
+    .campo-contrasena button,
+    .notificacion-usuario,
+    .usuarios-buscador input,
+    .usuarios-filtro,
+    .campo-usuario input,
+    .campo-usuario select {
+        transition: none;
+    }
+}

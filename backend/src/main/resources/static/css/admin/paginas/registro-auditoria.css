@@ -1,0 +1,342 @@
+
+/* ==========================================================================
+   CARMOVO - ADMINISTRADOR
+   REGISTRO DE AUDITORIA - PALETA AZUL PASTEL
+   ========================================================================== */
+
+/* ==========================================================================
+   AVISO INFORMATIVO
+   ========================================================================== */
+
+.auditoria-aviso {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    margin-bottom: 22px;
+    padding: 14px 16px;
+    border: 1px solid #C5DFEF;
+    border-radius: 12px;
+    background: #EAF4FA;
+    color: #315A75;
+    font-size: .82rem;
+    line-height: 1.55;
+}
+
+.auditoria-aviso i {
+    margin-top: 2px;
+    color: #527F9C;
+}
+
+/* ==========================================================================
+   RESUMEN DE AUDITORIA
+   ========================================================================== */
+
+.auditoria-resumen {
+    margin-bottom: 22px;
+}
+
+/* ==========================================================================
+   FILTROS DE AUDITORIA
+   ========================================================================== */
+
+.auditoria-filtros {
+    display: grid;
+    grid-template-columns: minmax(220px, 1.5fr) repeat(4, minmax(150px, 1fr)) auto;
+    gap: 12px;
+    align-items: end;
+    margin-bottom: 22px;
+    padding: 16px;
+}
+
+/* ==========================================================================
+   ETIQUETAS DE FILTROS
+   ========================================================================== */
+
+.auditoria-filtros label {
+    display: grid;
+    gap: 7px;
+}
+
+.auditoria-filtros label > span {
+    color: var(--admin-texto-secundario);
+    font-size: .7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .05em;
+}
+
+/* ==========================================================================
+   CAMPOS DE FILTROS
+   ========================================================================== */
+
+.auditoria-filtros input,
+.auditoria-filtros select {
+    width: 100%;
+    min-height: 42px;
+    padding: 0 12px;
+    border: 1px solid var(--admin-borde);
+    border-radius: 10px;
+    outline: none;
+    background: #FFFFFF;
+    color: var(--admin-texto);
+    transition: border-color .2s ease, box-shadow .2s ease;
+}
+
+.auditoria-filtros input::placeholder {
+    color: #8198A8;
+}
+
+.auditoria-filtros input:focus,
+.auditoria-filtros select:focus {
+    border-color: #7CB5D9;
+    box-shadow: 0 0 0 3px rgba(124, 181, 217, .16);
+}
+
+/* ==========================================================================
+   ACCIONES DE LOS FILTROS
+   ========================================================================== */
+
+.auditoria-filtros__acciones {
+    display: flex;
+    gap: 8px;
+}
+
+/* ==========================================================================
+   PANEL DE AUDITORIA
+   ========================================================================== */
+
+.auditoria-panel {
+    overflow: hidden;
+}
+
+/* ==========================================================================
+   CABECERA DEL PANEL
+   ========================================================================== */
+
+.auditoria-panel__cabecera {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 18px;
+    border-bottom: 1px solid var(--admin-borde);
+    background: #F3F8FC;
+}
+
+.auditoria-panel__cabecera h2 {
+    color: #315A75;
+    font-size: 1rem;
+}
+
+.auditoria-panel__cabecera p {
+    margin-top: 5px;
+    color: var(--admin-texto-secundario);
+    font-size: .78rem;
+}
+
+/* ==========================================================================
+   ACCIONES DEL PANEL
+   ========================================================================== */
+
+.auditoria-panel__acciones {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.auditoria-contador {
+    color: var(--admin-texto-secundario);
+    font-size: .76rem;
+    font-weight: 700;
+}
+
+/* ==========================================================================
+   TABLA DE AUDITORIA
+   ========================================================================== */
+
+.tabla-auditoria {
+    min-width: 1080px;
+}
+
+/* ==========================================================================
+   DETALLE DEL REGISTRO
+   ========================================================================== */
+
+.auditoria-detalle {
+    max-width: 420px;
+    color: #49677D;
+    line-height: 1.45;
+    overflow-wrap: anywhere;
+}
+
+/* ==========================================================================
+   ENTIDAD Y FECHA
+   ========================================================================== */
+
+.auditoria-entidad strong,
+.auditoria-fecha strong {
+    display: block;
+    color: #315A75;
+    font-size: .78rem;
+}
+
+.auditoria-entidad small,
+.auditoria-fecha small {
+    display: block;
+    margin-top: 3px;
+    color: var(--admin-texto-secundario);
+    font-size: .69rem;
+}
+
+/* ==========================================================================
+   ETIQUETAS DE ACCIONES
+   ========================================================================== */
+
+.badge-auditoria {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 9px;
+    border-radius: 999px;
+    font-size: .67rem;
+    font-weight: 800;
+    letter-spacing: .02em;
+    background: #EDF2F6;
+    color: #587284;
+}
+
+/* Crear */
+.badge-auditoria.crear {
+    color: #376B50;
+    background: #E4F3E9;
+}
+
+/* Actualizar */
+.badge-auditoria.actualizar,
+.badge-auditoria.actualizar-pago {
+    color: #315A75;
+    background: #DCECF7;
+}
+
+/* Cambiar estado */
+.badge-auditoria.cambiar-estado {
+    color: #9A722C;
+    background: #FFF2D8;
+}
+
+/* Eliminar */
+.badge-auditoria.eliminar {
+    color: #A64545;
+    background: #FFF1F1;
+}
+
+/* ==========================================================================
+   ULTIMA ACTUALIZACION
+   ========================================================================== */
+
+.auditoria-ultima-actualizacion {
+    margin-top: 12px;
+    color: var(--admin-texto-secundario);
+    font-size: .72rem;
+    text-align: right;
+}
+
+/* ==========================================================================
+   MENSAJE DE ERROR DE API
+   ========================================================================== */
+
+.mensaje-auditoria-api {
+    display: none;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+    padding: 14px 16px;
+    border: 1px solid #E9B8B8;
+    border-radius: 12px;
+    background: #FFF1F1;
+    color: #A64545;
+    font-size: .82rem;
+}
+
+.mensaje-auditoria-api.visible {
+    display: flex;
+}
+
+/* ==========================================================================
+   RESPONSIVE - PANTALLAS MEDIANAS
+   ========================================================================== */
+
+@media (max-width: 1250px) {
+    .auditoria-filtros {
+        grid-template-columns: repeat(3, minmax(180px, 1fr));
+    }
+}
+
+/* ==========================================================================
+   RESPONSIVE - TABLETAS Y CELULARES
+   ========================================================================== */
+
+@media (max-width: 760px) {
+    .auditoria-filtros {
+        grid-template-columns: 1fr;
+    }
+
+    .auditoria-filtros__acciones,
+    .auditoria-filtros__acciones .boton-secundario {
+        width: 100%;
+    }
+
+    .auditoria-panel__cabecera {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .auditoria-panel__acciones {
+        justify-content: space-between;
+        flex-wrap: wrap;
+    }
+}
+
+/* ==========================================================================
+   AJUSTES FINALES DE DIMENSIONES
+   ========================================================================== */
+
+.auditoria-aviso,
+.auditoria-filtros,
+.auditoria-filtros > *,
+.auditoria-panel,
+.auditoria-panel__cabecera,
+.auditoria-panel__acciones {
+    min-width: 0;
+    max-width: 100%;
+}
+
+.auditoria-panel__cabecera,
+.auditoria-panel__acciones,
+.auditoria-filtros__acciones {
+    flex-wrap: wrap;
+}
+
+.auditoria-filtros input,
+.auditoria-filtros select {
+    min-width: 0;
+}
+
+.auditoria-detalle {
+    overflow-wrap: anywhere;
+}
+
+.auditoria-panel {
+    width: 100%;
+}
+
+/* ==========================================================================
+   ACCESIBILIDAD
+   ========================================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+    .auditoria-filtros input,
+    .auditoria-filtros select {
+        transition: none;
+    }
+}

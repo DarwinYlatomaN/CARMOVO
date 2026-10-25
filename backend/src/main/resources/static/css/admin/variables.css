@@ -1,0 +1,40 @@
+
+:root {
+    /* ==========================================================
+       CARMOVO - ADMINISTRADOR
+       PALETA AZUL PASTEL
+       ========================================================== */
+
+    /* Fondos */
+    --admin-fondo: #F3F8FC;
+    --admin-superficie: #FFFFFF;
+    --admin-superficie-2: #EAF4FA;
+    --admin-superficie-3: #DCECF7;
+
+    /* Bordes */
+    --admin-borde: #DCECF7;
+
+    /* Textos */
+    --admin-texto: #293E4D;
+    --admin-texto-secundario: #587284;
+
+    /* Color principal de botones y elementos destacados
+       Se conservan los nombres originales para no afectar
+       las referencias existentes en otros archivos CSS. */
+    --admin-naranja: #A9D1EA;
+    --admin-naranja-hover: #7CB5D9;
+
+    /* Colores de estados */
+    --admin-verde: #4C966D;
+    --admin-amarillo: #D4A54B;
+    --admin-rojo: #C65C5C;
+    --admin-azul: #527F9C;
+
+    /* Dimensiones */
+    --admin-sidebar-ancho: 270px;
+    --admin-contenido-max: 1500px;
+    --admin-radio: 14px;
+
+    /* Sombras */
+    --admin-sombra: 0 8px 24px rgba(49, 90, 117, 0.08);
+}

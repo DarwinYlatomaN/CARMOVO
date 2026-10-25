@@ -1,0 +1,650 @@
+
+/* ==========================================================================
+   CARMOVO - ADMINISTRADOR
+   GESTION DE ALQUILERES - PALETA AZUL PASTEL
+   ========================================================================== */
+
+/* ==========================================================================
+   RESUMEN DE ALQUILERES
+   ========================================================================== */
+
+.resumen-alquileres {
+    margin-bottom: 18px;
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.resumen-alquileres__dato {
+    flex: 1 1 150px;
+    min-width: min(150px, 100%);
+    padding: 13px 15px;
+    border: 1px solid var(--admin-borde);
+    border-radius: 10px;
+    background: var(--admin-superficie);
+    box-shadow: 0 4px 14px rgba(49, 90, 117, .05);
+}
+
+.resumen-alquileres__dato span {
+    display: block;
+    color: var(--admin-texto-secundario);
+    font-size: .68rem;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.resumen-alquileres__dato strong {
+    display: block;
+    margin-top: 4px;
+    color: #315A75;
+    font-size: 1.15rem;
+}
+
+/* Colores de estados del resumen */
+
+.resumen-alquileres__dato.pendiente strong {
+    color: #A0782F;
+}
+
+.resumen-alquileres__dato.activo strong {
+    color: #527F9C;
+}
+
+.resumen-alquileres__dato.finalizado strong {
+    color: #376B50;
+}
+
+/* ==========================================================================
+   HERRAMIENTAS DE BUSQUEDA Y FILTRADO
+   ========================================================================== */
+
+.alquileres-herramientas {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    padding: 16px 18px;
+    border-bottom: 1px solid var(--admin-borde);
+    background: var(--admin-superficie);
+    min-width: 0;
+    flex-wrap: wrap;
+}
+
+/* ==========================================================================
+   BUSCADOR
+   ========================================================================== */
+
+.alquileres-buscador {
+    position: relative;
+    width: min(100%, 460px);
+    flex: 1 1 340px;
+    min-width: 0;
+}
+
+.alquileres-buscador i {
+    position: absolute;
+    top: 50%;
+    left: 13px;
+    transform: translateY(-50%);
+    color: #7198B3;
+    font-size: .82rem;
+}
+
+/* ==========================================================================
+   CAMPOS DE BUSQUEDA, FILTROS Y FORMULARIO
+   ========================================================================== */
+
+.alquileres-buscador input,
+.alquileres-filtro,
+.campo-alquiler input,
+.campo-alquiler select,
+.campo-alquiler textarea {
+    border: 1px solid var(--admin-borde);
+    border-radius: 10px;
+    background: #FFFFFF;
+    color: var(--admin-texto);
+    outline: none;
+    transition: border-color .2s ease, box-shadow .2s ease;
+}
+
+.alquileres-buscador input {
+    width: 100%;
+    min-height: 42px;
+    padding: 0 14px 0 38px;
+}
+
+.alquileres-buscador input::placeholder,
+.campo-alquiler input::placeholder,
+.campo-alquiler textarea::placeholder {
+    color: #8198A8;
+}
+
+/* ==========================================================================
+   FILTROS
+   ========================================================================== */
+
+.alquileres-filtros {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 0;
+    flex-wrap: wrap;
+}
+
+.alquileres-filtro {
+    min-width: 180px;
+    max-width: 100%;
+    min-height: 42px;
+    padding: 0 12px;
+    cursor: pointer;
+}
+
+/* ==========================================================================
+   ESTADOS DE ENFOQUE
+   ========================================================================== */
+
+.alquileres-buscador input:focus,
+.alquileres-filtro:focus,
+.campo-alquiler input:focus,
+.campo-alquiler select:focus,
+.campo-alquiler textarea:focus {
+    border-color: #7CB5D9;
+    box-shadow: 0 0 0 3px rgba(124, 181, 217, .16);
+}
+
+/* ==========================================================================
+   CABECERA DEL PANEL - CORREGIDA
+   ========================================================================== */
+
+.alquileres-panel-cabecera {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 16px;
+    padding: 15px 18px;
+    min-width: 0;
+    border-bottom: 1px solid var(--admin-borde);
+    background: #F3F8FC;
+}
+
+.alquileres-panel-cabecera__informacion {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 5px;
+    min-width: 0;
+}
+
+.alquileres-panel-cabecera__informacion h3 {
+    display: block;
+    margin: 0;
+    color: #315A75;
+    font-size: .95rem;
+    font-weight: 700;
+    line-height: 1.35;
+}
+
+.alquileres-panel-cabecera__informacion span {
+    display: block;
+    margin: 0;
+    color: var(--admin-texto-secundario);
+    font-size: .7rem;
+    font-weight: 400;
+    line-height: 1.4;
+}
+
+/* ==========================================================================
+   TABLA DE ALQUILERES
+   ========================================================================== */
+
+.tabla-alquileres {
+    min-width: 1180px;
+}
+
+/* ==========================================================================
+   INFORMACION DEL CLIENTE Y VEHICULO
+   ========================================================================== */
+
+.alquiler-cliente,
+.alquiler-vehiculo,
+.alquiler-periodo,
+.alquiler-sedes {
+    min-width: 0;
+}
+
+.alquiler-cliente strong,
+.alquiler-vehiculo strong {
+    display: block;
+    color: #315A75;
+    font-size: .79rem;
+    overflow-wrap: anywhere;
+}
+
+.alquiler-cliente small,
+.alquiler-vehiculo small,
+.alquiler-periodo small,
+.alquiler-sedes small {
+    display: block;
+    margin-top: 4px;
+    color: #587284;
+    font-size: .67rem;
+    line-height: 1.35;
+    overflow-wrap: anywhere;
+}
+
+/* ==========================================================================
+   IMPORTE TOTAL
+   ========================================================================== */
+
+.alquiler-total {
+    font-weight: 800;
+    color: #315A75;
+    white-space: nowrap;
+}
+
+/* ==========================================================================
+   ESTADOS DE LOS ALQUILERES
+   ========================================================================== */
+
+/* Pendiente */
+.badge-estado.pendiente {
+    color: #9A722C;
+    background: #FFF2D8;
+}
+
+/* Confirmado */
+.badge-estado.confirmado {
+    color: #315A75;
+    background: #DCECF7;
+}
+
+/* En curso */
+.badge-estado.en-curso {
+    color: #527F9C;
+    background: #EAF4FA;
+}
+
+/* Finalizado */
+.badge-estado.finalizado {
+    color: #376B50;
+    background: #E4F3E9;
+}
+
+/* Cancelado */
+.badge-estado.cancelado {
+    color: #A64545;
+    background: #FFF1F1;
+}
+
+/* ==========================================================================
+   ACCIONES DE LA TABLA
+   ========================================================================== */
+
+.acciones-alquiler {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    min-width: 0;
+}
+
+/* ==========================================================================
+   BOTONES DE ACCIONES
+   ========================================================================== */
+
+.boton-alquiler-icono {
+    width: 34px;
+    height: 34px;
+    display: grid;
+    place-items: center;
+    border-radius: 8px;
+    border: 1px solid var(--admin-borde);
+    background: #F3F8FC;
+    color: #527F9C;
+    cursor: pointer;
+    transition: .2s ease;
+}
+
+.boton-alquiler-icono:hover {
+    color: #315A75;
+    background: #DCECF7;
+    border-color: #A9D1EA;
+}
+
+/* Editar */
+.boton-alquiler-icono.editar:hover {
+    color: #315A75;
+    background: #DCECF7;
+    border-color: #7CB5D9;
+}
+
+/* Eliminar */
+.boton-alquiler-icono.eliminar:hover {
+    color: #A64545;
+    background: #FFF1F1;
+    border-color: #E9B8B8;
+}
+
+/* ==========================================================================
+   VENTANA MODAL
+   ========================================================================== */
+
+.modal-alquiler {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 200;
+    padding: 24px;
+    align-items: center;
+    justify-content: center;
+    background: rgba(41, 62, 77, .45);
+    backdrop-filter: blur(5px);
+}
+
+.modal-alquiler.abierto {
+    display: flex;
+}
+
+/* ==========================================================================
+   CONTENIDO DEL MODAL
+   ========================================================================== */
+
+.modal-alquiler__contenido {
+    width: min(820px, calc(100vw - 32px));
+    max-width: 100%;
+    max-height: calc(100vh - 48px);
+    overflow-y: auto;
+    border-radius: 16px;
+    border: 1px solid var(--admin-borde);
+    background: #FFFFFF;
+    color: var(--admin-texto);
+    box-shadow: 0 28px 70px rgba(49, 90, 117, .22);
+}
+
+/* ==========================================================================
+   CABECERA DEL MODAL
+   ========================================================================== */
+
+.modal-alquiler__cabecera {
+    min-height: 68px;
+    padding: 0 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    border-bottom: 1px solid var(--admin-borde);
+    background: #F3F8FC;
+}
+
+.modal-alquiler__cabecera h2 {
+    color: #315A75;
+    font-size: 1rem;
+}
+
+/* ==========================================================================
+   BOTON CERRAR MODAL
+   ========================================================================== */
+
+.modal-alquiler__cerrar {
+    width: 36px;
+    height: 36px;
+    border: 1px solid var(--admin-borde);
+    border-radius: 9px;
+    display: grid;
+    place-items: center;
+    background: #EAF4FA;
+    color: #527F9C;
+    cursor: pointer;
+    transition: .2s ease;
+}
+
+.modal-alquiler__cerrar:hover {
+    background: #DCECF7;
+    color: #315A75;
+    border-color: #A9D1EA;
+}
+
+/* ==========================================================================
+   FORMULARIO DE ALQUILER
+   ========================================================================== */
+
+.formulario-alquiler {
+    padding: 20px;
+}
+
+.formulario-alquiler__grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+    min-width: 0;
+}
+
+.campo-alquiler {
+    min-width: 0;
+}
+
+.campo-alquiler--completo {
+    grid-column: 1 / -1;
+}
+
+/* ==========================================================================
+   ETIQUETAS DEL FORMULARIO
+   ========================================================================== */
+
+.campo-alquiler label {
+    display: block;
+    margin-bottom: 7px;
+    color: #315A75;
+    font-size: .73rem;
+    font-weight: 700;
+}
+
+/* ==========================================================================
+   INPUTS, SELECTS Y TEXTAREA
+   ========================================================================== */
+
+.campo-alquiler input,
+.campo-alquiler select,
+.campo-alquiler textarea {
+    width: 100%;
+    min-height: 43px;
+    padding: 0 12px;
+    background: #FFFFFF;
+}
+
+.campo-alquiler textarea {
+    min-height: 88px;
+    padding-top: 11px;
+    padding-bottom: 11px;
+    resize: vertical;
+}
+
+/* ==========================================================================
+   TEXTOS DE AYUDA
+   ========================================================================== */
+
+.campo-alquiler small {
+    display: block;
+    margin-top: 7px;
+    color: #587284;
+    font-size: .68rem;
+    line-height: 1.45;
+}
+
+/* ==========================================================================
+   VALIDACIONES DEL FORMULARIO DE ALQUILERES
+   ========================================================================== */
+
+.campo-alquiler input[aria-invalid="true"],
+.campo-alquiler select[aria-invalid="true"],
+.campo-alquiler textarea[aria-invalid="true"] {
+    border-color: #C65C5C;
+    background-color: #FFF5F5;
+}
+
+.campo-alquiler input[aria-invalid="true"]:focus,
+.campo-alquiler select[aria-invalid="true"]:focus,
+.campo-alquiler textarea[aria-invalid="true"]:focus {
+    border-color: #C65C5C;
+    box-shadow: 0 0 0 3px rgba(198, 92, 92, .14);
+}
+
+.campo-alquiler .mensaje-error-campo {
+    display: block;
+    margin-top: 7px;
+    color: #A64545;
+    font-size: .7rem;
+    font-weight: 600;
+    line-height: 1.45;
+    overflow-wrap: anywhere;
+}
+
+.campo-alquiler .mensaje-error-campo[hidden] {
+    display: none;
+}
+
+/* ==========================================================================
+   NOTA INFORMATIVA DEL FORMULARIO
+   ========================================================================== */
+
+.formulario-alquiler__nota {
+    margin-top: 17px;
+    padding: 12px 14px;
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    border: 1px solid #C5DFEF;
+    border-radius: 10px;
+    background: #EAF4FA;
+    color: #49677D;
+    font-size: .7rem;
+    line-height: 1.5;
+}
+
+.formulario-alquiler__nota i {
+    margin-top: 2px;
+    color: #527F9C;
+}
+
+/* ==========================================================================
+   ACCIONES DEL FORMULARIO
+   ========================================================================== */
+
+.formulario-alquiler__acciones {
+    margin-top: 20px;
+    padding-top: 16px;
+    border-top: 1px solid var(--admin-borde);
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+/* ==========================================================================
+   NOTIFICACIONES
+   ========================================================================== */
+
+.notificacion-alquiler {
+    position: fixed;
+    right: 22px;
+    bottom: 22px;
+    z-index: 300;
+    max-width: calc(100vw - 32px);
+    padding: 13px 16px;
+    border-radius: 10px;
+    border: 1px solid var(--admin-borde);
+    background: #FFFFFF;
+    color: #293E4D;
+    box-shadow: 0 10px 30px rgba(49, 90, 117, .15);
+    font-size: .78rem;
+    transform: translateY(22px);
+    opacity: 0;
+    pointer-events: none;
+    transition: .25s ease;
+}
+
+.notificacion-alquiler.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Notificacion de exito */
+.notificacion-alquiler.exito {
+    border-color: #A8D5BA;
+    background: #E4F3E9;
+    color: #376B50;
+}
+
+/* Notificacion de error */
+.notificacion-alquiler.error {
+    border-color: #E9B8B8;
+    background: #FFF1F1;
+    color: #A64545;
+}
+
+/* ==========================================================================
+   RESPONSIVE - TABLETAS
+   ========================================================================== */
+
+@media (max-width: 860px) {
+    .alquileres-herramientas {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .alquileres-buscador {
+        width: 100%;
+    }
+
+    .alquileres-filtros {
+        align-items: stretch;
+    }
+
+    .alquileres-filtro {
+        flex: 1;
+        min-width: 0;
+    }
+}
+
+/* ==========================================================================
+   RESPONSIVE - CELULARES
+   ========================================================================== */
+
+@media (max-width: 580px) {
+    .formulario-alquiler__grid {
+        grid-template-columns: 1fr;
+    }
+
+    .campo-alquiler--completo {
+        grid-column: auto;
+    }
+
+    .alquileres-filtros {
+        flex-direction: column;
+    }
+
+    .modal-alquiler {
+        padding: 12px;
+    }
+}
+
+/* ==========================================================================
+   ACCESIBILIDAD
+   ========================================================================== */
+
+.boton-alquiler-icono:focus-visible,
+.modal-alquiler__cerrar:focus-visible {
+    outline: 2px solid #7CB5D9;
+    outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .boton-alquiler-icono,
+    .modal-alquiler__cerrar,
+    .notificacion-alquiler,
+    .alquileres-buscador input,
+    .alquileres-filtro,
+    .campo-alquiler input,
+    .campo-alquiler select,
+    .campo-alquiler textarea {
+        transition: none;
+    }
+}

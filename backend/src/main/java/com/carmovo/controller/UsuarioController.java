@@ -1,17 +1,20 @@
+
 package com.carmovo.controller;
 
-
-import com.carmovo.model.Perfil;
-import com.carmovo.model.Usuario;
 import com.carmovo.service.UsuarioServicio;
 import com.carmovo.service.AlquilerServicio;
-import com.carmovo.dto.AlquilerDTO;
 import com.carmovo.service.AuditoriaServicio;
+import com.carmovo.dto.AlquilerDTO;
 import com.carmovo.dto.UsuarioDTO;
 import com.carmovo.dto.UsuarioGuardarDTO;
+import com.carmovo.dto.RegistroClienteDTO;
+
+import jakarta.validation.Valid;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.Map;
@@ -46,25 +49,37 @@ public class UsuarioController {
     }
 
     @PostMapping("/api/v1/admin/usuarios")
-    public ResponseEntity<UsuarioDTO> crear(@RequestBody UsuarioGuardarDTO dto) {
+    public ResponseEntity<UsuarioDTO> crear(@Valid @RequestBody UsuarioGuardarDTO dto) {
         UsuarioDTO usuario = usuarioServicio.crearUsuario(dto);
+
         auditoriaServicio.registrarSeguro(
                 "Usuarios", "CREAR", "Usuario", usuario.getIdUsuario(),
-                "Se registró el usuario " + nombreUsuario(usuario) + " (" + usuario.getCorreo() + ") con perfil " + usuario.getNombrePerfil() + "."
+                "Se registró el usuario " + nombreUsuario(usuario)
+                        + " (" + usuario.getCorreo() + ") con perfil "
+                        + usuario.getNombrePerfil() + "."
         );
+
         return new ResponseEntity<>(usuario, HttpStatus.CREATED);
     }
 
     @PutMapping("/api/v1/admin/usuarios/{id}")
-    public ResponseEntity<UsuarioDTO> actualizar(@PathVariable Long id, @RequestBody UsuarioGuardarDTO dto) {
+    public ResponseEntity<UsuarioDTO> actualizar(
+            @PathVariable Long id,
+            @Valid @RequestBody UsuarioGuardarDTO dto
+    ) {
         UsuarioDTO anterior = usuarioServicio.obtenerPorId(id);
         UsuarioDTO actualizado = usuarioServicio.actualizarUsuario(id, dto);
+
         auditoriaServicio.registrarSeguro(
                 "Usuarios", "ACTUALIZAR", "Usuario", id,
-                "Se actualizó el usuario " + nombreUsuario(actualizado) + " (" + actualizado.getCorreo() + "). Perfil: " +
-                        anterior.getNombrePerfil() + " → " + actualizado.getNombrePerfil() + "; estado: " +
-                        estadoUsuario(anterior) + " → " + estadoUsuario(actualizado) + "."
+                "Se actualizó el usuario " + nombreUsuario(actualizado)
+                        + " (" + actualizado.getCorreo() + "). Perfil: "
+                        + anterior.getNombrePerfil() + " \u2192 "
+                        + actualizado.getNombrePerfil() + "; estado: "
+                        + estadoUsuario(anterior) + " \u2192 "
+                        + estadoUsuario(actualizado) + "."
         );
+
         return ResponseEntity.ok(actualizado);
     }
 
@@ -72,59 +87,140 @@ public class UsuarioController {
     public ResponseEntity<Void> eliminar(@PathVariable Long id) {
         UsuarioDTO usuario = usuarioServicio.obtenerPorId(id);
         usuarioServicio.eliminarUsuario(id);
+
         auditoriaServicio.registrarSeguro(
                 "Usuarios", "ELIMINAR", "Usuario", id,
-                "Se eliminó el usuario " + nombreUsuario(usuario) + " (" + usuario.getCorreo() + ")."
+                "Se eliminó el usuario " + nombreUsuario(usuario)
+                        + " (" + usuario.getCorreo() + ")."
         );
+
         return ResponseEntity.noContent().build();
     }
 
     @PostMapping("/api/v1/clientes/registro")
-    public ResponseEntity<UsuarioDTO> registrarCliente(@RequestBody UsuarioGuardarDTO dto) {
-        UsuarioDTO usuario = usuarioServicio.registrarCliente(dto);
-        auditoriaServicio.registrarSeguro(
-                "Usuarios", "REGISTRO_CLIENTE", "Usuario", usuario.getIdUsuario(),
-                "Se registró el cliente " + nombreUsuario(usuario) + " (" + usuario.getCorreo() + ") desde el sitio público."
-        );
-        return new ResponseEntity<>(usuario, HttpStatus.CREATED);
+    public ResponseEntity<?> registrarCliente(
+            @Valid @RequestBody RegistroClienteDTO dto
+    ) {
+        try {
+            UsuarioGuardarDTO datosUsuario = convertirRegistro(dto);
+
+            UsuarioDTO usuario = usuarioServicio.registrarCliente(datosUsuario);
+
+            auditoriaServicio.registrarSeguro(
+                    "Usuarios", "REGISTRO_CLIENTE", "Usuario",
+                    usuario.getIdUsuario(),
+                    "Se registró el cliente " + nombreUsuario(usuario)
+                            + " (" + usuario.getCorreo()
+                            + ") desde el sitio público."
+            );
+
+            return new ResponseEntity<>(usuario, HttpStatus.CREATED);
+
+        } catch (ResponseStatusException ex) {
+            String mensaje = ex.getReason() == null
+                    ? "No se pudo completar el registro."
+                    : ex.getReason();
+
+            return ResponseEntity
+                    .status(ex.getStatusCode())
+                    .body(Map.of("message", mensaje));
+        }
     }
 
     @PostMapping("/api/v1/clientes/login")
-    public ResponseEntity<UsuarioDTO> iniciarSesionCliente(@RequestBody Map<String, String> credenciales) {
-        String correo = credenciales == null ? null : credenciales.get("correo");
-        String contrasena = credenciales == null ? null : credenciales.get("contrasena");
-        return ResponseEntity.ok(usuarioServicio.autenticarCliente(correo, contrasena));
+    public ResponseEntity<UsuarioDTO> iniciarSesionCliente(
+            @RequestBody Map<String, String> credenciales
+    ) {
+        String correo = credenciales == null
+                ? null
+                : credenciales.get("correo");
+
+        String contrasena = credenciales == null
+                ? null
+                : credenciales.get("contrasena");
+
+        return ResponseEntity.ok(
+                usuarioServicio.autenticarCliente(correo, contrasena)
+        );
     }
 
     @GetMapping("/api/v1/clientes/{id}")
-    public ResponseEntity<UsuarioDTO> obtenerPerfilCliente(@PathVariable Long id) {
-        return ResponseEntity.ok(usuarioServicio.obtenerClientePorId(id));
+    public ResponseEntity<UsuarioDTO> obtenerPerfilCliente(
+            @PathVariable Long id
+    ) {
+        return ResponseEntity.ok(
+                usuarioServicio.obtenerClientePorId(id)
+        );
     }
 
     @PutMapping("/api/v1/clientes/{id}")
-    public ResponseEntity<UsuarioDTO> actualizarPerfilCliente(@PathVariable Long id, @RequestBody UsuarioGuardarDTO dto) {
-        UsuarioDTO actualizado = usuarioServicio.actualizarPerfilCliente(id, dto);
+    public ResponseEntity<UsuarioDTO> actualizarPerfilCliente(
+            @PathVariable Long id,
+            @Valid @RequestBody UsuarioGuardarDTO dto
+    ) {
+        UsuarioDTO actualizado =
+                usuarioServicio.actualizarPerfilCliente(id, dto);
+
         auditoriaServicio.registrarSeguro(
                 "Usuarios", "ACTUALIZAR_PERFIL_CLIENTE", "Usuario", id,
-                "El cliente " + nombreUsuario(actualizado) + " actualizó los datos de su perfil desde el sitio público."
+                "El cliente " + nombreUsuario(actualizado)
+                        + " actualiz\u00f3 los datos de su perfil desde el sitio p\u00fablico."
         );
+
         return ResponseEntity.ok(actualizado);
     }
 
     @GetMapping("/api/v1/clientes/{id}/alquileres/ultimo")
-    public ResponseEntity<AlquilerDTO> obtenerUltimoAlquilerCliente(@PathVariable Long id) {
+    public ResponseEntity<AlquilerDTO> obtenerUltimoAlquilerCliente(
+            @PathVariable Long id
+    ) {
         usuarioServicio.obtenerClientePorId(id);
-        Optional<AlquilerDTO> alquiler = alquilerServicio.obtenerUltimoPorUsuario(id);
+
+        Optional<AlquilerDTO> alquiler =
+                alquilerServicio.obtenerUltimoPorUsuario(id);
+
         return alquiler.map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.noContent().build());
     }
 
+    private UsuarioGuardarDTO convertirRegistro(
+            RegistroClienteDTO registro
+    ) {
+        UsuarioGuardarDTO dto = new UsuarioGuardarDTO();
+
+        dto.setNombres(registro.getNombres());
+        dto.setApellidos(registro.getApellidos());
+        dto.setCorreo(registro.getCorreo());
+        dto.setContrasena(registro.getContrasena());
+        dto.setTelefono(registro.getTelefono());
+        dto.setDocumento(registro.getDocumento());
+        dto.setFechaNacimiento(registro.getFechaNacimiento());
+        dto.setDomicilio(registro.getDomicilio());
+        dto.setDepartamento(registro.getDepartamento());
+        dto.setProvincia(registro.getProvincia());
+        dto.setDistrito(registro.getDistrito());
+        dto.setNumeroLicencia(registro.getNumeroLicencia());
+        dto.setCategoriaLicencia(registro.getCategoriaLicencia());
+        dto.setVencimientoLicencia(registro.getVencimientoLicencia());
+
+        return dto;
+    }
+
     private String nombreUsuario(UsuarioDTO usuario) {
-        return ((usuario.getNombres() == null ? "" : usuario.getNombres()) + " " +
-                (usuario.getApellidos() == null ? "" : usuario.getApellidos())).trim();
+        return (
+                (usuario.getNombres() == null
+                        ? ""
+                        : usuario.getNombres())
+                        + " "
+                        + (usuario.getApellidos() == null
+                        ? ""
+                        : usuario.getApellidos())
+        ).trim();
     }
 
     private String estadoUsuario(UsuarioDTO usuario) {
-        return Boolean.TRUE.equals(usuario.getEstado()) ? "Activo" : "Inactivo";
+        return Boolean.TRUE.equals(usuario.getEstado())
+                ? "Activo"
+                : "Inactivo";
     }
 }

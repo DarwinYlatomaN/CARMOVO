@@ -1,11 +1,11 @@
+
 package com.carmovo.controller;
 
-
-import com.carmovo.model.Alquiler;
-import com.carmovo.service.AlquilerServicio;
 import com.carmovo.dto.AlquilerDTO;
 import com.carmovo.dto.AlquilerGuardarDTO;
+import com.carmovo.service.AlquilerServicio;
 import com.carmovo.service.AuditoriaServicio;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,7 +21,10 @@ public class AlquilerController {
     private final AlquilerServicio alquilerServicio;
     private final AuditoriaServicio auditoriaServicio;
 
-    public AlquilerController(AlquilerServicio alquilerServicio, AuditoriaServicio auditoriaServicio) {
+    public AlquilerController(
+            AlquilerServicio alquilerServicio,
+            AuditoriaServicio auditoriaServicio
+    ) {
         this.alquilerServicio = alquilerServicio;
         this.auditoriaServicio = auditoriaServicio;
     }
@@ -37,48 +40,89 @@ public class AlquilerController {
     }
 
     @PostMapping
-    public ResponseEntity<AlquilerDTO> crear(@RequestBody AlquilerGuardarDTO dto) {
+    public ResponseEntity<AlquilerDTO> crear(
+            @Valid @RequestBody AlquilerGuardarDTO dto
+    ) {
         AlquilerDTO alquiler = alquilerServicio.crear(dto);
+
         auditoriaServicio.registrarSeguro(
-                "Alquileres", "CREAR", "Alquiler", alquiler.getIdAlquiler(),
-                "Se registró el alquiler #" + alquiler.getIdAlquiler() + " para " + alquiler.getCliente() +
-                        " con " + alquiler.getVehiculo() + ", estado " + alquiler.getEstado() + "."
+                "Alquileres",
+                "CREAR",
+                "Alquiler",
+                alquiler.getIdAlquiler(),
+                "Se registró el alquiler #" + alquiler.getIdAlquiler() +
+                        " para " + alquiler.getCliente() +
+                        " con " + alquiler.getVehiculo() +
+                        ", estado " + alquiler.getEstado() + "."
         );
+
         return new ResponseEntity<>(alquiler, HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<AlquilerDTO> actualizar(@PathVariable Long id, @RequestBody AlquilerGuardarDTO dto) {
+    public ResponseEntity<AlquilerDTO> actualizar(
+            @PathVariable Long id,
+            @Valid @RequestBody AlquilerGuardarDTO dto
+    ) {
         AlquilerDTO anterior = alquilerServicio.obtenerPorId(id);
         AlquilerDTO actualizado = alquilerServicio.actualizar(id, dto);
+
         auditoriaServicio.registrarSeguro(
-                "Alquileres", "ACTUALIZAR", "Alquiler", id,
-                "Se actualizó el alquiler #" + id + " de " + actualizado.getCliente() + ". Estado: " +
-                        anterior.getEstado() + " → " + actualizado.getEstado() + "."
+                "Alquileres",
+                "ACTUALIZAR",
+                "Alquiler",
+                id,
+                "Se actualizó el alquiler #" + id +
+                        " de " + actualizado.getCliente() +
+                        ". Estado: " + anterior.getEstado() +
+                        " → " + actualizado.getEstado() + "."
         );
+
         return ResponseEntity.ok(actualizado);
     }
 
     @PatchMapping("/{id}/estado")
-    public ResponseEntity<AlquilerDTO> cambiarEstado(@PathVariable Long id, @RequestBody Map<String, String> body) {
+    public ResponseEntity<AlquilerDTO> cambiarEstado(
+            @PathVariable Long id,
+            @RequestBody Map<String, String> body
+    ) {
         AlquilerDTO anterior = alquilerServicio.obtenerPorId(id);
-        AlquilerDTO actualizado = alquilerServicio.cambiarEstado(id, body.get("estado"));
+
+        AlquilerDTO actualizado = alquilerServicio.cambiarEstado(
+                id,
+                body.get("estado")
+        );
+
         auditoriaServicio.registrarSeguro(
-                "Alquileres", "CAMBIAR_ESTADO", "Alquiler", id,
-                "El alquiler #" + id + " cambió de " + anterior.getEstado() + " a " + actualizado.getEstado() +
+                "Alquileres",
+                "CAMBIAR_ESTADO",
+                "Alquiler",
+                id,
+                "El alquiler #" + id +
+                        " cambió de " + anterior.getEstado() +
+                        " a " + actualizado.getEstado() +
                         ". La flota se sincronizó automáticamente cuando correspondía."
         );
+
         return ResponseEntity.ok(actualizado);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> eliminar(@PathVariable Long id) {
         AlquilerDTO alquiler = alquilerServicio.obtenerPorId(id);
+
         alquilerServicio.eliminar(id);
+
         auditoriaServicio.registrarSeguro(
-                "Alquileres", "ELIMINAR", "Alquiler", id,
-                "Se eliminó el alquiler #" + id + " de " + alquiler.getCliente() + " con " + alquiler.getVehiculo() + "."
+                "Alquileres",
+                "ELIMINAR",
+                "Alquiler",
+                id,
+                "Se eliminó el alquiler #" + id +
+                        " de " + alquiler.getCliente() +
+                        " con " + alquiler.getVehiculo() + "."
         );
+
         return ResponseEntity.noContent().build();
     }
 }

@@ -1,3 +1,13 @@
+
+/* ==========================================================================
+   CARMOVO - EXPERIENCIAS
+   PALETA VERDE MENTA PASTEL
+   ========================================================================== */
+
+/* ==========================================================================
+   CLASES AUXILIARES
+   ========================================================================== */
+
 .mt-40 {
     margin-top: 40px;
 }
@@ -18,22 +28,33 @@
     text-align: center;
 }
 
+/* ==========================================================================
+   TITULOS DE SECCIONES
+   ========================================================================== */
+
 .titulo-seccion-exp {
-    color: #ffffff;
+    color: #376B50;
     font-size: 2.2rem;
     font-family: 'Outfit', sans-serif;
     margin-bottom: 10px;
 }
 
 .subtitulo-seccion {
-    color: #94a3b8;
+    color: #526B5D;
     margin-bottom: 30px;
 }
 
+/* ==========================================================================
+   CARRUSEL DE HISTORIAS
+   ========================================================================== */
+
 .historias-carrusel {
     display: flex;
+    justify-content: center;
+    align-items: center;
     gap: 20px;
     overflow-x: auto;
+    padding-top: 22px;
     padding-bottom: 15px;
 }
 
@@ -42,7 +63,7 @@
 }
 
 .historias-carrusel::-webkit-scrollbar-thumb {
-    background: #334155;
+    background: #C4DDCD;
     border-radius: 10px;
 }
 
@@ -52,59 +73,56 @@
     align-items: center;
     cursor: pointer;
     min-width: 90px;
+    margin: 38px;
 }
 
 .borde-gradiente {
     width: 80px;
     height: 80px;
     border-radius: 50%;
-    background: linear-gradient(45deg, #ff5a36, #facc15);
+    background: linear-gradient(
+            45deg,
+            #A8D5BA,
+            #F6DCE5,
+            #DDEEF7
+    );
     padding: 3px;
     transition: transform 0.3s ease;
-    object-fit:cover;
+    object-fit: cover;
 }
 
 .historia-item img {
     width: 120%;
     height: 120%;
     border-radius: 50%;
-    border: 3px solid #0b111e;
+    border: 3px solid #F5FAF6;
     object-fit: cover;
-    
 }
-.historias-carrusel{
-    display: flex;
-    justify-content:center;
-    align-items: center;
-    padding-top: 22px;
-   
-}
-.historia-item {
-    margin: 38px;
-}
+
 .historia-item span {
-    color: #ff5a36;
-   
+    color: #376B50;
     font-size: 1.2rem;
     margin-top: 21px;
     font-weight: 600;
-   
-    
 }
 
 .historia-item:hover .borde-gradiente {
     transform: scale(1.1);
 }
 
+/* ==========================================================================
+   EXPERIENCIAS SEGUN ESTADO DE ANIMO
+   ========================================================================== */
+
 .cabecera-mood h2 {
-    color: #ffffff;
-    font-family: 'Outfit';
+    color: #376B50;
+    font-family: 'Outfit', sans-serif;
     font-size: 2rem;
     margin: 0 0 5px 0;
 }
 
 .cabecera-mood p {
-    color: #94a3b8;
+    color: #526B5D;
 }
 
 .botones-mood {
@@ -115,9 +133,9 @@
 }
 
 .btn-mood {
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    color: #cbd5e1;
+    background: #FFFFFF;
+    border: 1px solid #C4DDCD;
+    color: #526B5D;
     padding: 12px 20px;
     border-radius: 30px;
     font-family: 'Outfit', sans-serif;
@@ -130,78 +148,178 @@
 
 .btn-mood:hover,
 .btn-mood.activo {
-    background: var(--acento-naranja, #ff5a36);
-    color: #fff;
-    border-color: var(--acento-naranja, #ff5a36);
-    box-shadow: 0 4px 15px rgba(255, 90, 54, 0.3);
+    background: #A8D5BA;
+    color: #263B30;
+    border-color: #8BC9A3;
+    box-shadow: 0 4px 15px rgba(55, 107, 80, 0.14);
 }
+
+.btn-mood:focus-visible {
+    outline: 3px solid #8BC9A3;
+    outline-offset: 3px;
+}
+
+/* ==========================================================================
+   TARJETA DE RESULTADO MOOD
+   TAMAÑO REDUCIDO Y RESPONSIVO
+   ========================================================================== */
 
 .resultado-mood-card {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    background: #0f172a;
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    height: 350px;
+    min-height: 350px;
+    background: #FFFFFF;
+    border: 1px solid #D8EEDF;
     border-radius: 20px;
     overflow: hidden;
     transition: opacity 0.4s ease;
+    box-shadow: 0 10px 30px rgba(55, 107, 80, 0.08);
 }
 
 .mood-info {
-    padding: 40px;
+    min-width: 0;
+    padding: 25px 30px;
     display: flex;
     flex-direction: column;
     justify-content: center;
 }
 
 .mood-info h3 {
-    color: #fff;
-    font-size: 1.8rem;
-    font-family: 'Outfit';
-    margin: 0 0 15px 0;
+    color: #376B50;
+    font-size: 1.55rem;
+    font-family: 'Outfit', sans-serif;
+    margin: 0 0 10px 0;
 }
 
 .mood-info p {
-    color: #cbd5e1;
-    line-height: 1.6;
-    margin-bottom: 20px;
+    color: #526B5D;
+    font-size: 0.95rem;
+    line-height: 1.5;
+    margin: 0 0 14px 0;
 }
 
 .mood-tags {
     display: flex;
     flex-direction: column;
-    gap: 10px;
-    margin-bottom: 25px;
+    gap: 8px;
+    margin-bottom: 14px;
 }
 
 .mood-tags span {
-    background: rgba(255, 255, 255, 0.05);
-    padding: 8px 15px;
+    background: #E4F3E9;
+    padding: 7px 12px;
     border-radius: 8px;
-    color: #fff;
-    font-size: 0.85rem;
+    color: #376B50;
+    font-size: 0.82rem;
     width: fit-content;
+    max-width: 100%;
 }
 
 .mood-tags i {
-    color: var(--acento-naranja, #ff5a36);
+    color: #5B9C76;
     margin-right: 5px;
 }
 
+/* Mantener el botón proporcionado dentro de la tarjeta. */
+.mood-info .boton-accion-naranja {
+    margin-top: 8px;
+    text-align: center;
+}
+
+/* Limitar el tamaño de la imagen para evitar que
+   determine la altura de toda la tarjeta. */
+.mood-imagen {
+    min-width: 0;
+    min-height: 0;
+    height: 100%;
+    overflow: hidden;
+}
+
 .mood-imagen img {
+    display: block;
     width: 100%;
     height: 100%;
     object-fit: cover;
+    object-position: center;
 }
 
-@media (max-width: 768px) {
+/* Pantallas medianas: permitir más altura si
+   el contenido necesita espacio adicional. */
+@media (min-width: 769px) and (max-width: 1024px) {
     .resultado-mood-card {
-        grid-template-columns: 1fr;
+        height: auto;
+        min-height: 350px;
+    }
+
+    .mood-info {
+        padding: 24px;
     }
 
     .mood-imagen {
-        height: 250px;
+        min-height: 350px;
     }
 }
+
+/* Celulares y tabletas pequeñas. */
+@media (max-width: 768px) {
+    .resultado-mood-card {
+        grid-template-columns: 1fr;
+        height: auto;
+        min-height: 0;
+    }
+
+    .mood-info {
+        padding: 25px 22px;
+    }
+
+    .mood-info h3 {
+        font-size: 1.5rem;
+    }
+
+    .mood-imagen {
+        height: 240px;
+        min-height: 240px;
+    }
+
+    .mood-imagen img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+}
+
+@media (max-width: 480px) {
+    .mood-info {
+        padding: 22px 18px;
+    }
+
+    .mood-info h3 {
+        font-size: 1.35rem;
+    }
+
+    .mood-info p {
+        font-size: 0.9rem;
+    }
+
+    .mood-imagen {
+        height: 210px;
+        min-height: 210px;
+    }
+
+    .botones-mood {
+        gap: 10px;
+    }
+
+    .btn-mood {
+        padding: 10px 14px;
+        font-size: 0.85rem;
+    }
+}
+
+/* ==========================================================================
+   RUTAS Y DESTINOS
+   ========================================================================== */
 
 .grid-rutas {
     display: grid;
@@ -210,10 +328,17 @@
 }
 
 .tarjeta-ruta {
-    background: rgba(255, 255, 255, 0.03);
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: #FFFFFF;
+    border: 1px solid #D8EEDF;
     border-radius: 16px;
     overflow: hidden;
+    box-shadow: 0 8px 24px rgba(55, 107, 80, 0.07);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.tarjeta-ruta:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 14px 30px rgba(55, 107, 80, 0.13);
 }
 
 .tarjeta-ruta img {
@@ -227,8 +352,8 @@
 }
 
 .contenido-ruta h3 {
-    color: #fff;
-    font-family: 'Outfit';
+    color: #376B50;
+    font-family: 'Outfit', sans-serif;
     font-size: 1.4rem;
     margin: 0 0 10px 0;
 }
@@ -236,30 +361,34 @@
 .detalles-ruta {
     display: flex;
     gap: 20px;
-    color: var(--acento-naranja, #ff5a36);
+    color: #5B9C76;
     font-weight: 600;
     font-size: 0.9rem;
     margin-bottom: 15px;
 }
 
 .contenido-ruta p {
-    color: #94a3b8;
+    color: #526B5D;
     font-size: 0.9rem;
     line-height: 1.5;
     margin-bottom: 20px;
 }
 
 .link-ruta {
-    color: #fff;
-    font-family: 'Outfit';
+    color: #376B50;
+    font-family: 'Outfit', sans-serif;
     font-weight: 700;
     text-decoration: none;
     transition: color 0.3s;
 }
 
 .link-ruta:hover {
-    color: var(--acento-naranja, #ff5a36);
+    color: #5B9C76;
 }
+
+/* ==========================================================================
+   GALERIA MASONRY DE TESTIMONIOS
+   ========================================================================== */
 
 .masonry-grid {
     column-count: 3;
@@ -272,7 +401,8 @@
     position: relative;
     border-radius: 16px;
     overflow: hidden;
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    border: 1px solid #D8EEDF;
+    box-shadow: 0 6px 20px rgba(55, 107, 80, 0.08);
 }
 
 .masonry-item img {
@@ -286,7 +416,7 @@
     bottom: 0;
     left: 0;
     width: 100%;
-    background: rgba(11, 17, 30, 0.75);
+    background: rgba(245, 250, 246, 0.94);
     backdrop-filter: blur(8px);
     padding: 20px;
     transform: translateY(100%);
@@ -298,13 +428,13 @@
 }
 
 .estrellas {
-    color: #facc15;
+    color: #B58C3A;
     font-size: 0.9rem;
     margin-bottom: 10px;
 }
 
 .capa-testimonio p {
-    color: #fff;
+    color: #263B30;
     font-style: italic;
     font-size: 0.9rem;
     margin-bottom: 1px;
@@ -313,8 +443,8 @@
 
 .etiqueta-auto {
     display: inline-block;
-    background: var(--acento-naranja, #ff5a36);
-    color: #fff;
+    background: #A8D5BA;
+    color: #263B30;
     padding: 4px 10px;
     border-radius: 20px;
     font-size: 0.75rem;
@@ -333,6 +463,10 @@
     }
 }
 
+/* ==========================================================================
+   INSIGNIAS DE EXPERIENCIAS
+   ========================================================================== */
+
 .grid-insignias {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -340,56 +474,61 @@
 }
 
 .insignia-card {
-    background: rgba(255, 255, 255, 0.03);
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: #FFFFFF;
+    border: 1px solid #D8EEDF;
     border-radius: 16px;
     padding: 30px 20px;
     text-align: center;
-    transition: all 0.3s;
+    transition: all 0.3s ease;
+    box-shadow: 0 6px 20px rgba(55, 107, 80, 0.06);
 }
 
 .icono-insignia {
     font-size: 3rem;
     margin-bottom: 15px;
+    color: #5B9C76;
 }
 
 .insignia-card h4 {
-    color: #fff;
-    font-family: 'Outfit';
+    color: #376B50;
+    font-family: 'Outfit', sans-serif;
     font-size: 1.2rem;
     margin: 0 0 5px 0;
 }
 
 .insignia-card p {
-    color: #94a3b8;
+    color: #526B5D;
     font-size: 0.85rem;
     margin: 0;
 }
 
 .insignia-card.desbloqueada {
-    border-color: var(--acento-naranja, #ff5a36);
-    box-shadow: 0 0 20px rgba(255, 90, 54, 0.15);
+    border-color: #A8D5BA;
+    box-shadow: 0 0 20px rgba(55, 107, 80, 0.13);
+    background: #F5FAF6;
 }
 
 .insignia-card.desbloqueada .icono-insignia {
-    color: var(--acento-naranja, #ff5a36);
-    text-shadow: 0 0 15px rgba(255, 90, 54, 0.6);
+    color: #5B9C76;
+    text-shadow: 0 0 15px rgba(168, 213, 186, 0.45);
 }
 
 .insignia-card.bloqueada {
     opacity: 0.5;
     filter: grayscale(100%);
 }
-/* 
-   MODAL TIPO STORY (HISTORIAS)
-    */
+
+/* ==========================================================================
+   MODAL TIPO STORY
+   ========================================================================== */
+
 .modal-story {
     position: fixed;
     top: 0;
     left: 0;
     width: 100vw;
     height: 100vh;
-    background: rgba(11, 17, 30, 0.9);
+    background: rgba(168, 213, 186, 0.65);
     backdrop-filter: blur(10px);
     z-index: 99999;
     display: flex;
@@ -406,15 +545,15 @@
 }
 
 .modal-story-contenido {
-    background: #0f172a;
+    background: #FFF9EF;
     width: 90%;
-    max-width: 400px; /* Formato vertical tipo celular */
+    max-width: 400px;
     max-height: 85vh;
     border-radius: 20px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    border: 1px solid #D8EEDF;
     position: relative;
     overflow-y: auto;
-    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 20px 50px rgba(55, 107, 80, 0.18);
     transform: scale(0.95);
     transition: transform 0.3s ease;
 }
@@ -427,9 +566,9 @@
     position: absolute;
     top: 15px;
     right: 15px;
-    background: rgba(0, 0, 0, 0.5);
-    border: none;
-    color: white;
+    background: rgba(255, 249, 239, 0.95);
+    border: 1px solid #D8EEDF;
+    color: #376B50;
     width: 30px;
     height: 30px;
     border-radius: 50%;
@@ -438,11 +577,12 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    transition: background 0.3s;
+    transition: background 0.3s ease;
 }
 
 .btn-cerrar-story:hover {
-    background: var(--acento-naranja, #ff5a36);
+    background: #A8D5BA;
+    color: #263B30;
 }
 
 .story-header {
@@ -457,22 +597,23 @@
     object-fit: cover;
     border-top-left-radius: 20px;
     border-top-right-radius: 20px;
-    opacity: 0.6;
+    opacity: 0.8;
 }
 
 .story-header h3 {
     position: absolute;
     bottom: 15px;
     left: 20px;
-    color: white;
+    color: #FFFFFF;
     font-family: 'Outfit', sans-serif;
     font-size: 1.5rem;
     margin: 0;
-    text-shadow: 0 2px 4px rgba(0,0,0,0.8);
+    text-shadow: 0 2px 5px rgba(0, 0, 0, 0.8);
 }
 
 .story-body {
     padding: 25px 20px;
+    color: #263B30;
 }
 
 .lista-tips-story {
@@ -482,7 +623,7 @@
 }
 
 .lista-tips-story li {
-    color: #cbd5e1;
+    color: #526B5D;
     font-size: 0.95rem;
     margin-bottom: 15px;
     padding-left: 30px;
@@ -491,12 +632,12 @@
 }
 
 .lista-tips-story li::before {
-    content: '\f058'; /* Icono de check (FontAwesome) */
+    content: '\f058';
     font-family: 'Font Awesome 6 Free';
     font-weight: 900;
     position: absolute;
     left: 0;
     top: 2px;
-    color: var(--acento-naranja, #ff5a36);
+    color: #5B9C76;
     font-size: 1.1rem;
 }
