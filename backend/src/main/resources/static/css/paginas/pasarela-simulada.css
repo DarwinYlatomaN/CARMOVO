@@ -1,0 +1,222 @@
+
+#modal-pasarela {
+    --pas-verde: #376B50;
+    --pas-oscuro: #263B30;
+    --pas-claro: #D8EEDF;
+    --pas-suave: #526B5D;
+    --pas-borde: #D4E3DA;
+    --pas-fondo: #F5FAF6;
+    --pas-acento: #376B50;
+    font-family: 'Outfit', sans-serif;
+}
+#modal-pasarela[data-metodo="yape"] { --pas-acento: #5B1A7A; }
+#modal-pasarela[data-metodo="plin"] { --pas-acento: #1FA3C4; }
+#modal-pasarela[data-metodo="paypal"] { --pas-acento: #376B50; }
+
+.pasarela-caja {
+    width: 92%;
+    max-width: 440px;
+    max-height: 94vh;
+    display: flex;
+    flex-direction: column;
+    background: #fff;
+    border-radius: 18px;
+    border: 1px solid var(--pas-claro);
+    box-shadow: 0 25px 60px rgba(38, 59, 48, .22);
+    overflow: hidden;
+    color: var(--pas-oscuro);
+}
+
+.pasarela-cabecera {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 18px;
+    border-bottom: 1px solid #EEF3F0;
+}
+.pasarela-logo {
+    height: 34px;
+    width: 52px;
+    object-fit: contain;
+    border-radius: 6px;
+    background: #fff;
+}
+.pasarela-titulo { flex: 1; display: flex; flex-direction: column; line-height: 1.25; }
+.pasarela-titulo strong { font-size: 15px; }
+.pasarela-titulo span { font-size: 12px; color: #2F8F5B; }
+.pasarela-modo {
+    font-style: normal;
+    background: #FFF3D6;
+    color: #8A5A00;
+    padding: 1px 7px;
+    border-radius: 10px;
+    font-weight: 600;
+}
+.pasarela-cerrar {
+    border: 0;
+    background: #F1F5F2;
+    width: 34px;
+    height: 34px;
+    border-radius: 10px;
+    color: var(--pas-suave);
+    cursor: pointer;
+}
+.pasarela-cerrar:hover { background: var(--pas-claro); }
+
+.pasarela-pasos {
+    display: flex;
+    list-style: none;
+    margin: 0;
+    padding: 12px 18px;
+    gap: 6px;
+    background: var(--pas-fondo);
+    font-size: 11.5px;
+    color: #8AA195;
+}
+.pasarela-pasos li { flex: 1; display: flex; align-items: center; gap: 5px; white-space: nowrap; }
+.pasarela-pasos li span {
+    width: 20px; height: 20px; border-radius: 50%;
+    display: inline-flex; align-items: center; justify-content: center;
+    background: #E3EFE7; font-weight: 700; font-size: 10.5px; flex-shrink: 0;
+}
+.pasarela-pasos li.activo { color: var(--pas-oscuro); font-weight: 600; }
+.pasarela-pasos li.activo span { background: var(--pas-acento); color: #fff; }
+.pasarela-pasos li.hecho span { background: #2F8F5B; color: #fff; }
+
+.pasarela-cuerpo { padding: 18px; overflow-y: auto; flex: 1; font-size: 14px; }
+.pasarela-anim { animation: pasEntrar .25s ease; }
+@keyframes pasEntrar { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+
+.pasarela-pie {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 18px;
+    border-top: 1px solid #EEF3F0;
+    background: var(--pas-fondo);
+    font-size: 13px;
+    color: var(--pas-suave);
+}
+.pasarela-pie strong { font-size: 17px; color: var(--pas-verde); }
+
+
+.pas-subtitulo { font-weight: 700; font-size: 12px; letter-spacing: .06em; text-transform: uppercase; color: var(--pas-verde); margin-bottom: 12px; }
+.pas-campo {
+    display: block;
+    border: 1.5px solid var(--pas-borde);
+    border-radius: 10px;
+    padding: 7px 12px 6px;
+    margin-bottom: 10px;
+    transition: border-color .2s, box-shadow .2s;
+    width: 100%;
+}
+.pas-campo:focus-within { border-color: var(--pas-acento); box-shadow: 0 0 0 3px var(--pas-claro); }
+.pas-campo small { display: block; font-size: 11px; font-weight: 600; color: #7B9184; }
+.pas-campo input, .pas-campo select {
+    border: 0; outline: 0; width: 100%; font-size: 15px; padding: 2px 0;
+    background: transparent; color: var(--pas-oscuro); font-family: inherit;
+}
+.pas-fila { display: flex; gap: 10px; }
+.pas-fila .pas-campo { flex: 1; }
+
+.pas-error { color: #B23B3B; font-size: 12.5px; min-height: 0; margin: 0 0 8px; display: none; }
+.pas-error.visible { display: block; }
+.pas-ayuda { font-size: 11.5px; color: #7B9184; margin: 10px 0 0; text-align: center; }
+.pas-texto-suave { color: var(--pas-suave); font-size: 13.5px; margin: 6px 0; }
+.pas-centro { text-align: center; }
+.pas-centro-texto { text-align: center; }
+
+
+.pas-btn {
+    border: 0; border-radius: 11px; padding: 12px 16px;
+    font: 600 15px 'Outfit', sans-serif; cursor: pointer; transition: filter .2s, transform .1s;
+}
+.pas-btn:hover { filter: brightness(1.07); }
+.pas-btn:active { transform: scale(.98); }
+.pas-btn-bloque { width: 100%; margin-top: 6px; }
+.pas-btn-pri { background: var(--pas-verde); color: #fff; }
+.pas-btn-sec { background: #fff; color: var(--pas-verde); border: 1.5px solid var(--pas-verde); }
+.pas-btn-yape { background: #5B1A7A; color: #fff; }
+.pas-btn-plin { background: linear-gradient(135deg, #1FB6C9, #4D7BE0); color: #fff; }
+.pas-botones { display: flex; gap: 10px; margin-top: 14px; }
+.pas-botones .pas-btn { flex: 1; }
+
+
+.pas-tarjeta-visual {
+    position: relative;
+    height: 150px;
+    border-radius: 14px;
+    padding: 16px 18px;
+    margin-bottom: 14px;
+    color: #fff;
+    background: linear-gradient(135deg, #263B30, #376B50 60%, #5B9C76);
+    box-shadow: 0 10px 22px rgba(38, 59, 48, .25);
+    transition: background .4s;
+}
+.pas-tarjeta-visual[data-marca="mastercard"] { background: linear-gradient(135deg, #2b2b2b, #5a3b1c 60%, #c2741d); }
+.pas-tarjeta-visual[data-marca="amex"] { background: linear-gradient(135deg, #1d4f73, #2f7fb0 60%, #6fb3db); }
+.pas-tv-marca { position: absolute; right: 18px; top: 14px; font-weight: 900; font-style: italic; font-size: 17px; letter-spacing: .03em; }
+.pas-tv-chip { width: 36px; height: 26px; border-radius: 5px; background: linear-gradient(135deg, #E9D38F, #B99A45); margin: 14px 0 14px; }
+.pas-tv-numero { font-family: 'Courier New', monospace; font-size: 18px; letter-spacing: 1.5px; white-space: nowrap; }
+.pas-tv-fila { display: flex; justify-content: space-between; font-size: 12px; margin-top: 12px; text-transform: uppercase; opacity: .95; }
+.pas-tv-fila span:first-child { max-width: 70%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+
+.pas-spinner {
+    width: 54px; height: 54px; margin: 10px auto 14px; border-radius: 50%;
+    border: 5px solid var(--pas-claro); border-top-color: var(--pas-acento);
+    animation: pasGirar .9s linear infinite;
+}
+@keyframes pasGirar { to { transform: rotate(360deg); } }
+.pas-titulo-proceso { font-weight: 700; margin: 0 0 12px; }
+.pas-progreso { height: 6px; background: #E3EFE7; border-radius: 4px; overflow: hidden; margin-bottom: 14px; }
+.pas-progreso div { height: 100%; width: 0; background: var(--pas-acento); transition: width .4s ease; }
+.pas-checklist { list-style: none; padding: 0; margin: 0; text-align: left; font-size: 13.5px; }
+.pas-checklist li { padding: 5px 0 5px 24px; position: relative; color: #9AAFA3; }
+.pas-checklist li::before { content: '•'; position: absolute; left: 6px; }
+.pas-checklist li.en-curso { color: var(--pas-oscuro); }
+.pas-checklist li.en-curso::before { content: ''; left: 2px; top: 9px; width: 12px; height: 12px; border-radius: 50%; border: 2px solid var(--pas-claro); border-top-color: var(--pas-acento); animation: pasGirar .8s linear infinite; }
+.pas-checklist li.hecho { color: var(--pas-oscuro); }
+.pas-checklist li.hecho::before { content: '✓'; color: #2F8F5B; font-weight: 800; left: 3px; }
+
+
+.pas-otp { display: flex; gap: 8px; justify-content: center; margin: 14px 0 6px; }
+.pas-otp-caja {
+    width: 44px; height: 52px; text-align: center; font-size: 22px; font-weight: 700;
+    border: 1.5px solid var(--pas-borde); border-radius: 10px; outline: 0; color: var(--pas-oscuro);
+}
+.pas-otp-caja:focus { border-color: var(--pas-acento); box-shadow: 0 0 0 3px var(--pas-claro); }
+.pas-3ds-sello { display: inline-flex; gap: 8px; align-items: center; background: #E1EEF8; color: #2E6A92; font-weight: 700; font-size: 12.5px; padding: 6px 12px; border-radius: 20px; }
+
+/* ---------- QR ---------- */
+.pas-qr { position: relative; border-radius: 14px; padding: 16px; text-align: center; color: #fff; margin-bottom: 12px; overflow: hidden; }
+.pas-qr-yape { background: #5B1A7A; }
+.pas-qr-plin { background: linear-gradient(135deg, #1FB6C9, #4D7BE0); }
+.pas-qr img { width: 150px; height: 150px; object-fit: contain; background: #fff; border-radius: 10px; padding: 6px; }
+.pas-qr strong { display: block; font-size: 18px; margin-top: 8px; }
+.pas-qr span { font-size: 12.5px; opacity: .95; }
+.pas-qr.vencido img { filter: blur(4px) grayscale(1); }
+.pas-qr-vencido { position: absolute; inset: 0; background: rgba(255,255,255,.88); color: var(--pas-oscuro); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; font-weight: 700; }
+
+
+.pas-resumen { margin: 8px 0; }
+.pas-kv { display: flex; justify-content: space-between; gap: 12px; padding: 7px 0; border-bottom: 1px dashed #E3ECE6; font-size: 13.5px; }
+.pas-kv span { color: var(--pas-suave); }
+.pas-kv b { text-align: right; }
+.pas-total-caja { display: flex; justify-content: space-between; align-items: center; background: var(--pas-fondo); border-radius: 10px; padding: 12px 14px; margin-top: 10px; }
+.pas-total-caja b { color: var(--pas-verde); text-align: right; font-size: 17px; }
+.pas-total-caja small { display: block; font-size: 12px; color: var(--pas-suave); font-weight: 500; }
+.pas-icono-resultado { width: 66px; height: 66px; border-radius: 50%; margin: 6px auto 10px; display: flex; align-items: center; justify-content: center; font-size: 32px; color: #fff; animation: pasPop .35s ease; }
+.pas-icono-resultado.ok { background: #2F8F5B; }
+.pas-icono-resultado.rechazo { background: #C65C5C; }
+@keyframes pasPop { from { transform: scale(.5); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+.pas-resultado-titulo { font-weight: 700; font-size: 18px; margin: 0 0 6px; }
+.pas-emitiendo { text-align: center; color: var(--pas-suave); font-size: 13px; margin: 14px 0 0; }
+
+@media (max-width: 480px) {
+    .pasarela-pasos { font-size: 0; }
+    .pasarela-pasos li { justify-content: center; }
+    .pas-otp-caja { width: 38px; height: 46px; }
+}
+#modal-pasarela .oculto { display: none !important; }
+#modal-pasarela { z-index: 10000; }

@@ -68,6 +68,15 @@ public class AlquilerServicio {
                 .map(this::convertirADto);
     }
 
+    @Transactional(readOnly = true)
+    public List<AlquilerDTO> obtenerPorUsuario(Long idUsuario) {
+        return alquilerRepositorio
+                .findByIdUsuarioOrderByFechaRegistroDesc(idUsuario)
+                .stream()
+                .map(this::convertirADto)
+                .toList();
+    }
+
     @Transactional
     public AlquilerDTO crear(AlquilerGuardarDTO dto) {
         validar(dto, null);

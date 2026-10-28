@@ -16,11 +16,13 @@
     <link rel="stylesheet" th:href="@{/css/admin/componentes/barra-lateral.css}">
     <link rel="stylesheet" th:href="@{/css/admin/componentes/tabla-datos.css}">
     <link rel="stylesheet" th:href="@{/css/admin/paginas/gestion-pagos.css}">
+    <link rel="stylesheet" th:href="@{/css/paginas/comprobante.css}">
 
     <script defer th:src="@{/js/admin/servicios/admin-api.cliente.js}"></script>
     <script defer th:src="@{/js/admin/guardias/rol.guardia.js}"></script>
     <script defer th:src="@{/js/admin/componentes/barra-lateral.js}"></script>
     <script defer th:src="@{/js/admin/principal.js}"></script>
+    <script defer th:src="@{/js/servicios/comprobante.servicio.js}"></script>
     <script defer th:src="@{/js/admin/paginas/gestion-pagos.pagina.js}"></script>
 </head>
 
@@ -152,13 +154,14 @@
                             <th>Estado alquiler</th>
                             <th>Estado pago</th>
                             <th>Fecha de pago</th>
+                            <th>Comprobante</th>
                             <th>Acciones</th>
                         </tr>
                         </thead>
 
                         <tbody id="tablaPagos">
                         <tr>
-                            <td colspan="9" class="estado-vacio">Cargando pagos...</td>
+                            <td colspan="10" class="estado-vacio">Cargando pagos...</td>
                         </tr>
                         </tbody>
                     </table>

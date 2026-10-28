@@ -37,10 +37,6 @@ document.addEventListener('DOMContentLoaded', () => {
     let enviandoReserva = false;
     let perfilClienteActual = null;
 
-    if (typeof Culqi !== 'undefined') {
-        Culqi.publicKey = 'pk_test_TU_LLAVE_PUBLICA_AQUI';
-    }
-
     function fechaLocalISO(fecha) {
         const anio = fecha.getFullYear();
         const mes = String(fecha.getMonth() + 1).padStart(2, '0');
@@ -454,78 +450,57 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     const radiosPago = document.querySelectorAll('input[name="pago"]');
-    const modales = document.querySelectorAll('.modal-pago');
-    const botonesCerrar = document.querySelectorAll('.btn-cerrar-modal');
 
-    function cerrarTodosLosModales() {
-        modales.forEach(modal => {
-            modal.classList.remove('activo');
-            modal.classList.add('oculto');
-        });
+    function desmarcarMetodos() {
+        radiosPago.forEach(radio => radio.checked = false);
     }
 
+    // Cada método abre la pasarela de pago simulada (pasarela-simulada.js).
     radiosPago.forEach(radio => {
         radio.addEventListener('click', function (e) {
             e.preventDefault();
 
             if (!validarFormulario()) {
-                this.checked = false;
+                desmarcarMetodos();
+                return;
+            }
+            if (!autoActual) {
+                alert('Debe seleccionar un vehículo.');
+                return;
+            }
+            if (!window.PasarelaSimulada) {
+                alert('No se pudo cargar la pasarela de pago.');
                 return;
             }
 
-            this.checked = true;
-            cerrarTodosLosModales();
+            const radioElegido = this;
+            setTimeout(() => { radioElegido.checked = true; }, 0);
 
             const nombreCompleto = `${inputNombre?.value || ''} ${inputApellidos?.value || ''}`.trim();
-            if (nombreCompleto !== '') {
-                document.querySelectorAll('.titular-auto-relleno').forEach(input => input.value = nombreCompleto);
-            }
 
-            const modalId = this.getAttribute('data-modal');
-            const modalSeleccionado = modalId ? document.getElementById(modalId) : null;
-            if (modalSeleccionado) {
-                modalSeleccionado.classList.remove('oculto');
-                modalSeleccionado.classList.add('activo');
-            }
-        });
-    });
-
-    botonesCerrar.forEach(btn => {
-        btn.addEventListener('click', function (e) {
-            e.preventDefault();
-            cerrarTodosLosModales();
-            radiosPago.forEach(radio => radio.checked = false);
+            window.PasarelaSimulada.abrir({
+                metodo: this.dataset.metodo || this.value,
+                total: totalPagar,
+                concepto: `Alquiler ${autoActual?.nombre || 'de vehículo'}`,
+                titular: nombreCompleto,
+                celular: inputTelefono?.value || '',
+                correo: inputCorreo?.value || '',
+                onAprobado: (resultado) => window.enviarReservaBackend(resultado.metodo, resultado),
+                onCancelado: desmarcarMetodos
+            });
         });
     });
 
     const btnCerrarExito = document.querySelector('.btn-cerrar-exito');
     if (btnCerrarExito) {
         btnCerrarExito.addEventListener('click', function () {
-            // La reserva ya fue registrada correctamente. Evitamos dejar al usuario
-            // atrapado en el modal y lo llevamos a Mi Cuenta para revisar su estado.
+            // La reserva y el comprobante ya fueron registrados: vamos a Mi Cuenta.
             const modalExito = document.getElementById('modal-pago-exito');
             modalExito?.classList.remove('activo');
             modalExito?.classList.add('oculto');
-            window.location.href = '/miCuenta';
+            window.location.href = '/miCuenta#comprobante';
         });
     }
-
-    document.querySelectorAll('.btn-abrir-qr').forEach(btn => {
-        btn.addEventListener('click', function () {
-            const targetId = this.getAttribute('data-target');
-            const contenedorQR = document.getElementById(targetId);
-
-            if (contenedorQR) {
-                if (contenedorQR.classList.contains('oculto')) {
-                    contenedorQR.classList.remove('oculto');
-                    this.innerHTML = '<i class="fa-solid fa-eye-slash"></i> Ocultar QR';
-                } else {
-                    contenedorQR.classList.add('oculto');
-                    this.innerHTML = '<i class="fa-solid fa-qrcode"></i> Mostrar QR';
-                }
-            }
-        });
-    });
 
     function textoOpcion(select) {
         if (!select?.value) return '';
@@ -542,55 +517,29 @@ document.addEventListener('DOMContentLoaded', () => {
         return metodos[metodo] || metodo;
     }
 
-    function obtenerReferenciaPago(metodoPago) {
-        if (metodoPago === 'yape') {
-            return document.getElementById('operacion-yape')?.value?.trim() || '';
-        }
-        if (metodoPago === 'plin') {
-            return document.getElementById('operacion-plin')?.value?.trim() || '';
-        }
-        return '';
+    function estadoPagoInicial() {
+        // La pasarela simulada solo llama al backend cuando el pago fue aprobado.
+        return 'Pagado';
     }
 
-    function validarDatosPago(metodoPago) {
-        if (metodoPago === 'yape' || metodoPago === 'plin') {
-            const referencia = obtenerReferenciaPago(metodoPago);
-            if (!referencia) {
-                alert(`Ingresa el número de operación de ${normalizarMetodoPago(metodoPago)}.`);
-                const campo = document.getElementById(metodoPago === 'yape' ? 'operacion-yape' : 'operacion-plin');
-                campo?.focus();
-                return false;
-            }
-        }
-        return true;
-    }
-
-    function estadoPagoInicial(metodoPago) {
-        return metodoPago === 'yape' || metodoPago === 'plin' ? 'En revisión' : 'Pendiente';
-    }
-
-    window.enviarReservaBackend = async (metodoPago, tokenCulqi = null) => {
-        if (enviandoReserva) return;
-        if (!autoActual) {
-            alert('Debe seleccionar un vehículo.');
-            return;
-        }
-        if (!validarFormulario()) return;
+    // Devuelve una promesa: si falla lanza el error para que la pasarela
+    // muestre el mensaje y permita reintentar el registro.
+    window.enviarReservaBackend = async (metodoPago, resultadoPago = {}) => {
+        if (enviandoReserva) throw new Error('La reserva ya se está registrando.');
+        if (!autoActual) throw new Error('Debe seleccionar un vehículo.');
+        if (!validarFormulario()) throw new Error('Revisa los datos del conductor.');
 
         const sesion = obtenerSesionCliente();
         if (!sesion) {
             pantallaBloqueo?.classList.remove('oculto');
-            return;
+            throw new Error('Debes iniciar sesión para continuar.');
         }
 
         if (!perfilClienteActual?.departamento || !perfilClienteActual?.provincia || !perfilClienteActual?.distrito) {
-            alert('Completa Departamento, Provincia y Distrito en Mi Cuenta antes de realizar una reserva.');
-            return;
+            throw new Error('Completa Departamento, Provincia y Distrito en Mi Cuenta antes de realizar una reserva.');
         }
 
-        if (!validarDatosPago(metodoPago)) return;
-
-        const referenciaPago = obtenerReferenciaPago(metodoPago);
+        const referenciaPago = resultadoPago.referencia || null;
 
         const reservaData = {
             idUsuario: Number(sesion.idUsuario),
@@ -600,8 +549,9 @@ document.addEventListener('DOMContentLoaded', () => {
             lugarRecogida: textoOpcion(selectRecogida),
             lugarEntrega: textoOpcion(selectEntrega),
             metodoPago: normalizarMetodoPago(metodoPago),
-            referenciaPago: referenciaPago || null,
-            tokenPago: tokenCulqi,
+            referenciaPago,
+            tokenPago: resultadoPago.tokenPago || null,
+            detallePago: resultadoPago.detallePago || null,
             conductor: {
                 nombre: inputNombre.value.trim(),
                 apellidos: inputApellidos.value.trim(),
@@ -636,7 +586,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (!res.ok) {
                 const mensaje = typeof respuesta === 'string'
                     ? respuesta
-                    : respuesta?.message || respuesta?.error || 'No se pudo registrar la reserva.';
+                    : respuesta?.message || respuesta?.detalle || respuesta?.error || 'No se pudo registrar la reserva.';
                 throw new Error(mensaje);
             }
 
@@ -655,118 +605,30 @@ document.addEventListener('DOMContentLoaded', () => {
                 fechaInicio: alquiler.fechaInicio,
                 fechaFin: alquiler.fechaFin,
                 metodoPago: normalizarMetodoPago(metodoPago),
-                estadoPago: estadoPagoInicial(metodoPago),
-                referenciaPago: referenciaPago || null
+                estadoPago: estadoPagoInicial(),
+                referenciaPago
             }));
 
-            document.querySelectorAll('.modal-pago').forEach(m => m.classList.add('oculto'));
             const modalExito = document.getElementById('modal-pago-exito');
             const nombreExito = document.getElementById('nombre-exito');
             const textoValidacion = modalExito?.querySelector('.texto-validacion');
 
             if (nombreExito) nombreExito.textContent = inputNombre.value.split(' ')[0];
             if (textoValidacion) {
-                const estadoPago = estadoPagoInicial(metodoPago);
-                const detalleReferencia = referenciaPago
-                    ? `<br>Referencia: <strong>${referenciaPago}</strong>.`
-                    : '';
-                textoValidacion.innerHTML = `Reserva #${alquiler.idAlquiler} registrada como <strong>${alquiler.estado}</strong>.<br>Pago: <strong>${estadoPago}</strong>${detalleReferencia}<br>Total calculado por el servidor: S/ ${Number(alquiler.total).toFixed(2)}.`;
+                textoValidacion.innerHTML = `Reserva #${alquiler.idAlquiler} registrada como <strong>${alquiler.estado}</strong>.<br>Pago: <strong>Pagado</strong> con ${normalizarMetodoPago(metodoPago)} · Ref. <strong>${referenciaPago || '—'}</strong>.<br>Total: S/ ${Number(alquiler.total).toFixed(2)}. Tu comprobante ya está disponible en Mi Cuenta.`;
             }
             if (modalExito) {
                 modalExito.classList.remove('oculto');
                 modalExito.classList.add('activo');
             }
-        } catch (error) {
-            console.error('Error al confirmar reserva:', error);
-            alert(error.message || 'Hubo un problema al procesar tu reserva.');
+            return alquiler;
         } finally {
             enviandoReserva = false;
-            document.querySelectorAll('.btn-guardar-modal').forEach(boton => {
-                boton.style.pointerEvents = '';
-                if (boton.dataset.textoOriginal) {
-                    boton.innerHTML = boton.dataset.textoOriginal;
-                }
-            });
         }
     };
-
-    document.querySelectorAll('.btn-guardar-modal').forEach(boton => {
-        boton.addEventListener('click', function () {
-            const texto = this.textContent.toLowerCase();
-
-            if (texto.includes('tarjeta')) {
-                if (typeof Culqi !== 'undefined') {
-                    Culqi.settings({
-                        title: 'Carmovo Alquileres',
-                        currency: 'PEN',
-                        description: `Reserva: ${autoActual?.nombre || 'Vehículo'}`,
-                        amount: Math.round(totalPagar * 100)
-                    });
-
-                    Culqi.options({
-                        lang: 'auto',
-                        installments: false,
-                        paymentMethods: { tarjeta: true, yape: false, bancaMovil: false }
-                    });
-
-                    Culqi.open();
-                } else {
-                    alert('Culqi no está cargado.');
-                }
-                return;
-            }
-
-            let metodo = 'tarjeta';
-            if (texto.includes('yape')) metodo = 'yape';
-            if (texto.includes('plin')) metodo = 'plin';
-            if (texto.includes('pay-pal') || texto.includes('paypal')) metodo = 'paypal';
-
-            if (!validarDatosPago(metodo)) return;
-
-            if (!this.dataset.textoOriginal) {
-                this.dataset.textoOriginal = this.innerHTML;
-            }
-            this.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Procesando...';
-            this.style.pointerEvents = 'none';
-            window.enviarReservaBackend(metodo);
-        });
-    });
-
-
-    document.querySelectorAll('.input-comprobante').forEach(input => {
-        input.addEventListener('change', function () {
-            const archivo = this.files?.[0];
-            const previewId = this.dataset.preview;
-            const preview = previewId ? document.getElementById(previewId) : null;
-            if (!archivo || !preview) return;
-
-            if (!archivo.type.startsWith('image/')) {
-                alert('Selecciona una imagen válida como comprobante.');
-                this.value = '';
-                preview.classList.add('oculto');
-                return;
-            }
-
-            const lector = new FileReader();
-            lector.onload = evento => {
-                preview.src = evento.target.result;
-                preview.classList.remove('oculto');
-            };
-            lector.readAsDataURL(archivo);
-        });
-    });
 
     configurarFechas();
     completarDatosDesdePerfil();
     cargarVehiculosBackend();
 });
 
-window.culqi = function () {
-    if (Culqi.token) {
-        const tokenCulqi = Culqi.token.id;
-        window.enviarReservaBackend('tarjeta', tokenCulqi);
-    } else {
-        console.error(Culqi.error);
-        alert(Culqi.error?.user_message || 'No se pudo generar el token de pago.');
-    }
-};

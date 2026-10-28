@@ -635,3 +635,20 @@
         transition: none;
     }
 }
+
+/* ---------- Comprobante ---------- */
+.pago-referencia {
+    display: block;
+    margin-top: 3px;
+    font-size: 11.5px;
+    color: var(--texto-secundario, #587284);
+}
+.pago-comprobante strong {
+    display: block;
+    font-size: 12.5px;
+    margin-bottom: 6px;
+    white-space: nowrap;
+}
+.pago-comprobante .acciones-pago { justify-content: flex-start; gap: 6px; }
+.boton-pago-icono.descargar { background: #4C966D; border-color: #4C966D; color: #fff; }
+.boton-pago-icono:disabled { opacity: .6; cursor: wait; }

@@ -1294,6 +1294,223 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     }
 
+    // =========================================================
+    // COMPROBANTE DE PAGO
+    // =========================================================
+
+    let comprobanteActual = null;
+
+    function ocultarComprobante() {
+        comprobanteActual = null;
+        document.getElementById('comprobante')?.classList.add('oculto');
+    }
+
+    async function cargarComprobante(alquiler) {
+        const bloque = document.getElementById('comprobante');
+        if (!bloque || !alquiler?.idAlquiler || alquiler.estado === 'Cancelado') {
+            ocultarComprobante();
+            return;
+        }
+
+        try {
+            const comprobante =
+                await window.CarmovoClienteApi.obtenerComprobante(
+                    sesionActual.idUsuario,
+                    alquiler.idAlquiler
+                );
+
+            if (!comprobante) {
+                ocultarComprobante();
+                return;
+            }
+
+            comprobanteActual = comprobante;
+
+            const fechaEmision = comprobante.fechaEmision
+                ? new Date(comprobante.fechaEmision).toLocaleString('es-PE', {
+                    day: 'numeric', month: 'short', year: 'numeric',
+                    hour: '2-digit', minute: '2-digit'
+                })
+                : '';
+
+            asignarTexto('comp-numero', `Comprobante N° ${comprobante.numero}`);
+            asignarTexto(
+                'comp-detalle',
+                [
+                    comprobante.metodoPago,
+                    comprobante.referencia ? `Op. ${comprobante.referencia}` : '',
+                    fechaEmision
+                ].filter(Boolean).join(' · ')
+            );
+
+            bloque.classList.remove('oculto');
+
+            if (window.location.hash === '#comprobante') {
+                bloque.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                window.CarmovoComprobante?.previsualizar(comprobanteActual);
+                history.replaceState(null, '', window.location.pathname);
+            }
+
+        } catch (error) {
+            console.error('No se pudo cargar el comprobante:', error);
+            ocultarComprobante();
+        }
+    }
+
+    document.getElementById('btn-ver-comprobante')?.addEventListener('click', () => {
+        if (comprobanteActual) {
+            window.CarmovoComprobante?.previsualizar(comprobanteActual);
+        }
+    });
+
+    document.getElementById('btn-descargar-comprobante')?.addEventListener('click', async function () {
+        if (!comprobanteActual) return;
+        const original = this.innerHTML;
+        this.disabled = true;
+        this.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Generando PDF...';
+        try {
+            await window.CarmovoComprobante?.descargarPdf(comprobanteActual);
+        } finally {
+            this.disabled = false;
+            this.innerHTML = original;
+        }
+    });
+
+    // =========================================================
+    // HISTORIAL DE ALQUILERES
+    // =========================================================
+
+    let historialAlquileres = [];
+    let idAlquilerSeleccionado = null;
+
+    function escaparHtml(valor) {
+        return String(valor ?? '').replace(/[&<>"']/g, c => ({
+            '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+        }[c]));
+    }
+
+    function claseEstadoHistorial(estado) {
+        if (estado === 'Cancelado') return 'rechazado';
+        if (['Confirmado', 'En curso', 'Finalizado'].includes(estado)) return 'aceptado';
+        return 'pendiente';
+    }
+
+    function pintarHistorial() {
+        const lista = document.getElementById('historial-lista');
+        const contador = document.getElementById('historial-contador');
+        if (!lista) return;
+
+        if (contador) {
+            const n = historialAlquileres.length;
+            contador.textContent = `${n} ${n === 1 ? 'alquiler' : 'alquileres'}`;
+        }
+
+        if (!historialAlquileres.length) {
+            lista.innerHTML = '<p class="historial-vacio">Aún no tienes alquileres registrados.</p>';
+            return;
+        }
+
+        lista.innerHTML = historialAlquileres.map(alquiler => {
+            const seleccionado = String(alquiler.idAlquiler) === String(idAlquilerSeleccionado);
+            const estado = alquiler.estado || 'Pendiente';
+            return `
+                <article class="historial-item ${seleccionado ? 'seleccionado' : ''}"
+                         data-id-alquiler="${escaparHtml(alquiler.idAlquiler)}"
+                         tabindex="0" role="button"
+                         aria-label="Ver alquiler #${escaparHtml(alquiler.idAlquiler)}">
+                    <div class="historial-principal">
+                        <span class="historial-id">#${escaparHtml(alquiler.idAlquiler)}</span>
+                        <div>
+                            <strong>${escaparHtml(texto(alquiler.vehiculo))}</strong>
+                            <small>${escaparHtml(formatearFecha(alquiler.fechaInicio))} - ${escaparHtml(formatearFecha(alquiler.fechaFin))} · ${escaparHtml(texto(alquiler.metodoPago))}</small>
+                        </div>
+                    </div>
+                    <div class="historial-secundario">
+                        <span class="historial-total">S/ ${Number(alquiler.total || 0).toFixed(2)}</span>
+                        <span class="historial-estado ${claseEstadoHistorial(estado)}">${escaparHtml(estado)}</span>
+                        ${alquiler.numeroComprobante ? `
+                            <button type="button" class="historial-btn" data-accion="ver-comprobante"
+                                    title="Ver comprobante ${escaparHtml(alquiler.numeroComprobante)}"
+                                    aria-label="Ver comprobante">
+                                <i class="fa-regular fa-eye"></i>
+                            </button>
+                            <button type="button" class="historial-btn principal" data-accion="descargar-comprobante"
+                                    title="Descargar comprobante" aria-label="Descargar comprobante">
+                                <i class="fa-solid fa-download"></i>
+                            </button>` : '<span class="historial-sin-comprobante">Sin comprobante</span>'}
+                    </div>
+                </article>`;
+        }).join('');
+    }
+
+    async function seleccionarAlquiler(alquiler) {
+        if (!alquiler) return;
+        idAlquilerSeleccionado = alquiler.idAlquiler;
+        pintarHistorial();
+        configurarEstadoAlquiler(alquiler);
+        await cargarComprobante(alquiler);
+    }
+
+    async function cargarHistorial() {
+        try {
+            const alquileres =
+                await window.CarmovoClienteApi.listarAlquileres(
+                    sesionActual.idUsuario
+                );
+            historialAlquileres = Array.isArray(alquileres) ? alquileres : [];
+        } catch (error) {
+            console.error('No se pudo cargar el historial de alquileres:', error);
+            historialAlquileres = [];
+        }
+        pintarHistorial();
+    }
+
+    document.getElementById('historial-lista')?.addEventListener('click', async evento => {
+        const item = evento.target.closest('.historial-item');
+        if (!item) return;
+        const alquiler = historialAlquileres.find(
+            a => String(a.idAlquiler) === item.dataset.idAlquiler
+        );
+        if (!alquiler) return;
+
+        const boton = evento.target.closest('[data-accion]');
+        if (!boton) {
+            await seleccionarAlquiler(alquiler);
+            document.querySelector('.estado-reserva')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            return;
+        }
+
+        const icono = boton.querySelector('i');
+        const claseOriginal = icono?.className;
+        boton.disabled = true;
+        if (icono) icono.className = 'fa-solid fa-spinner fa-spin';
+        try {
+            const comprobante = await window.CarmovoClienteApi.obtenerComprobante(
+                sesionActual.idUsuario,
+                alquiler.idAlquiler
+            );
+            if (!comprobante) return;
+            if (boton.dataset.accion === 'ver-comprobante') {
+                await window.CarmovoComprobante?.previsualizar(comprobante);
+            } else {
+                await window.CarmovoComprobante?.descargarPdf(comprobante);
+            }
+        } catch (error) {
+            console.error('No se pudo obtener el comprobante:', error);
+            alert('No se pudo obtener el comprobante. Inténtalo nuevamente.');
+        } finally {
+            boton.disabled = false;
+            if (icono) icono.className = claseOriginal;
+        }
+    });
+
+    document.getElementById('historial-lista')?.addEventListener('keydown', evento => {
+        if ((evento.key === 'Enter' || evento.key === ' ') && evento.target.classList.contains('historial-item')) {
+            evento.preventDefault();
+            evento.target.click();
+        }
+    });
+
     async function cargarUltimoAlquiler() {
         try {
             const alquiler =
@@ -1301,7 +1518,9 @@ document.addEventListener('DOMContentLoaded', async () => {
                     sesionActual.idUsuario
                 );
 
+            idAlquilerSeleccionado = alquiler?.idAlquiler ?? null;
             configurarEstadoAlquiler(alquiler);
+            await cargarComprobante(alquiler);
 
         } catch (error) {
             console.error(
@@ -1627,4 +1846,5 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     await cargarPerfil();
     await cargarUltimoAlquiler();
+    await cargarHistorial();
 });

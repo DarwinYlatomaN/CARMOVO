@@ -15,6 +15,8 @@ public interface AlquilerRepositorio extends JpaRepository<Alquiler, Long> {
 
     Optional<Alquiler> findFirstByIdUsuarioOrderByFechaRegistroDesc(Long idUsuario);
 
+    List<Alquiler> findByIdUsuarioOrderByFechaRegistroDesc(Long idUsuario);
+
     @Query("""
         SELECT a
         FROM Alquiler a

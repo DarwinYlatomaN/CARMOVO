@@ -149,7 +149,7 @@
         if (!filtrados.length) {
             cuerpo.innerHTML = `
                 <tr>
-                    <td colspan="9" class="estado-vacio">
+                    <td colspan="10" class="estado-vacio">
                         No se encontraron pagos con los filtros seleccionados.
                     </td>
                 </tr>
@@ -188,7 +188,10 @@
                         </div>
                     </td>
 
-                    <td>${escapar(metodo)}</td>
+                    <td>
+                        ${escapar(metodo)}
+                        ${pago.referencia ? `<small class="pago-referencia">${escapar(pago.metodoPago === 'Tarjeta' || pago.metodoPago === 'PayPal' ? '' : 'Op. ')}${escapar(pago.referencia)}</small>` : ''}
+                    </td>
 
                     <td>
                         <span class="pago-monto">
@@ -215,6 +218,28 @@
                     </td>
 
                     <td>
+                        ${pago.numeroComprobante ? `
+                            <div class="pago-comprobante">
+                                <strong>${escapar(pago.numeroComprobante)}</strong>
+                                <div class="acciones-pago">
+                                    <button class="boton-pago-icono" type="button"
+                                        data-accion="ver-comprobante"
+                                        data-id-alquiler="${escapar(pago.idAlquiler)}"
+                                        title="Ver comprobante" aria-label="Ver comprobante">
+                                        <i class="fa-solid fa-eye"></i>
+                                    </button>
+                                    <button class="boton-pago-icono descargar" type="button"
+                                        data-accion="descargar-comprobante"
+                                        data-id-alquiler="${escapar(pago.idAlquiler)}"
+                                        title="Descargar PDF" aria-label="Descargar PDF">
+                                        <i class="fa-solid fa-download"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        ` : `<span class="pago-sin-dato">${estadoPago === 'Rechazado' ? 'No emitido (pago rechazado)' : 'No emitido'}</span>`}
+                    </td>
+
+                    <td>
                         <div class="acciones-pago">
                             <button
                                 class="boton-pago-icono editar"
@@ -238,7 +263,7 @@
 
         cuerpo.innerHTML = `
             <tr>
-                <td colspan="9" class="estado-vacio">
+                <td colspan="10" class="estado-vacio">
                     Cargando pagos...
                 </td>
             </tr>
@@ -257,7 +282,7 @@
 
             cuerpo.innerHTML = `
                 <tr>
-                    <td colspan="9" class="estado-vacio">
+                    <td colspan="10" class="estado-vacio">
                         <i class="fa-solid fa-triangle-exclamation"></i>
                         No se pudo cargar Pagos e ingresos.
                         Verifica que Spring Boot est\u00e9 ejecut\u00e1ndose
@@ -390,7 +415,33 @@
             }
         });
 
-        $('#tablaPagos').addEventListener('click', evento => {
+        $('#tablaPagos').addEventListener('click', async evento => {
+            const botonComprobante = evento.target.closest(
+                '[data-accion="ver-comprobante"], [data-accion="descargar-comprobante"]'
+            );
+            if (botonComprobante) {
+                const icono = botonComprobante.querySelector('i');
+                const claseOriginal = icono?.className;
+                botonComprobante.disabled = true;
+                if (icono) icono.className = 'fa-solid fa-spinner fa-spin';
+                try {
+                    const comprobante = await window.CarmovoAdminApi.obtenerComprobante(
+                        botonComprobante.dataset.idAlquiler
+                    );
+                    if (botonComprobante.dataset.accion === 'ver-comprobante') {
+                        await window.CarmovoComprobante.previsualizar(comprobante);
+                    } else {
+                        await window.CarmovoComprobante.descargarPdf(comprobante);
+                    }
+                } catch (error) {
+                    notificar(error?.message || 'No se pudo obtener el comprobante.', 'error');
+                } finally {
+                    botonComprobante.disabled = false;
+                    if (icono) icono.className = claseOriginal;
+                }
+                return;
+            }
+
             const boton = evento.target.closest('[data-accion="editar"]');
             if (!boton) return;
 

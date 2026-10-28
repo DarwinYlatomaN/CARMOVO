@@ -73,4 +73,9 @@ public class AlquilerDTO {
 
     public LocalDateTime getFechaRegistro() { return fechaRegistro; }
     public void setFechaRegistro(LocalDateTime fechaRegistro) { this.fechaRegistro = fechaRegistro; }
+
+    // Solo se completa en el historial del cliente (Mi Cuenta).
+    private String numeroComprobante;
+    public String getNumeroComprobante() { return numeroComprobante; }
+    public void setNumeroComprobante(String numeroComprobante) { this.numeroComprobante = numeroComprobante; }
 }

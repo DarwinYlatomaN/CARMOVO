@@ -19,6 +19,10 @@ public class PagoDTO {
     private String observaciones;
     private LocalDateTime fechaPago;
     private LocalDateTime fechaRegistro;
+    private String numeroComprobante;
+
+    public String getNumeroComprobante() { return numeroComprobante; }
+    public void setNumeroComprobante(String numeroComprobante) { this.numeroComprobante = numeroComprobante; }
 
     public Long getIdPago() { return idPago; }
     public void setIdPago(Long idPago) { this.idPago = idPago; }

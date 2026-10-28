@@ -246,6 +246,10 @@
             return solicitar(`/admin/pagos/${idAlquiler}`);
         },
 
+        obtenerComprobante(idAlquiler) {
+            return solicitar(`/admin/comprobantes/alquiler/${idAlquiler}`);
+        },
+
         actualizarPago(idAlquiler, datos) {
             return solicitar(`/admin/pagos/${idAlquiler}`, {
                 method: 'PATCH',

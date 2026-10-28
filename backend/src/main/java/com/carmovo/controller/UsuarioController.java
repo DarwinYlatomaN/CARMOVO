@@ -4,6 +4,7 @@ package com.carmovo.controller;
 import com.carmovo.service.UsuarioServicio;
 import com.carmovo.service.AlquilerServicio;
 import com.carmovo.service.AuditoriaServicio;
+import com.carmovo.service.ComprobanteServicio;
 import com.carmovo.dto.AlquilerDTO;
 import com.carmovo.dto.UsuarioDTO;
 import com.carmovo.dto.UsuarioGuardarDTO;
@@ -27,15 +28,18 @@ public class UsuarioController {
     private final UsuarioServicio usuarioServicio;
     private final AuditoriaServicio auditoriaServicio;
     private final AlquilerServicio alquilerServicio;
+    private final ComprobanteServicio comprobanteServicio;
 
     public UsuarioController(
             UsuarioServicio usuarioServicio,
             AuditoriaServicio auditoriaServicio,
-            AlquilerServicio alquilerServicio
+            AlquilerServicio alquilerServicio,
+            ComprobanteServicio comprobanteServicio
     ) {
         this.usuarioServicio = usuarioServicio;
         this.auditoriaServicio = auditoriaServicio;
         this.alquilerServicio = alquilerServicio;
+        this.comprobanteServicio = comprobanteServicio;
     }
 
     @GetMapping("/api/v1/admin/usuarios")
@@ -181,6 +185,21 @@ public class UsuarioController {
 
         return alquiler.map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.noContent().build());
+    }
+
+    /** Historial completo de alquileres del cliente (más reciente primero). */
+    @GetMapping("/api/v1/clientes/{id}/alquileres")
+    public ResponseEntity<List<AlquilerDTO>> listarAlquileresCliente(
+            @PathVariable Long id
+    ) {
+        usuarioServicio.obtenerClientePorId(id);
+
+        List<AlquilerDTO> alquileres = alquilerServicio.obtenerPorUsuario(id);
+        alquileres.forEach(alquiler -> alquiler.setNumeroComprobante(
+                comprobanteServicio.numeroPorAlquiler(alquiler.getIdAlquiler()).orElse(null)
+        ));
+
+        return ResponseEntity.ok(alquileres);
     }
 
     private UsuarioGuardarDTO convertirRegistro(

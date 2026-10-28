@@ -14,6 +14,7 @@
     <link rel="stylesheet" href="/css/paginas/responsive.css" th:href="@{/css/paginas/responsive.css}">
    
     <link rel="stylesheet" href="/css/paginas/reserva.css" th:href="@{/css/paginas/reserva.css}">
+    <link rel="stylesheet" href="/css/paginas/pasarela-simulada.css" th:href="@{/css/paginas/pasarela-simulada.css}">
 </head>
 <body>
     <header class="cabecera">
@@ -244,28 +245,28 @@
                         <h3>3. Método de Pago</h3>
                         <div class="opciones-pago">
                             <label class="radio-pago">
-                                <input type="radio" name="pago" value="tarjeta" data-modal="modal-tarjeta">
+                                <input type="radio" name="pago" value="tarjeta" data-metodo="tarjeta">
                                 <span class="contenido-radio-pago">
                                     Tarjeta de Crédito / Débito
                                     <img src="/recursos/pagos/visa.jpg" th:src="@{/recursos/pagos/visa.jpg}" alt="Tarjetas" class="logo-metodo-pago">
                                 </span>
                             </label>
                             <label class="radio-pago">
-                                <input type="radio" name="pago" value="paypal" data-modal="modal-paypal">
+                                <input type="radio" name="pago" value="paypal" data-metodo="paypal">
                                 <span class="contenido-radio-pago">
                                     PayPal
                                     <img src="/recursos/pagos/Pay-Pal.webp" th:src="@{/recursos/pagos/Pay-Pal.webp}" alt="PayPal" class="logo-metodo-pago">
                                 </span>
                             </label>
                             <label class="radio-pago">
-                                <input type="radio" name="pago" value="yape" data-modal="modal-yape">
+                                <input type="radio" name="pago" value="yape" data-metodo="yape">
                                 <span class="contenido-radio-pago">
                                     Yape
                                     <img src="/recursos/pagos/yape.png" th:src="@{/recursos/pagos/yape.png}" alt="Yape" class="logo-metodo-pago">
                                 </span>
                             </label>
                             <label class="radio-pago">
-                                <input type="radio" name="pago" value="plin" data-modal="modal-plin">
+                                <input type="radio" name="pago" value="plin" data-metodo="plin">
                                 <span class="contenido-radio-pago">
                                     Plin
                                     <img src="/recursos/pagos/plin.jpg" th:src="@{/recursos/pagos/plin.jpg}" alt="Plin" class="logo-metodo-pago">
@@ -337,124 +338,34 @@
     </main>
 
     <div class="contenedor-modales-pago">
-        <div id="modal-tarjeta" class="modal-pago oculto">
-            <div class="modal-pago-contenido text-center">
-                <div class="modal-pago-cabecera">
-                    <h4>Detalles de Tarjeta</h4>
-                    <button type="button" class="btn-cerrar-modal"><i class="fa-solid fa-xmark"></i></button>
+        <!-- Pasarela de pago simulada (una sola, cambia según el método) -->
+        <div id="modal-pasarela" class="modal-pago oculto" role="dialog" aria-modal="true" aria-label="Pasarela de pago">
+            <div class="pasarela-caja">
+                <div class="pasarela-cabecera">
+                    <img id="pasarela-logo" src="" alt="" class="pasarela-logo">
+                    <div class="pasarela-titulo">
+                        <strong id="pasarela-titulo">Pago seguro CARMOVO</strong>
+                        <span><i class="fa-solid fa-lock"></i> Conexión segura · <em class="pasarela-modo">Modo prueba</em></span>
+                    </div>
+                    <button type="button" class="pasarela-cerrar" aria-label="Cerrar pasarela"><i class="fa-solid fa-xmark"></i></button>
                 </div>
-                <h3 class="monto-modal-destacado">Total: <span class="monto-dinamico-modal">S/ 0.00</span></h3>
-                <div class="pago-tarjeta" style="margin-bottom: 20px;">
-                    <img src="/recursos/pagos/visa.jpg" th:src="@{/recursos/pagos/visa.jpg}" alt="tarjeta " class="tarjeta-visa">
+                <ol class="pasarela-pasos" id="pasarela-pasos"></ol>
+                <div class="pasarela-cuerpo" id="pasarela-cuerpo"></div>
+                <div class="pasarela-pie">
+                    <span>Total a pagar</span>
+                    <strong id="pasarela-total">S/ 0.00</strong>
                 </div>
-                <p class="texto-instruccion">Los datos de tu tarjeta se ingresarán únicamente en la ventana segura de Culqi. CARMOVO no almacena número de tarjeta ni CVV.</p>
-                <button type="button" class="boton-accion-naranja boton-bloque btn-guardar-modal mt-20">Continuar con Tarjeta</button>
             </div>
         </div>
 
-        <div id="modal-paypal" class="modal-pago oculto">
-            <div class="modal-pago-contenido text-center">
-                <div class="modal-pago-cabecera">
-                    <h4>Conectar con PayPal</h4>
-                    <button type="button" class="btn-cerrar-modal"><i class="fa-solid fa-xmark"></i></button>
-                </div>
-                <h3 class="monto-modal-destacado">Total: <span class="monto-dinamico-modal">S/ 0.00</span></h3>
-                <img src="/recursos/pagos/Pay-Pal.webp" th:src="@{/recursos/pagos/Pay-Pal.webp}" alt="PayPal" class="logo-modal" style="margin-bottom: 15px;">
-                <p class="texto-instruccion">PayPal está disponible como método de reserva, pero el cobro real aún no está integrado. El pago quedará Pendiente hasta su validación.</p>
-                <div class="grupo-input text-left mt-15">
-                    <label>Nombre del titular de la cuenta</label>
-                    <input type="text" class="titular-auto-relleno" placeholder="Nombre completo">
-                </div>
-                <button type="button" class="boton-accion-naranja boton-bloque btn-guardar-modal mt-20">Confirmar Pago Pay-Pal</button>
-            </div>
-        </div>
-
-        <div id="modal-yape" class="modal-pago oculto">
-            <div class="modal-pago-contenido text-center">
-                <div class="modal-pago-cabecera">
-                    <h4>Pago con Yape</h4>
-                    <button type="button" class="btn-cerrar-modal"><i class="fa-solid fa-xmark"></i></button>
-                </div>
-                <h3 class="monto-modal-destacado">Total: <span class="monto-dinamico-modal">S/ 0.00</span></h3>
-                
-                <button type="button" class="btn-abrir-qr" data-target="qr-yape-container">
-                    <i class="fa-solid fa-qrcode"></i> Mostrar QR
-                </button>
-                <div id="qr-yape-container" class="qr-placeholder bg-yape oculto">
-                    <img src="/recursos/pagos/QR-YAPE.jpg" th:src="@{/recursos/pagos/QR-YAPE.jpg}" alt="QR Yape" class="qr-imagen">
-                </div>
-                
-                <p class="info-titular">Titular: CARMOVE S.A.C.<br>Número: 927 357 060</p>
-                <div class="grupo-input text-left">
-                    <label>Nombre de quien transfiere</label>
-                    <input type="text" class="titular-auto-relleno" placeholder="Nombre completo">
-                </div>
-                <div class="grupo-input text-left mt-15">
-                    <label>Número de Operación</label>
-                    <input type="text" id="operacion-yape" placeholder="Ej: 12345678" maxlength="40">
-                </div>
-                <div class="grupo-input text-left mt-15">
-                <label>Sube tu comprobante de pago</label>
-                <div class="contenedor-subir-archivo">
-                    <input type="file" class="input-comprobante" id="comprobante-yape" accept="image/png, image/jpeg, image/jpg" data-preview="preview-yape">
-                    <label for="comprobante-yape" class="label-archivo">
-                        <i class="fa-solid fa-cloud-arrow-up"></i> <span>Seleccionar imagen</span>
-                    </label>
-                </div>
-                  <img id="preview-yape" class="vista-previa-imagen oculto" alt="Vista previa">
-                </div>
-
-                <button type="button" class="boton-accion-naranja boton-bloque btn-guardar-modal mt-20">Confirmar Pago Yape</button>
-            </div>
-        </div>
-
-        <div id="modal-plin" class="modal-pago oculto">
-            <div class="modal-pago-contenido text-center">
-                <div class="modal-pago-cabecera">
-                    <h4>Pago con Plin</h4>
-                    <button type="button" class="btn-cerrar-modal"><i class="fa-solid fa-xmark"></i></button>
-                </div>
-                <h3 class="monto-modal-destacado">Total: <span class="monto-dinamico-modal">S/ 0.00</span></h3>
-                
-                <button type="button" class="btn-abrir-qr" data-target="qr-plin-container">
-                    <i class="fa-solid fa-qrcode"></i> Mostrar QR
-                </button>
-                <div id="qr-plin-container" class="qr-placeholder bg-plin oculto">
-                    <img src="/recursos/pagos/QR-PLIN3.png" th:src="@{/recursos/pagos/QR-PLIN3.png}" alt="QR Plin" class="qr-imagen">
-                </div>
-                
-                <p class="info-titular">Titular: CARMOVE S.A.C.<br>Número: 927 357 060</p>
-                <div class="grupo-input text-left">
-                    <label>Nombre de quien transfiere</label>
-                    <input type="text" class="titular-auto-relleno" placeholder="Nombre completo">
-                </div>
-                <div class="grupo-input text-left mt-15">
-                    <label>Número de Operación</label>
-                    <input type="text" id="operacion-plin" placeholder="Ej: 12345678" maxlength="40">
-                </div>
-                <div class="grupo-input text-left mt-15">
-                <label>Sube tu comprobante de pago</label>
-                <div class="contenedor-subir-archivo">
-                    <input type="file" class="input-comprobante" id="comprobante-plin" accept="image/png, image/jpeg, image/jpg" data-preview="preview-plin">
-                    <label for="comprobante-plin" class="label-archivo">
-                        <i class="fa-solid fa-cloud-arrow-up"></i> <span>Seleccionar imagen</span>
-                    </label>
-                </div>
-                  <img id="preview-plin" class="vista-previa-imagen oculto" alt="Vista previa">
-                </div>
-
-                <button type="button" class="boton-accion-naranja boton-bloque btn-guardar-modal mt-20">Confirmar Pago Plin</button>
-            </div>
-        </div>
-        
         <div id="modal-pago-exito" class="modal-pago oculto">
             <div class="modal-pago-contenido text-center">
                 <div class="icono-exito">
                     <i class="fa-solid fa-circle-check"></i>
                 </div>
                 <h4 class="titulo-exito">¡Reserva registrada, <span id="nombre-exito"></span>!</h4>
-                <p class="texto-validacion">Tu reserva quedó registrada como Pendiente.<br>El pago será validado en la siguiente etapa del proceso.</p>
-                <button type="button" class="boton-accion-naranja boton-bloque btn-cerrar-exito mt-20">Ver mi reserva</button>
+                <p class="texto-validacion">Tu pago fue aprobado y tu comprobante ya está disponible.</p>
+                <button type="button" class="boton-accion-naranja boton-bloque btn-cerrar-exito mt-20"><i class="fa-solid fa-file-invoice"></i> Ver mi comprobante</button>
             </div>
         </div>
     </div>
@@ -522,8 +433,8 @@
     <script src="/js/db y app-categorias/app-categorias.js" th:src="@{/js/db%20y%20app-categorias/app-categorias.js}"></script>
     <script src="/js/paginas/busqueda.js" th:src="@{/js/paginas/busqueda.js}"></script>
     <script src="/js/servicios/api.cliente.js" th:src="@{/js/servicios/api.cliente.js}"></script>
+    <script src="/js/paginas/pasarela-simulada.js" th:src="@{/js/paginas/pasarela-simulada.js}"></script>
     <script src="/js/paginas/reserva.pagina.js" th:src="@{/js/paginas/reserva.pagina.js}"></script>
-    <script src="https://checkout.culqi.com/js/v4"></script>
 
 </body>
 </html>

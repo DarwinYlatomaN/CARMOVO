@@ -119,11 +119,34 @@
         return leerRespuesta(respuesta);
     }
 
+    async function listarAlquileres(idUsuario) {
+        const respuesta = await fetch(
+            `${API_BASE}/${idUsuario}/alquileres`
+        );
+
+        return leerRespuesta(respuesta);
+    }
+
+    async function obtenerComprobante(idUsuario, idAlquiler) {
+        const respuesta = await fetch(
+            `${API_BASE}/${idUsuario}/comprobantes/alquiler/${idAlquiler}`
+        );
+
+        // 404 = el alquiler todavía no tiene comprobante.
+        if (respuesta.status === 404) {
+            return null;
+        }
+
+        return leerRespuesta(respuesta);
+    }
+
     window.CarmovoClienteApi = {
         registrar,
         iniciarSesion,
         obtenerPerfil,
         actualizarPerfil,
-        obtenerUltimoAlquiler
+        obtenerUltimoAlquiler,
+        obtenerComprobante,
+        listarAlquileres
     };
 })();

@@ -15,4 +15,6 @@ Thumbs.db
 
 # Variables de entorno locales
 .env
-**/.env
+**/.env*.zip 
+*.zip 
+backend/target/ 

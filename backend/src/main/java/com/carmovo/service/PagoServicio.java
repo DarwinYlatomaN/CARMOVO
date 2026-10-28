@@ -30,10 +30,13 @@ public class PagoServicio {
 
     private final PagoRepositorio pagoRepositorio;
     private final AlquilerServicio alquilerServicio;
+    private final ComprobanteServicio comprobanteServicio;
 
-    public PagoServicio(PagoRepositorio pagoRepositorio, AlquilerServicio alquilerServicio) {
+    public PagoServicio(PagoRepositorio pagoRepositorio, AlquilerServicio alquilerServicio,
+                        ComprobanteServicio comprobanteServicio) {
         this.pagoRepositorio = pagoRepositorio;
         this.alquilerServicio = alquilerServicio;
+        this.comprobanteServicio = comprobanteServicio;
     }
 
     @Transactional(readOnly = true)
@@ -60,14 +63,29 @@ public class PagoServicio {
             Long idAlquiler,
             String metodoPago,
             String referencia,
-            String tokenPago
+            String tokenPago,
+            String detallePago
     ) {
         if (idAlquiler == null) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "El alquiler es obligatorio para registrar el pago.");
         }
 
-        AlquilerDTO alquiler = alquilerServicio.obtenerPorId(idAlquiler);
         String metodo = esVacio(metodoPago) ? "" : metodoPago.trim().toLowerCase(Locale.ROOT);
+        if (!Set.of("tarjeta", "paypal", "yape", "plin").contains(metodo)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Método de pago no válido para la reserva.");
+        }
+        if (esVacio(tokenPago) || !tokenPago.startsWith("SIM-")) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "No se recibió la confirmación de la pasarela de pago.");
+        }
+        if ("SIM-RECHAZADO".equals(tokenPago)) {
+            // La reserva es @Transactional: el alquiler creado se revierte.
+            throw new ResponseStatusException(HttpStatus.PAYMENT_REQUIRED, "Pago rechazado por la pasarela simulada.");
+        }
+        if (esVacio(referencia)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "La pasarela no devolvió un número de operación.");
+        }
+
+        AlquilerDTO alquiler = alquilerServicio.obtenerPorId(idAlquiler);
 
         Pago pago = pagoRepositorio.findByIdAlquiler(idAlquiler).orElseGet(() -> {
             Pago nuevo = new Pago();
@@ -75,50 +93,14 @@ public class PagoServicio {
             return nuevo;
         });
 
-        switch (metodo) {
-            case "yape", "plin" -> {
-                if (esVacio(referencia)) {
-                    throw new ResponseStatusException(
-                            HttpStatus.BAD_REQUEST,
-                            "Ingresa el número de operación del pago con " + metodoPago.trim() + "."
-                    );
-                }
-                pago.setEstado("En revisión");
-                pago.setReferencia(referencia.trim());
-                pago.setObservaciones(
-                        "Pago reportado desde el sitio público. Pendiente de validación administrativa."
-                );
-                pago.setFechaPago(null);
-            }
-            case "tarjeta" -> {
-                if (esVacio(tokenPago)) {
-                    throw new ResponseStatusException(
-                            HttpStatus.BAD_REQUEST,
-                            "No se recibió un token válido para el pago con tarjeta."
-                    );
-                }
-                pago.setEstado("Pendiente");
-                pago.setReferencia(null);
-                pago.setObservaciones(
-                        "Token de Culqi generado desde el sitio público. El cobro aún requiere confirmación del proveedor."
-                );
-                pago.setFechaPago(null);
-            }
-            case "paypal" -> {
-                pago.setEstado("Pendiente");
-                pago.setReferencia(null);
-                pago.setObservaciones(
-                        "PayPal seleccionado desde el sitio público. La integración de cobro real aún no está confirmada."
-                );
-                pago.setFechaPago(null);
-            }
-            default -> throw new ResponseStatusException(
-                    HttpStatus.BAD_REQUEST,
-                    "Método de pago no válido para la reserva."
-            );
-        }
+        pago.setEstado("Pagado");
+        pago.setReferencia(referencia.trim());
+        pago.setObservaciones("Pago aprobado en pasarela simulada (" + metodoPago.trim() + ")."
+                + (esVacio(detallePago) ? "" : " " + detallePago.trim()));
+        pago.setFechaPago(LocalDateTime.now());
 
         Pago guardado = pagoRepositorio.save(pago);
+        comprobanteServicio.emitir(alquiler, guardado, detallePago);
         return convertirADto(alquiler, guardado);
     }
 
@@ -159,6 +141,9 @@ public class PagoServicio {
         }
 
         Pago guardado = pagoRepositorio.save(pago);
+        if ("Pagado".equals(estado)) {
+            comprobanteServicio.emitir(alquiler, guardado, null);
+        }
         return convertirADto(alquiler, guardado);
     }
 
@@ -179,6 +164,7 @@ public class PagoServicio {
         dto.setObservaciones(pago == null ? null : pago.getObservaciones());
         dto.setFechaPago(pago == null ? null : pago.getFechaPago());
         dto.setFechaRegistro(pago == null ? null : pago.getFechaRegistro());
+        dto.setNumeroComprobante(comprobanteServicio.numeroPorAlquiler(alquiler.getIdAlquiler()).orElse(null));
         return dto;
     }
 

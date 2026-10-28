@@ -1,12 +1,5 @@
 
-/* ==========================================================================
-   CARMOVO - MI CUENTA
-   PALETA VERDE MENTA PASTEL
-   ========================================================================== */
 
-/* ==========================================================================
-   CABECERA DE MI CUENTA
-   ========================================================================== */
 
 .cabecera-cuenta {
     margin: 30px 0 20px 0;
@@ -592,4 +585,149 @@
     .modal-pago-cabecera .btn-cerrar-modal {
         transition: none;
     }
+}
+
+/* =========================================================
+   COMPROBANTE DE PAGO (debajo del estado de la reserva)
+   ========================================================= */
+.bloque-comprobante {
+    margin-top: 16px;
+    background: #FFFFFF;
+    border: 1.5px dashed #A8D5BA;
+    border-radius: 12px;
+    padding: 14px 16px;
+}
+.bloque-comprobante.oculto { display: none !important; }
+.bloque-comprobante-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 10px;
+    margin-bottom: 12px;
+}
+.bloque-comprobante-top strong {
+    display: block;
+    font-family: 'Outfit', sans-serif;
+    font-size: 15px;
+    color: #263B30;
+}
+.bloque-comprobante-top span#comp-detalle {
+    display: block;
+    font-size: 13px;
+    color: #526B5D;
+    margin-top: 2px;
+}
+.badge-pagado {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: #DFF3E6;
+    color: #1F7A45;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 5px 11px;
+    border-radius: 20px;
+    white-space: nowrap;
+}
+.badge-pagado i { font-size: 7px; }
+.bloque-comprobante-botones { display: flex; gap: 10px; }
+.btn-comp-sec,
+.btn-comp-pri {
+    flex: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    border-radius: 10px;
+    padding: 11px 14px;
+    font: 600 14px 'Outfit', sans-serif;
+    cursor: pointer;
+    transition: filter .2s, transform .1s;
+}
+.btn-comp-sec { background: #FFFFFF; color: #376B50; border: 1.5px solid #376B50; }
+.btn-comp-pri { background: #376B50; color: #FFFFFF; border: 1.5px solid #376B50; }
+.btn-comp-sec:hover, .btn-comp-pri:hover { filter: brightness(1.06); }
+.btn-comp-pri:disabled { opacity: .7; cursor: wait; }
+
+@media (max-width: 576px) {
+    .bloque-comprobante-botones { flex-direction: column; }
+}
+
+/* =========================================================
+   HISTORIAL DE ALQUILERES
+   ========================================================= */
+.historial-alquileres { margin-top: 30px; }
+.historial-cabecera { display: flex; justify-content: space-between; align-items: center; gap: 10px; }
+.historial-cabecera h3 { margin: 0; }
+.historial-contador {
+    background: #D8EEDF;
+    color: #376B50;
+    font-weight: 600;
+    font-size: 13px;
+    padding: 5px 12px;
+    border-radius: 20px;
+}
+.historial-ayuda { color: #526B5D; font-size: 14px; margin: 8px 0 18px; }
+.historial-lista { display: flex; flex-direction: column; gap: 12px; }
+.historial-vacio { color: #526B5D; text-align: center; padding: 20px; margin: 0; }
+
+.historial-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    padding: 14px 18px;
+    border: 1px solid #D8EEDF;
+    border-radius: 12px;
+    background: #FFFFFF;
+    cursor: pointer;
+    transition: border-color .2s, background .2s, box-shadow .2s;
+}
+.historial-item:hover { border-color: #A8D5BA; background: #F5FAF6; }
+.historial-item:focus-visible { outline: 3px solid #A8D5BA; outline-offset: 2px; }
+.historial-item.seleccionado {
+    border-color: #376B50;
+    background: #F0F8F3;
+    box-shadow: 0 0 0 1px #376B50 inset;
+}
+.historial-principal { display: flex; align-items: center; gap: 14px; min-width: 0; }
+.historial-principal strong { display: block; color: #263B30; font-size: 15px; }
+.historial-principal small { display: block; color: #526B5D; font-size: 13px; margin-top: 2px; }
+.historial-id {
+    background: #E4F3E9;
+    color: #376B50;
+    font-weight: 700;
+    border-radius: 10px;
+    padding: 8px 10px;
+    font-size: 13px;
+    flex-shrink: 0;
+}
+.historial-secundario { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
+.historial-total { font-weight: 700; color: #376B50; white-space: nowrap; }
+.historial-estado {
+    font-size: 12px;
+    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: 20px;
+    white-space: nowrap;
+}
+.historial-estado.aceptado { background: #DFF3E6; color: #1F7A45; }
+.historial-estado.pendiente { background: #FFF1D6; color: #94620A; }
+.historial-estado.rechazado { background: #FBE3E3; color: #A33A3A; }
+.historial-btn {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    border: 1.5px solid #376B50;
+    background: #FFFFFF;
+    color: #376B50;
+    cursor: pointer;
+}
+.historial-btn.principal { background: #376B50; color: #FFFFFF; }
+.historial-btn:disabled { opacity: .6; cursor: wait; }
+.historial-sin-comprobante { font-size: 12px; color: #8AA195; white-space: nowrap; }
+
+@media (max-width: 768px) {
+    .historial-item { flex-direction: column; align-items: stretch; }
+    .historial-secundario { justify-content: space-between; flex-wrap: wrap; }
 }

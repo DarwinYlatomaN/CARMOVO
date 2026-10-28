@@ -13,6 +13,7 @@
     <link rel="stylesheet" href="/css/paginas/home.css" th:href="@{/css/paginas/home.css}">
     <link rel="stylesheet" href="/css/paginas/responsive.css" th:href="@{/css/paginas/responsive.css}">
     <link rel="stylesheet" href="/css/paginas/miCuenta.css" th:href="@{/css/paginas/miCuenta.css}">
+    <link rel="stylesheet" href="/css/paginas/comprobante.css" th:href="@{/css/paginas/comprobante.css}">
     <link rel="stylesheet" href="/css/paginas/footer.css" th:href="@{/css/paginas/footer.css}">
 </head>
 <body>
@@ -146,6 +147,25 @@
                     <p id="mensaje-verificador">
                         Tus datos y comprobante están siendo revisados por nuestro equipo de seguridad.
                     </p>
+
+                    <!-- Comprobante de pago (se muestra cuando el pago fue aprobado) -->
+                    <div id="comprobante" class="bloque-comprobante oculto">
+                        <div class="bloque-comprobante-top">
+                            <div>
+                                <strong id="comp-numero">Comprobante N° —</strong>
+                                <span id="comp-detalle">—</span>
+                            </div>
+                            <span class="badge-pagado"><i class="fa-solid fa-circle"></i> Pagado</span>
+                        </div>
+                        <div class="bloque-comprobante-botones">
+                            <button type="button" id="btn-ver-comprobante" class="btn-comp-sec">
+                                <i class="fa-regular fa-eye"></i> Previsualizar comprobante
+                            </button>
+                            <button type="button" id="btn-descargar-comprobante" class="btn-comp-pri">
+                                <i class="fa-solid fa-download"></i> Descargar PDF
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -170,6 +190,18 @@
             </div>
         </section>
     </div>
+
+    <!-- Historial de todos los alquileres del cliente -->
+    <section class="tarjeta-cuenta historial-alquileres" id="historial-alquileres">
+        <div class="historial-cabecera">
+            <h3>Mis alquileres</h3>
+            <span class="historial-contador" id="historial-contador">0 alquileres</span>
+        </div>
+        <p class="historial-ayuda">Selecciona un alquiler para ver su estado y detalles arriba.</p>
+        <div class="historial-lista" id="historial-lista">
+            <p class="historial-vacio">Cargando tus alquileres...</p>
+        </div>
+    </section>
 </main>
 
 <div class="contenedor-modales-pago">
@@ -447,6 +479,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script src="/js/servicios/api.cliente.js" th:src="@{/js/servicios/api.cliente.js}"></script>
+<script src="/js/servicios/comprobante.servicio.js" th:src="@{/js/servicios/comprobante.servicio.js}"></script>
 <script src="/js/paginas/miCuenta.js" th:src="@{/js/paginas/miCuenta.js}"></script>
 <script src="/js/paginas/experiencia.js" th:src="@{/js/paginas/experiencia.js}"></script>
 <script src="/js/db y app-categorias/db.js" th:src="@{/js/db%20y%20app-categorias/db.js}"></script>

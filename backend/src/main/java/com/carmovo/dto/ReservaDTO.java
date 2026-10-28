@@ -19,6 +19,7 @@ public class ReservaDTO {
     private String metodoPago;
     private String referenciaPago;
     private String tokenPago;
+    private String detallePago;
     private ConductorDTO conductor;
 
     public Long getIdUsuario() { return idUsuario; }
@@ -53,6 +54,9 @@ public class ReservaDTO {
 
     public String getTokenPago() { return tokenPago; }
     public void setTokenPago(String tokenPago) { this.tokenPago = tokenPago; }
+
+    public String getDetallePago() { return detallePago; }
+    public void setDetallePago(String detallePago) { this.detallePago = detallePago; }
 
     public ConductorDTO getConductor() { return conductor; }
     public void setConductor(ConductorDTO conductor) { this.conductor = conductor; }

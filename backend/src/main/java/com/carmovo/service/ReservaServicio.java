@@ -53,7 +53,8 @@ public class ReservaServicio {
                 creado.getIdAlquiler(),
                 alquiler.getMetodoPago(),
                 dto.getReferenciaPago(),
-                dto.getTokenPago()
+                dto.getTokenPago(),
+                dto.getDetallePago()
         );
 
         return creado;
