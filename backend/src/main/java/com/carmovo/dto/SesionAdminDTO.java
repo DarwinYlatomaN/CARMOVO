@@ -10,6 +10,9 @@ public class SesionAdminDTO {
     private String correo;
     private String perfil;
     private LocalDateTime expiraEn;
+    private boolean principal;
+    private java.util.List<String> permisos;
+    private String rutaInicio;
 
     public SesionAdminDTO() {
     }
@@ -53,6 +56,13 @@ public class SesionAdminDTO {
     public void setPerfil(String perfil) {
         this.perfil = perfil;
     }
+
+    public boolean isPrincipal() { return principal; }
+    public void setPrincipal(boolean principal) { this.principal = principal; }
+    public java.util.List<String> getPermisos() { return permisos; }
+    public void setPermisos(java.util.List<String> permisos) { this.permisos = permisos; }
+    public String getRutaInicio() { return rutaInicio; }
+    public void setRutaInicio(String rutaInicio) { this.rutaInicio = rutaInicio; }
 
     public LocalDateTime getExpiraEn() {
         return expiraEn;

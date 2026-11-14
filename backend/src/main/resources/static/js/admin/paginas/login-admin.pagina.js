@@ -12,7 +12,7 @@
 
     if (sesionExistente?.token && sesionExistente?.perfil === 'Administrador') {
         window.CarmovoAdminApi.validarSesion()
-            .then(() => window.location.replace(RUTA_TABLERO))
+            .then(sesion => window.location.replace(sesion.rutaInicio || RUTA_TABLERO))
             .catch(() => window.CarmovoAdminApi.limpiarSesionLocal());
     }
 
@@ -45,7 +45,7 @@
             mostrarMensaje(`Bienvenido, ${sesion.nombreCompleto}.`, 'exito');
 
             setTimeout(() => {
-                window.location.replace(RUTA_TABLERO);
+                window.location.replace(sesion.rutaInicio || RUTA_TABLERO);
             }, 350);
 
         } catch (error) {

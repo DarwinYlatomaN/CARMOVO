@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Acceso denegado (403) | CARMOVO</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/admin/paginas/acceso-denegado.css}" href="/css/admin/paginas/acceso-denegado.css">
+</head>
+<body>
+    <header class="cabecera">
+        <div class="marca">
+            <img th:src="@{/recursos/imagenes/home/logo-carmovo-transparente.png}"
+                 src="/recursos/imagenes/home/logo-carmovo-transparente.png"
+                 alt="Logotipo CARMOVO">
+            <div><strong>CARMOVO</strong><span>Panel administrador</span></div>
+        </div>
+    </header>
+    <main class="contenido">
+        <section class="tarjeta" aria-labelledby="titulo-error">
+            <div class="simbolo" aria-hidden="true">!</div>
+            <p class="eyebrow">Acceso restringido</p>
+            <h1 id="titulo-error">No tienes permiso para acceder</h1>
+            <p class="descripcion">La cuenta que estás utilizando no tiene autorización para abrir esta página.</p>
+            <div class="codigo"><span>Estado HTTP</span><strong>403</strong><span>· Acceso denegado</span></div>
+            <p class="ayuda">Si necesitas utilizar este módulo, solicita el permiso al administrador principal.</p>
+            <div class="acciones">
+                <button type="button" class="boton principal" onclick="window.history.back()">Volver a la página anterior</button>
+                <a class="boton secundario" th:href="@{/admin/login}" href="/admin/login">Ir al inicio de sesión</a>
+            </div>
+        </section>
+        <p class="pie">CARMOVO · Control de acceso administrativo</p>
+    </main>
+</body>
+</html>

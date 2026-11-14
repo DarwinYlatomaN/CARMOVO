@@ -466,7 +466,7 @@
             ]);
 
             usuarios = usuariosRespuesta;
-            perfiles = perfilesRespuesta;
+            perfiles = perfilesRespuesta.filter(perfil => normalizar(perfil.nombre) !== 'administrador');
 
             marcarApi(true);
             renderizarPerfiles();

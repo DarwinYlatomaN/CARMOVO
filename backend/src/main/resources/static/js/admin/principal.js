@@ -22,7 +22,7 @@
         });
 
         document.querySelectorAll('.perfil-admin__rol').forEach(elemento => {
-            elemento.textContent = sesion.perfil || 'Administrador';
+            elemento.textContent = sesion.principal ? 'Administrador principal' : 'Administrador secundario';
         });
 
         const iniciales = obtenerIniciales(sesion.nombreCompleto || 'Administrador');
@@ -51,7 +51,30 @@
         colocarAdministrador(window.CarmovoAdminApi?.obtenerSesionLocal?.());
     });
 
+    function ocultarEnlacesNoAutorizados(sesion) {
+        if (!sesion || sesion.principal) return;
+        const rutas = {
+            '/admin/tablero': 'ADMIN_TABLERO',
+            '/admin/gestion-flota': 'ADMIN_FLOTA',
+            '/admin/gestion-alquileres': 'ADMIN_ALQUILERES',
+            '/admin/gestion-usuarios': 'ADMIN_USUARIOS',
+            '/admin/gestion-pagos': 'ADMIN_PAGOS',
+            '/admin/monitoreo-flota': 'ADMIN_MONITOREO',
+            '/admin/reportes': 'ADMIN_REPORTES',
+            '/admin/registro-auditoria': 'ADMIN_AUDITORIA',
+            '/admin/gestion-administradores': 'ADMIN_ADMINISTRADORES'
+        };
+        document.querySelectorAll('a[href^="/admin/"]').forEach(enlace => {
+            if (rutas[enlace.getAttribute('href')] &&
+                !(sesion.permisos || []).includes(rutas[enlace.getAttribute('href')])) {
+                enlace.hidden = true;
+                enlace.style.display = 'none';
+            }
+        });
+    }
+
     window.addEventListener('carmovo:sesion-admin', evento => {
         colocarAdministrador(evento.detail);
+        ocultarEnlacesNoAutorizados(evento.detail);
     });
 })();

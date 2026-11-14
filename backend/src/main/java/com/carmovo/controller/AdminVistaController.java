@@ -20,6 +20,12 @@ public class AdminVistaController {
         return "admin/login-admin";
     }
 
+    @GetMapping("/gestion-administradores")
+    public String mostrarGestionAdministradores(Model model) {
+        model.addAttribute("tituloPagina", "Gestión de administradores | CARMOVO");
+        return "admin/gestion-administradores";
+    }
+
     @GetMapping("/tablero")
     public String mostrarTablero(Model model) {
         model.addAttribute(

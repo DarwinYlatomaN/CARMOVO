@@ -35,6 +35,25 @@
         }
     }
 
+    function mensajeEstado(estado) {
+        switch (estado) {
+            case 400: return 'Revisa los datos ingresados.';
+            case 401: return 'Debes iniciar sesión para continuar.';
+            case 403: return 'No tienes autorización para realizar esta acción.';
+            case 404: return 'No se encontró la información solicitada.';
+            case 409: return 'Ya existe un registro con esos datos.';
+            case 500: return 'Se produjo un error en el servidor. Inténtalo nuevamente.';
+            default: return `No se pudo completar la solicitud (HTTP ${estado}).`;
+        }
+    }
+
+    function mensajeLegible(valor, estado) {
+        const texto = String(valor || '').trim();
+        return !texto || /^(Forbidden|Conflict|Unauthorized|Bad Request|Not Found|Internal Server Error|Error HTTP \d{3})$/i.test(texto)
+            ? mensajeEstado(estado)
+            : texto;
+    }
+
     async function solicitar(ruta, opciones = {}) {
         const {
             sinAutenticacion = false,
@@ -91,7 +110,7 @@
                 redirigirAlLogin();
             }
 
-            const error = new Error(mensaje);
+            const error = new Error(mensajeLegible(mensaje, respuesta.status));
 
             error.status = respuesta.status;
             error.errores = detalleError?.errores || {};
@@ -175,6 +194,11 @@
             return solicitar('/admin/usuarios');
         },
 
+        // Solo los datos básicos de clientes que se necesitan en Alquileres.
+        listarClientesAlquileres() {
+            return solicitar('/admin/clientes-alquileres');
+        },
+
         obtenerUsuario(id) {
             return solicitar(`/admin/usuarios/${id}`);
         },
@@ -255,6 +279,26 @@
                 method: 'PATCH',
                 body: JSON.stringify(datos)
             });
+        },
+
+        listarAdministradores() {
+            return solicitar('/admin/administradores');
+        },
+
+        obtenerPermisosAdministradores() {
+            return solicitar('/admin/administradores/permisos');
+        },
+
+        crearAdministrador(datos) {
+            return solicitar('/admin/administradores', { method: 'POST', body: JSON.stringify(datos) });
+        },
+
+        actualizarAdministrador(id, datos) {
+            return solicitar(`/admin/administradores/${id}`, { method: 'PUT', body: JSON.stringify(datos) });
+        },
+
+        desactivarAdministrador(id) {
+            return solicitar(`/admin/administradores/${id}/desactivar`, { method: 'PATCH' });
         },
 
         listarAuditoria() {

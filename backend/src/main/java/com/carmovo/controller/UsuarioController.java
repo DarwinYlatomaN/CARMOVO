@@ -2,6 +2,7 @@
 package com.carmovo.controller;
 
 import com.carmovo.service.UsuarioServicio;
+import com.carmovo.repository.PerfilRepositorio;
 import com.carmovo.service.AlquilerServicio;
 import com.carmovo.service.AuditoriaServicio;
 import com.carmovo.service.ComprobanteServicio;
@@ -26,6 +27,7 @@ import java.util.Optional;
 public class UsuarioController {
 
     private final UsuarioServicio usuarioServicio;
+    private final PerfilRepositorio perfilRepositorio;
     private final AuditoriaServicio auditoriaServicio;
     private final AlquilerServicio alquilerServicio;
     private final ComprobanteServicio comprobanteServicio;
@@ -34,26 +36,34 @@ public class UsuarioController {
             UsuarioServicio usuarioServicio,
             AuditoriaServicio auditoriaServicio,
             AlquilerServicio alquilerServicio,
-            ComprobanteServicio comprobanteServicio
+            ComprobanteServicio comprobanteServicio,
+            PerfilRepositorio perfilRepositorio
     ) {
         this.usuarioServicio = usuarioServicio;
         this.auditoriaServicio = auditoriaServicio;
         this.alquilerServicio = alquilerServicio;
         this.comprobanteServicio = comprobanteServicio;
+        this.perfilRepositorio = perfilRepositorio;
     }
 
     @GetMapping("/api/v1/admin/usuarios")
     public ResponseEntity<List<UsuarioDTO>> listarTodos() {
-        return ResponseEntity.ok(usuarioServicio.obtenerTodos());
+        // Los administradores se gestionan únicamente en el módulo protegido del principal.
+        return ResponseEntity.ok(usuarioServicio.obtenerTodos().stream()
+                .filter(u -> !esAdministrador(u)).toList());
     }
 
     @GetMapping("/api/v1/admin/usuarios/{id}")
     public ResponseEntity<UsuarioDTO> obtenerPorId(@PathVariable Long id) {
-        return ResponseEntity.ok(usuarioServicio.obtenerPorId(id));
+        UsuarioDTO usuario = usuarioServicio.obtenerPorId(id);
+        if (esAdministrador(usuario)) throw new ResponseStatusException(HttpStatus.FORBIDDEN,
+                "Las cuentas administrativas se gestionan desde Administradores.");
+        return ResponseEntity.ok(usuario);
     }
 
     @PostMapping("/api/v1/admin/usuarios")
     public ResponseEntity<UsuarioDTO> crear(@Valid @RequestBody UsuarioGuardarDTO dto) {
+        impedirPerfilAdministrador(dto);
         UsuarioDTO usuario = usuarioServicio.crearUsuario(dto);
 
         auditoriaServicio.registrarSeguro(
@@ -71,7 +81,9 @@ public class UsuarioController {
             @PathVariable Long id,
             @Valid @RequestBody UsuarioGuardarDTO dto
     ) {
+        impedirPerfilAdministrador(dto);
         UsuarioDTO anterior = usuarioServicio.obtenerPorId(id);
+        impedirModificarAdministrador(anterior);
         UsuarioDTO actualizado = usuarioServicio.actualizarUsuario(id, dto);
 
         auditoriaServicio.registrarSeguro(
@@ -90,6 +102,7 @@ public class UsuarioController {
     @DeleteMapping("/api/v1/admin/usuarios/{id}")
     public ResponseEntity<Void> eliminar(@PathVariable Long id) {
         UsuarioDTO usuario = usuarioServicio.obtenerPorId(id);
+        impedirModificarAdministrador(usuario);
         usuarioServicio.eliminarUsuario(id);
 
         auditoriaServicio.registrarSeguro(
@@ -200,6 +213,23 @@ public class UsuarioController {
         ));
 
         return ResponseEntity.ok(alquileres);
+    }
+
+    private boolean esAdministrador(UsuarioDTO dto) {
+        return "Administrador".equalsIgnoreCase(dto.getNombrePerfil());
+    }
+
+    private void impedirModificarAdministrador(UsuarioDTO dto) {
+        if (esAdministrador(dto)) throw new ResponseStatusException(HttpStatus.FORBIDDEN,
+                "Las cuentas administrativas se gestionan únicamente desde Gestión de administradores.");
+    }
+
+    private void impedirPerfilAdministrador(UsuarioGuardarDTO dto) {
+        if (dto != null && dto.getIdPerfil() != null && perfilRepositorio.findById(dto.getIdPerfil())
+                .map(p -> "Administrador".equalsIgnoreCase(p.getNombre())).orElse(false)) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN,
+                    "No se puede otorgar el perfil Administrador desde Gestión de usuarios.");
+        }
     }
 
     private UsuarioGuardarDTO convertirRegistro(

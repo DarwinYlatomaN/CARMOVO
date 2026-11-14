@@ -18,7 +18,11 @@ public class AdminWebConfig implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(adminAutenticacionInterceptor)
-                .addPathPatterns("/api/v1/admin/**", "/api/v1/vehiculos/**");
+                .addPathPatterns("/api/v1/admin/**", "/api/v1/vehiculos", "/api/v1/vehiculos/**", "/admin/**",
+                        "/", "/home", "/home.html", "/categorias", "/categorias.html",
+                        "/reservas", "/reservas.html", "/ofertas", "/ofertas.html",
+                        "/experiencia", "/experiencia.html", "/soporte", "/soporte.html",
+                        "/miCuenta", "/miCuenta.html");
     }
 
     @Override

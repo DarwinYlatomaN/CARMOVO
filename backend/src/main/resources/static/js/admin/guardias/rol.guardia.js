@@ -23,6 +23,23 @@
                 throw new Error('Perfil sin acceso administrativo.');
             }
 
+            const pagina = document.body.dataset.pagina;
+            const codigos = {
+                'tablero': 'ADMIN_TABLERO',
+                'gestion-flota': 'ADMIN_FLOTA',
+                'gestion-alquileres': 'ADMIN_ALQUILERES',
+                'gestion-usuarios': 'ADMIN_USUARIOS',
+                'gestion-pagos': 'ADMIN_PAGOS',
+                'monitoreo-flota': 'ADMIN_MONITOREO',
+                'reportes': 'ADMIN_REPORTES',
+                'registro-auditoria': 'ADMIN_AUDITORIA',
+                'gestion-administradores': 'ADMIN_ADMINISTRADORES'
+            };
+            if (!sesion.principal && codigos[pagina] && !(sesion.permisos || []).includes(codigos[pagina])) {
+                window.location.replace(sesion.rutaInicio || LOGIN);
+                return false;
+            }
+
             window.dispatchEvent(
                 new CustomEvent('carmovo:sesion-admin', {
                     detail: sesion

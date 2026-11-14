@@ -25,12 +25,14 @@ public class AdminSesionServicio {
     private static final String PERFIL_ADMINISTRADOR = "Administrador";
 
     private final UsuarioRepositorio usuarioRepositorio;
+    private final AdministradorAccesoServicio accesos;
     private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
     private final SecureRandom secureRandom = new SecureRandom();
     private final Map<String, AdminSesion> sesiones = new ConcurrentHashMap<>();
 
-    public AdminSesionServicio(UsuarioRepositorio usuarioRepositorio) {
+    public AdminSesionServicio(UsuarioRepositorio usuarioRepositorio, AdministradorAccesoServicio accesos) {
         this.usuarioRepositorio = usuarioRepositorio;
+        this.accesos = accesos;
     }
 
     public SesionAdminDTO iniciarSesion(LoginAdminDTO dto) {
@@ -59,6 +61,8 @@ public class AdminSesionServicio {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Correo o contraseña incorrectos.");
         }
 
+        // Si la cuenta no fue migrada/configurada o carece de páginas, no puede iniciar sesión.
+        comprobarPermisosAsignados(usuario.getIdUsuario());
         limpiarSesionesExpiradas();
         cerrarSesionesDelUsuario(usuario.getIdUsuario());
 
@@ -103,7 +107,15 @@ public class AdminSesionServicio {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "El usuario ya no tiene acceso administrativo.");
         }
 
+        comprobarPermisosAsignados(usuario.getIdUsuario());
         return sesion;
+    }
+
+    private void comprobarPermisosAsignados(Long idUsuario) {
+        if (!accesos.esPrincipal(idUsuario) && accesos.permisos(idUsuario).isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN,
+                    "Esta cuenta todavía no tiene páginas autorizadas. Contacta al administrador principal.");
+        }
     }
 
     public SesionAdminDTO obtenerSesion(String token) {
@@ -146,6 +158,11 @@ public class AdminSesionServicio {
         dto.setCorreo(sesion.getCorreo());
         dto.setPerfil(sesion.getPerfil());
         dto.setExpiraEn(sesion.getExpiraEn());
+        boolean principal = accesos.esPrincipal(sesion.getIdUsuario());
+        java.util.List<String> permisos = accesos.permisos(sesion.getIdUsuario());
+        dto.setPrincipal(principal);
+        dto.setPermisos(permisos);
+        dto.setRutaInicio(PermisosAdministrativos.rutaInicial(principal, new java.util.HashSet<>(permisos)));
         return dto;
     }
 

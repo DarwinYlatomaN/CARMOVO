@@ -3,7 +3,7 @@
     const $ = selector => document.querySelector(selector);
 
     let alquileres = [];
-    let usuarios = [];
+    let clientes = [];
     let vehiculos = [];
     let alquilerEditandoId = null;
 
@@ -391,14 +391,12 @@
         const select = $('#alquilerUsuario');
         const actual = select.value;
 
-        const clientes = usuarios.filter(usuario =>
-            usuario.estado === true &&
-            normalizar(usuario.nombrePerfil) === 'cliente'
-        );
+        // El servidor devuelve únicamente clientes activos y los datos necesarios.
+        const clientesDisponibles = clientes;
 
         select.innerHTML =
             '<option value="" disabled>Seleccionar cliente</option>' +
-            clientes.map(usuario => `
+            clientesDisponibles.map(usuario => `
                 <option value="${escapar(usuario.idUsuario)}">
                     ${escapar(usuario.nombres)}
                     ${escapar(usuario.apellidos)}
@@ -407,7 +405,7 @@
                 </option>
             `).join('');
 
-        if (clientes.some(
+        if (clientesDisponibles.some(
             usuario => String(usuario.idUsuario) === String(actual)
         )) {
             select.value = actual;
@@ -456,16 +454,16 @@
         try {
             const [
                 alquileresRespuesta,
-                usuariosRespuesta,
+                clientesRespuesta,
                 vehiculosRespuesta
             ] = await Promise.all([
                 window.CarmovoAdminApi.listarAlquileres(),
-                window.CarmovoAdminApi.listarUsuarios(),
+                window.CarmovoAdminApi.listarClientesAlquileres(),
                 window.CarmovoAdminApi.listarVehiculos()
             ]);
 
             alquileres = alquileresRespuesta;
-            usuarios = usuariosRespuesta;
+            clientes = clientesRespuesta;
             vehiculos = vehiculosRespuesta;
 
             marcarApi(true);
@@ -476,15 +474,15 @@
 
         } catch (error) {
             console.error(error);
-            marcarApi(false);
+            // Una respuesta HTTP (incluso 4xx/5xx) significa que la API sí responde.
+            marcarApi(Boolean(error?.status));
 
             cuerpo.innerHTML = `
                 <tr>
                     <td colspan="8" class="estado-vacio">
                         <i class="fa-solid fa-triangle-exclamation"></i>
                         No se pudo cargar Gesti\u00f3n de Alquileres.
-                        Verifica que Spring Boot est\u00e9 ejecut\u00e1ndose
-                        y que la tabla de alquileres exista en MySQL.
+                        Revisa la notificación de error o intenta actualizar la página.
                     </td>
                 </tr>
             `;

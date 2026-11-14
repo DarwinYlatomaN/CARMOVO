@@ -6,6 +6,7 @@ import com.carmovo.repository.UsuarioRepositorio;
 import com.carmovo.model.Perfil;
 import com.carmovo.repository.PerfilRepositorio;
 import com.carmovo.dto.UsuarioDTO;
+import com.carmovo.dto.ClienteAlquilerResumenDTO;
 import com.carmovo.dto.UsuarioGuardarDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -35,6 +36,15 @@ public class UsuarioServicio {
     public List<UsuarioDTO> obtenerTodos() {
         return usuarioRepositorio.findAll().stream()
                 .map(this::convertirADto)
+                .toList();
+    }
+
+    /** Consulta restringida a Alquileres: sin documento, domicilio ni otros datos sensibles. */
+    @Transactional(readOnly = true)
+    public List<ClienteAlquilerResumenDTO> listarClientesParaAlquileres() {
+        return usuarioRepositorio.buscarClientesActivosParaAlquileres().stream()
+                .map(u -> new ClienteAlquilerResumenDTO(
+                        u.getIdUsuario(), u.getNombres(), u.getApellidos(), u.getCorreo()))
                 .toList();
     }
 
