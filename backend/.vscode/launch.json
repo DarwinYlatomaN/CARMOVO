@@ -1,0 +1,18 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "java",
+            "name": "CARMOVO (local)",
+            "request": "launch",
+            "mainClass": "com.carmovo.BackendApplication",
+            "projectName": "backend",
+            "env": {
+                "DB_URL": "jdbc:mysql://localhost:3308/carmovo_db?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=America/Lima",
+                "DB_USER": "root",
+                "DB_PASSWORD": "654321",
+                "CARMOVO_DNI_TOKEN": "PEGA_AQUI_TU_TOKEN_DE_MIAPI"
+            }
+        }
+    ]
+}

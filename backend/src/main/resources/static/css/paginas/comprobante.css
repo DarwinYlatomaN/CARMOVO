@@ -165,3 +165,14 @@
     body.cmp-imprimiendo .cmp-modal { position: absolute; inset: 0; background: none; padding: 0; display: block; }
     body.cmp-imprimiendo .cmp-modal .cmp-recibo { position: absolute; left: 0; top: 0; width: 100%; border: 0; }
 }
+
+/* Boleta / factura y comprobantes anulados */
+.cmp-recibo { position: relative; overflow: hidden; }
+.cmp-tipo { display: block; font-size: 12.5px !important; font-weight: 800; color: #263B30 !important; letter-spacing: .02em; margin-top: 2px; }
+.cmp-grilla .cmp-ancho { grid-column: 1 / -1; }
+.cmp-marca-anulado {
+    position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+    font-size: 96px; font-weight: 900; color: rgba(198, 92, 92, .13); transform: rotate(-24deg);
+    pointer-events: none; letter-spacing: .12em;
+}
+.cmp-sello-anulado { color: #A33A3A !important; border-color: #A33A3A !important; }

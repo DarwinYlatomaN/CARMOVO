@@ -78,4 +78,32 @@ public class AlquilerDTO {
     private String numeroComprobante;
     public String getNumeroComprobante() { return numeroComprobante; }
     public void setNumeroComprobante(String numeroComprobante) { this.numeroComprobante = numeroComprobante; }
+
+    // ---- Campos agregados (actualización 2026) ----
+    private boolean conChofer;
+    private Long idConductor;
+    private String conductor;
+    private String estadoServicio;
+    private String telefonoCliente;
+    private String placa;
+    private String estadoPago;
+    public boolean isConChofer() { return conChofer; }
+    public void setConChofer(boolean conChofer) { this.conChofer = conChofer; }
+    public Long getIdConductor() { return idConductor; }
+    public void setIdConductor(Long idConductor) { this.idConductor = idConductor; }
+    public String getConductor() { return conductor; }
+    public void setConductor(String conductor) { this.conductor = conductor; }
+    public String getEstadoServicio() { return estadoServicio; }
+    public void setEstadoServicio(String estadoServicio) { this.estadoServicio = estadoServicio; }
+    public String getTelefonoCliente() { return telefonoCliente; }
+    public void setTelefonoCliente(String telefonoCliente) { this.telefonoCliente = telefonoCliente; }
+    public String getPlaca() { return placa; }
+    public void setPlaca(String placa) { this.placa = placa; }
+    public String getEstadoPago() { return estadoPago; }
+    public void setEstadoPago(String estadoPago) { this.estadoPago = estadoPago; }
+
+    /** Motivo que dio caja al rechazar el pago (se muestra al cliente en Mi cuenta). */
+    private String motivoRechazoPago;
+    public String getMotivoRechazoPago() { return motivoRechazoPago; }
+    public void setMotivoRechazoPago(String motivoRechazoPago) { this.motivoRechazoPago = motivoRechazoPago; }
 }

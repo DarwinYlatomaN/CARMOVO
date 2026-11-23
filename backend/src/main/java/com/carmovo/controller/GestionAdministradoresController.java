@@ -38,4 +38,7 @@ public class GestionAdministradoresController {
 
     @PatchMapping("/{id}/desactivar")
     public AdministradorSecundarioDTO desactivar(@PathVariable Long id) { return servicio.desactivar(actor(), id); }
+
+    @PatchMapping("/{id}/activar")
+    public AdministradorSecundarioDTO activar(@PathVariable Long id) { return servicio.cambiarEstado(actor(), id, true); }
 }

@@ -22,8 +22,46 @@ public class AdminVistaController {
 
     @GetMapping("/gestion-administradores")
     public String mostrarGestionAdministradores(Model model) {
-        model.addAttribute("tituloPagina", "Gestión de administradores | CARMOVO");
+        model.addAttribute("tituloPagina", "Empleados | CARMOVO");
         return "admin/gestion-administradores";
+    }
+
+    /** Misma pantalla de Empleados, filtrada a los choferes de la agencia. */
+    @GetMapping("/conductores")
+    public String conductores(Model model) {
+        model.addAttribute("tituloPagina", "Conductores | CARMOVO");
+        model.addAttribute("paginaMenu", "conductores");
+        return "admin/gestion-administradores";
+    }
+
+    @GetMapping("/roles-permisos")
+    public String rolesPermisos(Model model) {
+        model.addAttribute("tituloPagina", "Roles y permisos | CARMOVO");
+        return "admin/roles-permisos";
+    }
+
+    @GetMapping("/mantenimiento")
+    public String mantenimiento(Model model) {
+        model.addAttribute("tituloPagina", "Mantenimiento | CARMOVO");
+        return "admin/mantenimiento";
+    }
+
+    @GetMapping("/categorias")
+    public String categorias(Model model) {
+        model.addAttribute("tituloPagina", "Categorías | CARMOVO");
+        return "admin/categorias";
+    }
+
+    @GetMapping("/mis-servicios")
+    public String misServicios(Model model) {
+        model.addAttribute("tituloPagina", "Mis servicios | CARMOVO");
+        return "admin/mis-servicios";
+    }
+
+    @GetMapping("/portal-web")
+    public String portalWeb(Model model) {
+        model.addAttribute("tituloPagina", "Portal web | CARMOVO");
+        return "admin/portal-web";
     }
 
     @GetMapping("/tablero")

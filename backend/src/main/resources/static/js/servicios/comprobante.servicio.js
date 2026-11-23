@@ -52,41 +52,58 @@
     function etiquetaReferencia(metodo) {
         const m = String(metodo || '').toLowerCase();
         if (m === 'tarjeta') return 'Código de autorización';
+        if (m === 'efectivo') return 'Código de reserva';
         if (m === 'paypal') return 'ID de transacción';
         return 'N° de operación';
     }
 
     function renderizar(c) {
         const dias = Number(c.dias) || 1;
-        const precioUnitario = Number(c.subtotal || 0) / dias;
+        const factura = c.tipo === 'FACTURA';
+        const anulado = c.estado === 'ANULADO';
+        const valorUnitario = Number(c.subtotal || 0) / dias;
         const metodo = [c.metodoPago, c.detalleMetodo].filter(Boolean).join(' · ');
+        const titulo = factura ? 'FACTURA ELECTRÓNICA' : 'BOLETA DE VENTA ELECTRÓNICA';
+
+        const cliente = factura
+            ? `<div><span>Razón social</span>${esc(c.nombreCliente || '—')}</div>
+               <div><span>RUC</span>${esc(c.documentoCliente || '—')}</div>
+               <div class="cmp-ancho"><span>Dirección fiscal</span>${esc(c.direccionCliente || '—')}</div>`
+            : `<div><span>Cliente</span>${esc(c.nombreCliente || c.cliente || '—')}</div>
+               <div><span>DNI</span>${esc(c.documentoCliente || c.documento || '—')}</div>`;
+
+        const efectivo = c.montoRecibido
+            ? `<div><span>Efectivo recibido</span><span>${soles(c.montoRecibido)}</span></div>
+               <div><span>Vuelto</span><span>${soles(c.vuelto)}</span></div>`
+            : '';
 
         return `
-        <div class="cmp-recibo" id="cmp-recibo">
+        <div class="cmp-recibo ${anulado ? 'cmp-anulado' : ''}" id="cmp-recibo">
+            ${anulado ? '<div class="cmp-marca-anulado" aria-hidden="true">ANULADO</div>' : ''}
             <div class="cmp-cabecera">
                 <div>
                     <img src="${LOGO}" alt="CARMOVO" class="cmp-logo" crossorigin="anonymous">
-                    <p class="cmp-empresa">CARMOVO Rental Cars S.A.C. · RUC 20601234567<br>Av. Balta 123, Chiclayo · soporte@carmovo.com</p>
+                    <p class="cmp-empresa">CARMOVO Rental Cars S.A.C. · RUC 20601234565<br>Av. Balta 123, Chiclayo · soporte@carmovo.com</p>
                 </div>
                 <div class="cmp-caja-numero">
-                    <span>RECIBO ELECTRÓNICO</span>
+                    <span>RUC 20601234565</span>
+                    <span class="cmp-tipo">${titulo}</span>
                     <strong>${esc(c.numero)}</strong>
-                    <span>Emitido: ${esc(fechaHora(c.fechaEmision))}</span>
+                    <span>Emisión: ${esc(fechaHora(c.fechaEmision))}</span>
                 </div>
             </div>
 
             <div class="cmp-grilla">
-                <div><span>Cliente</span>${esc(c.cliente || '—')}</div>
-                <div><span>DNI / Documento</span>${esc(c.documento || '—')}</div>
-                <div><span>Correo</span>${esc(c.correo || '—')}</div>
+                ${cliente}
                 <div><span>Alquiler</span>#${esc(c.idAlquiler)} · ${esc(c.vehiculo || 'Vehículo')}</div>
                 <div><span>Método de pago</span>${esc(metodo || '—')}</div>
                 <div><span>${etiquetaReferencia(c.metodoPago)}</span>${esc(c.referencia || '—')}</div>
+                <div><span>Correo</span>${esc(c.correo || '—')}</div>
             </div>
 
             <table class="cmp-tabla">
                 <thead>
-                    <tr><th>Descripción</th><th>Días</th><th class="der">P. unit.</th><th class="der">Importe</th></tr>
+                    <tr><th>Descripción</th><th>Cant.</th><th class="der">${factura ? 'V. unit.' : 'P. unit.'}</th><th class="der">${factura ? 'Valor venta' : 'Importe'}</th></tr>
                 </thead>
                 <tbody>
                     <tr>
@@ -94,8 +111,8 @@
                             <small>${esc(fecha(c.fechaInicio))} – ${esc(fecha(c.fechaFin))} · Recojo: ${esc(c.lugarRecogida || '—')} · Entrega: ${esc(c.lugarEntrega || '—')}</small>
                         </td>
                         <td>${dias}</td>
-                        <td class="der">${soles(precioUnitario)}</td>
-                        <td class="der">${soles(c.subtotal)}</td>
+                        <td class="der">${soles(factura ? valorUnitario : Number(c.total || 0) / dias)}</td>
+                        <td class="der">${soles(factura ? c.subtotal : c.total)}</td>
                     </tr>
                 </tbody>
             </table>
@@ -104,17 +121,18 @@
                 <div class="cmp-verificacion">
                     <div class="cmp-qr" id="cmp-qr"></div>
                     <div>
-                        <span class="cmp-sello">PAGADO</span>
+                        <span class="cmp-sello ${anulado ? 'cmp-sello-anulado' : ''}">${anulado ? 'ANULADO' : 'PAGADO'}</span>
                         <p>Código de verificación<br><b>${esc(c.codigoVerificacion)}</b></p>
                     </div>
                 </div>
                 <div class="cmp-totales">
                     <div><span>Op. gravada</span><span>${soles(c.subtotal)}</span></div>
                     <div><span>IGV (18%)</span><span>${soles(c.igv)}</span></div>
-                    <div class="cmp-total"><span>Total pagado</span><span>${soles(c.total)}</span></div>
+                    <div class="cmp-total"><span>${factura ? 'Importe total' : 'Total pagado'}</span><span>${soles(c.total)}</span></div>
+                    ${efectivo}
                 </div>
             </div>
-
+            ${anulado && c.motivoAnulacion ? `<p class="cmp-nota"><b>Motivo de anulación:</b> ${esc(c.motivoAnulacion)}</p>` : ''}
             <p class="cmp-nota">Documento generado en entorno de simulación con fines académicos. No tiene validez tributaria ante SUNAT.</p>
         </div>`;
     }

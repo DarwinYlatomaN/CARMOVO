@@ -166,7 +166,28 @@
                     </div>
 
                     <div class="tarjeta-reserva">
-                        <h3>2. Datos del Conductor</h3>
+                        <h3>2. ¿Quién manejará el auto?</h3>
+                        <div class="quien-maneja" role="radiogroup" aria-label="Quién manejará el auto">
+                            <label class="quien-maneja__opcion">
+                                <input type="radio" name="quien-maneja" value="yo" checked>
+                                <span>
+                                    <i class="fa-solid fa-id-card"></i>
+                                    <strong>Yo manejo</strong>
+                                    <small>El titular de la cuenta es el conductor. Se usa la licencia de tu perfil.</small>
+                                </span>
+                            </label>
+                            <label class="quien-maneja__opcion">
+                                <input type="radio" name="quien-maneja" value="agencia">
+                                <span>
+                                    <i class="fa-solid fa-user-tie"></i>
+                                    <strong>Chofer de la agencia</strong>
+                                    <small>Un conductor de CARMOVO maneja por ti. No necesitas licencia. + S/ 80.00 por día.</small>
+                                </span>
+                            </label>
+                        </div>
+                        <input type="checkbox" id="con-chofer" hidden>
+                        <p class="aviso-chofer" id="aviso-chofer" role="alert" hidden></p>
+                        <h4 class="subtitulo-conductor" id="titulo-datos-conductor">Datos del conductor</h4>
                         <p style="margin: 0 0 16px; color: #666; font-size: 0.95rem;">
                             Estos datos se cargan desde tu perfil y son solo de lectura. Si necesitas corregirlos, actualízalos desde Mi Cuenta.
                         </p>
@@ -242,7 +263,45 @@
                     </div>
 
                     <div class="tarjeta-reserva oculto" id="seccion-metodos-pago">
-                        <h3>3. Método de Pago</h3>
+                        <h3>3. Comprobante y método de pago</h3>
+
+                        <p class="subtitulo-pago">¿Qué comprobante necesitas?</p>
+                        <div class="selector-comprobante" role="radiogroup" aria-label="Tipo de comprobante">
+                            <label class="opcion-comprobante">
+                                <input type="radio" name="tipo-comprobante" value="BOLETA" checked>
+                                <span><strong>Boleta</strong><small>Para personas naturales (con tu DNI)</small></span>
+                            </label>
+                            <label class="opcion-comprobante">
+                                <input type="radio" name="tipo-comprobante" value="FACTURA">
+                                <span><strong>Factura</strong><small>Para empresas o negocios con RUC</small></span>
+                            </label>
+                        </div>
+
+                        <div class="datos-factura" id="datos-factura" hidden>
+                            <div class="grupo-input">
+                                <label for="factura-ruc">RUC</label>
+                                <input type="text" id="factura-ruc" class="form-control" inputmode="numeric" maxlength="11" placeholder="11 dígitos" autocomplete="off">
+                                <small class="mensaje-campo" id="factura-ruc-estado"></small>
+                            </div>
+                            <div class="grupo-input">
+                                <label for="factura-razon">Razón social</label>
+                                <input type="text" id="factura-razon" class="form-control" maxlength="150" placeholder="Ej. TRANSPORTES NORTE S.A.C.">
+                            </div>
+                            <div class="grupo-input grupo-ancho">
+                                <label for="factura-direccion">Dirección fiscal</label>
+                                <input type="text" id="factura-direccion" class="form-control" maxlength="200" placeholder="Av., número, distrito, provincia">
+                            </div>
+                        </div>
+                        <p class="error-factura" id="error-factura" role="alert" hidden></p>
+
+                        <label class="pol-acepto" id="campo-acepto-reserva">
+                            <input type="checkbox" name="aceptaPoliticas" id="acepta-politicas" value="true">
+                            <span>He leído y acepto los <a href="/politicas" data-politicas="pol-terminos">Términos y condiciones</a> y la
+                                <a href="/politicas" data-politicas="pol-privacidad">Política de privacidad</a>, y autorizo el tratamiento
+                                de mis datos personales (Ley N.° 29733).</span>
+                        </label>
+
+                        <p class="subtitulo-pago">Método de pago</p>
                         <div class="opciones-pago">
                             <label class="radio-pago">
                                 <input type="radio" name="pago" value="tarjeta" data-metodo="tarjeta">
@@ -252,10 +311,10 @@
                                 </span>
                             </label>
                             <label class="radio-pago">
-                                <input type="radio" name="pago" value="paypal" data-metodo="paypal">
+                                <input type="radio" name="pago" value="efectivo" data-metodo="efectivo">
                                 <span class="contenido-radio-pago">
-                                    PayPal
-                                    <img src="/recursos/pagos/Pay-Pal.webp" th:src="@{/recursos/pagos/Pay-Pal.webp}" alt="PayPal" class="logo-metodo-pago">
+                                    Efectivo en oficina
+                                    <span class="logo-metodo-pago logo-efectivo" aria-hidden="true"><i class="fa-solid fa-money-bill-wave"></i></span>
                                 </span>
                             </label>
                             <label class="radio-pago">
@@ -263,6 +322,13 @@
                                 <span class="contenido-radio-pago">
                                     Yape
                                     <img src="/recursos/pagos/yape.png" th:src="@{/recursos/pagos/yape.png}" alt="Yape" class="logo-metodo-pago">
+                                </span>
+                            </label>
+                            <label class="radio-pago">
+                                <input type="radio" name="pago" value="transferencia" data-metodo="transferencia">
+                                <span class="contenido-radio-pago">
+                                    Transferencia bancaria
+                                    <span class="logo-metodo-pago logo-efectivo" aria-hidden="true"><i class="fa-solid fa-building-columns"></i></span>
                                 </span>
                             </label>
                             <label class="radio-pago">
@@ -317,6 +383,11 @@
                             <span id="resumen-tarifa-base">S/ 0.00</span>
                         </div>
 
+                        <div class="precio-item" id="fila-chofer" hidden>
+                            <span id="etiqueta-chofer">Servicio con chofer</span>
+                            <span id="resumen-chofer">S/ 0.00</span>
+                        </div>
+
                         <div class="precio-item">
                             <span>Seguro básico</span>
                             <span>S/ 120.00</span>
@@ -343,6 +414,7 @@
             <div class="pasarela-caja">
                 <div class="pasarela-cabecera">
                     <img id="pasarela-logo" src="" alt="" class="pasarela-logo">
+                    <span id="pasarela-icono" class="pasarela-icono" hidden aria-hidden="true"><i class="fa-solid fa-money-bill-wave"></i></span>
                     <div class="pasarela-titulo">
                         <strong id="pasarela-titulo">Pago seguro CARMOVO</strong>
                         <span><i class="fa-solid fa-lock"></i> Conexión segura · <em class="pasarela-modo">Modo prueba</em></span>
@@ -365,7 +437,7 @@
                 </div>
                 <h4 class="titulo-exito">¡Reserva registrada, <span id="nombre-exito"></span>!</h4>
                 <p class="texto-validacion">Tu pago fue aprobado y tu comprobante ya está disponible.</p>
-                <button type="button" class="boton-accion-naranja boton-bloque btn-cerrar-exito mt-20"><i class="fa-solid fa-file-invoice"></i> Ver mi comprobante</button>
+                <button type="button" class="boton-accion-naranja boton-bloque btn-cerrar-exito mt-20"><i class="fa-solid fa-user"></i> Ir a Mi Cuenta</button>
             </div>
         </div>
     </div>
@@ -399,8 +471,8 @@
                 <div class="pie-columna">
                     <h4>Legal</h4>
                     <ul>
-                        <li><a href="#">Privacidad</a></li>
-                        <li><a href="#">Términos</a></li>
+                        <li><a href="/politicas#pol-privacidad">Privacidad</a></li>
+                        <li><a href="/politicas#pol-terminos">Términos</a></li>
                         <li><a href="#">Cookies</a></li>
                         <li><a href="#">Preguntas</a></li>
                     </ul>
@@ -434,7 +506,9 @@
     <script src="/js/paginas/busqueda.js" th:src="@{/js/paginas/busqueda.js}"></script>
     <script src="/js/servicios/api.cliente.js" th:src="@{/js/servicios/api.cliente.js}"></script>
     <script src="/js/paginas/pasarela-simulada.js" th:src="@{/js/paginas/pasarela-simulada.js}"></script>
+    <script src="/js/servicios/politicas.js" th:src="@{/js/servicios/politicas.js}"></script>
     <script src="/js/paginas/reserva.pagina.js" th:src="@{/js/paginas/reserva.pagina.js}"></script>
 
+    <script src="/js/paginas/portal.publico.js" th:src="@{/js/paginas/portal.publico.js}"></script>
 </body>
 </html>

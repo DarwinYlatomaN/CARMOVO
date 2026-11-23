@@ -20,9 +20,13 @@ document.addEventListener('DOMContentLoaded', async () => {
 
             btnCerrar.addEventListener('click', (e) => {
                 e.preventDefault();
-                localStorage.removeItem('carmovo_sesion');
-                localStorage.removeItem('usuarioCarmovoLogueado');
-                window.location.reload();
+                if (window.CarmovoClienteApi) {
+                    window.CarmovoClienteApi.cerrarSesion();
+                } else {
+                    localStorage.removeItem('carmovo_sesion');
+                    localStorage.removeItem('usuarioCarmovoLogueado');
+                }
+                window.location.href = '/home';
             });
 
             botonLogin.parentNode.insertBefore(btnCerrar, botonLogin.nextSibling);
@@ -60,6 +64,9 @@ document.addEventListener('DOMContentLoaded', async () => {
         .toLowerCase();
 
     function resolverImagenBusqueda(vehiculo) {
+        const propia = String(vehiculo.imagen || '').trim();
+        if (/^(https?:|\/)/i.test(propia)) return propia;
+
         const nombreReal = quitarAcentos(`${vehiculo.marca || ''} ${vehiculo.modelo || ''}`).trim();
 
         if (typeof autosDB !== 'undefined' && Array.isArray(autosDB)) {
@@ -72,7 +79,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     if (inputBusqueda && modalResultados && listaCoincidencias) {
         try {
-            const respuesta = await fetch('http://localhost:8080/api/v1/vehiculos');
+            const respuesta = await fetch('/api/v1/vehiculos');
             if (!respuesta.ok) throw new Error('No se pudo consultar la flota');
 
             const datos = await respuesta.json();

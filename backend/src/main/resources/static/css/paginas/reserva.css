@@ -909,3 +909,72 @@ input[type="radio"]:focus-visible {
         flex-direction: column;
     }
 }
+
+/* =========================================================
+   Servicio con chofer y comprobante (boleta / factura)
+   ========================================================= */
+.opcion-chofer {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-top: 18px;
+    padding: 14px 16px;
+    background: #F5FAF6;
+    border-radius: 14px;
+    cursor: pointer;
+    transition: background .2s;
+}
+.opcion-chofer:hover { background: #E4F3E9; }
+.opcion-chofer input { width: 20px; height: 20px; accent-color: #376B50; flex-shrink: 0; }
+.opcion-chofer__texto strong { display: block; color: #263B30; }
+.opcion-chofer__texto small { color: #526B5D; }
+
+.subtitulo-pago { font-weight: 700; color: #263B30; margin: 18px 0 10px; }
+.subtitulo-pago:first-of-type { margin-top: 4px; }
+.selector-comprobante { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.opcion-comprobante { position: relative; cursor: pointer; }
+.opcion-comprobante input { position: absolute; opacity: 0; pointer-events: none; }
+.opcion-comprobante span {
+    display: block; padding: 14px 16px; border-radius: 14px; background: #F5FAF6;
+    box-shadow: inset 0 0 0 2px transparent; transition: box-shadow .2s, background .2s;
+}
+.opcion-comprobante span strong { display: block; color: #263B30; }
+.opcion-comprobante span small { color: #526B5D; }
+.opcion-comprobante input:checked + span { background: #E4F3E9; box-shadow: inset 0 0 0 2px #376B50; }
+.opcion-comprobante input:focus-visible + span { box-shadow: inset 0 0 0 2px #376B50, 0 0 0 3px #D8EEDF; }
+
+.datos-factura { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 14px; }
+.datos-factura[hidden] { display: none; }
+.datos-factura .grupo-ancho { grid-column: 1 / -1; }
+.mensaje-campo { font-size: .82rem; font-weight: 600; }
+.mensaje-campo.ok { color: #2F7A4E; }
+.mensaje-campo.error { color: #B23B3B; }
+.error-factura { background: rgba(198, 92, 92, .1); color: #A33A3A; border-radius: 10px; padding: 10px 12px; font-weight: 600; margin: 12px 0 0; }
+.error-factura[hidden] { display: none; }
+
+.logo-efectivo {
+    display: inline-flex; align-items: center; justify-content: center;
+    background: #E4F3E9; color: #2F7A4E; font-size: 1.15rem; border-radius: 8px; width: 52px; height: 32px;
+}
+
+@media (max-width: 576px) {
+    .selector-comprobante, .datos-factura { grid-template-columns: 1fr; }
+}
+.grupo-input[hidden] { display: none !important; }
+.aviso-chofer { margin: 8px 0 0; padding: 10px 14px; border-radius: 12px; background: #FFF4DB; color: #8A6214; font-size: .88rem; font-weight: 600; }
+.aviso-chofer[hidden] { display: none; }
+
+/* ¿Quién manejará el auto? */
+.quien-maneja { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 4px 0 6px; }
+.quien-maneja__opcion { position: relative; cursor: pointer; }
+.quien-maneja__opcion input { position: absolute; opacity: 0; pointer-events: none; }
+.quien-maneja__opcion span { display: grid; grid-template-columns: auto 1fr; column-gap: 12px; row-gap: 4px; align-items: center;
+    height: 100%; padding: 16px 18px; border-radius: 14px; background: #F5FAF6; border: 2px solid transparent; transition: background .2s, border-color .2s; }
+.quien-maneja__opcion span i { grid-row: 1 / span 2; font-size: 1.35rem; color: #376B50; width: 26px; text-align: center; }
+.quien-maneja__opcion span strong { color: #263B30; }
+.quien-maneja__opcion span small { color: #526B5D; line-height: 1.4; }
+.quien-maneja__opcion:hover span { background: #E4F3E9; }
+.quien-maneja__opcion input:checked + span { background: #E4F3E9; border-color: #376B50; }
+.quien-maneja__opcion input:focus-visible + span { outline: 3px solid #A7D3B6; outline-offset: 2px; }
+.subtitulo-conductor { font-size: 1.05rem; font-weight: 700; color: #263B30; margin: 22px 0 6px; }
+@media (max-width: 640px) { .quien-maneja { grid-template-columns: 1fr; } }

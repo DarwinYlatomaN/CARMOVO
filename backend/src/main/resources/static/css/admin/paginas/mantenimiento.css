@@ -1,0 +1,8 @@
+/* CARMOVO · Mantenimiento (sin bordes) */
+.mt-alertas h2 { color: #8a6420; }
+.mt-alertas__lista { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 10px; }
+.mt-alerta { display: flex; align-items: center; justify-content: space-between; gap: 12px; background: #fbf1dc; border-radius: 14px; padding: 12px 14px; }
+.mt-alerta strong { display: block; color: var(--admin-texto); }
+.mt-alerta small { color: #8a6420; font-weight: 600; }
+.mt-atrasado { color: #9d3c3c !important; font-weight: 700; }
+.mt-cerrado { color: var(--admin-texto-secundario); }

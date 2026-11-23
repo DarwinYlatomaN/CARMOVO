@@ -23,6 +23,17 @@ public class Perfil {
     )
     private List<Opcion> opciones;
 
+    /** Módulos que puede usar el rol (códigos de PermisosAdministrativos). */
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "perfil_permisos", joinColumns = @JoinColumn(name = "id_perfil"))
+    @Column(name = "codigo", nullable = false, length = 50)
+    private java.util.Set<String> permisos = new java.util.HashSet<>();
+
+    public java.util.Set<String> getPermisos() { return permisos; }
+    public void setPermisos(java.util.Set<String> permisos) {
+        this.permisos = permisos == null ? new java.util.HashSet<>() : new java.util.HashSet<>(permisos);
+    }
+
     public Perfil() {
     }
 

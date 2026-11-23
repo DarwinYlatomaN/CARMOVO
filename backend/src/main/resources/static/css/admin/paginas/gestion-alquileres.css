@@ -648,3 +648,19 @@
         transition: none;
     }
 }
+
+/* Operaciones: entrega, devolución y chofer */
+.op-etiquetas { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 6px; }
+.op-etiquetas .pu-chip { font-size: .7rem; padding: 3px 8px; }
+.acciones-alquiler { flex-wrap: wrap; }
+.boton-alquiler-icono.op-entrega { background: #e3f3ea; color: #2f6f4b; }
+.boton-alquiler-icono.op-devolucion { background: #fbf1dc; color: #8a6420; }
+.boton-alquiler-icono.op-chofer { background: #e1eef7; color: #36617d; }
+
+/* Opción "con chofer de la agencia" */
+label.opcion-chofer-admin { display: flex; flex-direction: row; align-items: flex-start; gap: 12px; padding: 14px 16px;
+    border-radius: 14px; background: #EEF7F1; cursor: pointer; }
+label.opcion-chofer-admin input { width: 20px; height: 20px; margin-top: 2px; flex-shrink: 0; accent-color: #376B50; }
+label.opcion-chofer-admin span { display: flex; flex-direction: column; gap: 4px; }
+label.opcion-chofer-admin strong { color: #24573C; font-size: .92rem; }
+label.opcion-chofer-admin small { color: #4E6B5B; font-size: .8rem; line-height: 1.4; }

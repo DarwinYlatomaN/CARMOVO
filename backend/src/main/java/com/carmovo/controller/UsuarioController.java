@@ -6,6 +6,9 @@ import com.carmovo.repository.PerfilRepositorio;
 import com.carmovo.service.AlquilerServicio;
 import com.carmovo.service.AuditoriaServicio;
 import com.carmovo.service.ComprobanteServicio;
+import com.carmovo.service.ClienteActual;
+import com.carmovo.service.JwtServicio;
+import com.carmovo.service.RecuperacionContrasenaServicio;
 import com.carmovo.dto.AlquilerDTO;
 import com.carmovo.dto.UsuarioDTO;
 import com.carmovo.dto.UsuarioGuardarDTO;
@@ -31,6 +34,10 @@ public class UsuarioController {
     private final AuditoriaServicio auditoriaServicio;
     private final AlquilerServicio alquilerServicio;
     private final ComprobanteServicio comprobanteServicio;
+    private final JwtServicio jwtServicio;
+    private final RecuperacionContrasenaServicio recuperacionServicio;
+    private final com.carmovo.repository.PagoRepositorio pagoRepositorio;
+    private final com.carmovo.service.PoliticasServicio politicas;
 
     public UsuarioController(
             UsuarioServicio usuarioServicio,
@@ -38,12 +45,21 @@ public class UsuarioController {
             AlquilerServicio alquilerServicio,
             ComprobanteServicio comprobanteServicio,
             PerfilRepositorio perfilRepositorio
+    ,
+            JwtServicio jwtServicio,
+            RecuperacionContrasenaServicio recuperacionServicio,
+            com.carmovo.repository.PagoRepositorio pagoRepositorio,
+            com.carmovo.service.PoliticasServicio politicas
     ) {
+        this.politicas = politicas;
+        this.pagoRepositorio = pagoRepositorio;
         this.usuarioServicio = usuarioServicio;
         this.auditoriaServicio = auditoriaServicio;
         this.alquilerServicio = alquilerServicio;
         this.comprobanteServicio = comprobanteServicio;
         this.perfilRepositorio = perfilRepositorio;
+        this.jwtServicio = jwtServicio;
+        this.recuperacionServicio = recuperacionServicio;
     }
 
     @GetMapping("/api/v1/admin/usuarios")
@@ -57,7 +73,7 @@ public class UsuarioController {
     public ResponseEntity<UsuarioDTO> obtenerPorId(@PathVariable Long id) {
         UsuarioDTO usuario = usuarioServicio.obtenerPorId(id);
         if (esAdministrador(usuario)) throw new ResponseStatusException(HttpStatus.FORBIDDEN,
-                "Las cuentas administrativas se gestionan desde Administradores.");
+                "Las cuentas del personal se gestionan desde Empleados.");
         return ResponseEntity.ok(usuario);
     }
 
@@ -100,18 +116,22 @@ public class UsuarioController {
     }
 
     @DeleteMapping("/api/v1/admin/usuarios/{id}")
-    public ResponseEntity<Void> eliminar(@PathVariable Long id) {
+    public ResponseEntity<Map<String, Object>> eliminar(@PathVariable Long id) {
         UsuarioDTO usuario = usuarioServicio.obtenerPorId(id);
         impedirModificarAdministrador(usuario);
-        usuarioServicio.eliminarUsuario(id);
+        boolean eliminado = usuarioServicio.eliminarUsuario(id);
 
-        auditoriaServicio.registrarSeguro(
-                "Usuarios", "ELIMINAR", "Usuario", id,
-                "Se eliminó el usuario " + nombreUsuario(usuario)
-                        + " (" + usuario.getCorreo() + ")."
-        );
+        String detalle = eliminado
+                ? "Se eliminó el usuario " + nombreUsuario(usuario) + " (" + usuario.getCorreo() + ")."
+                : "El usuario " + nombreUsuario(usuario) + " (" + usuario.getCorreo()
+                        + ") tiene alquileres registrados: se desactivó en lugar de eliminarse.";
+        auditoriaServicio.registrarSeguro("Usuarios", eliminado ? "ELIMINAR" : "DESACTIVAR", "Usuario", id, detalle);
 
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok(Map.of(
+                "eliminado", eliminado,
+                "message", eliminado
+                        ? "Usuario eliminado correctamente."
+                        : "El usuario tiene alquileres registrados, por eso se desactivó en lugar de eliminarse."));
     }
 
     @PostMapping("/api/v1/clientes/registro")
@@ -122,6 +142,7 @@ public class UsuarioController {
             UsuarioGuardarDTO datosUsuario = convertirRegistro(dto);
 
             UsuarioDTO usuario = usuarioServicio.registrarCliente(datosUsuario);
+            politicas.registrar(usuario.getIdUsuario(), com.carmovo.service.PoliticasServicio.REGISTRO, null, null);
 
             auditoriaServicio.registrarSeguro(
                     "Usuarios", "REGISTRO_CLIENTE", "Usuario",
@@ -131,6 +152,7 @@ public class UsuarioController {
                             + ") desde el sitio público."
             );
 
+            usuario.setToken(jwtServicio.generar(usuario.getIdUsuario(), "CLIENTE"));
             return new ResponseEntity<>(usuario, HttpStatus.CREATED);
 
         } catch (ResponseStatusException ex) {
@@ -156,15 +178,33 @@ public class UsuarioController {
                 ? null
                 : credenciales.get("contrasena");
 
-        return ResponseEntity.ok(
-                usuarioServicio.autenticarCliente(correo, contrasena)
-        );
+        UsuarioDTO usuario = usuarioServicio.autenticarCliente(correo, contrasena);
+        usuario.setToken(jwtServicio.generar(usuario.getIdUsuario(), "CLIENTE"));
+        return ResponseEntity.ok(usuario);
+    }
+
+    /** Paso 1 de "Olvidé mi contraseña": responde igual exista o no el correo. */
+    @PostMapping("/api/v1/clientes/recuperar/solicitar")
+    public ResponseEntity<Map<String, String>> solicitarRecuperacion(@RequestBody Map<String, String> datos) {
+        recuperacionServicio.solicitar(datos == null ? null : datos.get("correo"));
+        return ResponseEntity.ok(Map.of("message",
+                "Si el correo está registrado, recibirás un enlace para restablecer tu contraseña."));
+    }
+
+    /** Paso 2: cambia la contraseña usando el enlace recibido. */
+    @PostMapping("/api/v1/clientes/recuperar/confirmar")
+    public ResponseEntity<Map<String, String>> confirmarRecuperacion(@RequestBody Map<String, String> datos) {
+        recuperacionServicio.confirmar(
+                datos == null ? null : datos.get("token"),
+                datos == null ? null : datos.get("contrasena"));
+        return ResponseEntity.ok(Map.of("message", "Tu contraseña fue actualizada. Ya puedes iniciar sesión."));
     }
 
     @GetMapping("/api/v1/clientes/{id}")
     public ResponseEntity<UsuarioDTO> obtenerPerfilCliente(
             @PathVariable Long id
     ) {
+        ClienteActual.exigirPropietario(id);
         return ResponseEntity.ok(
                 usuarioServicio.obtenerClientePorId(id)
         );
@@ -175,6 +215,7 @@ public class UsuarioController {
             @PathVariable Long id,
             @Valid @RequestBody UsuarioGuardarDTO dto
     ) {
+        ClienteActual.exigirPropietario(id);
         UsuarioDTO actualizado =
                 usuarioServicio.actualizarPerfilCliente(id, dto);
 
@@ -191,10 +232,15 @@ public class UsuarioController {
     public ResponseEntity<AlquilerDTO> obtenerUltimoAlquilerCliente(
             @PathVariable Long id
     ) {
+        ClienteActual.exigirPropietario(id);
         usuarioServicio.obtenerClientePorId(id);
 
         Optional<AlquilerDTO> alquiler =
                 alquilerServicio.obtenerUltimoPorUsuario(id);
+        alquiler.ifPresent(a -> pagoRepositorio.findByIdAlquiler(a.getIdAlquiler()).ifPresent(pago -> {
+            a.setEstadoPago(pago.getEstado());
+            a.setMotivoRechazoPago(pago.getMotivoRechazo());
+        }));
 
         return alquiler.map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.noContent().build());
@@ -205,30 +251,38 @@ public class UsuarioController {
     public ResponseEntity<List<AlquilerDTO>> listarAlquileresCliente(
             @PathVariable Long id
     ) {
+        ClienteActual.exigirPropietario(id);
         usuarioServicio.obtenerClientePorId(id);
 
         List<AlquilerDTO> alquileres = alquilerServicio.obtenerPorUsuario(id);
-        alquileres.forEach(alquiler -> alquiler.setNumeroComprobante(
-                comprobanteServicio.numeroPorAlquiler(alquiler.getIdAlquiler()).orElse(null)
-        ));
+        alquileres.forEach(alquiler -> {
+            alquiler.setNumeroComprobante(
+                    comprobanteServicio.numeroPorAlquiler(alquiler.getIdAlquiler()).orElse(null));
+            pagoRepositorio.findByIdAlquiler(alquiler.getIdAlquiler())
+                    .ifPresent(pago -> {
+                        alquiler.setEstadoPago(pago.getEstado());
+                        alquiler.setMotivoRechazoPago(pago.getMotivoRechazo());
+                    });
+        });
 
         return ResponseEntity.ok(alquileres);
     }
 
+    /** El personal (Administrador, Agente, Cajero, Conductor) se gestiona en "Empleados". */
     private boolean esAdministrador(UsuarioDTO dto) {
-        return "Administrador".equalsIgnoreCase(dto.getNombrePerfil());
+        return com.carmovo.service.PermisosAdministrativos.esRolPersonal(dto.getNombrePerfil());
     }
 
     private void impedirModificarAdministrador(UsuarioDTO dto) {
         if (esAdministrador(dto)) throw new ResponseStatusException(HttpStatus.FORBIDDEN,
-                "Las cuentas administrativas se gestionan únicamente desde Gestión de administradores.");
+                "Las cuentas del personal se gestionan únicamente desde Empleados.");
     }
 
     private void impedirPerfilAdministrador(UsuarioGuardarDTO dto) {
         if (dto != null && dto.getIdPerfil() != null && perfilRepositorio.findById(dto.getIdPerfil())
-                .map(p -> "Administrador".equalsIgnoreCase(p.getNombre())).orElse(false)) {
+                .map(p -> com.carmovo.service.PermisosAdministrativos.esRolPersonal(p.getNombre())).orElse(false)) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN,
-                    "No se puede otorgar el perfil Administrador desde Gestión de usuarios.");
+                    "Los roles del personal se asignan desde Empleados, no desde Gestión de usuarios.");
         }
     }
 

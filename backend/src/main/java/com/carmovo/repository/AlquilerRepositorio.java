@@ -15,6 +15,11 @@ public interface AlquilerRepositorio extends JpaRepository<Alquiler, Long> {
 
     Optional<Alquiler> findFirstByIdUsuarioOrderByFechaRegistroDesc(Long idUsuario);
 
+    boolean existsByIdUsuario(Long idUsuario);
+
+    /** Servicios con chofer asignados a un conductor. */
+    List<Alquiler> findByIdConductorOrderByFechaInicioAsc(Long idConductor);
+
     List<Alquiler> findByIdUsuarioOrderByFechaRegistroDesc(Long idUsuario);
 
     @Query("""

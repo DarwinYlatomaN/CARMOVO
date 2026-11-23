@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title th:text="${tituloPagina}">Categorías | CARMOVO</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link rel="stylesheet" th:href="@{/css/admin/variables.css}">
+    <link rel="stylesheet" th:href="@{/css/admin/base.css}">
+    <link rel="stylesheet" th:href="@{/css/admin/componentes/barra-lateral.css}">
+    <link rel="stylesheet" th:href="@{/css/admin/componentes/panel-ui.css}">
+    <link rel="stylesheet" th:href="@{/css/admin/paginas/categorias.css}">
+    <script defer th:src="@{/js/admin/servicios/admin-api.cliente.js}"></script>
+    <script defer th:src="@{/js/admin/guardias/rol.guardia.js}"></script>
+    <script defer th:src="@{/js/admin/componentes/barra-lateral.js}"></script>
+    <script defer th:src="@{/js/admin/principal.js}"></script>
+    <script defer th:src="@{/js/admin/paginas/categorias.pagina.js}"></script>
+</head>
+<body data-pagina="categorias">
+<div class="app-admin">
+    <aside id="barraLateral"></aside>
+    <div class="overlay-admin" id="overlayAdmin"></div>
+    <div class="contenido-admin">
+        <header class="cabecera-admin">
+            <div class="cabecera-admin__izquierda">
+                <button class="boton-menu-admin" id="btnMenuAdmin" type="button" aria-label="Abrir menú"><i class="fa-solid fa-bars"></i></button>
+                <div><div class="cabecera-admin__titulo">Categorías</div><div class="cabecera-admin__subtitulo" id="fechaAdmin">Tipos de vehículos de la flota</div></div>
+            </div>
+        </header>
+        <main class="pagina-admin">
+            <section class="pu-encabezado">
+                <div>
+                    <h1>Categorías de vehículos</h1>
+                    <p>Crea las categorías de tu flota (por ejemplo SUVs, Sedanes o Eventos). Aparecen como pestañas en la página Categorías del sitio y en el formulario de vehículos.</p>
+                </div>
+                <div class="pu-acciones">
+                    <a class="pu-boton pu-boton--suave" href="/admin/gestion-flota" th:href="@{/admin/gestion-flota}"><i class="fa-solid fa-car-side"></i> Ver flota</a>
+                    <button class="pu-boton pu-boton--primario" id="ct-nueva" type="button"><i class="fa-solid fa-plus"></i> Nueva categoría</button>
+                </div>
+            </section>
+
+            <section class="pu-tarjeta">
+                <div class="pu-tabla-envoltura">
+                    <table class="pu-tabla">
+                        <thead><tr><th>Categoría</th><th>Orden</th><th>Vehículos</th><th>Estado</th><th>Acciones</th></tr></thead>
+                        <tbody id="ct-filas"><tr><td colspan="5" class="pu-vacio">Cargando…</td></tr></tbody>
+                    </table>
+                </div>
+            </section>
+
+            <div class="pu-modal" id="ct-modal" hidden role="dialog" aria-modal="true" aria-labelledby="ct-titulo">
+                <div class="pu-modal__caja">
+                    <div class="pu-modal__cabecera">
+                        <div><h2 id="ct-titulo">Nueva categoría</h2><p>Si cambias el nombre, sus vehículos se actualizan solos.</p></div>
+                        <button class="pu-modal__cerrar" type="button" data-cerrar aria-label="Cerrar"><i class="fa-solid fa-xmark"></i></button>
+                    </div>
+                    <form id="ct-form" novalidate>
+                        <div class="pu-grid">
+                            <label class="pu-campo pu-ancho">Nombre <input name="nombre" maxlength="50" required placeholder="Ej.: Camionetas eléctricas"></label>
+                            <label class="pu-campo pu-ancho">Descripción (opcional) <textarea name="descripcion" maxlength="255" placeholder="Ej.: Vehículos 100% eléctricos para la ciudad"></textarea></label>
+                            <label class="pu-campo">Orden en el sitio <input name="orden" type="number" min="0" max="999" value="0"><small>Las de menor número aparecen primero</small></label>
+                            <label class="pu-check" style="align-self:center"><input type="checkbox" name="activa" checked> Visible en el sitio</label>
+                            <div class="pu-campo pu-ancho">Imagen de la categoría (opcional)
+                                <div class="ct-imagen">
+                                    <img id="ct-vista" alt="" hidden>
+                                    <span class="ct-sin-imagen" id="ct-sin-imagen"><i class="fa-regular fa-image"></i></span>
+                                    <div>
+                                        <label class="pu-boton pu-boton--suave pu-boton--chico"><i class="fa-solid fa-upload"></i> Subir imagen
+                                            <input type="file" id="ct-archivo" accept="image/jpeg,image/png,image/webp" hidden></label>
+                                        <button type="button" class="pu-boton pu-boton--chico pu-boton--rojo" id="ct-quitar" hidden>Quitar</button>
+                                        <small>JPG, PNG o WEBP · máximo 2 MB</small>
+                                    </div>
+                                </div>
+                                <input type="hidden" name="imagen">
+                            </div>
+                        </div>
+                        <div class="pu-error" hidden></div>
+                        <div class="pu-modal__pie">
+                            <button class="pu-boton pu-boton--suave" type="button" data-cerrar>Cancelar</button>
+                            <button class="pu-boton pu-boton--primario" type="submit">Guardar categoría</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
+<div id="pu-mensaje" class="pu-mensaje" role="status" aria-live="polite" hidden></div>
+</body>
+</html>

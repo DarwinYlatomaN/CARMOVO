@@ -1,0 +1,25 @@
+/* CARMOVO · Mis servicios (Conductor) — pensado para celular */
+.ms-lista { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 16px; }
+.ms-tarjeta { background: var(--admin-superficie); border-radius: 18px; padding: 18px; box-shadow: var(--admin-sombra); display: flex; flex-direction: column; gap: 14px; }
+.ms-cabecera { display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; }
+.ms-cabecera strong { font-size: 1.05rem; color: var(--admin-texto); display: block; }
+.ms-cabecera small { color: var(--admin-texto-secundario); }
+.ms-dato { display: flex; gap: 12px; align-items: flex-start; color: var(--admin-texto); font-size: .9rem; }
+.ms-dato i { width: 18px; color: var(--admin-azul); margin-top: 3px; }
+.ms-dato small { display: block; color: var(--admin-texto-secundario); font-size: .78rem; }
+.ms-pasos { display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; }
+.ms-pasos span { height: 6px; border-radius: 99px; background: var(--admin-superficie-2); }
+.ms-pasos span.hecho { background: var(--admin-azul); }
+.ms-pasos-texto { display: grid; grid-template-columns: repeat(4, 1fr); font-size: .68rem; color: var(--admin-texto-secundario); text-align: center; margin-top: -8px; }
+.ms-botones { display: flex; gap: 8px; }
+.ms-botones .pu-boton { flex: 1; min-height: 48px; }
+.ms-hoy { background: #e1eef7; }
+
+@media (max-width: 980px) {
+    .ms-lista { grid-template-columns: 1fr; }
+}
+@media (max-width: 640px) {
+    .pagina-admin { padding: 16px !important; }
+    .pu-encabezado h1 { font-size: 1.3rem; }
+}
+.ms-botones .pu-boton.ms-wa { flex: 0 0 52px; padding: 0; }

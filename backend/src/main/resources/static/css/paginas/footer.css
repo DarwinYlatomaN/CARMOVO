@@ -243,3 +243,9 @@
         right: 20px;
     }
 }
+
+/* ===== Contenido editable desde "Portal web" ===== */
+a.portal-aviso__texto:hover { text-decoration: underline; }
+.portal-imagen-hero { background-size: cover; background-position: center; }
+.portal-pie-contacto { display: flex; flex-direction: column; gap: 4px; margin-top: 12px; font-size: .85rem; opacity: .85; }
+.portal-sin-ofertas { grid-column: 1 / -1; text-align: center; padding: 40px 16px; color: #587284; font-weight: 600; }

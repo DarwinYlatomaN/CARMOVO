@@ -92,4 +92,18 @@ public class Alquiler {
 
     public LocalDateTime getFechaRegistro() { return fechaRegistro; }
     public void setFechaRegistro(LocalDateTime fechaRegistro) { this.fechaRegistro = fechaRegistro; }
+
+    // ---- Campos agregados (actualización 2026) ----
+    @Column(name = "con_chofer", nullable = false)
+    private boolean conChofer;
+    @Column(name = "id_conductor")
+    private Long idConductor;
+    @Column(name = "estado_servicio", length = 20)
+    private String estadoServicio;
+    public boolean isConChofer() { return conChofer; }
+    public void setConChofer(boolean conChofer) { this.conChofer = conChofer; }
+    public Long getIdConductor() { return idConductor; }
+    public void setIdConductor(Long idConductor) { this.idConductor = idConductor; }
+    public String getEstadoServicio() { return estadoServicio; }
+    public void setEstadoServicio(String estadoServicio) { this.estadoServicio = estadoServicio; }
 }

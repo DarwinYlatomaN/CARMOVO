@@ -111,15 +111,26 @@
                             <option value="En revisión">En revisión</option>
                             <option value="Pagado">Pagado</option>
                             <option value="Rechazado">Rechazado</option>
+                            <option value="Expirado">Expirado</option>
+                            <option value="Anulado">Anulado</option>
+                            <option value="Reembolso pendiente">Reembolso pendiente</option>
+                            <option value="Reembolsado">Reembolsado</option>
                         </select>
 
                         <select class="pagos-filtro" id="filtroMetodoPago">
                             <option value="">Todos los métodos</option>
                             <option value="Tarjeta">Tarjeta</option>
-                            <option value="PayPal">PayPal</option>
+                            <option value="Efectivo">Efectivo</option>
                             <option value="Yape">Yape</option>
                             <option value="Plin">Plin</option>
+                            <option value="Transferencia">Transferencia</option>
                             <option value="Sin especificar">Sin especificar</option>
+                        </select>
+                        <select id="filtroComprobante" aria-label="Filtrar por comprobante">
+                            <option value="">Todos los comprobantes</option>
+                            <option value="BOLETA">Boletas</option>
+                            <option value="FACTURA">Facturas</option>
+                            <option value="SIN">Sin emitir</option>
                         </select>
 
                         <button

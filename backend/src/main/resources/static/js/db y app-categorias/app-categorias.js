@@ -19,15 +19,24 @@ async function inicializarCatalogoVehiculos() {
     if (!contenedorAutos) return;
 
     try {
-        const respuesta = await fetch('http://localhost:8080/api/v1/vehiculos');
+        const respuesta = await fetch('/api/v1/vehiculos');
         if (!respuesta.ok) throw new Error('Error al conectar con el servidor');
 
         const vehiculos = await respuesta.json();
         window.autosGlobales = Array.isArray(vehiculos) ? vehiculos : [];
 
+        // Orden de las pestañas: el que define el administrador en "Categorías".
+        let ordenAdmin = [];
+        try {
+            const r = await fetch('/api/v1/categorias');
+            if (r.ok) ordenAdmin = (await r.json()).map(c => c.nombre);
+        } catch (_) { /* si falla, se usa el orden de los vehículos */ }
+
+        const conVehiculos = new Set(window.autosGlobales.map(auto => auto.categoria).filter(Boolean));
         const categorias = [
             'Todos',
-            ...new Set(window.autosGlobales.map(auto => auto.categoria).filter(Boolean))
+            ...ordenAdmin.filter(nombre => conVehiculos.has(nombre)),
+            ...[...conVehiculos].filter(nombre => !ordenAdmin.includes(nombre))
         ];
 
         if (contenedorCategorias) {
@@ -220,6 +229,11 @@ function resolverImagenVehiculo(auto) {
             return `../${imagenBD}`;
         }
 
+        // Ruta absoluta del sitio (fotos subidas desde el panel o /recursos/...).
+        if (imagenBD.startsWith('/')) {
+            return imagenBD;
+        }
+
         // Si la base de datos contiene solamente el nombre del archivo.
         const carpeta = carpetas[normalizarTexto(auto.categoria)];
 
@@ -370,7 +384,9 @@ window.abrirModalTecnico = function(auto) {
 
     document.getElementById('modalCategoria').textContent = auto.categoria || '';
     document.getElementById('modalTitulo').textContent = `${auto.marca || ''} ${auto.modelo || ''}`.trim();
-    document.getElementById('modalDescripcion').textContent = auto.descripcion || 'Vehículo en excelentes condiciones, equipado con tecnología de punta, confort garantizado y revisiones al día para tu total seguridad en rutas del Perú.';
+    // Las descripciones antiguas de prueba ("Característica: … | Etiqueta: …") no se muestran.
+    const descripcionReal = /\|\s*Rating:/i.test(auto.descripcion || '') ? '' : String(auto.descripcion || '').trim();
+    document.getElementById('modalDescripcion').textContent = descripcionReal || 'Vehículo en excelentes condiciones, equipado con tecnología de punta, confort garantizado y revisiones al día para tu total seguridad en rutas del Perú.';
     document.getElementById('modalTransmision').textContent = auto.transmision || 'Automática';
     document.getElementById('modalPasajeros').textContent = auto.pasajeros || 5;
 

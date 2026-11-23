@@ -75,4 +75,9 @@ public class UsuarioDTO {
 
     public String getNombrePerfil() { return nombrePerfil; }
     public void setNombrePerfil(String nombrePerfil) { this.nombrePerfil = nombrePerfil; }
+
+    // Token JWT: solo se envía al iniciar sesión o registrarse como cliente.
+    private String token;
+    public String getToken() { return token; }
+    public void setToken(String token) { this.token = token; }
 }

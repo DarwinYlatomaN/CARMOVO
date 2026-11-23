@@ -15,12 +15,14 @@
     <link rel="stylesheet" th:href="@{/css/admin/base.css}">
     <link rel="stylesheet" th:href="@{/css/admin/componentes/barra-lateral.css}">
     <link rel="stylesheet" th:href="@{/css/admin/componentes/tabla-datos.css}">
+    <link rel="stylesheet" th:href="@{/css/admin/componentes/panel-ui.css}">
     <link rel="stylesheet" th:href="@{/css/admin/paginas/gestion-alquileres.css}">
 
     <script defer th:src="@{/js/admin/servicios/admin-api.cliente.js}"></script>
     <script defer th:src="@{/js/admin/guardias/rol.guardia.js}"></script>
     <script defer th:src="@{/js/admin/componentes/barra-lateral.js}"></script>
     <script defer th:src="@{/js/admin/principal.js}"></script>
+    <script defer th:src="@{/js/admin/componentes/operaciones-alquiler.js}"></script>
     <script defer th:src="@{/js/admin/paginas/gestion-alquileres.pagina.js}"></script>
 </head>
 
@@ -349,6 +351,15 @@
                     ></small>
                 </div>
 
+                <label class="campo-alquiler campo-alquiler--completo opcion-chofer-admin" for="alquilerConChofer">
+                    <input type="checkbox" id="alquilerConChofer">
+                    <span>
+                        <strong><i class="fa-solid fa-user-tie"></i> Con chofer de la agencia</strong>
+                        <small>Un conductor de CARMOVO maneja el vehículo (+ S/ 80 por día). Se asigna automáticamente
+                            uno libre con licencia vigente; puedes cambiarlo con "Asignar chofer".</small>
+                    </span>
+                </label>
+
                 <div class="campo-alquiler campo-alquiler--completo">
                     <label for="alquilerObservaciones">Observaciones</label>
                     <textarea
@@ -373,7 +384,7 @@
                 <i class="fa-solid fa-calculator"></i>
                 <span>
                     El total se calcula en el backend usando la tarifa diaria del vehículo,
-                    S/ 120 de seguro y 18% de impuestos, igual que el flujo de reservas
+                    S/ 120 de seguro, chofer (si se elige) y 18% de impuestos, igual que el flujo de reservas
                     del sitio público.
                 </span>
             </div>

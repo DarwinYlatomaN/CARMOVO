@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title th:text="${tituloPagina}">Portal web | CARMOVO</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link rel="stylesheet" th:href="@{/css/admin/variables.css}">
+    <link rel="stylesheet" th:href="@{/css/admin/base.css}">
+    <link rel="stylesheet" th:href="@{/css/admin/componentes/barra-lateral.css}">
+    <link rel="stylesheet" th:href="@{/css/admin/componentes/panel-ui.css}">
+    <link rel="stylesheet" th:href="@{/css/admin/paginas/portal-web.css}">
+    <script defer th:src="@{/js/admin/servicios/admin-api.cliente.js}"></script>
+    <script defer th:src="@{/js/admin/guardias/rol.guardia.js}"></script>
+    <script defer th:src="@{/js/admin/componentes/barra-lateral.js}"></script>
+    <script defer th:src="@{/js/admin/principal.js}"></script>
+    <script defer th:src="@{/js/admin/paginas/portal-web.pagina.js}"></script>
+</head>
+<body data-pagina="portal-web">
+<div class="app-admin">
+    <aside id="barraLateral"></aside>
+    <div class="overlay-admin" id="overlayAdmin"></div>
+    <div class="contenido-admin">
+        <header class="cabecera-admin">
+            <div class="cabecera-admin__izquierda">
+                <button class="boton-menu-admin" id="btnMenuAdmin" type="button" aria-label="Abrir menú"><i class="fa-solid fa-bars"></i></button>
+                <div><div class="cabecera-admin__titulo">Portal web</div><div class="cabecera-admin__subtitulo" id="fechaAdmin">Contenido del sitio público</div></div>
+            </div>
+        </header>
+        <main class="pagina-admin">
+            <section class="pu-encabezado">
+                <div>
+                    <h1>Portal web</h1>
+                    <p>Edita los textos, imágenes, ofertas y preguntas frecuentes del sitio. Los cambios se guardan como borrador y se ven en el sitio solo cuando presionas <strong>Publicar</strong>.</p>
+                </div>
+                <div class="pu-acciones">
+                    <span class="pu-chip" id="pw-estado">Sin cambios</span>
+                    <a class="pu-boton pu-boton--suave" href="/home" target="_blank" rel="noopener"><i class="fa-solid fa-arrow-up-right-from-square"></i> Ver sitio</a>
+                    <button class="pu-boton pu-boton--rojo" id="pw-restaurar-inicial" type="button" title="Vuelve el sitio a la configuración con la que empezó"><i class="fa-solid fa-clock-rotate-left"></i> Restaurar configuración inicial</button>
+                    <button class="pu-boton pu-boton--suave" id="pw-descartar" type="button" disabled><i class="fa-solid fa-rotate-left"></i> Descartar</button>
+                    <button class="pu-boton pu-boton--suave" id="pw-guardar" type="button"><i class="fa-solid fa-floppy-disk"></i> Guardar borrador</button>
+                    <button class="pu-boton pu-boton--primario" id="pw-publicar" type="button"><i class="fa-solid fa-upload"></i> Publicar</button>
+                </div>
+            </section>
+
+            <div class="pu-pestanas" role="tablist" id="pw-pestanas">
+                <button type="button" class="activa" data-panel="inicio" role="tab"><i class="fa-solid fa-house"></i> Inicio</button>
+                <button type="button" data-panel="diseno" role="tab"><i class="fa-solid fa-palette"></i> Diseño</button>
+                <button type="button" data-panel="ofertas" role="tab"><i class="fa-solid fa-tags"></i> Ofertas</button>
+                <button type="button" data-panel="faq" role="tab"><i class="fa-solid fa-circle-question"></i> Preguntas frecuentes</button>
+                <button type="button" data-panel="contacto" role="tab"><i class="fa-solid fa-phone"></i> Contacto</button>
+                <button type="button" data-panel="historial" role="tab"><i class="fa-solid fa-clock-rotate-left"></i> Historial</button>
+            </div>
+
+            <div class="pw-diseno">
+                <div class="pw-editor">
+                    <section class="pu-panel" data-panel="inicio">
+                        <div class="pu-tarjeta">
+                            <h2>Portada</h2>
+                            <p class="pu-ayuda">Lo primero que ve el cliente al entrar al sitio.</p>
+                            <div class="pu-grid">
+                                <label class="pu-campo">Título <input data-campo="inicio.titulo" maxlength="70"></label>
+                                <label class="pu-campo">Palabra resaltada <input data-campo="inicio.resaltado" maxlength="40"></label>
+                                <label class="pu-campo pu-ancho">Subtítulo <textarea data-campo="inicio.subtitulo" maxlength="220"></textarea></label>
+                                <div class="pu-campo pu-ancho">Fondo de la portada
+                                    <div class="pw-imagen">
+                                        <video id="pw-video-vista" src="/recursos/imagenes/home/video-auto.mp4" th:src="@{/recursos/imagenes/home/video-auto.mp4}" muted loop autoplay playsinline></video>
+                                        <img id="pw-imagen-vista" alt="Vista previa de la portada" hidden>
+                                        <div>
+                                            <strong id="pw-imagen-estado">Video original</strong>
+                                            <div class="pw-imagen__botones">
+                                                <label class="pu-boton pu-boton--suave pu-boton--chico" id="pw-video-boton"><i class="fa-solid fa-film"></i> Reemplazar video
+                                                    <input type="file" id="pw-video-archivo" accept="video/mp4,video/webm" hidden></label>
+                                                <label class="pu-boton pu-boton--suave pu-boton--chico" id="pw-imagen-boton"><i class="fa-solid fa-image"></i> Poner una imagen
+                                                    <input type="file" id="pw-imagen-archivo" accept="image/jpeg,image/png,image/webp" hidden></label>
+                                                <button type="button" class="pu-boton pu-boton--suave pu-boton--chico" id="pw-imagen-quitar" hidden><i class="fa-solid fa-rotate-left"></i> Volver al video original</button>
+                                            </div>
+                                            <div class="pw-progreso" id="pw-progreso" hidden><span></span></div>
+                                            <small>Video: MP4 o WEBM, máximo 20 MB (se reproduce sin sonido y en bucle). Imagen: JPG, PNG o WEBP, máximo 2 MB, ideal 1600×900 px.</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="pu-tarjeta">
+                            <h2>Beneficios</h2>
+                            <p class="pu-ayuda">Cuatro razones para elegir CARMOVO.</p>
+                            <label class="pu-campo" style="margin-bottom:14px">Título de la sección <input data-campo="inicio.tituloBeneficios" maxlength="60"></label>
+                            <div class="pw-beneficios" id="pw-beneficios"></div>
+                        </div>
+                    </section>
+
+                    <section class="pu-panel" data-panel="diseno" hidden>
+                        <div class="pu-tarjeta">
+                            <div class="pw-fila-titulo">
+                                <div><h2>Colores</h2><p class="pu-ayuda">Se aplican a todo el sitio: botones, menú, tarjetas, fondos y textos. Los tonos claros y oscuros se calculan solos.</p></div>
+                                <button type="button" class="pu-boton pu-boton--suave pu-boton--chico" id="pw-diseno-original"><i class="fa-solid fa-rotate-left"></i> Diseño original</button>
+                            </div>
+                            <div class="pw-paletas" id="pw-paletas"></div>
+                            <div class="pw-colores">
+                                <label class="pw-color"><input type="color" data-tema="colorPrincipal"><span><b>Principal</b><small>Botones, enlaces y menú activo</small></span></label>
+                                <label class="pw-color"><input type="color" data-tema="colorAcento"><span><b>Acento</b><small>Botones suaves, tarjetas y resaltados</small></span></label>
+                                <label class="pw-color"><input type="color" data-tema="colorFondo"><span><b>Fondo</b><small>Fondo general de las páginas</small></span></label>
+                                <label class="pw-color"><input type="color" data-tema="colorTexto"><span><b>Texto</b><small>Títulos y párrafos</small></span></label>
+                            </div>
+                        </div>
+                        <div class="pu-tarjeta">
+                            <h2>Tipografía</h2>
+                            <p class="pu-ayuda">Elige el tipo de letra de los títulos y del texto.</p>
+                            <div class="pu-grid">
+                                <label class="pu-campo">Títulos <select data-tema="fuenteTitulos" class="pw-fuente"></select></label>
+                                <label class="pu-campo">Texto <select data-tema="fuenteTexto" class="pw-fuente"></select></label>
+                                <div class="pw-muestra-fuente pu-ancho" id="pw-muestra-fuente"><strong>Tu auto listo para la próxima aventura</strong><span>Reserva en minutos, sin cargos ocultos y con asistencia 24/7.</span></div>
+                            </div>
+                        </div>
+                        <div class="pu-tarjeta">
+                            <h2>Forma de los botones</h2>
+                            <div class="pw-opciones" data-opciones="formaBotones">
+                                <button type="button" data-valor=""><span class="pw-ej pw-ej--original">Reservar</span>Original</button>
+                                <button type="button" data-valor="redondeado"><span class="pw-ej" style="border-radius:12px">Reservar</span>Redondeados</button>
+                                <button type="button" data-valor="pildora"><span class="pw-ej" style="border-radius:999px">Reservar</span>Píldora</button>
+                                <button type="button" data-valor="recto"><span class="pw-ej" style="border-radius:4px">Reservar</span>Rectos</button>
+                            </div>
+                        </div>
+                        <div class="pu-tarjeta">
+                            <h2>Forma de las tarjetas</h2>
+                            <div class="pw-opciones" data-opciones="formaTarjetas">
+                                <button type="button" data-valor=""><span class="pw-ej-tarjeta" style="border-radius:16px"></span>Original</button>
+                                <button type="button" data-valor="suave"><span class="pw-ej-tarjeta" style="border-radius:24px"></span>Muy redondeadas</button>
+                                <button type="button" data-valor="recta"><span class="pw-ej-tarjeta" style="border-radius:4px"></span>Rectas</button>
+                            </div>
+                        </div>
+                        <div class="pu-tarjeta">
+                            <h2>Portada</h2>
+                            <label class="pu-campo">Oscuridad sobre el video o la imagen: <b id="pw-oscuridad-valor">original</b>
+                                <input type="range" min="0" max="90" step="5" data-tema="oscuridadPortada" class="pw-rango"></label>
+                            <small class="pu-ayuda">Más oscuro hace que el título se lea mejor sobre fondos claros.</small>
+                        </div>
+                    </section>
+
+                    <section class="pu-panel" data-panel="ofertas" hidden>
+                        <div class="pu-tarjeta">
+                            <div class="pw-fila-titulo">
+                                <div><h2>Ofertas</h2><p class="pu-ayuda">Se muestran en la página Ofertas solo dentro de sus fechas de vigencia. Se publican al guardarlas.</p></div>
+                                <button class="pu-boton pu-boton--primario pu-boton--chico" type="button" id="pw-nueva-oferta"><i class="fa-solid fa-plus"></i> Nueva oferta</button>
+                            </div>
+                            <div class="pu-tabla-envoltura">
+                                <table class="pu-tabla">
+                                    <thead><tr><th>Oferta</th><th>Vehículo</th><th>Descuento</th><th>Vigencia</th><th>Estado</th><th></th></tr></thead>
+                                    <tbody id="pw-ofertas"></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section class="pu-panel" data-panel="faq" hidden>
+                        <div class="pu-tarjeta">
+                            <div class="pw-fila-titulo">
+                                <div><h2>Preguntas frecuentes</h2><p class="pu-ayuda">Aparecen en la página Soporte. Arrastra con las flechas para ordenarlas.</p></div>
+                                <button class="pu-boton pu-boton--suave pu-boton--chico" type="button" id="pw-nueva-faq"><i class="fa-solid fa-plus"></i> Agregar pregunta</button>
+                            </div>
+                            <div class="pw-faq" id="pw-faq"></div>
+                        </div>
+                    </section>
+
+                    <section class="pu-panel" data-panel="contacto" hidden>
+                        <div class="pu-tarjeta">
+                            <h2>Datos de contacto</h2>
+                            <p class="pu-ayuda">Se muestran en Soporte y al pie de todas las páginas.</p>
+                            <div class="pu-grid">
+                                <label class="pu-campo">Teléfono de emergencias <input data-campo="contacto.telefonoEmergencias" maxlength="20"></label>
+                                <label class="pu-campo">WhatsApp <input data-campo="contacto.whatsapp" maxlength="20"></label>
+                                <label class="pu-campo">Correo <input data-campo="contacto.correo" type="email" maxlength="100"></label>
+                                <label class="pu-campo">Horario de atención <input data-campo="contacto.horario" maxlength="80"></label>
+                                <label class="pu-campo pu-ancho">Dirección <input data-campo="contacto.direccion" maxlength="150"></label>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section class="pu-panel" data-panel="historial" hidden>
+                        <div class="pu-tarjeta">
+                            <h2>Versiones publicadas</h2>
+                            <p class="pu-ayuda">Cada vez que publicas se guarda una copia. Puedes volver a una versión anterior (se cargará como borrador).</p>
+                            <div class="pu-linea" id="pw-versiones"></div>
+                        </div>
+                    </section>
+                </div>
+
+                <aside class="pw-vista" aria-label="Vista previa">
+                    <div class="pw-vista__barra">
+                        <span></span><span></span><span></span>
+                        <small id="pw-vista-pagina">Vista previa del borrador · Inicio</small>
+                        <div class="pw-vista__dispositivos" role="group" aria-label="Tamaño de pantalla">
+                            <button type="button" class="activo" data-dispositivo="pc" title="Computadora" aria-label="Computadora"><i class="fa-solid fa-desktop"></i></button>
+                            <button type="button" data-dispositivo="celular" title="Celular" aria-label="Celular"><i class="fa-solid fa-mobile-screen"></i></button>
+                        </div>
+                    </div>
+                    <div class="pw-vista__marco" id="pw-vista-marco">
+                        <iframe id="pw-vista-iframe" title="Vista previa de la página" src="/home?vistaPrevia=1" th:src="@{/home(vistaPrevia=1)}" tabindex="-1" loading="lazy"></iframe>
+                    </div>
+                    <p class="pw-vista__nota">Es tu página real con los cambios sin publicar.</p>
+                </aside>
+            </div>
+
+            <div class="pu-modal" id="pw-modal" hidden role="dialog" aria-modal="true">
+                <div class="pu-modal__caja">
+                    <div class="pu-modal__cabecera">
+                        <div><h2 id="pw-modal-titulo">Oferta</h2><p>Elige un vehículo y su descuento.</p></div>
+                        <button class="pu-modal__cerrar" type="button" data-cerrar aria-label="Cerrar"><i class="fa-solid fa-xmark"></i></button>
+                    </div>
+                    <form id="pw-oferta-form" novalidate>
+                        <div class="pu-grid">
+                            <label class="pu-campo pu-ancho">Título <input name="titulo" maxlength="80" required placeholder="Ej.: Fin de semana largo"></label>
+                            <label class="pu-campo pu-ancho">Subtítulo <input name="subtitulo" maxlength="160" placeholder="Ej.: Válido para recojo en Lima"></label>
+                            <label class="pu-campo pu-ancho">Vehículo <select name="idVehiculo" required></select></label>
+                            <label class="pu-campo">Descuento (%) <input name="descuento" type="number" min="1" max="70" required></label>
+                            <label class="pu-campo">Precio final <input name="precioFinal" readonly tabindex="-1"></label>
+                            <label class="pu-campo">Desde <input name="inicio" type="date" required></label>
+                            <label class="pu-campo">Hasta <input name="fin" type="date" required></label>
+                            <label class="pu-check pu-ancho"><input type="checkbox" name="visible" checked> Visible en el sitio</label>
+                        </div>
+                        <div class="pu-error" hidden></div>
+                        <div class="pu-modal__pie">
+                            <button class="pu-boton pu-boton--suave" type="button" data-cerrar>Cancelar</button>
+                            <button class="pu-boton pu-boton--primario" type="submit">Guardar oferta</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
+<div id="pu-mensaje" class="pu-mensaje" role="status" aria-live="polite" hidden></div>
+</body>
+</html>

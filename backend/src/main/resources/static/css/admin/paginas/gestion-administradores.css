@@ -1,37 +1,198 @@
-
+/* =========================================================
+   CARMOVO · Empleados y Roles y permisos
+   Estilo limpio: sin bordes ni líneas divisorias. La separación
+   se logra con fondos suaves, sombras ligeras y espacio.
+   ========================================================= */
 .ga-panel { max-width: 1360px; margin: auto; }
-.ga-encabezado { gap: 18px; flex-wrap: wrap; }
-.ga-boton,.ga-boton-blanco { border: 1px solid #307bae; background:#316f9e;color:white;padding:11px 17px;border-radius:12px;font-weight:700;cursor:pointer;font-family:inherit; }
-.ga-boton:hover { background:#275a7f; }
-.ga-boton-blanco { background:white;color:#285d7c;border-color:#cadce9; }
-.ga-boton:disabled { opacity:.5;cursor:wait; }
-.ga-tarjeta { background:white;border-radius:18px;border:1px solid #dce8f0;padding:24px;margin-top:23px;box-shadow:0 6px 20px #18476c0c; }
-.ga-lista-cabecera { display:flex;justify-content:space-between;align-items:center;gap:16px;margin-bottom:18px; }
-.ga-lista-cabecera h2 { font-size:1.14rem;color:#234c67;margin:0; }
-.ga-lista-cabecera span { color:#63839a;font-weight:600;font-size:.85rem; }
-.ga-tabla-scroll { overflow-x:auto; }
-.ga-tabla { border-collapse:collapse;width:100%;font-size:.89rem; }
-.ga-tabla th,.ga-tabla td { padding:15px 12px;border-bottom:1px solid #e8eef5;text-align:left;vertical-align:middle; }
-.ga-tabla th { color:#436781;background:#f3f8fc;white-space:nowrap; }
-.ga-tabla td { color:#365367; }
-.ga-etiqueta { display:inline-block;background:#e6f4ff;color:#315e88;padding:5px 9px;border-radius:8px;font-size:.76rem;font-weight:700;margin:2px; }
-.ga-estado-activo {color:#1c8353;background:#e5f7ee}.ga-estado-inactivo{color:#ac3f48;background:#ffeded}
-.ga-acciones-tabla { display:flex;gap:8px;flex-wrap:wrap; }
-.ga-acciones-tabla button {border:1px solid #c7dce9;background:white;color:#326b93;border-radius:8px;padding:7px 9px;cursor:pointer;font-weight:600;}
-.ga-acciones-tabla button:hover {background:#edf7fc;}
-.ga-form-contenedor[hidden],.ga-mensaje[hidden] {display:none!important;}
-.ga-grid { display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:17px; }
-#ga-form label {display:flex;flex-direction:column;gap:8px;color:#41637c;font-weight:700;font-size:.86rem;}
-#ga-form input:not([type=checkbox]) {width:100%;border:1px solid #cbdde8;border-radius:10px;min-height:43px;padding:10px 12px;font:inherit;color:#264c65;}
-#ga-form input:focus { outline:2px solid #a4d5f6; border-color:#3e8dbc; }
-#ga-form .ga-estado {flex-direction:row;align-items:center;margin:20px 0;}
-#ga-form h3 {font-size:1rem;color:#244e6d;margin:22px 0 7px;}
-.ga-ayuda {color:#69859b;font-size:.85rem;margin:3px 0 16px;}
-.ga-permisos-grid {display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;}
-.ga-permisos-grid fieldset {border:1px solid #d8e7f1;border-radius:13px;padding:16px;}
-.ga-permisos-grid legend {font-weight:800;color:#315d78;padding:0 7px;}
-#ga-form .ga-permiso {flex-direction:row;align-items:center;gap:10px;font-weight:500;padding:9px 4px;}
-.ga-acciones {display:flex;justify-content:flex-end;gap:12px;margin-top:23px;flex-wrap:wrap;}
-.ga-mensaje {padding:14px;border:1px solid #bad5e6;background:#eaf6ff;border-radius:11px;color:#214c70;margin:15px 0;}
-.ga-mensaje.error {border-color:#f1baba;background:#fff3f3;color:#ac3434;}
-@media(max-width:760px){.ga-grid,.ga-permisos-grid{grid-template-columns:1fr}.ga-tarjeta{padding:15px}.ga-encabezado .ga-boton{width:100%}}
+
+.ga-encabezado { display: flex; justify-content: space-between; align-items: flex-end; gap: 18px; flex-wrap: wrap; margin-bottom: 22px; }
+.ga-encabezado h1 { margin: 0 0 6px; font-size: 1.6rem; color: var(--admin-texto); }
+.ga-encabezado p { margin: 0; color: var(--admin-texto-secundario); }
+.ga-encabezado__acciones { display: flex; gap: 10px; flex-wrap: wrap; }
+
+/* Botones */
+.ga-boton, .ga-boton-suave, .ga-boton-peligro {
+    display: inline-flex; align-items: center; gap: 8px; border: 0; border-radius: 12px;
+    padding: 11px 18px; font: 700 .9rem inherit; font-family: inherit; cursor: pointer; text-decoration: none;
+    transition: background .2s, transform .1s, box-shadow .2s;
+}
+.ga-boton { background: var(--admin-verde); color: #fff; box-shadow: 0 6px 16px rgba(76, 150, 109, .25); }
+.ga-boton:hover { background: #3f8460; }
+.ga-boton-suave { background: var(--admin-superficie-2); color: var(--admin-texto); }
+.ga-boton-suave:hover { background: var(--admin-superficie-3); }
+.ga-boton-peligro { background: #FBE9E9; color: #A33A3A; }
+.ga-boton:active, .ga-boton-suave:active { transform: scale(.98); }
+.ga-boton:disabled { opacity: .55; cursor: wait; box-shadow: none; }
+.ga-icono { width: 38px; height: 38px; border: 0; border-radius: 10px; background: var(--admin-superficie-2); color: var(--admin-texto-secundario); cursor: pointer; }
+.ga-icono:hover { background: var(--admin-superficie-3); }
+
+/* Mensajes */
+.ga-mensaje { padding: 14px 16px; background: #E7F4EC; border-radius: 12px; color: #1F6B44; margin: 0 0 18px; font-weight: 600; }
+.ga-mensaje.error { background: #FBE9E9; color: #A33A3A; }
+.ga-mensaje[hidden], .ga-modal[hidden], .ga-error[hidden], .ga-aviso-principal[hidden], [hidden].ga-ancho { display: none !important; }
+
+/* Resumen por rol */
+.ga-resumen { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 14px; margin-bottom: 18px; }
+.ga-resumen__item { background: var(--admin-superficie); border-radius: 16px; padding: 16px 18px; box-shadow: var(--admin-sombra); }
+.ga-resumen__item span { display: block; font-size: .78rem; font-weight: 700; color: var(--admin-texto-secundario); text-transform: uppercase; letter-spacing: .04em; }
+.ga-resumen__item strong { display: block; font-size: 1.6rem; color: var(--admin-texto); margin-top: 4px; }
+
+/* Tarjeta y filtros */
+.ga-tarjeta { background: var(--admin-superficie); border-radius: 18px; padding: 20px; box-shadow: var(--admin-sombra); }
+.ga-filtros { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 14px; }
+.ga-buscar { flex: 1; min-width: 220px; display: flex; align-items: center; gap: 10px; background: var(--admin-fondo); border-radius: 12px; padding: 0 14px; color: var(--admin-texto-secundario); }
+.ga-buscar input { border: 0; background: transparent; outline: 0; width: 100%; min-height: 44px; font: inherit; color: var(--admin-texto); }
+.ga-filtros select { border: 0; background: var(--admin-fondo); border-radius: 12px; min-height: 44px; padding: 0 14px; font: inherit; color: var(--admin-texto); cursor: pointer; }
+.ga-buscar:focus-within, .ga-filtros select:focus { box-shadow: 0 0 0 3px var(--admin-superficie-3); outline: 0; }
+
+/* Tabla sin líneas: filas separadas por espacio y fondo al pasar el cursor */
+.ga-tabla-scroll { overflow-x: auto; }
+.ga-tabla { width: 100%; border-collapse: separate; border-spacing: 0 6px; font-size: .9rem; }
+.ga-tabla th { text-align: left; padding: 8px 14px; font-size: .74rem; letter-spacing: .06em; text-transform: uppercase; color: var(--admin-texto-secundario); white-space: nowrap; }
+.ga-tabla td { padding: 12px 14px; color: var(--admin-texto); vertical-align: middle; background: var(--admin-fondo); }
+.ga-tabla td:first-child { border-radius: 12px 0 0 12px; }
+.ga-tabla td:last-child { border-radius: 0 12px 12px 0; }
+.ga-tabla tbody tr:hover td { background: var(--admin-superficie-2); }
+.ga-tabla tr.ga-fila-principal td { background: #EEF5FB; }
+.ga-col-acciones { text-align: right !important; }
+.ga-vacio { text-align: center; color: var(--admin-texto-secundario); padding: 28px !important; }
+
+.ga-persona { display: flex; align-items: center; gap: 12px; }
+.ga-avatar { width: 38px; height: 38px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-weight: 800; font-size: .82rem; background: var(--admin-superficie-3); color: var(--admin-texto); flex-shrink: 0; }
+.ga-persona strong { display: block; }
+.ga-persona small { color: var(--admin-texto-secundario); }
+
+/* Chips */
+.ga-chip { display: inline-flex; align-items: center; gap: 6px; padding: 5px 11px; border-radius: 20px; font-size: .78rem; font-weight: 700; white-space: nowrap; }
+.ga-rol-administrador, .ga-rol-principal { background: #293E4D; color: #fff; }
+.ga-rol-agente { background: #DCECF7; color: #2E6A92; }
+.ga-rol-cajero { background: #E2F2E8; color: #2F7A4E; }
+.ga-rol-conductor { background: #FCEBD5; color: #9A5B12; }
+.ga-estado-activo { background: #E5F7EE; color: #1C8353; }
+.ga-estado-inactivo { background: #FBE9E9; color: #A33A3A; }
+.ga-modulos-texto { color: var(--admin-texto-secundario); font-size: .85rem; }
+
+.ga-acciones-tabla { display: flex; justify-content: flex-end; gap: 6px; }
+.ga-acciones-tabla button { width: 36px; height: 36px; border: 0; border-radius: 10px; background: var(--admin-superficie); color: var(--admin-azul); cursor: pointer; }
+.ga-acciones-tabla button:hover { background: var(--admin-superficie-3); }
+.ga-acciones-tabla button.apagar { color: #A33A3A; }
+.ga-acciones-tabla button.encender { color: #1C8353; }
+.ga-acciones-tabla button:disabled { opacity: .35; cursor: not-allowed; }
+
+/* Ventana del formulario */
+.ga-modal { position: fixed; inset: 0; background: rgba(30, 45, 58, .45); display: flex; align-items: center; justify-content: center; padding: 20px; z-index: 1000; }
+.ga-modal__caja { width: 100%; max-width: 560px; max-height: 92vh; overflow-y: auto; background: var(--admin-superficie); border-radius: 20px; padding: 26px; box-shadow: 0 24px 60px rgba(20, 40, 60, .25); animation: gaEntrar .2s ease; }
+@keyframes gaEntrar { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+.ga-modal__cabecera { display: flex; justify-content: space-between; gap: 14px; margin-bottom: 18px; }
+.ga-modal__cabecera h2 { margin: 0 0 4px; font-size: 1.2rem; color: var(--admin-texto); }
+.ga-modal__cabecera p { margin: 0; color: var(--admin-texto-secundario); font-size: .88rem; }
+
+.ga-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.ga-ancho { grid-column: 1 / -1; }
+#ga-form label { display: flex; flex-direction: column; gap: 7px; color: var(--admin-texto-secundario); font-weight: 700; font-size: .82rem; }
+#ga-form small { font-weight: 500; }
+#ga-form input:not([type=checkbox]), #ga-form select {
+    width: 100%; border: 0; background: var(--admin-fondo); border-radius: 12px; min-height: 46px;
+    padding: 10px 14px; font: inherit; font-weight: 500; color: var(--admin-texto);
+}
+#ga-form input:focus, #ga-form select:focus { outline: 0; box-shadow: 0 0 0 3px var(--admin-superficie-3); }
+#ga-form input:disabled, #ga-form select:disabled { opacity: .6; cursor: not-allowed; }
+
+.ga-modulos { margin: 14px 0 4px; display: flex; flex-wrap: wrap; gap: 6px; }
+.ga-modulos__titulo { width: 100%; font-size: .8rem; font-weight: 700; color: var(--admin-texto-secundario); }
+.ga-modulos .ga-chip { background: var(--admin-superficie-2); color: var(--admin-texto); font-weight: 600; }
+
+.ga-interruptor { flex-direction: row !important; align-items: center; gap: 12px !important; margin: 18px 0 6px; cursor: pointer; color: var(--admin-texto) !important; }
+.ga-interruptor input { position: absolute; opacity: 0; pointer-events: none; }
+.ga-interruptor__pista { width: 44px; height: 24px; border-radius: 20px; background: #C9D8E2; position: relative; transition: background .2s; flex-shrink: 0; }
+.ga-interruptor__pista::after { content: ''; position: absolute; left: 3px; top: 3px; width: 18px; height: 18px; border-radius: 50%; background: #fff; transition: left .2s; box-shadow: 0 1px 3px rgba(0,0,0,.2); }
+.ga-interruptor input:checked + .ga-interruptor__pista { background: var(--admin-verde); }
+.ga-interruptor input:checked + .ga-interruptor__pista::after { left: 23px; }
+.ga-interruptor input:focus-visible + .ga-interruptor__pista { box-shadow: 0 0 0 3px var(--admin-superficie-3); }
+
+.ga-aviso-principal { background: #EEF5FB; color: #2E6A92; border-radius: 12px; padding: 12px 14px; font-size: .86rem; margin: 14px 0 0; }
+.ga-error { background: #FBE9E9; color: #A33A3A; border-radius: 12px; padding: 12px 14px; font-size: .86rem; font-weight: 600; margin: 14px 0 0; }
+.ga-acciones { display: flex; justify-content: flex-end; gap: 10px; margin-top: 22px; }
+
+/* =========================================================
+   Roles y permisos (matriz)
+   ========================================================= */
+.rp-aviso { display: flex; gap: 12px; align-items: flex-start; background: #FFF8E6; color: #7A5A12; border-radius: 14px; padding: 14px 16px; margin-bottom: 18px; font-size: .9rem; }
+.rp-matriz { width: 100%; border-collapse: separate; border-spacing: 0 6px; }
+.rp-matriz th { padding: 10px 12px; text-align: center; vertical-align: bottom; }
+.rp-matriz th:first-child, .rp-matriz td:first-child { text-align: left; }
+.rp-matriz td { padding: 12px; text-align: center; background: var(--admin-fondo); }
+.rp-matriz td:first-child { border-radius: 12px 0 0 12px; }
+.rp-matriz td:last-child { border-radius: 0 12px 12px 0; }
+.rp-matriz tbody tr:hover td { background: var(--admin-superficie-2); }
+.rp-matriz .rp-grupo td { background: transparent; padding: 18px 12px 4px; font-size: .74rem; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; color: var(--admin-texto-secundario); text-align: left; }
+.rp-rol { display: flex; flex-direction: column; align-items: center; gap: 6px; }
+.rp-rol small { color: var(--admin-texto-secundario); font-weight: 600; font-size: .74rem; }
+.rp-modulo strong { display: block; color: var(--admin-texto); }
+.rp-modulo small { color: var(--admin-texto-secundario); font-size: .78rem; }
+
+.rp-check { position: relative; display: inline-flex; width: 26px; height: 26px; cursor: pointer; }
+.rp-check input { position: absolute; opacity: 0; width: 100%; height: 100%; margin: 0; cursor: pointer; }
+.rp-check span { width: 26px; height: 26px; border-radius: 8px; background: #fff; box-shadow: inset 0 0 0 2px #C9DCE8; display: inline-flex; align-items: center; justify-content: center; transition: background .15s, box-shadow .15s; }
+.rp-check input:checked + span { background: var(--admin-verde); box-shadow: none; }
+.rp-check input:checked + span::after { content: '\f00c'; font-family: 'Font Awesome 6 Free'; font-weight: 900; color: #fff; font-size: .8rem; }
+.rp-check input:focus-visible + span { box-shadow: 0 0 0 3px var(--admin-superficie-3); }
+.rp-check input:disabled { cursor: not-allowed; }
+.rp-check input:disabled + span { background: #C9DCE8; box-shadow: none; }
+.rp-check input:disabled:checked + span::after { color: #fff; }
+
+.rp-barra { position: sticky; bottom: 16px; display: flex; justify-content: space-between; align-items: center; gap: 14px; flex-wrap: wrap; margin-top: 16px; background: #293E4D; color: #fff; border-radius: 16px; padding: 14px 18px; box-shadow: 0 14px 30px rgba(20, 40, 60, .25); }
+.rp-barra[hidden] { display: none; }
+.rp-barra .ga-boton-suave { background: rgba(255,255,255,.14); color: #fff; }
+.rp-barra .ga-boton-suave:hover { background: rgba(255,255,255,.24); }
+
+@media (max-width: 760px) {
+    .ga-grid { grid-template-columns: 1fr; }
+    .ga-tarjeta, .ga-modal__caja { padding: 16px; }
+    .ga-encabezado__acciones { width: 100%; }
+    .ga-encabezado__acciones > * { flex: 1; justify-content: center; }
+}
+
+/* Roles creados por el administrador: renombrar y eliminar */
+.rp-rol-acciones { display: inline-flex; gap: 4px; margin-top: 4px; }
+.rp-rol-acciones button { border: 0; background: var(--admin-fondo); width: 26px; height: 26px; border-radius: 8px; cursor: pointer; color: var(--admin-texto-secundario); font-size: .72rem; }
+.rp-rol-acciones button:hover:not(:disabled) { background: var(--admin-superficie-3); color: var(--admin-texto); }
+.rp-rol-acciones button[data-eliminar-rol] { color: #9d3c3c; }
+.rp-rol-acciones button:disabled { opacity: .4; cursor: not-allowed; }
+
+/* Formulario completo del empleado */
+.ga-modal__caja { max-width: 640px; }
+.ga-seccion { margin: 6px 0 -2px; font-size: .82rem; font-weight: 800; text-transform: uppercase; letter-spacing: .05em; color: var(--admin-azul); display: flex; align-items: center; gap: 8px; }
+.ga-seccion small { text-transform: none; letter-spacing: 0; font-weight: 600; color: var(--admin-texto-secundario); }
+.ga-licencia { background: var(--admin-fondo); border-radius: 14px; padding: 14px; }
+.ga-licencia[hidden] { display: none; }
+.ga-licencia .ga-grid { margin-top: 10px; }
+.ga-licencia input, .ga-licencia select { background: var(--admin-superficie) !important; }
+.ga-dato-extra { display: block; font-size: .74rem; color: var(--admin-texto-secundario); margin-top: 2px; }
+
+/* DNI con consulta a RENIEC */
+.ga-dni { display: flex; gap: 8px; }
+.ga-dni input { flex: 1; }
+.ga-dni .ga-boton-suave { min-height: 46px; white-space: nowrap; }
+.ga-dni-estado { font-size: .78rem; font-weight: 700; padding: 6px 10px; border-radius: 10px; background: var(--admin-superficie-2); color: var(--admin-texto-secundario); }
+.ga-dni-estado.ok { background: #e3f3ea; color: #2f6f4b; }
+.ga-dni-estado.error { background: #fbf1dc; color: #8a6420; }
+.ga-dni-estado[hidden] { display: none; }
+#ga-form input.autocompletado { background: #eef8f1; }
+
+/* Aceptación de términos y privacidad */
+#ga-form label.ga-acepto { flex-direction: row; align-items: flex-start; gap: 10px; margin: 14px 0 0; padding: 12px 14px;
+    background: var(--admin-fondo); border-radius: 12px; font-weight: 500; font-size: .84rem; line-height: 1.45; color: var(--admin-texto); cursor: pointer; }
+#ga-form label.ga-acepto input { width: 18px; height: 18px; margin: 1px 0 0; flex-shrink: 0; accent-color: var(--admin-primario, #2E6A92); cursor: pointer; }
+#ga-form label.ga-acepto a { color: #2E6A92; font-weight: 700; }
+#ga-form label.ga-acepto.ga-acepto--ok { background: #E5F7EE; }
+
+/* Conductores: licencia */
+.ga-licencia-dato strong { display: block; font-size: .86rem; color: var(--admin-texto); }
+.ga-licencia-dato small { color: var(--admin-texto-secundario); font-size: .76rem; }
+.ga-vence-ok { background: #E5F7EE; color: #1C8353; }
+.ga-vence-pronto { background: #FFF4DB; color: #8A6214; }
+.ga-vence-mal { background: #FBE9E9; color: #A33A3A; }
+.ga-resumen__item.ga-resumen__item--alerta strong { color: #A33A3A; }
+.ga-sin-rol { background: #FFF8E6; color: #7A5A12; border-radius: 14px; padding: 14px 16px; margin-bottom: 18px; font-size: .9rem; }
+.ga-modulos[hidden] { display: none; }

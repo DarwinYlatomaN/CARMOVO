@@ -360,3 +360,82 @@
         transition: none;
     }
 }
+
+/* Barra lateral sin barras de desplazamiento visibles (se sigue pudiendo desplazar) */
+.barra-lateral {
+    overflow-x: hidden;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+.barra-lateral::-webkit-scrollbar {
+    display: none;
+}
+
+/* Menú agrupado por áreas */
+.barra-lateral__seccion .barra-lateral__etiqueta:not(:first-child) { margin-top: 16px; }
+.barra-lateral__seccion { scrollbar-width: none; }
+.barra-lateral, .barra-lateral * { scrollbar-width: none !important; }
+.barra-lateral::-webkit-scrollbar, .barra-lateral *::-webkit-scrollbar { width: 0 !important; height: 0 !important; display: none !important; }
+
+/* ==========================================================================
+   MENÚ DE MI CUENTA (esquina superior derecha)
+   ========================================================================== */
+.mp { position: relative; }
+.mp__boton { display: flex; align-items: center; gap: 10px; border: 0; background: transparent; padding: 6px 10px 6px 6px; border-radius: 14px; cursor: pointer; font: inherit; color: #293E4D; text-align: left; }
+.mp__boton:hover, .mp__boton[aria-expanded="true"] { background: #EAF4FA; }
+.mp__avatar { width: 40px; height: 40px; border-radius: 50%; display: grid; place-items: center; background: #A9D1EA; color: #293E4D; font-weight: 800; font-size: .85rem; object-fit: cover; flex-shrink: 0; }
+.mp__avatar--grande { width: 52px; height: 52px; font-size: 1rem; }
+.mp__avatar--foto { width: 92px; height: 92px; font-size: 1.6rem; }
+.mp__datos { display: flex; flex-direction: column; min-width: 0; }
+.mp__datos strong { font-size: .88rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 190px; }
+.mp__datos small { font-size: .74rem; color: #587284; }
+.mp__flecha { font-size: .7rem; color: #587284; }
+.mp__panel { position: absolute; right: 0; top: calc(100% + 8px); width: 290px; background: #fff; border-radius: 16px; box-shadow: 0 18px 48px rgba(30, 50, 70, .18); padding: 8px; z-index: 900; animation: mpEntrar .15s ease; }
+.mp__panel[hidden] { display: none; }
+@keyframes mpEntrar { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: none; } }
+.mp__cabeza { display: flex; gap: 12px; align-items: center; padding: 10px 10px 14px; margin-bottom: 6px; background: #F3F8FC; border-radius: 12px; }
+.mp__cabeza strong { display: block; font-size: .9rem; color: #293E4D; }
+.mp__cabeza small { display: block; font-size: .76rem; color: #587284; word-break: break-all; }
+.mp__rol { display: inline-block; margin-top: 4px; font-size: .7rem; font-weight: 700; background: #DCECF7; color: #315A75; padding: 2px 8px; border-radius: 99px; }
+.mp__panel > button, .mp__panel > a { width: 100%; display: flex; align-items: center; gap: 10px; border: 0; background: transparent; padding: 10px 12px; border-radius: 10px; font: inherit; font-size: .86rem; font-weight: 600; color: #293E4D; cursor: pointer; text-decoration: none; text-align: left; }
+.mp__panel > button:hover, .mp__panel > a:hover { background: #EAF4FA; }
+.mp__panel i { width: 18px; color: #527F9C; }
+.mp__panel .mp__salir { color: #9d3c3c; }
+.mp__panel .mp__salir i { color: #9d3c3c; }
+
+.mp-ventana { position: fixed; inset: 0; background: rgba(30, 45, 58, .45); display: flex; align-items: center; justify-content: center; padding: 20px; z-index: 1500; }
+.mp-ventana__caja { width: 100%; max-width: 520px; max-height: 92vh; overflow-y: auto; background: #fff; border-radius: 20px; padding: 26px; box-shadow: 0 24px 60px rgba(20, 40, 60, .25); animation: mpEntrar .2s ease; }
+.mp-ventana__cabecera { display: flex; justify-content: space-between; gap: 14px; margin-bottom: 18px; }
+.mp-ventana__cabecera h2 { margin: 0 0 4px; font-size: 1.18rem; color: #293E4D; }
+.mp-ventana__cabecera p { margin: 0; color: #587284; font-size: .86rem; }
+.mp-ventana__cerrar { border: 0; background: #EAF4FA; width: 36px; height: 36px; border-radius: 10px; cursor: pointer; color: #293E4D; flex-shrink: 0; }
+.mp-form label { display: flex; flex-direction: column; gap: 7px; color: #587284; font-weight: 700; font-size: .82rem; margin-bottom: 12px; }
+.mp-form input:not([type=file]) { width: 100%; border: 0; background: #F3F8FC; border-radius: 12px; min-height: 44px; padding: 0 14px; font: inherit; font-weight: 500; color: #293E4D; box-sizing: border-box; }
+.mp-form input:focus { outline: 2px solid #A9D1EA; }
+.mp-form input:disabled { color: #8aa0b0; }
+.mp-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0 14px; }
+.mp-foto { display: flex; gap: 18px; align-items: center; background: #F3F8FC; border-radius: 16px; padding: 14px; margin-bottom: 16px; }
+.mp-foto > div:last-child { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+.mp-foto small { width: 100%; color: #587284; font-size: .76rem; font-weight: 500; }
+.mp-foto label { margin: 0; }
+.mp-clave { position: relative; display: block; }
+.mp-clave button { position: absolute; right: 6px; top: 50%; transform: translateY(-50%); border: 0; background: transparent; color: #587284; cursor: pointer; width: 34px; height: 34px; }
+.mp-reglas { list-style: none; margin: -4px 0 14px; padding: 0; display: flex; flex-wrap: wrap; gap: 6px; }
+.mp-reglas li { font-size: .74rem; font-weight: 700; padding: 4px 10px; border-radius: 99px; background: #F3F8FC; color: #8aa0b0; }
+.mp-reglas li.cumple { background: #e3f3ea; color: #2f6f4b; }
+.mp-reglas li.cumple::before { content: "✓ "; }
+.mp-error { background: #f9e5e5; color: #9d3c3c; border-radius: 12px; padding: 10px 14px; font-size: .85rem; font-weight: 600; margin: 4px 0 0; }
+.mp-error.ok { background: #e3f3ea; color: #2f6f4b; }
+.mp-error[hidden] { display: none; }
+.mp-pie { display: flex; justify-content: flex-end; gap: 10px; margin-top: 18px; }
+.mp-boton { display: inline-flex; align-items: center; gap: 8px; min-height: 40px; padding: 0 16px; border: 0; border-radius: 12px; background: #527F9C; color: #fff; font: inherit; font-weight: 700; font-size: .86rem; cursor: pointer; }
+.mp-boton:disabled { opacity: .55; cursor: not-allowed; }
+.mp-boton--suave { background: #EAF4FA; color: #293E4D; }
+.mp-boton--texto { background: transparent; color: #9d3c3c; padding: 0 8px; }
+label.mp-boton { flex-direction: row; color: #293E4D; font-size: .86rem; margin: 0; }
+
+@media (max-width: 760px) {
+    .mp__datos, .mp__flecha { display: none; }
+    .mp-grid { grid-template-columns: 1fr; }
+}

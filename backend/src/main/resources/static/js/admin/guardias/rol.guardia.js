@@ -1,5 +1,7 @@
 (function () {
     const LOGIN = '/admin/login';
+    // Todo rol que no sea "Cliente" es del personal (incluye los roles creados por el administrador).
+    const esPersonal = perfil => !!perfil && String(perfil).trim().toLowerCase() !== 'cliente';
 
     function irAlLogin() {
         if (window.location.pathname !== LOGIN) {
@@ -10,7 +12,7 @@
     async function validar() {
         const sesionLocal = window.CarmovoAdminApi?.obtenerSesionLocal();
 
-        if (!sesionLocal?.token || sesionLocal?.perfil !== 'Administrador') {
+        if (!sesionLocal?.token || !esPersonal(sesionLocal?.perfil)) {
             window.CarmovoAdminApi?.limpiarSesionLocal();
             irAlLogin();
             return false;
@@ -19,7 +21,7 @@
         try {
             const sesion = await window.CarmovoAdminApi.validarSesion();
 
-            if (sesion.perfil !== 'Administrador') {
+            if (!esPersonal(sesion.perfil)) {
                 throw new Error('Perfil sin acceso administrativo.');
             }
 
@@ -33,7 +35,13 @@
                 'monitoreo-flota': 'ADMIN_MONITOREO',
                 'reportes': 'ADMIN_REPORTES',
                 'registro-auditoria': 'ADMIN_AUDITORIA',
-                'gestion-administradores': 'ADMIN_ADMINISTRADORES'
+                'gestion-administradores': 'ADMIN_ADMINISTRADORES',
+                'roles-permisos': 'ADMIN_ADMINISTRADORES',
+                'conductores': 'ADMIN_ADMINISTRADORES',
+                'mantenimiento': 'ADMIN_FLOTA',
+                'categorias': 'ADMIN_FLOTA',
+                'mis-servicios': 'ADMIN_SERVICIOS',
+                'portal-web': 'ADMIN_PORTAL'
             };
             if (!sesion.principal && codigos[pagina] && !(sesion.permisos || []).includes(codigos[pagina])) {
                 window.location.replace(sesion.rutaInicio || LOGIN);

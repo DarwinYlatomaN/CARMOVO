@@ -83,6 +83,9 @@
         if (valor === 'en revision') return 'en-revision';
         if (valor === 'pagado') return 'pagado';
         if (valor === 'rechazado') return 'rechazado';
+        if (valor === 'expirado' || valor === 'anulado') return 'expirado';
+        if (valor === 'reembolso pendiente') return 'reembolso';
+        if (valor === 'reembolsado') return 'reembolsado';
 
         return 'pendiente';
     }
@@ -91,6 +94,7 @@
         const busqueda = normalizar($('#buscarPago').value);
         const estado = normalizar($('#filtroEstadoPago').value);
         const metodo = normalizar($('#filtroMetodoPago').value);
+        const comprobante = $('#filtroComprobante')?.value || '';
 
         return pagos.filter(pago => {
             const metodoReal = pago.metodoPago || 'Sin especificar';
@@ -101,8 +105,14 @@
                 pago.correoCliente,
                 pago.vehiculo,
                 metodoReal,
-                pago.referencia
+                pago.referencia,
+                pago.numeroComprobante,
+                pago.ruc,
+                pago.razonSocial
             ].some(valor => normalizar(valor).includes(busqueda));
+
+            const tipo = pago.numeroComprobante ? (pago.tipoComprobante || 'BOLETA') : 'SIN';
+            const coincideComprobante = !comprobante || tipo === comprobante;
 
             const coincideEstado = !estado ||
                 normalizar(pago.estadoPago) === estado;
@@ -110,7 +120,7 @@
             const coincideMetodo = !metodo ||
                 normalizar(metodoReal) === metodo;
 
-            return coincideBusqueda && coincideEstado && coincideMetodo;
+            return coincideBusqueda && coincideEstado && coincideMetodo && coincideComprobante;
         });
     }
 
@@ -137,6 +147,32 @@
         $('#resumenPagosRevision').textContent = revision;
         $('#resumenPagosPagados').textContent = pagados.length;
         $('#resumenIngresos').textContent = moneda(ingresos);
+    }
+
+    /** Botones de caja según el estado del pago. */
+    function botonesCajero(pago) {
+        const id = escapar(pago.idAlquiler);
+        const boton = (accion, icono, titulo, clase = '') => `
+            <button class="boton-pago-icono ${clase}" type="button" data-accion="${accion}" data-id-alquiler="${id}"
+                    title="${titulo}" aria-label="${titulo}"><i class="fa-solid ${icono}"></i></button>`;
+        const estado = pago.estadoPago || '';
+        const metodo = normalizar(pago.metodoPago);
+        let html = '';
+        if (estado === 'En revisión') {
+            html += `<button class="boton-verificar-pago" type="button" data-accion="verificar" data-id-alquiler="${id}"
+                        title="Revisar la constancia y aprobar o rechazar"><i class="fa-solid fa-magnifying-glass-dollar"></i> Verificar</button>`;
+        }
+        if (estado === 'Pendiente' && metodo === 'efectivo') {
+            html += boton('cobrar-efectivo', 'fa-money-bill-wave', 'Cobrar en efectivo', 'aprobar');
+            html += boton('rechazar', 'fa-xmark', 'Anular reserva', 'rechazar');
+        }
+        if (estado === 'Reembolso pendiente') {
+            html += boton('reembolsar', 'fa-rotate-left', 'Registrar reembolso', 'reembolsar');
+        }
+        if (Number(pago.cargosPendientes || 0) > 0) {
+            html += boton('cobrar-cargos', 'fa-file-invoice-dollar', `Cobrar cargos adicionales (${moneda(pago.cargosPendientes)})`, 'cargos');
+        }
+        return html;
     }
 
     function renderizarTabla() {
@@ -190,13 +226,16 @@
 
                     <td>
                         ${escapar(metodo)}
-                        ${pago.referencia ? `<small class="pago-referencia">${escapar(pago.metodoPago === 'Tarjeta' || pago.metodoPago === 'PayPal' ? '' : 'Op. ')}${escapar(pago.referencia)}</small>` : ''}
+                        ${pago.referencia ? `<small class="pago-referencia">${escapar({ Tarjeta: 'Aut. ', Efectivo: 'Cód. ' }[pago.metodoPago] ?? 'Op. ')}${escapar(pago.referencia)}</small>` : ''}
+                        ${pago.detalle ? `<small class="pago-referencia">${escapar(pago.detalle)}</small>` : ''}
                     </td>
 
                     <td>
                         <span class="pago-monto">
                             ${escapar(moneda(pago.monto))}
                         </span>
+                        ${Number(pago.cargosPendientes || 0) > 0 ? `<small class="pago-cargos">+ ${escapar(moneda(pago.cargosPendientes))} en cargos</small>` : ''}
+                        ${pago.vuelto != null && pago.montoRecibido ? `<small class="pago-referencia">Recibido ${escapar(moneda(pago.montoRecibido))} · vuelto ${escapar(moneda(pago.vuelto))}</small>` : ''}
                     </td>
 
                     <td>
@@ -241,13 +280,14 @@
 
                     <td>
                         <div class="acciones-pago">
+                            ${botonesCajero(pago)}
                             <button
                                 class="boton-pago-icono editar"
                                 type="button"
                                 data-accion="editar"
                                 data-id-alquiler="${escapar(pago.idAlquiler)}"
-                                title="Actualizar pago"
-                                aria-label="Actualizar pago"
+                                title="Editar pago manualmente"
+                                aria-label="Editar pago manualmente"
                             >
                                 <i class="fa-solid fa-pen"></i>
                             </button>
@@ -256,6 +296,261 @@
                 </tr>
             `;
         }).join('');
+    }
+
+    // ================================================================ acciones de caja
+
+    /** Ventana simple (sin bordes) para confirmar acciones de caja. Devuelve los datos o null. */
+    function ventanaCaja({ titulo, texto, campo, confirmar, peligro = false, alCambiar }) {
+        return new Promise(resolver => {
+            const fondo = document.createElement('div');
+            fondo.className = 'caja-modal';
+            fondo.innerHTML = `
+                <div class="caja-modal__caja" role="dialog" aria-modal="true" aria-labelledby="caja-titulo">
+                    <h3 id="caja-titulo">${escapar(titulo)}</h3>
+                    <div class="caja-modal__texto">${texto}</div>
+                    ${campo ? `<label class="caja-modal__campo">${escapar(campo.etiqueta)}
+                        ${campo.tipo === 'textarea'
+                            ? `<textarea id="caja-valor" rows="3" maxlength="255" placeholder="${escapar(campo.placeholder || '')}"></textarea>`
+                            : `<input id="caja-valor" type="${campo.tipo}" step="0.10" min="0" inputmode="decimal" value="${escapar(campo.valor || '')}">`}
+                    </label>` : ''}
+                    <p class="caja-modal__info" id="caja-info"></p>
+                    <p class="caja-modal__error" id="caja-error" hidden></p>
+                    <div class="caja-modal__acciones">
+                        <button type="button" class="caja-btn caja-btn--suave" data-r="no">Cancelar</button>
+                        <button type="button" class="caja-btn ${peligro ? 'caja-btn--peligro' : 'caja-btn--ok'}" data-r="si">${escapar(confirmar)}</button>
+                    </div>
+                </div>`;
+            document.body.appendChild(fondo);
+            const valor = fondo.querySelector('#caja-valor');
+            const info = fondo.querySelector('#caja-info');
+            const errorCaja = fondo.querySelector('#caja-error');
+            const actualizar = () => { if (alCambiar) info.innerHTML = alCambiar(valor?.value || ''); };
+            valor?.addEventListener('input', actualizar);
+            actualizar();
+            setTimeout(() => (valor || fondo.querySelector('[data-r="si"]')).focus(), 30);
+            const terminar = r => { fondo.remove(); resolver(r); };
+            fondo.addEventListener('click', e => {
+                if (e.target === fondo || e.target.dataset.r === 'no') return terminar(null);
+                if (e.target.dataset.r === 'si') {
+                    if (campo?.requerido && !(valor.value || '').trim()) {
+                        errorCaja.textContent = campo.mensajeRequerido || 'Completa el campo.';
+                        errorCaja.hidden = false;
+                        return;
+                    }
+                    if (campo?.validar) {
+                        const problema = campo.validar(valor.value);
+                        if (problema) { errorCaja.textContent = problema; errorCaja.hidden = false; return; }
+                    }
+                    terminar({ valor: valor ? valor.value.trim() : true });
+                }
+            });
+            fondo.addEventListener('keydown', e => { if (e.key === 'Escape') terminar(null); });
+        });
+    }
+
+    // ================================================================ verificación de Yape, Plin y transferencia
+
+    const MOTIVOS_RECHAZO = [
+        'El pago no llegó a la cuenta de CARMOVO.',
+        'El monto recibido no coincide con el total.',
+        'La foto no se ve bien o no es una constancia válida.',
+        'El N° de operación no coincide con la constancia.',
+        'La fecha de la operación no coincide.'
+    ];
+
+    function nombreMetodo(metodo) {
+        return ({ yape: 'Yape', plin: 'Plin', transferencia: 'Transferencia bancaria', tarjeta: 'Tarjeta', efectivo: 'Efectivo' })[normalizar(metodo)] || metodo || '—';
+    }
+
+    function fechaCorta(valor) {
+        if (!valor) return '—';
+        const [a, m, d] = String(valor).slice(0, 10).split('-');
+        return `${d}/${m}/${a}`;
+    }
+
+    /** Ventana para revisar todos los datos de la operación y la constancia, y aprobar o rechazar con motivo. */
+    async function verificarPago(pago) {
+        const total = Number(pago.monto || 0);
+        const reportado = Number(pago.montoPagado || pago.monto || 0);
+        const coincide = Math.abs(total - reportado) < 0.005;
+        const fila = (k, v, destacado = false) => `<div class="vp-dato ${destacado ? 'vp-dato--fuerte' : ''}"><span>${escapar(k)}</span><b>${v}</b></div>`;
+        const fondo = document.createElement('div');
+        fondo.className = 'caja-modal';
+        fondo.innerHTML = `
+            <div class="caja-modal__caja vp" role="dialog" aria-modal="true" aria-labelledby="vp-titulo">
+                <div class="vp-cabecera">
+                    <div>
+                        <h3 id="vp-titulo">Verificar pago · ${escapar(nombreMetodo(pago.metodoPago))}</h3>
+                        <p>Alquiler #${escapar(pago.idAlquiler)} · reportado el ${escapar(fechaHora(pago.fechaRegistro))}</p>
+                    </div>
+                    <button type="button" class="vp-cerrar" data-vp="cerrar" aria-label="Cerrar"><i class="fa-solid fa-xmark"></i></button>
+                </div>
+                <div class="vp-cuerpo">
+                    <div class="vp-constancia" id="vp-constancia"><div class="vp-cargando"><i class="fa-solid fa-spinner fa-spin"></i> Cargando constancia…</div></div>
+                    <div class="vp-datos">
+                        <h4>Operación</h4>
+                        ${fila('Método', escapar(nombreMetodo(pago.metodoPago)))}
+                        ${fila('N° de operación', escapar(pago.referencia || '—'), true)}
+                        ${fila('Detalle', escapar(pago.detalle || '—'))}
+                        ${pago.banco ? fila('Banco', escapar(pago.banco)) : ''}
+                        ${fila('Fecha y hora del pago', escapar(fechaHora(pago.fechaOperacion)))}
+                        ${fila('Monto a recibir', `${moneda(total)} ${coincide ? '' : `<em class="vp-alerta">reportado ${moneda(reportado)}</em>`}`, true)}
+                        <h4>Reserva</h4>
+                        ${fila('Cliente', `${escapar(pago.cliente || '—')}<small>${escapar(pago.correoCliente || '')}</small>`)}
+                        ${fila('Vehículo', escapar(pago.vehiculo || '—'))}
+                        ${fila('Fechas', `${escapar(fechaCorta(pago.fechaInicio))} al ${escapar(fechaCorta(pago.fechaFin))}${pago.conChofer ? ' · con chofer' : ''}`)}
+                        ${pago.lugarRecogida ? fila('Recojo', escapar(pago.lugarRecogida)) : ''}
+                        ${fila('Comprobante pedido', escapar(pago.tipoComprobante === 'FACTURA' ? `Factura · RUC ${pago.ruc || ''}` : 'Boleta'))}
+                        <ul class="vp-checklist">
+                            <li><i class="fa-regular fa-square-check"></i> El dinero aparece en la cuenta o app de CARMOVO.</li>
+                            <li><i class="fa-regular fa-square-check"></i> El monto, el N° de operación y la fecha coinciden con la foto.</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="vp-rechazo" id="vp-rechazo" hidden>
+                    <label class="caja-modal__campo">Motivo del rechazo (el cliente lo recibirá por correo)
+                        <textarea id="vp-motivo" rows="2" maxlength="255" placeholder="Escribe o elige un motivo"></textarea></label>
+                    <div class="vp-motivos">${MOTIVOS_RECHAZO.map(m => `<button type="button" data-motivo="${escapar(m)}">${escapar(m)}</button>`).join('')}</div>
+                </div>
+                <p class="caja-modal__error" id="vp-error" hidden></p>
+                <div class="caja-modal__acciones">
+                    <button type="button" class="caja-btn caja-btn--suave" data-vp="cerrar">Cerrar</button>
+                    <button type="button" class="caja-btn caja-btn--peligro" data-vp="rechazar"><i class="fa-solid fa-xmark"></i> Rechazar</button>
+                    <button type="button" class="caja-btn caja-btn--ok" data-vp="aprobar"><i class="fa-solid fa-check"></i> Aprobar y emitir comprobante</button>
+                </div>
+            </div>`;
+        document.body.appendChild(fondo);
+        let urlConstancia = null;
+        const cerrar = () => { if (urlConstancia) URL.revokeObjectURL(urlConstancia); fondo.remove(); };
+        const mostrarError = texto => { const e = fondo.querySelector('#vp-error'); e.textContent = texto; e.hidden = !texto; };
+
+        try {
+            const c = await window.CarmovoAdminApi.constanciaPago(pago.idAlquiler);
+            const caja = fondo.querySelector('#vp-constancia');
+            if (!c) {
+                caja.innerHTML = '<div class="vp-sin-constancia"><i class="fa-regular fa-image"></i><p>Este pago no tiene foto de constancia.</p></div>';
+            } else {
+                urlConstancia = c.url;
+                caja.innerHTML = c.tipo.includes('pdf')
+                    ? `<iframe src="${c.url}" title="Constancia del pago"></iframe><a class="vp-abrir" href="${c.url}" target="_blank" rel="noopener"><i class="fa-solid fa-up-right-from-square"></i> Abrir PDF</a>`
+                    : `<a href="${c.url}" target="_blank" rel="noopener" title="Abrir en tamaño completo"><img src="${c.url}" alt="Constancia del pago"></a>
+                       <a class="vp-abrir" href="${c.url}" target="_blank" rel="noopener"><i class="fa-solid fa-magnifying-glass-plus"></i> Ver en grande</a>`;
+            }
+        } catch (error) {
+            fondo.querySelector('#vp-constancia').innerHTML = `<div class="vp-sin-constancia"><p>${escapar(error.message)}</p></div>`;
+        }
+
+        fondo.addEventListener('keydown', e => { if (e.key === 'Escape') cerrar(); });
+        fondo.addEventListener('click', async e => {
+            if (e.target === fondo) return cerrar();
+            const motivo = e.target.closest('[data-motivo]');
+            if (motivo) { fondo.querySelector('#vp-motivo').value = motivo.dataset.motivo; return; }
+            const accion = e.target.closest('[data-vp]')?.dataset.vp;
+            if (!accion) return;
+            if (accion === 'cerrar') return cerrar();
+            const rechazo = fondo.querySelector('#vp-rechazo');
+            if (accion === 'rechazar' && rechazo.hidden) {
+                rechazo.hidden = false;
+                fondo.querySelector('[data-vp="aprobar"]').hidden = true;
+                fondo.querySelector('#vp-motivo').focus();
+                return;
+            }
+            const motivoTexto = fondo.querySelector('#vp-motivo').value.trim();
+            if (accion === 'rechazar' && motivoTexto.length < 5) return mostrarError('Escribe o elige el motivo del rechazo.');
+            const botones = fondo.querySelectorAll('.caja-modal__acciones button');
+            botones.forEach(b => { b.disabled = true; });
+            try {
+                if (accion === 'aprobar') await window.CarmovoAdminApi.accionPago(pago.idAlquiler, 'aprobar');
+                else await window.CarmovoAdminApi.accionPago(pago.idAlquiler, 'rechazar', { motivo: motivoTexto });
+                cerrar();
+                notificar(accion === 'aprobar'
+                    ? 'Pago aprobado. La reserva quedó confirmada, se emitió el comprobante y se avisó al cliente.'
+                    : 'Pago rechazado. La reserva se canceló y el cliente recibió el motivo por correo.');
+                await cargarPagos();
+            } catch (error) {
+                botones.forEach(b => { b.disabled = false; });
+                mostrarError(error?.message || 'No se pudo guardar la decisión.');
+            }
+        });
+    }
+
+    async function accionCaja(accion, pago) {
+        if (accion === 'verificar') return verificarPago(pago);
+        const etiqueta = `alquiler #${pago.idAlquiler} · ${pago.cliente}`;
+        const total = Number(pago.montoPagado || pago.monto || 0);
+        let respuesta = null;
+        let peticion = null;
+
+        const metodoTexto = ({ yape: 'Yape', plin: 'Plin', tarjeta: 'Tarjeta', efectivo: 'Efectivo' })[String(pago.metodoPago || '').toLowerCase()] || pago.metodoPago || '';
+        if (accion === 'aprobar') {
+            respuesta = await ventanaCaja({
+                titulo: `Verificar pago ${escapar(metodoTexto)}`.trim(),
+                texto: `<p>Revisa en la app ${escapar(metodoTexto)} de CARMOVO que llegó la operación <b>${escapar(pago.referencia || '—')}</b>
+                    (${escapar(pago.detalle || pago.banco || '—')}) por <b>${moneda(total)}</b>.</p>
+                    <p>Si llegó, apruébalo: se confirmará la reserva, se emitirá el comprobante y se avisará al cliente.
+                    Si no llegó o el monto no coincide, ciérralo y usa <b>Rechazar pago</b> indicando el motivo.</p>`,
+                confirmar: 'Aprobar y emitir comprobante'
+            });
+            peticion = () => window.CarmovoAdminApi.accionPago(pago.idAlquiler, 'aprobar');
+        }
+        if (accion === 'rechazar') {
+            respuesta = await ventanaCaja({
+                titulo: 'Rechazar pago',
+                texto: `<p>La reserva del ${escapar(etiqueta)} se cancelará y el vehículo quedará libre. El cliente recibirá un correo con el motivo.</p>`,
+                campo: { etiqueta: 'Motivo del rechazo', tipo: 'textarea', requerido: true, placeholder: 'Ej. El yapeo no llegó a la cuenta de CARMOVO / El monto recibido no coincide.', mensajeRequerido: 'Indica el motivo.' },
+                confirmar: 'Rechazar pago',
+                peligro: true
+            });
+            if (respuesta) peticion = () => window.CarmovoAdminApi.accionPago(pago.idAlquiler, 'rechazar', { motivo: respuesta.valor });
+        }
+        if (accion === 'cobrar-efectivo') {
+            respuesta = await ventanaCaja({
+                titulo: 'Cobro en efectivo',
+                texto: `<p>${escapar(etiqueta)} · código <b>${escapar(pago.referencia || '—')}</b></p><p class="caja-monto">Total a cobrar: <b>${moneda(total)}</b></p>`,
+                campo: {
+                    etiqueta: 'Monto recibido (S/)', tipo: 'number', valor: total.toFixed(2), requerido: true,
+                    validar: v => Number(v) >= total ? null : `El monto recibido debe ser al menos ${moneda(total)}.`
+                },
+                alCambiar: v => Number(v) >= total
+                    ? `Vuelto a entregar: <b>${moneda(Number(v) - total)}</b>`
+                    : `Faltan <b>${moneda(total - Number(v || 0))}</b>`,
+                confirmar: 'Registrar cobro y emitir comprobante'
+            });
+            if (respuesta) peticion = () => window.CarmovoAdminApi.accionPago(pago.idAlquiler, 'efectivo', { montoRecibido: respuesta.valor });
+        }
+        if (accion === 'reembolsar') {
+            respuesta = await ventanaCaja({
+                titulo: 'Registrar reembolso',
+                texto: `<p>Confirma que devolviste <b>${moneda(total)}</b> al cliente del ${escapar(etiqueta)} por el mismo medio de pago (${escapar(pago.metodoPago || '—')}).</p><p>El comprobante <b>${escapar(pago.numeroComprobante || '—')}</b> quedará anulado.</p>`,
+                confirmar: 'Registrar reembolso',
+                peligro: true
+            });
+            peticion = () => window.CarmovoAdminApi.accionPago(pago.idAlquiler, 'reembolsar');
+        }
+        if (accion === 'cobrar-cargos') {
+            respuesta = await ventanaCaja({
+                titulo: 'Cobrar cargos adicionales',
+                texto: `<p>${escapar(etiqueta)}</p><p class="caja-monto">Cargos pendientes: <b>${moneda(pago.cargosPendientes)}</b></p><p>Incluye devolución tardía, combustible faltante o daños registrados en la devolución.</p>`,
+                confirmar: 'Marcar como cobrados'
+            });
+            peticion = () => window.CarmovoAdminApi.accionPago(pago.idAlquiler, 'cargos/cobrar', { metodo: 'Efectivo' });
+        }
+
+        if (!respuesta || !peticion) return;
+        try {
+            await peticion();
+            notificar({
+                aprobar: 'Pago aprobado. Se emitió el comprobante y se avisó al cliente.',
+                rechazar: 'Pago rechazado. La reserva se canceló.',
+                'cobrar-efectivo': 'Cobro registrado. Se emitió el comprobante.',
+                reembolsar: 'Reembolso registrado. El comprobante quedó anulado.',
+                'cobrar-cargos': 'Cargos adicionales cobrados.'
+            }[accion]);
+            await cargarPagos();
+        } catch (error) {
+            notificar(error.message || 'No se pudo completar la acción.', 'error');
+        }
     }
 
     async function cargarPagos() {
@@ -415,7 +710,18 @@
             }
         });
 
+        $('#filtroComprobante')?.addEventListener('change', renderizarTabla);
+
         $('#tablaPagos').addEventListener('click', async evento => {
+            const botonCaja = evento.target.closest(
+                '[data-accion="verificar"], [data-accion="aprobar"], [data-accion="rechazar"], [data-accion="cobrar-efectivo"], [data-accion="reembolsar"], [data-accion="cobrar-cargos"]'
+            );
+            if (botonCaja) {
+                const pago = pagos.find(item => String(item.idAlquiler) === String(botonCaja.dataset.idAlquiler));
+                if (pago) await accionCaja(botonCaja.dataset.accion, pago);
+                return;
+            }
+
             const botonComprobante = evento.target.closest(
                 '[data-accion="ver-comprobante"], [data-accion="descargar-comprobante"]'
             );

@@ -14,7 +14,8 @@
         pasajeros: 'vehiculoPasajeros',
         transmision: 'vehiculoTransmision',
         estado: 'vehiculoEstado',
-        imagen: 'vehiculoImagen'
+        imagen: 'vehiculoImagen',
+        placa: 'vehiculoPlaca'
     };
 
     const mensajesFormulario = {
@@ -25,7 +26,8 @@
         pasajeros: 'errorVehiculoPasajeros',
         transmision: 'errorVehiculoTransmision',
         estado: 'errorVehiculoEstado',
-        imagen: 'errorVehiculoImagen'
+        imagen: 'errorVehiculoImagen',
+        placa: 'errorVehiculoPlaca'
     };
 
     const patronLetras = /^\p{L}+(?: +\p{L}+)*$/u;
@@ -86,16 +88,13 @@
             return valor;
         }
 
+        // Las imágenes del proyecto se sirven en /recursos/... y las subidas en /api/v1/portal/imagenes/...
         if (valor.startsWith('../recursos/')) {
-            return '/' + valor.slice('../recursos/'.length);
+            return valor.slice(2);
         }
 
         if (valor.startsWith('recursos/')) {
-            return '/' + valor.slice('recursos/'.length);
-        }
-
-        if (valor.startsWith('/recursos/')) {
-            return valor.slice('/recursos'.length);
+            return '/' + valor;
         }
 
         return valor;
@@ -221,21 +220,10 @@
 
         const categoria = $('#vehiculoCategoria').value;
 
-        const categoriasPermitidas = [
-            'Económicos',
-            'Sedanes',
-            'SUVs',
-            'Pick-ups 4x4',
-            'Minivans',
-            'Todoterreno',
-            'Crossovers',
-            'Furgonetas',
-            'Híbridos',
-            'Premium / Lujo',
-            'Eventos'
-        ];
+        const categoriasPermitidas = [...$('#vehiculoCategoria').options]
+            .map(opcion => opcion.value).filter(Boolean);
 
-        if (!categoriasPermitidas.includes(categoria)) {
+        if (!categoria || !categoriasPermitidas.includes(categoria)) {
             errores.categoria = 'Selecciona una categoría válida.';
         }
 
@@ -407,7 +395,11 @@
                         </span>
                     </td>
 
-                    <td>${escapar(v.transmision)}</td>
+                    <td>
+                        <strong>${escapar(v.placa || 'Sin placa')}</strong>
+                        <small class="flota-km">${v.kilometraje != null ? `${Number(v.kilometraje).toLocaleString('es-PE')} km` : '—'} · ${escapar(v.transmision || '')}</small>
+                        ${v.alertaDocumentos ? `<small class="flota-alerta"><i class="fa-solid fa-triangle-exclamation"></i> ${escapar(v.alertaDocumentos)}</small>` : ''}
+                    </td>
 
                     <td>
                         <div class="acciones-tabla">
@@ -435,6 +427,75 @@
                 </tr>
             `;
         }).join('');
+    }
+
+    // ---------------------------------------------------------- categorías del formulario
+    let categoriasFormulario = [];
+
+    async function cargarCategoriasFormulario() {
+        try {
+            categoriasFormulario = await window.CarmovoAdminApi.listarCategorias() || [];
+        } catch (_) {
+            categoriasFormulario = [];
+        }
+        llenarSelectCategorias();
+    }
+
+    function llenarSelectCategorias(actual = '') {
+        const select = $('#vehiculoCategoria');
+        const opciones = categoriasFormulario
+            .filter(c => c.activa || c.nombre === actual)
+            .map(c => `<option value="${escapar(c.nombre)}">${escapar(c.nombre)}${c.activa ? '' : ' (oculta)'}</option>`);
+        if (actual && !categoriasFormulario.some(c => c.nombre === actual)) {
+            opciones.push(`<option value="${escapar(actual)}">${escapar(actual)}</option>`);
+        }
+        select.innerHTML = `<option value="" disabled ${actual ? '' : 'selected'}>${categoriasFormulario.length ? 'Seleccionar' : 'Primero crea una categoría'}</option>` + opciones.join('');
+        if (actual) select.value = actual;
+    }
+
+    // ---------------------------------------------------------- imagen del vehículo
+    function mostrarVistaImagen() {
+        const url = resolverImagen($('#vehiculoImagen').value.trim());
+        const vista = $('#vehiculoImagenVista');
+        const vacia = $('#vehiculoImagenVacia');
+        if (!vista) return;
+        vista.hidden = !url;
+        vacia.hidden = !!url;
+        if (url) {
+            vista.onerror = () => { vista.hidden = true; vacia.hidden = false; };
+            vista.src = url;
+        }
+    }
+
+    async function subirFotoVehiculo(archivo) {
+        if (!archivo) return;
+        limpiarErrorCampo?.('imagen');
+        if (!/^image\/(jpeg|png|webp)$/.test(archivo.type)) {
+            mostrarErrorImagen('Solo se aceptan imágenes JPG, PNG o WEBP.');
+            return;
+        }
+        if (archivo.size > 2 * 1024 * 1024) {
+            mostrarErrorImagen('La imagen pesa más de 2 MB. Redúcela e inténtalo de nuevo.');
+            return;
+        }
+        const etiqueta = document.querySelector('.flota-imagen__subir');
+        etiqueta?.classList.add('subiendo');
+        try {
+            const r = await window.CarmovoAdminApi.subirImagenVehiculo(archivo);
+            $('#vehiculoImagen').value = r.url;
+            mostrarVistaImagen();
+        } catch (error) {
+            mostrarErrorImagen(error.message || 'No se pudo subir la imagen.');
+        } finally {
+            etiqueta?.classList.remove('subiendo');
+        }
+    }
+
+    function mostrarErrorImagen(texto) {
+        const caja = $('#errorVehiculoImagen');
+        if (!caja) return;
+        caja.textContent = texto;
+        caja.hidden = false;
     }
 
     async function cargarVehiculos() {
@@ -487,12 +548,21 @@
 
         $('#vehiculoMarca').value = vehiculo?.marca ?? '';
         $('#vehiculoModelo').value = vehiculo?.modelo ?? '';
-        $('#vehiculoCategoria').value = vehiculo?.categoria ?? '';
+        llenarSelectCategorias(vehiculo?.categoria ?? '');
         $('#vehiculoPrecio').value = vehiculo?.precioDia ?? '';
         $('#vehiculoPasajeros').value = vehiculo?.pasajeros ?? '';
         $('#vehiculoTransmision').value = vehiculo?.transmision ?? 'Automático';
         $('#vehiculoEstado').value = vehiculo?.estado ?? 'Disponible';
         $('#vehiculoImagen').value = vehiculo?.imagen ?? '';
+        mostrarVistaImagen();
+        $('#vehiculoDescripcion').value = vehiculo?.descripcion ?? '';
+        $('#vehiculoDescripcionContador').textContent = $('#vehiculoDescripcion').value.length;
+        $('#vehiculoPlaca').value = vehiculo?.placa ?? '';
+        $('#vehiculoAnio').value = vehiculo?.anio ?? '';
+        $('#vehiculoColor').value = vehiculo?.color ?? '';
+        $('#vehiculoKilometraje').value = vehiculo?.kilometraje ?? '';
+        $('#vehiculoSoat').value = vehiculo?.vencimientoSoat ?? '';
+        $('#vehiculoRevision').value = vehiculo?.vencimientoRevision ?? '';
 
         $('#modalVehiculo').classList.add('abierto');
         document.body.style.overflow = 'hidden';
@@ -536,8 +606,22 @@
             pasajeros: Number($('#vehiculoPasajeros').value),
             transmision: $('#vehiculoTransmision').value,
             estado: $('#vehiculoEstado').value,
-            imagen: $('#vehiculoImagen').value.trim() || null
+            imagen: $('#vehiculoImagen').value.trim() || null,
+            descripcion: $('#vehiculoDescripcion').value.trim(),
+            // Datos de control de la flota (placa, documentos y kilometraje)
+            placa: $('#vehiculoPlaca').value.trim().toUpperCase(),
+            anio: $('#vehiculoAnio').value ? Number($('#vehiculoAnio').value) : null,
+            color: $('#vehiculoColor').value.trim(),
+            kilometraje: $('#vehiculoKilometraje').value !== '' ? Number($('#vehiculoKilometraje').value) : null,
+            vencimientoSoat: $('#vehiculoSoat').value || null,
+            vencimientoRevision: $('#vehiculoRevision').value || null
         };
+
+        if (datos.placa && !/^[A-Z0-9]{3}-?\d{3}$/.test(datos.placa)) {
+            mostrarErroresFormulario({ placa: 'La placa debe tener el formato ABC-123.' });
+            notificar('Revisa la placa del vehículo.', 'error');
+            return;
+        }
 
         const boton = $('#btnGuardarVehiculo');
         boton.disabled = true;
@@ -704,6 +788,15 @@
 
     document.addEventListener('DOMContentLoaded', () => {
         prepararEventos();
+        cargarCategoriasFormulario();
+        $('#vehiculoImagenArchivo')?.addEventListener('change', evento => {
+            subirFotoVehiculo(evento.target.files[0]);
+            evento.target.value = '';
+        });
+        $('#vehiculoImagen')?.addEventListener('change', mostrarVistaImagen);
+        $('#vehiculoDescripcion')?.addEventListener('input', evento => {
+            $('#vehiculoDescripcionContador').textContent = evento.target.value.length;
+        });
         cargarVehiculos();
     });
 })();

@@ -54,6 +54,23 @@
             : texto;
     }
 
+    /** Sube una imagen (multipart) con la sesión del panel. */
+    async function subirArchivo(ruta, archivo) {
+        const datos = new FormData();
+        datos.append('archivo', archivo);
+        const token = obtenerToken();
+        const r = await fetch(`${API_BASE}${ruta}`, {
+            method: 'POST', body: datos,
+            headers: token ? { Authorization: `Bearer ${token}` } : {}
+        });
+        if (!r.ok) {
+            let m = 'No se pudo subir la imagen.';
+            try { const j = await r.json(); m = j.detail || j.message || m; } catch (_) { /* sin JSON */ }
+            throw new Error(m);
+        }
+        return r.json();
+    }
+
     async function solicitar(ruta, opciones = {}) {
         const {
             sinAutenticacion = false,
@@ -299,6 +316,128 @@
 
         desactivarAdministrador(id) {
             return solicitar(`/admin/administradores/${id}/desactivar`, { method: 'PATCH' });
+        },
+
+        activarAdministrador(id) {
+            return solicitar(`/admin/administradores/${id}/activar`, { method: 'PATCH' });
+        },
+
+        // Roles y permisos (solo administrador principal)
+        listarRoles() {
+            return solicitar('/admin/roles');
+        },
+
+        crearRol(nombre, permisos = []) {
+            return solicitar('/admin/roles', { method: 'POST', body: JSON.stringify({ nombre, permisos }) });
+        },
+        renombrarRol(idPerfil, nombre) {
+            return solicitar(`/admin/roles/${idPerfil}`, { method: 'PATCH', body: JSON.stringify({ nombre }) });
+        },
+        eliminarRol(idPerfil) {
+            return solicitar(`/admin/roles/${idPerfil}`, { method: 'DELETE' });
+        },
+
+        listarModulosRoles() {
+            return solicitar('/admin/roles/modulos');
+        },
+
+        actualizarPermisosRol(idPerfil, permisos) {
+            return solicitar(`/admin/roles/${idPerfil}/permisos`, {
+                method: 'PUT',
+                body: JSON.stringify({ permisos })
+            });
+        },
+
+        /** Acciones de caja: aprobar, rechazar, efectivo, reembolsar, cargos/cobrar. */
+        // ---------- Operaciones de alquiler (entrega, devolución, chofer)
+        listarInspecciones(idAlquiler) { return solicitar(`/admin/alquileres/${idAlquiler}/inspecciones`); },
+        registrarEntrega(idAlquiler, datos) {
+            return solicitar(`/admin/alquileres/${idAlquiler}/entrega`, { method: 'POST', body: JSON.stringify(datos) });
+        },
+        registrarDevolucion(idAlquiler, datos) {
+            return solicitar(`/admin/alquileres/${idAlquiler}/devolucion`, { method: 'POST', body: JSON.stringify(datos) });
+        },
+        listarConductores() { return solicitar('/admin/alquileres/conductores'); },
+        asignarConductor(idAlquiler, idConductor) {
+            return solicitar(`/admin/alquileres/${idAlquiler}/chofer`, { method: 'PATCH', body: JSON.stringify({ idConductor }) });
+        },
+
+        consultarDni(dni) { return solicitar(`/admin/reniec/${encodeURIComponent(dni)}`); },
+
+        // ---------- Mi perfil (cualquier rol del personal)
+        miPerfil() { return solicitar('/admin/perfil'); },
+        actualizarMiPerfil(datos) { return solicitar('/admin/perfil', { method: 'PUT', body: JSON.stringify(datos) }); },
+        cambiarMiContrasena(datos) { return solicitar('/admin/perfil/contrasena', { method: 'PUT', body: JSON.stringify(datos) }); },
+        subirFotoPerfil(archivo) { return subirArchivo('/admin/perfil/foto', archivo); },
+        quitarFotoPerfil() { return solicitar('/admin/perfil/foto', { method: 'DELETE' }); },
+
+        // ---------- Categorías e imágenes de vehículos
+        listarCategorias() { return solicitar('/admin/categorias'); },
+        guardarCategoria(categoria) {
+            return categoria.idCategoria
+                ? solicitar(`/admin/categorias/${categoria.idCategoria}`, { method: 'PUT', body: JSON.stringify(categoria) })
+                : solicitar('/admin/categorias', { method: 'POST', body: JSON.stringify(categoria) });
+        },
+        eliminarCategoria(id) { return solicitar(`/admin/categorias/${id}`, { method: 'DELETE' }); },
+        subirImagenVehiculo(archivo) { return subirArchivo('/admin/vehiculos/imagen', archivo); },
+
+        // ---------- Mantenimiento
+        listarMantenimientos() { return solicitar('/admin/mantenimientos'); },
+        listarTiposMantenimiento() { return solicitar('/admin/mantenimientos/tipos'); },
+        alertasMantenimiento() { return solicitar('/admin/mantenimientos/alertas'); },
+        crearMantenimiento(datos) {
+            return solicitar('/admin/mantenimientos', { method: 'POST', body: JSON.stringify(datos) });
+        },
+        accionMantenimiento(id, accion, datos = {}) {
+            return solicitar(`/admin/mantenimientos/${id}/${accion}`, { method: 'POST', body: JSON.stringify(datos) });
+        },
+
+        // ---------- Conductor
+        misServicios() { return solicitar('/admin/servicios/mios'); },
+        avanzarServicio(idAlquiler, estado) {
+            return solicitar(`/admin/servicios/${idAlquiler}/estado`, { method: 'PATCH', body: JSON.stringify({ estado }) });
+        },
+
+        // ---------- Portal web
+        obtenerPortalEditor() { return solicitar('/admin/portal'); },
+        guardarBorradorPortal(contenido) {
+            const texto = typeof contenido === 'string' ? contenido : JSON.stringify(contenido);
+            return solicitar('/admin/portal/borrador', { method: 'PUT', body: JSON.stringify({ contenido: texto }) });
+        },
+        publicarPortal(resumen = '') {
+            return solicitar('/admin/portal/publicar', { method: 'POST', body: JSON.stringify({ resumen }) });
+        },
+        restaurarPortalInicial() { return solicitar('/admin/portal/restaurar-inicial', { method: 'POST' }); },
+        descartarBorradorPortal() { return solicitar('/admin/portal/descartar', { method: 'POST' }); },
+        versionesPortal() { return solicitar('/admin/portal/versiones'); },
+        restaurarVersionPortal(id) { return solicitar(`/admin/portal/versiones/${id}/restaurar`, { method: 'POST' }); },
+        listarOfertasPortal() { return solicitar('/admin/portal/ofertas'); },
+        guardarOfertaPortal(oferta) {
+            return oferta.idOferta
+                ? solicitar(`/admin/portal/ofertas/${oferta.idOferta}`, { method: 'PUT', body: JSON.stringify(oferta) })
+                : solicitar('/admin/portal/ofertas', { method: 'POST', body: JSON.stringify(oferta) });
+        },
+        eliminarOfertaPortal(id) { return solicitar(`/admin/portal/ofertas/${id}`, { method: 'DELETE' }); },
+        subirImagenPortal(archivo) { return subirArchivo('/admin/portal/imagenes', archivo); },
+        subirVideoPortal(archivo) { return subirArchivo('/admin/portal/videos', archivo); },
+
+        /** Constancia (foto/PDF) que subió el cliente. Devuelve { url, tipo } o null si no tiene. */
+        async constanciaPago(idAlquiler) {
+            const token = obtenerToken();
+            const r = await fetch(`${API_BASE}/admin/pagos/${idAlquiler}/constancia`, {
+                headers: token ? { Authorization: `Bearer ${token}` } : {}
+            });
+            if (r.status === 404) return null;
+            if (!r.ok) throw new Error('No se pudo cargar la constancia del pago.');
+            const blob = await r.blob();
+            return { url: URL.createObjectURL(blob), tipo: blob.type || r.headers.get('Content-Type') || '' };
+        },
+
+        accionPago(idAlquiler, accion, datos = {}) {
+            return solicitar(`/admin/pagos/${idAlquiler}/${accion}`, {
+                method: 'POST',
+                body: JSON.stringify(datos)
+            });
         },
 
         listarAuditoria() {

@@ -751,6 +751,10 @@ document.addEventListener('DOMContentLoaded', () => {
             : 'No se pudo registrar la cuenta.';
     }
 
+    // Términos y privacidad: se abre el documento completo antes de poder marcar la casilla.
+    const casillaPoliticas = document.getElementById('aceptaPoliticas');
+    window.CarmovoPoliticas?.vincular(casillaPoliticas, { tipo: 'cliente' });
+
     formularioRegistro.addEventListener('submit', async (e) => {
         e.preventDefault();
 
@@ -791,10 +795,19 @@ document.addEventListener('DOMContentLoaded', () => {
             domicilio,
             numeroLicencia: licencia,
             categoriaLicencia: categoria,
-            vencimientoLicencia: venceLicencia
+            vencimientoLicencia: venceLicencia,
+            aceptaPoliticas: !!casillaPoliticas?.checked
         };
 
         if (!validarFormulario(datosRegistro, pass2)) {
+            return;
+        }
+
+        if (!datosRegistro.aceptaPoliticas) {
+            const etiqueta = document.getElementById('campo-acepto-registro');
+            etiqueta?.classList.add('pol-acepto--error');
+            mostrarError('Lee y acepta los Términos y la Política de privacidad para crear tu cuenta.');
+            etiqueta?.scrollIntoView({ behavior: 'smooth', block: 'center' });
             return;
         }
 
@@ -814,34 +827,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 datosRegistro
             );
 
-            const nombreCompleto = (
-                `${usuario.nombres || nombres} ${usuario.apellidos || apellidos}`
-            ).trim();
-
-            const sesion = {
-                logueado: true,
-                idUsuario: usuario.idUsuario,
-                nombre: nombreCompleto,
+            // El servidor devuelve el cliente con su token JWT: se guarda la sesión.
+            window.CarmovoClienteApi.guardarSesion({
+                ...usuario,
                 nombres: usuario.nombres || nombres,
                 apellidos: usuario.apellidos || apellidos,
                 correo: usuario.correo || correo,
-                telefono: usuario.telefono || telefono,
-                perfil: usuario.nombrePerfil || 'Cliente'
-            };
-
-            // MySQL es la fuente de verdad del perfil completo.
-            // En el navegador solo conservamos los datos mínimos de sesión.
-            localStorage.setItem(
-                'carmovo_sesion',
-                JSON.stringify(sesion)
-            );
-
-            localStorage.setItem(
-                'usuarioCarmovoLogueado',
-                'true'
-            );
-
-            localStorage.removeItem('carmovo_usuarios');
+                telefono: usuario.telefono || telefono
+            });
 
             window.location.href = '/miCuenta';
 

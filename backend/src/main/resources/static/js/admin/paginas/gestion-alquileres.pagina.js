@@ -320,6 +320,7 @@
                     <div class="alquiler-vehiculo">
                         <strong>${escapar(alquiler.vehiculo)}</strong>
                         <small>${escapar(alquiler.categoriaVehiculo || '\u2014')}</small>
+                        ${window.CarmovoOperacionesAlquiler?.etiquetas(alquiler) || ''}
                     </div>
                 </td>
 
@@ -360,6 +361,7 @@
 
                 <td>
                     <div class="acciones-alquiler">
+                        ${window.CarmovoOperacionesAlquiler?.botones(alquiler) || ''}
                         <button
                             class="boton-alquiler-icono editar"
                             type="button"
@@ -543,6 +545,7 @@
             $('#alquilerMetodoPago').value = alquiler.metodoPago || '';
             $('#alquilerEstado').value = alquiler.estado || 'Pendiente';
             $('#alquilerObservaciones').value = alquiler.observaciones || '';
+            $('#alquilerConChofer').checked = !!alquiler.conChofer;
         }
 
         actualizarMinimoFechaFin();
@@ -566,7 +569,8 @@
             lugarEntrega: $('#alquilerLugarEntrega').value,
             metodoPago: $('#alquilerMetodoPago').value,
             estado: $('#alquilerEstado').value,
-            observaciones: $('#alquilerObservaciones').value.trim() || null
+            observaciones: $('#alquilerObservaciones').value.trim() || null,
+            conChofer: $('#alquilerConChofer').checked
         };
     }
 
@@ -735,6 +739,16 @@
 
             if (boton.dataset.accion === 'eliminar') {
                 eliminarAlquiler(id);
+            }
+
+            if (boton.dataset.accion.startsWith('op-')) {
+                const alquiler = alquileres.find(item => String(item.idAlquiler) === String(id));
+                if (alquiler) {
+                    window.CarmovoOperacionesAlquiler.ejecutar(boton.dataset.accion, alquiler, async mensaje => {
+                        await cargarDatos();
+                        if (mensaje) notificar(mensaje);
+                    });
+                }
             }
         });
 

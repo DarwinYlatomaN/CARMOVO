@@ -320,4 +320,9 @@ public class RegistroClienteDTO {
     public void setVencimientoLicencia(LocalDate vencimientoLicencia) {
         this.vencimientoLicencia = vencimientoLicencia;
     }
+
+    @AssertTrue(message = "Debes leer y aceptar los Términos y la Política de privacidad.")
+    private Boolean aceptaPoliticas;
+    public Boolean getAceptaPoliticas() { return aceptaPoliticas; }
+    public void setAceptaPoliticas(Boolean aceptaPoliticas) { this.aceptaPoliticas = aceptaPoliticas; }
 }

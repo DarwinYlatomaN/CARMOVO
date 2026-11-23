@@ -1,0 +1,47 @@
+# =====================================================================
+# CARMOVO · Levantar todo con Docker (opcional)
+#   docker compose up --build
+# Abre http://localhost:8080
+#
+# La primera vez, importa tu base de datos y la actualización:
+#   1) Tu respaldo (CARMOVO_BaseDeDatos_Completa.sql)
+#   2) backend/sql/CARMOVO_actualizacion_completa.sql
+# en el MySQL de este archivo (puerto 3308, usuario root, clave 654321).
+# =====================================================================
+services:
+  mysql:
+    image: mysql:8.4
+    container_name: carmovo-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: "654321"
+      MYSQL_DATABASE: carmovo_db
+      TZ: America/Lima
+    command: ["--character-set-server=utf8mb4", "--collation-server=utf8mb4_unicode_ci"]
+    ports:
+      - "3308:3306"
+    volumes:
+      - carmovo-datos:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-p654321"]
+      interval: 10s
+      retries: 10
+
+  app:
+    build: ./backend
+    container_name: carmovo-app
+    depends_on:
+      mysql:
+        condition: service_healthy
+    environment:
+      DB_URL: jdbc:mysql://mysql:3306/carmovo_db?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=America/Lima
+      DB_USER: root
+      DB_PASSWORD: "654321"
+      THYMELEAF_CACHE: "true"
+      CARMOVO_URL_PUBLICA: http://localhost:8080
+      CARMOVO_JWT_SECRETO: cambia-esta-clave-por-una-larga-y-secreta-2026
+      CARMOVO_DNI_TOKEN: ${CARMOVO_DNI_TOKEN:-}
+    ports:
+      - "8080:8080"
+
+volumes:
+  carmovo-datos:

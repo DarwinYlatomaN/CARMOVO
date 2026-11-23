@@ -63,9 +63,17 @@
                     <p>Registra, actualiza y controla los vehículos disponibles en CARMOVO.</p>
                 </div>
 
-                <button class="boton-primario" type="button" id="btnNuevoVehiculo">
-                    <i class="fa-solid fa-plus"></i> Nuevo vehículo
-                </button>
+                <div style="display:flex;gap:10px;flex-wrap:wrap">
+                    <a class="boton-secundario" href="/admin/categorias" th:href="@{/admin/categorias}" style="text-decoration:none">
+                        <i class="fa-solid fa-layer-group"></i> Categorías
+                    </a>
+                    <a class="boton-secundario" href="/admin/mantenimiento" th:href="@{/admin/mantenimiento}" style="text-decoration:none">
+                        <i class="fa-solid fa-screwdriver-wrench"></i> Mantenimiento
+                    </a>
+                    <button class="boton-primario" type="button" id="btnNuevoVehiculo">
+                        <i class="fa-solid fa-plus"></i> Nuevo vehículo
+                    </button>
+                </div>
             </section>
 
             <section class="resumen-flota">
@@ -138,7 +146,7 @@
                             <th>Pasajeros</th>
                             <th>Precio/día</th>
                             <th>Estado</th>
-                            <th>Transmisión</th>
+                            <th>Placa · km</th>
                             <th>Acciones</th>
                         </tr>
                         </thead>
@@ -234,18 +242,8 @@
                             aria-describedby="errorVehiculoCategoria"
                     >
                         <option value="" disabled selected>Seleccionar</option>
-                        <option>Económicos</option>
-                        <option>Sedanes</option>
-                        <option>SUVs</option>
-                        <option>Pick-ups 4x4</option>
-                        <option>Minivans</option>
-                        <option>Todoterreno</option>
-                        <option>Crossovers</option>
-                        <option>Furgonetas</option>
-                        <option>Híbridos</option>
-                        <option>Premium / Lujo</option>
-                        <option>Eventos</option>
                     </select>
+                    <small class="ayuda-campo-flota">¿No está la que buscas? <a href="/admin/categorias" th:href="@{/admin/categorias}">Crear categoría</a></small>
                     <small
                             id="errorVehiculoCategoria"
                             class="mensaje-error-campo"
@@ -335,17 +333,71 @@
                     ></small>
                 </div>
 
+                <div class="campo-formulario">
+                    <label for="vehiculoPlaca">Placa</label>
+                    <input id="vehiculoPlaca" name="placa" type="text" maxlength="7" placeholder="ABC-123" autocomplete="off" style="text-transform:uppercase">
+                    <small id="errorVehiculoPlaca" class="mensaje-error-campo" role="alert" hidden></small>
+                </div>
+
+                <div class="campo-formulario">
+                    <label for="vehiculoAnio">Año</label>
+                    <input id="vehiculoAnio" name="anio" type="number" min="1990" max="2100" placeholder="2024">
+                </div>
+
+                <div class="campo-formulario">
+                    <label for="vehiculoColor">Color</label>
+                    <input id="vehiculoColor" name="color" type="text" maxlength="30" placeholder="Gris plata">
+                </div>
+
+                <div class="campo-formulario">
+                    <label for="vehiculoKilometraje">Kilometraje actual</label>
+                    <input id="vehiculoKilometraje" name="kilometraje" type="number" min="0" step="1" placeholder="25000">
+                </div>
+
+                <div class="campo-formulario">
+                    <label for="vehiculoSoat">Vencimiento del SOAT</label>
+                    <input id="vehiculoSoat" name="vencimientoSoat" type="date">
+                </div>
+
+                <div class="campo-formulario">
+                    <label for="vehiculoRevision">Vencimiento de revisión técnica</label>
+                    <input id="vehiculoRevision" name="vencimientoRevision" type="date">
+                </div>
+
+                <div class="campo-formulario campo-formulario--completo">
+                    <label for="vehiculoDescripcion">Descripción (opcional)</label>
+                    <textarea
+                            id="vehiculoDescripcion"
+                            name="descripcion"
+                            rows="3"
+                            maxlength="1000"
+                            placeholder="Ej.: SUV familiar con cámara de retroceso, pantalla táctil, Apple CarPlay y maletera amplia."
+                    ></textarea>
+                    <small class="ayuda-campo-flota"><span id="vehiculoDescripcionContador">0</span>/1000 · Se muestra en la web al ver el detalle del vehículo.</small>
+                </div>
+
                 <div class="campo-formulario campo-formulario--completo">
                     <label for="vehiculoImagen">
-                        Ruta o URL de imagen (opcional)
+                        Imagen del vehículo (opcional)
                     </label>
+                    <div class="flota-imagen">
+                        <img id="vehiculoImagenVista" alt="Vista previa del vehículo" hidden>
+                        <span class="flota-imagen__vacia" id="vehiculoImagenVacia"><i class="fa-regular fa-image"></i></span>
+                        <div class="flota-imagen__acciones">
+                            <label class="boton-secundario flota-imagen__subir">
+                                <i class="fa-solid fa-upload"></i> Subir foto
+                                <input type="file" id="vehiculoImagenArchivo" accept="image/jpeg,image/png,image/webp" hidden>
+                            </label>
+                            <small>JPG, PNG o WEBP · máximo 2 MB. También puedes pegar un enlace o ruta abajo.</small>
+                        </div>
+                    </div>
                     <input
                             id="vehiculoImagen"
                             name="imagen"
                             type="text"
                             maxlength="255"
                             aria-describedby="errorVehiculoImagen"
-                            placeholder="../recursos/imagenes/SUVs/Toyota-rav4.jpg"
+                            placeholder="https://... o /recursos/imagenes/SUVs/Toyota-rav4.jpg"
                     >
                     <small
                             id="errorVehiculoImagen"

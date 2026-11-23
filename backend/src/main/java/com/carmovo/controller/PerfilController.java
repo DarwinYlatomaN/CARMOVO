@@ -21,6 +21,10 @@ public class PerfilController {
 
     @GetMapping
     public ResponseEntity<List<PerfilDTO>> listarTodos() {
-        return ResponseEntity.ok(perfilServicio.obtenerTodos());
+        // En "Gestión de usuarios" solo se asignan perfiles de cliente;
+        // los roles del personal se manejan en "Empleados" y "Roles y permisos".
+        return ResponseEntity.ok(perfilServicio.obtenerTodos().stream()
+                .filter(p -> !com.carmovo.service.PermisosAdministrativos.esRolPersonal(p.getNombre()))
+                .toList());
     }
 }

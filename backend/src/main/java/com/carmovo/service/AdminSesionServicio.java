@@ -22,7 +22,6 @@ import java.util.concurrent.ConcurrentHashMap;
 public class AdminSesionServicio {
 
     private static final int HORAS_SESION = 8;
-    private static final String PERFIL_ADMINISTRADOR = "Administrador";
 
     private final UsuarioRepositorio usuarioRepositorio;
     private final AdministradorAccesoServicio accesos;
@@ -52,7 +51,7 @@ public class AdminSesionServicio {
         }
 
         if (usuario.getPerfil() == null ||
-                !PERFIL_ADMINISTRADOR.equalsIgnoreCase(usuario.getPerfil().getNombre())) {
+                !PermisosAdministrativos.esRolPersonal(usuario.getPerfil().getNombre())) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Este usuario no tiene acceso al panel de administración.");
         }
 
@@ -102,7 +101,7 @@ public class AdminSesionServicio {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "El usuario de la sesión ya no existe."));
 
         if (!Boolean.TRUE.equals(usuario.getEstado()) || usuario.getPerfil() == null ||
-                !PERFIL_ADMINISTRADOR.equalsIgnoreCase(usuario.getPerfil().getNombre())) {
+                !PermisosAdministrativos.esRolPersonal(usuario.getPerfil().getNombre())) {
             sesiones.remove(token);
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "El usuario ya no tiene acceso administrativo.");
         }
@@ -114,7 +113,7 @@ public class AdminSesionServicio {
     private void comprobarPermisosAsignados(Long idUsuario) {
         if (!accesos.esPrincipal(idUsuario) && accesos.permisos(idUsuario).isEmpty()) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN,
-                    "Esta cuenta todavía no tiene páginas autorizadas. Contacta al administrador principal.");
+                    "Tu rol todavía no tiene módulos asignados. Contacta al administrador principal.");
         }
     }
 

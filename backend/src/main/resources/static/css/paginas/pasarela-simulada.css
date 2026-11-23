@@ -220,3 +220,65 @@
 }
 #modal-pasarela .oculto { display: none !important; }
 #modal-pasarela { z-index: 10000; }
+/* =========================================================
+   Pasarela validada por el servidor: cuotas, efectivo, modo prueba
+   ========================================================= */
+#modal-pasarela[data-metodo="efectivo"] { --pas-acento: #2F7A4E; }
+.pasarela-icono { width: 52px; height: 34px; border-radius: 6px; background: #E4F3E9; color: #2F7A4E; display: inline-flex; align-items: center; justify-content: center; font-size: 1.2rem; }
+.pasarela-icono[hidden], .pasarela-logo[hidden] { display: none; }
+.pas-tv-tipo { position: absolute; right: 18px; bottom: 44px; font-size: 10px; font-weight: 700; letter-spacing: .06em; background: rgba(255,255,255,.18); padding: 2px 7px; border-radius: 6px; }
+.pas-tv-tipo:empty { display: none; }
+.pas-etiqueta { font-size: 11.5px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; color: var(--pas-suave); margin: 4px 0 6px; }
+.pas-cuotas { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; margin-bottom: 10px; }
+.pas-cuotas label { position: relative; cursor: pointer; }
+.pas-cuotas input { position: absolute; opacity: 0; }
+.pas-cuotas span { display: block; text-align: center; padding: 8px 0; border-radius: 9px; background: var(--pas-fondo); font-size: 12.5px; font-weight: 600; }
+.pas-cuotas input:checked + span { background: var(--pas-claro); color: var(--pas-verde); box-shadow: inset 0 0 0 2px var(--pas-verde); }
+.pas-prueba { margin-top: 12px; background: #FFFBEF; border-radius: 10px; padding: 8px 12px; font-size: 12px; color: #7A5A12; text-align: left; }
+.pas-prueba summary { cursor: pointer; font-weight: 700; }
+.pas-prueba ul { margin: 6px 0 0; padding-left: 18px; }
+.pas-icono-resultado.espera { background: #E9A23B; }
+.pas-efectivo__monto { text-align: center; background: var(--pas-fondo); border-radius: 14px; padding: 14px; margin-bottom: 10px; }
+.pas-efectivo__monto small { display: block; color: var(--pas-suave); font-size: 12px; }
+.pas-efectivo__monto strong { font-size: 26px; color: var(--pas-verde); }
+.pas-pasos-efectivo { list-style: none; padding: 0; margin: 12px 0; font-size: 13.5px; }
+.pas-pasos-efectivo li { display: flex; gap: 10px; align-items: flex-start; padding: 6px 0; }
+.pas-pasos-efectivo i { color: var(--pas-verde); margin-top: 3px; width: 16px; text-align: center; }
+.pas-campo select { appearance: auto; }
+
+/* Estilo limpio: sin bordes ni líneas (fondos suaves y espacio) */
+.pasarela-caja { border: 0; }
+.pasarela-cabecera { border-bottom: 0; }
+.pasarela-pie { border-top: 0; }
+.pas-campo { border: 0; background: var(--pas-fondo); }
+.pas-campo:focus-within { box-shadow: 0 0 0 2px var(--pas-acento), 0 0 0 5px var(--pas-claro); }
+.pas-kv { border-bottom: 0; padding: 6px 0; }
+.pas-resumen { background: var(--pas-fondo); border-radius: 12px; padding: 6px 14px; }
+.pas-otp-caja { border: 0; background: var(--pas-fondo); }
+.pas-otp-caja:focus { box-shadow: 0 0 0 2px var(--pas-acento); }
+.pas-btn-sec { border: 0; background: var(--pas-claro); }
+
+/* Constancia del pago (foto, captura o PDF) */
+.pas-constancia { margin-bottom: 12px; }
+.pas-constancia__zona { display: flex; align-items: center; gap: 14px; padding: 16px; border: 2px dashed #B7D3C2; border-radius: 14px;
+    background: #F5FAF6; cursor: pointer; transition: border-color .2s, background .2s; }
+.pas-constancia__zona:hover { border-color: var(--pas-acento); background: #EDF7F0; }
+.pas-constancia__zona[hidden] { display: none; }
+.pas-constancia__zona i { font-size: 1.6rem; color: var(--pas-verde); }
+.pas-constancia__zona span { display: flex; flex-direction: column; gap: 2px; font-size: .92rem; color: #263B30; }
+.pas-constancia__zona small { color: #6B8577; font-size: .78rem; }
+.pas-constancia__vista { position: relative; border-radius: 14px; overflow: hidden; background: #F5FAF6; }
+.pas-constancia__vista[hidden] { display: none; }
+.pas-constancia__vista img { display: block; width: 100%; max-height: 220px; object-fit: contain; background: #EEF3F0; }
+.pas-constancia__pdf { display: flex; align-items: center; gap: 10px; padding: 16px; color: #263B30; font-weight: 600; word-break: break-all; }
+.pas-constancia__pdf i { font-size: 1.6rem; color: #C0392B; }
+.pas-constancia__cambiar { position: absolute; top: 8px; right: 8px; border: 0; border-radius: 10px; padding: 6px 12px;
+    background: rgba(255,255,255,.92); font: inherit; font-size: .8rem; font-weight: 700; color: #263B30; cursor: pointer; }
+.pas-cuentas { display: grid; gap: 10px; margin: 8px 0 10px; }
+.pas-cuenta { border-radius: 14px; background: #F5FAF6; padding: 12px 14px; }
+.pas-cuenta__cabecera { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 6px; }
+.pas-cuenta__cabecera small { color: #6B8577; }
+.pas-cuenta .pas-kv { align-items: center; gap: 8px; }
+.pas-cuenta .pas-kv b { margin-left: auto; font-variant-numeric: tabular-nums; }
+.pas-copiar { border: 0; background: #fff; border-radius: 8px; width: 30px; height: 30px; cursor: pointer; color: var(--pas-verde); flex-shrink: 0; }
+@media (max-width: 480px) { .pas-fila { flex-direction: column; gap: 0; } }

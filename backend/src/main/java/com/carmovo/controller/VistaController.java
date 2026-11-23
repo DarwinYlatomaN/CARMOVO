@@ -4,6 +4,7 @@ package com.carmovo.controller;
 import com.carmovo.dto.RegistroClienteDTO;
 import com.carmovo.dto.UsuarioDTO;
 import com.carmovo.dto.UsuarioGuardarDTO;
+import com.carmovo.service.JwtServicio;
 import com.carmovo.service.UsuarioServicio;
 import com.carmovo.service.VehiculoServicio;
 
@@ -34,13 +35,20 @@ public class VistaController {
 
     private final UsuarioServicio usuarioServicio;
     private final VehiculoServicio vehiculoServicio;
+    private final JwtServicio jwtServicio;
+
+    private final com.carmovo.service.PoliticasServicio politicas;
 
     public VistaController(
             UsuarioServicio usuarioServicio,
-            VehiculoServicio vehiculoServicio
+            VehiculoServicio vehiculoServicio,
+            JwtServicio jwtServicio,
+            com.carmovo.service.PoliticasServicio politicas
     ) {
+        this.politicas = politicas;
         this.usuarioServicio = usuarioServicio;
         this.vehiculoServicio = vehiculoServicio;
+        this.jwtServicio = jwtServicio;
     }
 
     @ModelAttribute
@@ -80,6 +88,13 @@ public class VistaController {
         return "experiencia";
     }
 
+    /** Términos y condiciones + Política de privacidad (texto en js/servicios/politicas.js). */
+    @GetMapping({"/politicas", "/terminos", "/privacidad"})
+    public String politicas(Model model) {
+        model.addAttribute("tituloPagina", "Términos y privacidad | Carmovo");
+        return "politicas";
+    }
+
     @GetMapping({"/soporte", "/soporte.html"})
     public String soporte(Model model) {
         model.addAttribute("tituloPagina", "Soporte | Carmovo");
@@ -111,6 +126,7 @@ public class VistaController {
                     loginForm.getPassword()
             );
 
+            usuario.setToken(jwtServicio.generar(usuario.getIdUsuario(), "CLIENTE"));
             model.addAttribute("usuarioAutenticado", usuario);
 
         } catch (ResponseStatusException ex) {
@@ -164,7 +180,9 @@ public class VistaController {
             UsuarioGuardarDTO datosUsuario = convertirRegistro(registroForm);
 
             UsuarioDTO usuario = usuarioServicio.registrarCliente(datosUsuario);
+            politicas.registrar(usuario.getIdUsuario(), com.carmovo.service.PoliticasServicio.REGISTRO, null, null);
 
+            usuario.setToken(jwtServicio.generar(usuario.getIdUsuario(), "CLIENTE"));
             model.addAttribute("usuarioRegistrado", usuario);
 
         } catch (ResponseStatusException ex) {

@@ -22,7 +22,7 @@
         });
 
         document.querySelectorAll('.perfil-admin__rol').forEach(elemento => {
-            elemento.textContent = sesion.principal ? 'Administrador principal' : 'Administrador secundario';
+            elemento.textContent = sesion.principal ? 'Administrador principal' : (sesion.perfil || 'Personal');
         });
 
         const iniciales = obtenerIniciales(sesion.nombreCompleto || 'Administrador');
@@ -62,7 +62,12 @@
             '/admin/monitoreo-flota': 'ADMIN_MONITOREO',
             '/admin/reportes': 'ADMIN_REPORTES',
             '/admin/registro-auditoria': 'ADMIN_AUDITORIA',
-            '/admin/gestion-administradores': 'ADMIN_ADMINISTRADORES'
+            '/admin/gestion-administradores': 'ADMIN_ADMINISTRADORES',
+            '/admin/roles-permisos': 'ADMIN_ADMINISTRADORES',
+            '/admin/mantenimiento': 'ADMIN_FLOTA',
+            '/admin/categorias': 'ADMIN_FLOTA',
+            '/admin/mis-servicios': 'ADMIN_SERVICIOS',
+            '/admin/portal-web': 'ADMIN_PORTAL'
         };
         document.querySelectorAll('a[href^="/admin/"]').forEach(enlace => {
             if (rutas[enlace.getAttribute('href')] &&

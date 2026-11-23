@@ -69,4 +69,36 @@ public class ComprobanteDTO {
     public void setLugarEntrega(String v) { this.lugarEntrega = v; }
     public String getEstadoAlquiler() { return estadoAlquiler; }
     public void setEstadoAlquiler(String v) { this.estadoAlquiler = v; }
+
+    // ---- Campos agregados (actualización 2026) ----
+    private String tipo;
+    private String serie;
+    private Integer correlativo;
+    private String documentoCliente;
+    private String nombreCliente;
+    private String direccionCliente;
+    private String estado;
+    private String motivoAnulacion;
+    private java.math.BigDecimal montoRecibido;
+    private java.math.BigDecimal vuelto;
+    public String getTipo() { return tipo; }
+    public void setTipo(String tipo) { this.tipo = tipo; }
+    public String getSerie() { return serie; }
+    public void setSerie(String serie) { this.serie = serie; }
+    public Integer getCorrelativo() { return correlativo; }
+    public void setCorrelativo(Integer correlativo) { this.correlativo = correlativo; }
+    public String getDocumentoCliente() { return documentoCliente; }
+    public void setDocumentoCliente(String documentoCliente) { this.documentoCliente = documentoCliente; }
+    public String getNombreCliente() { return nombreCliente; }
+    public void setNombreCliente(String nombreCliente) { this.nombreCliente = nombreCliente; }
+    public String getDireccionCliente() { return direccionCliente; }
+    public void setDireccionCliente(String direccionCliente) { this.direccionCliente = direccionCliente; }
+    public String getEstado() { return estado; }
+    public void setEstado(String estado) { this.estado = estado; }
+    public String getMotivoAnulacion() { return motivoAnulacion; }
+    public void setMotivoAnulacion(String motivoAnulacion) { this.motivoAnulacion = motivoAnulacion; }
+    public java.math.BigDecimal getMontoRecibido() { return montoRecibido; }
+    public void setMontoRecibido(java.math.BigDecimal montoRecibido) { this.montoRecibido = montoRecibido; }
+    public java.math.BigDecimal getVuelto() { return vuelto; }
+    public void setVuelto(java.math.BigDecimal vuelto) { this.vuelto = vuelto; }
 }

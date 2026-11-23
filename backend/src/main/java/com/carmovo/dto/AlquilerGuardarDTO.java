@@ -133,4 +133,9 @@ public class AlquilerGuardarDTO {
 
         return palabras.length <= 200;
     }
+
+    // ---- Campos agregados (actualización 2026) ----
+    private Boolean conChofer;
+    public Boolean getConChofer() { return conChofer; }
+    public void setConChofer(Boolean conChofer) { this.conChofer = conChofer; }
 }

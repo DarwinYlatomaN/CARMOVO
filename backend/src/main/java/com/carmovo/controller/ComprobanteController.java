@@ -1,6 +1,7 @@
 package com.carmovo.controller;
 
 import com.carmovo.dto.ComprobanteDTO;
+import com.carmovo.service.ClienteActual;
 import com.carmovo.service.ComprobanteServicio;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,6 +20,7 @@ public class ComprobanteController {
     @GetMapping("/api/v1/clientes/{idUsuario}/comprobantes/alquiler/{idAlquiler}")
     public ResponseEntity<ComprobanteDTO> obtenerParaCliente(@PathVariable Long idUsuario,
                                                              @PathVariable Long idAlquiler) {
+        ClienteActual.exigirPropietario(idUsuario);
         return ResponseEntity.ok(comprobanteServicio.obtenerParaCliente(idUsuario, idAlquiler));
     }
 
@@ -26,5 +28,12 @@ public class ComprobanteController {
     @GetMapping("/api/v1/admin/comprobantes/alquiler/{idAlquiler}")
     public ResponseEntity<ComprobanteDTO> obtenerParaAdmin(@PathVariable Long idAlquiler) {
         return ResponseEntity.ok(comprobanteServicio.obtenerPorAlquiler(idAlquiler));
+    }
+
+    /** "Mis comprobantes" del cliente autenticado. */
+    @GetMapping("/api/v1/clientes/{idUsuario}/comprobantes")
+    public java.util.List<ComprobanteDTO> listarDelCliente(@PathVariable Long idUsuario) {
+        ClienteActual.exigirPropietario(idUsuario);
+        return comprobanteServicio.listarDelCliente(idUsuario);
     }
 }

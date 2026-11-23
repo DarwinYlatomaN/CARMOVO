@@ -1,0 +1,107 @@
+/* =========================================================
+   CARMOVO · Componentes comunes del panel (sin bordes ni líneas)
+   Usado por: Mantenimiento, Mis servicios, Portal web y las
+   operaciones de entrega / devolución de Alquileres.
+   ========================================================= */
+
+.pu-encabezado { display: flex; justify-content: space-between; align-items: flex-end; gap: 16px; flex-wrap: wrap; margin-bottom: 20px; }
+.pu-encabezado h1 { margin: 0 0 4px; font-size: 1.55rem; color: var(--admin-texto); }
+.pu-encabezado p { margin: 0; color: var(--admin-texto-secundario); font-size: .92rem; max-width: 640px; }
+.pu-acciones { display: flex; gap: 10px; flex-wrap: wrap; }
+
+.pu-tarjeta { background: var(--admin-superficie); border-radius: 18px; padding: 20px; box-shadow: var(--admin-sombra); }
+.pu-tarjeta + .pu-tarjeta { margin-top: 18px; }
+.pu-tarjeta h2 { margin: 0 0 4px; font-size: 1.05rem; color: var(--admin-texto); }
+.pu-tarjeta > p.pu-ayuda { margin: 0 0 16px; color: var(--admin-texto-secundario); font-size: .86rem; }
+
+.pu-resumen { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 14px; margin-bottom: 18px; }
+.pu-resumen div { background: var(--admin-superficie); border-radius: 16px; padding: 16px 18px; box-shadow: var(--admin-sombra); }
+.pu-resumen span { display: block; font-size: .76rem; font-weight: 700; color: var(--admin-texto-secundario); text-transform: uppercase; letter-spacing: .04em; }
+.pu-resumen strong { display: block; font-size: 1.55rem; color: var(--admin-texto); margin-top: 4px; }
+
+/* Botones */
+.pu-boton { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 42px; padding: 0 18px; border: 0; border-radius: 12px; font: inherit; font-weight: 700; font-size: .88rem; cursor: pointer; text-decoration: none; transition: background .15s, transform .1s; }
+.pu-boton:active { transform: translateY(1px); }
+.pu-boton:disabled { opacity: .55; cursor: not-allowed; }
+.pu-boton--primario { background: var(--admin-azul); color: #fff; }
+.pu-boton--primario:hover:not(:disabled) { background: #3f6a86; }
+.pu-boton--suave { background: var(--admin-superficie-2); color: var(--admin-texto); }
+.pu-boton--suave:hover:not(:disabled) { background: var(--admin-superficie-3); }
+.pu-boton--verde { background: #e3f3ea; color: #2f6f4b; }
+.pu-boton--verde:hover:not(:disabled) { background: #cfeadb; }
+.pu-boton--rojo { background: #f9e5e5; color: #9d3c3c; }
+.pu-boton--rojo:hover:not(:disabled) { background: #f3d2d2; }
+.pu-boton--chico { min-height: 34px; padding: 0 12px; font-size: .8rem; border-radius: 10px; }
+
+/* Chips de estado */
+.pu-chip { display: inline-flex; align-items: center; gap: 6px; padding: 4px 11px; border-radius: 999px; font-size: .76rem; font-weight: 700; background: var(--admin-superficie-2); color: var(--admin-texto-secundario); white-space: nowrap; }
+.pu-chip--verde { background: #e3f3ea; color: #2f6f4b; }
+.pu-chip--amarillo { background: #fbf1dc; color: #8a6420; }
+.pu-chip--rojo { background: #f9e5e5; color: #9d3c3c; }
+.pu-chip--azul { background: #e1eef7; color: #36617d; }
+
+/* Filtros */
+.pu-filtros { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 14px; }
+.pu-filtros input, .pu-filtros select { border: 0; background: var(--admin-fondo); border-radius: 12px; min-height: 44px; padding: 0 14px; font: inherit; color: var(--admin-texto); }
+.pu-filtros input { flex: 1; min-width: 220px; }
+
+/* Tabla sin líneas: filas separadas por espacio y zebra suave */
+.pu-tabla-envoltura { overflow-x: auto; }
+.pu-tabla { width: 100%; border-collapse: separate; border-spacing: 0 6px; font-size: .88rem; }
+.pu-tabla th { text-align: left; padding: 6px 14px; font-size: .74rem; text-transform: uppercase; letter-spacing: .05em; color: var(--admin-texto-secundario); font-weight: 700; }
+.pu-tabla td { padding: 12px 14px; background: var(--admin-fondo); color: var(--admin-texto); vertical-align: middle; }
+.pu-tabla td:first-child { border-radius: 12px 0 0 12px; }
+.pu-tabla td:last-child { border-radius: 0 12px 12px 0; }
+.pu-tabla td small { display: block; color: var(--admin-texto-secundario); font-size: .78rem; margin-top: 2px; }
+.pu-tabla .pu-vacio { text-align: center; color: var(--admin-texto-secundario); padding: 28px; border-radius: 12px; }
+.pu-tabla .pu-celda-acciones { display: flex; gap: 6px; flex-wrap: wrap; }
+
+/* Mensajes */
+.pu-mensaje { position: fixed; right: 24px; bottom: 24px; z-index: 1200; max-width: 380px; padding: 14px 18px; border-radius: 14px; background: #2f6f4b; color: #fff; font-weight: 600; box-shadow: 0 12px 32px rgba(20, 40, 60, .25); }
+.pu-mensaje.error { background: #9d3c3c; }
+.pu-mensaje[hidden], .pu-modal[hidden], .pu-error[hidden] { display: none !important; }
+.pu-error { background: #f9e5e5; color: #9d3c3c; border-radius: 12px; padding: 10px 14px; font-size: .85rem; font-weight: 600; margin-top: 12px; }
+.pu-nota { background: var(--admin-superficie-2); color: var(--admin-texto-secundario); border-radius: 12px; padding: 10px 14px; font-size: .84rem; margin-top: 12px; }
+
+/* Modal */
+.pu-modal { position: fixed; inset: 0; background: rgba(30, 45, 58, .45); display: flex; align-items: center; justify-content: center; padding: 20px; z-index: 1000; }
+.pu-modal__caja { width: 100%; max-width: 580px; max-height: 92vh; overflow-y: auto; background: var(--admin-superficie); border-radius: 20px; padding: 26px; box-shadow: 0 24px 60px rgba(20, 40, 60, .25); animation: puEntrar .2s ease; }
+@keyframes puEntrar { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+.pu-modal__cabecera { display: flex; justify-content: space-between; align-items: flex-start; gap: 14px; margin-bottom: 18px; }
+.pu-modal__cabecera h2 { margin: 0 0 4px; font-size: 1.18rem; color: var(--admin-texto); }
+.pu-modal__cabecera p { margin: 0; color: var(--admin-texto-secundario); font-size: .86rem; }
+.pu-modal__cerrar { border: 0; background: var(--admin-superficie-2); width: 36px; height: 36px; border-radius: 10px; cursor: pointer; color: var(--admin-texto); flex-shrink: 0; }
+.pu-modal__pie { display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px; }
+
+/* Formularios */
+.pu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.pu-ancho { grid-column: 1 / -1; }
+.pu-campo { display: flex; flex-direction: column; gap: 7px; color: var(--admin-texto-secundario); font-weight: 700; font-size: .82rem; }
+.pu-campo small { font-weight: 500; }
+.pu-campo input, .pu-campo select, .pu-campo textarea { width: 100%; border: 0; background: var(--admin-fondo); border-radius: 12px; min-height: 44px; padding: 10px 14px; font: inherit; font-weight: 500; color: var(--admin-texto); box-sizing: border-box; }
+.pu-campo textarea { min-height: 84px; resize: vertical; }
+.pu-campo input:focus, .pu-campo select:focus, .pu-campo textarea:focus { outline: 2px solid var(--admin-naranja); outline-offset: 0; }
+.pu-check { display: flex; align-items: center; gap: 10px; font-weight: 600; color: var(--admin-texto); font-size: .88rem; cursor: pointer; }
+
+/* Indicador de combustible en octavos */
+.pu-combustible { display: flex; gap: 4px; }
+.pu-combustible button { flex: 1; height: 34px; border: 0; border-radius: 8px; background: var(--admin-fondo); cursor: pointer; font: inherit; font-size: .72rem; font-weight: 700; color: var(--admin-texto-secundario); }
+.pu-combustible button.lleno { background: var(--admin-azul); color: #fff; }
+
+/* Línea de tiempo (inspecciones) sin bordes */
+.pu-linea { display: grid; gap: 10px; }
+.pu-linea__item { background: var(--admin-fondo); border-radius: 14px; padding: 14px 16px; }
+.pu-linea__item strong { color: var(--admin-texto); }
+.pu-linea__item p { margin: 6px 0 0; color: var(--admin-texto-secundario); font-size: .84rem; }
+
+/* Pestañas */
+.pu-pestanas { display: flex; gap: 6px; flex-wrap: wrap; background: var(--admin-superficie); padding: 6px; border-radius: 14px; box-shadow: var(--admin-sombra); margin-bottom: 18px; }
+.pu-pestanas button { border: 0; background: transparent; padding: 10px 16px; border-radius: 10px; font: inherit; font-weight: 700; font-size: .86rem; color: var(--admin-texto-secundario); cursor: pointer; }
+.pu-pestanas button.activa { background: var(--admin-superficie-2); color: var(--admin-texto); }
+.pu-panel[hidden] { display: none; }
+
+@media (max-width: 640px) {
+    .pu-grid { grid-template-columns: 1fr; }
+    .pu-modal__caja { padding: 20px; border-radius: 18px; }
+    .pu-mensaje { left: 16px; right: 16px; bottom: 16px; max-width: none; }
+}

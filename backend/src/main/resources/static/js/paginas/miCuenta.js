@@ -1239,8 +1239,10 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
 
         const estado = alquiler.estado || 'Pendiente';
+        const pagoEnRevision = alquiler.estadoPago === 'En revisión';
+        const pagoRechazado = alquiler.estadoPago === 'Rechazado';
 
-        tituloEstado.textContent = estado;
+        tituloEstado.textContent = pagoEnRevision ? 'Pago en revisión' : (pagoRechazado ? 'Pago rechazado' : estado);
 
         asignarTexto(
             'cuenta-vehiculo',
@@ -1262,7 +1264,14 @@ document.addEventListener('DOMContentLoaded', async () => {
             `S/ ${Number(alquiler.total || 0).toFixed(2)}`
         );
 
-        if (estado === 'Cancelado') {
+        if (pagoEnRevision) {
+            cajaEstado.classList.add('pendiente');
+            mensaje.textContent =
+                'Caja está verificando la constancia de tu pago. Tu reserva queda en revisión hasta que el pago se apruebe o se rechace; te avisaremos por correo.';
+        } else if (pagoRechazado) {
+            cajaEstado.classList.add('rechazado');
+            mensaje.textContent = `Tu pago fue rechazado y la reserva se canceló.${alquiler.motivoRechazoPago ? ` Motivo: ${alquiler.motivoRechazoPago}` : ''}`;
+        } else if (estado === 'Cancelado') {
             cajaEstado.classList.add('rechazado');
 
             mensaje.textContent =
@@ -1319,7 +1328,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                     alquiler.idAlquiler
                 );
 
-            if (!comprobante) {
+            if (!comprobante?.numero) {
                 ocultarComprobante();
                 return;
             }
@@ -1333,7 +1342,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 })
                 : '';
 
-            asignarTexto('comp-numero', `Comprobante N° ${comprobante.numero}`);
+            asignarTexto('comp-numero', `${comprobante.tipo === 'FACTURA' ? 'Factura' : 'Boleta'} N° ${comprobante.numero}${comprobante.estado === 'ANULADO' ? ' (anulada)' : ''}`);
             asignarTexto(
                 'comp-detalle',
                 [
@@ -1390,9 +1399,21 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     function claseEstadoHistorial(estado) {
-        if (estado === 'Cancelado') return 'rechazado';
+        if (estado === 'Cancelado' || estado === 'Pago rechazado') return 'rechazado';
         if (['Confirmado', 'En curso', 'Finalizado'].includes(estado)) return 'aceptado';
         return 'pendiente';
+    }
+
+    /** Texto para alquileres sin comprobante según el estado del pago. */
+    function textoPagoPendiente(alquiler) {
+        const estado = alquiler.estadoPago || '';
+        if (estado === 'Pendiente' && alquiler.metodoPago === 'Efectivo') return 'Pagar en oficina';
+        if (estado === 'En revisión') return 'Pago en revisión';
+        if (estado === 'Reembolso pendiente') return 'Reembolso en proceso';
+        if (estado === 'Reembolsado') return 'Reembolsado';
+        if (estado === 'Expirado') return 'Pago vencido';
+        if (estado === 'Rechazado') return alquiler.motivoRechazoPago ? `Rechazado: ${alquiler.motivoRechazoPago}` : 'Pago rechazado';
+        return 'Sin comprobante';
     }
 
     function pintarHistorial() {
@@ -1412,7 +1433,8 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         lista.innerHTML = historialAlquileres.map(alquiler => {
             const seleccionado = String(alquiler.idAlquiler) === String(idAlquilerSeleccionado);
-            const estado = alquiler.estado || 'Pendiente';
+            const estado = alquiler.estadoPago === 'En revisión' ? 'En revisión'
+                : (alquiler.estadoPago === 'Rechazado' ? 'Pago rechazado' : (alquiler.estado || 'Pendiente'));
             return `
                 <article class="historial-item ${seleccionado ? 'seleccionado' : ''}"
                          data-id-alquiler="${escaparHtml(alquiler.idAlquiler)}"
@@ -1426,6 +1448,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                         </div>
                     </div>
                     <div class="historial-secundario">
+                        ${alquiler.numeroComprobante ? `<span class="historial-tipo ${alquiler.numeroComprobante.startsWith('F') ? 'factura' : 'boleta'}">${alquiler.numeroComprobante.startsWith('F') ? 'Factura' : 'Boleta'} ${escaparHtml(alquiler.numeroComprobante)}</span>` : ''}
                         <span class="historial-total">S/ ${Number(alquiler.total || 0).toFixed(2)}</span>
                         <span class="historial-estado ${claseEstadoHistorial(estado)}">${escaparHtml(estado)}</span>
                         ${alquiler.numeroComprobante ? `
@@ -1437,7 +1460,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                             <button type="button" class="historial-btn principal" data-accion="descargar-comprobante"
                                     title="Descargar comprobante" aria-label="Descargar comprobante">
                                 <i class="fa-solid fa-download"></i>
-                            </button>` : '<span class="historial-sin-comprobante">Sin comprobante</span>'}
+                            </button>` : `<span class="historial-sin-comprobante">${escaparHtml(textoPagoPendiente(alquiler))}</span>`}
                     </div>
                 </article>`;
         }).join('');

@@ -12,7 +12,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
+import com.carmovo.dto.VehiculoDTO;
+import com.carmovo.model.IntentoPago;
 import java.util.ArrayList;
+import java.util.Locale;
 import java.util.List;
 
 @Service
@@ -22,15 +25,53 @@ public class ReservaServicio {
 
     private final AlquilerServicio alquilerServicio;
     private final PagoServicio pagoServicio;
+    private final PasarelaServicio pasarela;
+    private final VehiculoServicio vehiculoServicio;
+    private final NotificacionServicio notificaciones;
+    private final com.carmovo.repository.PagoRepositorio pagoRepositorio;
+    private final PoliticasServicio politicas;
 
-    public ReservaServicio(AlquilerServicio alquilerServicio, PagoServicio pagoServicio) {
+    public ReservaServicio(AlquilerServicio alquilerServicio, PagoServicio pagoServicio, PasarelaServicio pasarela,
+                           VehiculoServicio vehiculoServicio, NotificacionServicio notificaciones,
+                           com.carmovo.repository.PagoRepositorio pagoRepositorio, PoliticasServicio politicas) {
+        this.politicas = politicas;
         this.alquilerServicio = alquilerServicio;
         this.pagoServicio = pagoServicio;
+        this.pasarela = pasarela;
+        this.vehiculoServicio = vehiculoServicio;
+        this.notificaciones = notificaciones;
+        this.pagoRepositorio = pagoRepositorio;
     }
 
+    /**
+     * Registra una reserva del sitio web:
+     *  1. Valida datos, conductor (edad, licencia vigente y categoría) y boleta o factura.
+     *  2. Verifica el pago en la pasarela (monto calculado por el servidor, uso único).
+     *  3. Crea el alquiler: "Confirmado" si el pago está aprobado; "Pendiente" si falta validar o cobrar.
+     *  4. Registra el pago y, si corresponde, emite el comprobante.
+     * Todo ocurre en una transacción: si algo falla, no queda nada a medias.
+     */
     @Transactional
     public AlquilerDTO procesarReserva(ReservaDTO dto) {
         validarReserva(dto);
+        PoliticasServicio.exigir(dto.getAceptaPoliticas());
+        boolean conChofer = Boolean.TRUE.equals(dto.getConChofer());
+        PagoServicio.DatosFacturacion facturacion = validarFacturacion(dto);
+
+        VehiculoDTO vehiculo = vehiculoServicio.obtenerPorId(dto.getVehiculoId());
+        ReservaDTO.ConductorDTO conductor = dto.getConductor();
+        // Con chofer de la agencia el cliente no maneja: no se le pide licencia, solo ser mayor de edad.
+        String problemaConductor = conChofer
+                ? ValidadorDocumentos.validarTitularConChofer(conductor.getFechaNacimiento(), dto.getFechaInicio())
+                : ValidadorDocumentos.validarConductor(
+                        conductor.getFechaNacimiento(), conductor.getCategoriaLicencia(), conductor.getVencimientoLicencia(),
+                        vehiculo.getCategoria(), dto.getFechaInicio(), dto.getFechaFin());
+        if (problemaConductor != null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, problemaConductor);
+        }
+
+        IntentoPago intento = pasarela.consumir(dto.getCodigoIntento(), dto.getIdUsuario(), dto.getVehiculoId(),
+                dto.getFechaInicio(), dto.getFechaFin(), conChofer);
 
         AlquilerGuardarDTO alquiler = new AlquilerGuardarDTO();
         alquiler.setIdUsuario(dto.getIdUsuario());
@@ -39,25 +80,56 @@ public class ReservaServicio {
         alquiler.setFechaFin(dto.getFechaFin());
         alquiler.setLugarRecogida(dto.getLugarRecogida().trim());
         alquiler.setLugarEntrega(dto.getLugarEntrega().trim());
-        alquiler.setMetodoPago(limpiarOpcional(dto.getMetodoPago()));
-        alquiler.setEstado("Pendiente");
+        alquiler.setMetodoPago(nombreMetodo(intento.getMetodo()));
+        alquiler.setEstado("APROBADO".equals(intento.getEstado()) ? "Confirmado" : "Pendiente");
         alquiler.setObservaciones(construirObservaciones(dto));
+        alquiler.setConChofer(conChofer);
 
-        // AlquilerServicio es la única fuente de verdad para disponibilidad,
-        // validación del perfil Cliente y cálculo del total.
+        // AlquilerServicio es la única fuente de verdad para disponibilidad y precio.
         AlquilerDTO creado = alquilerServicio.crear(alquiler);
+        if (creado.getTotal().compareTo(intento.getMonto()) != 0) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT,
+                    "El precio cambió mientras pagabas. Vuelve a iniciar el pago.");
+        }
 
-        // La selección realizada en el sitio público también deja un registro
-        // real en pagos para que el panel administrativo pueda revisarlo.
-        pagoServicio.registrarDesdeReserva(
-                creado.getIdAlquiler(),
-                alquiler.getMetodoPago(),
-                dto.getReferenciaPago(),
-                dto.getTokenPago(),
-                dto.getDetallePago()
-        );
+        pagoServicio.registrarDesdeReserva(creado, intento, facturacion);
+        pasarela.marcarUsado(intento, creado.getIdAlquiler());
+        politicas.registrar(dto.getIdUsuario(), PoliticasServicio.RESERVA, creado.getIdAlquiler(), null);
 
-        return creado;
+        pagoRepositorio.findByIdAlquiler(creado.getIdAlquiler())
+                .ifPresent(pago -> notificaciones.reservaRegistrada(creado, pago));
+        return alquilerServicio.obtenerPorId(creado.getIdAlquiler());
+    }
+
+    private PagoServicio.DatosFacturacion validarFacturacion(ReservaDTO dto) {
+        String tipo = dto.getTipoComprobante() == null ? "BOLETA" : dto.getTipoComprobante().trim().toUpperCase(Locale.ROOT);
+        if (!"FACTURA".equals(tipo)) {
+            return new PagoServicio.DatosFacturacion("BOLETA", null, null, null);
+        }
+        String ruc = dto.getRuc() == null ? "" : dto.getRuc().trim();
+        if (!ValidadorDocumentos.rucValido(ruc)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                    "El RUC no es válido: debe tener 11 dígitos, empezar con 10, 15, 17 o 20 y su dígito verificador debe coincidir.");
+        }
+        if (esVacio(dto.getRazonSocial()) || dto.getRazonSocial().trim().length() > 150) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "La razón social es obligatoria para emitir factura.");
+        }
+        if (esVacio(dto.getDireccionFiscal()) || dto.getDireccionFiscal().trim().length() > 200) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "La dirección fiscal es obligatoria para emitir factura.");
+        }
+        return new PagoServicio.DatosFacturacion("FACTURA", ruc,
+                dto.getRazonSocial().trim().toUpperCase(Locale.ROOT), dto.getDireccionFiscal().trim());
+    }
+
+    private static String nombreMetodo(String metodo) {
+        return switch (metodo) {
+            case "tarjeta" -> "Tarjeta";
+            case "yape" -> "Yape";
+            case "plin" -> "Plin";
+            case "transferencia" -> "Transferencia";
+            case "efectivo" -> "Efectivo";
+            default -> metodo;
+        };
     }
 
     private void validarReserva(ReservaDTO dto) {
@@ -79,16 +151,6 @@ public class ReservaServicio {
         if (esVacio(dto.getLugarRecogida()) || esVacio(dto.getLugarEntrega())) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Los lugares de recogida y entrega son obligatorios.");
         }
-        if (esVacio(dto.getMetodoPago())) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Selecciona un método de pago.");
-        }
-        if (("Yape".equalsIgnoreCase(dto.getMetodoPago()) || "Plin".equalsIgnoreCase(dto.getMetodoPago()))
-                && esVacio(dto.getReferenciaPago())) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Ingresa el número de operación del pago.");
-        }
-        if ("Tarjeta".equalsIgnoreCase(dto.getMetodoPago()) && esVacio(dto.getTokenPago())) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "No se recibió el token del pago con tarjeta.");
-        }
         if (dto.getConductor() == null) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Los datos del conductor son obligatorios.");
         }
@@ -99,29 +161,35 @@ public class ReservaServicio {
                 || esVacio(conductor.getDni())
                 || esVacio(conductor.getCorreo())
                 || esVacio(conductor.getTelefono())
-                || esVacio(conductor.getLicencia())
-                || esVacio(conductor.getCategoriaLicencia())
-                || conductor.getVencimientoLicencia() == null
+                || (!Boolean.TRUE.equals(dto.getConChofer()) && (esVacio(conductor.getLicencia())
+                        || esVacio(conductor.getCategoriaLicencia())
+                        || conductor.getVencimientoLicencia() == null))
                 || esVacio(conductor.getDomicilio())
                 || esVacio(conductor.getDepartamento())
                 || esVacio(conductor.getProvincia())
                 || esVacio(conductor.getDistrito())) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Completa los datos obligatorios y la ubicación del conductor.");
         }
+        if (!ValidadorDocumentos.dniValido(conductor.getDni())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "El DNI del conductor debe tener 8 dígitos.");
+        }
     }
 
     private String construirObservaciones(ReservaDTO dto) {
         ReservaDTO.ConductorDTO conductor = dto.getConductor();
         List<String> partes = new ArrayList<>();
-        partes.add("Reserva web");
-        partes.add("Conductor: " + limpiar(conductor.getNombre()) + " " + limpiar(conductor.getApellidos()));
+        partes.add("Reserva web" + (Boolean.TRUE.equals(dto.getConChofer()) ? " con chofer" : ""));
+        boolean conChofer = Boolean.TRUE.equals(dto.getConChofer());
+        partes.add((conChofer ? "Titular: " : "Conductor: ") + limpiar(conductor.getNombre()) + " " + limpiar(conductor.getApellidos()));
         partes.add("DNI: " + limpiar(conductor.getDni()));
         partes.add("Tel: " + limpiar(conductor.getTelefono()));
         partes.add("Correo: " + limpiar(conductor.getCorreo()));
-        partes.add("Licencia: " + limpiar(conductor.getLicencia()));
-        partes.add("Cat.: " + limpiar(conductor.getCategoriaLicencia()));
+        if (!conChofer || !esVacio(conductor.getLicencia())) {
+            partes.add("Licencia: " + limpiar(conductor.getLicencia()));
+            partes.add("Cat.: " + limpiar(conductor.getCategoriaLicencia()));
+        }
 
-        if (conductor.getVencimientoLicencia() != null) {
+        if (!conChofer && conductor.getVencimientoLicencia() != null) {
             partes.add("Vence: " + conductor.getVencimientoLicencia());
         }
         if (conductor.getFechaNacimiento() != null) {

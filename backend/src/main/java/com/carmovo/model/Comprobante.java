@@ -78,4 +78,41 @@ public class Comprobante {
     public void setTotal(BigDecimal total) { this.total = total; }
     public LocalDateTime getFechaEmision() { return fechaEmision; }
     public void setFechaEmision(LocalDateTime fechaEmision) { this.fechaEmision = fechaEmision; }
+
+    // ---- Campos agregados (actualización 2026) ----
+    @Column(nullable = false, length = 10)
+    private String tipo = "BOLETA";
+    @Column(nullable = false, length = 4)
+    private String serie = "B001";
+    private Integer correlativo;
+    @Column(name = "documento_cliente", length = 11)
+    private String documentoCliente;
+    @Column(name = "nombre_cliente", length = 150)
+    private String nombreCliente;
+    @Column(name = "direccion_cliente", length = 200)
+    private String direccionCliente;
+    @Column(nullable = false, length = 15)
+    private String estado = "EMITIDO";
+    @Column(name = "fecha_anulacion")
+    private LocalDateTime fechaAnulacion;
+    @Column(name = "motivo_anulacion", length = 255)
+    private String motivoAnulacion;
+    public String getTipo() { return tipo; }
+    public void setTipo(String tipo) { this.tipo = tipo; }
+    public String getSerie() { return serie; }
+    public void setSerie(String serie) { this.serie = serie; }
+    public Integer getCorrelativo() { return correlativo; }
+    public void setCorrelativo(Integer correlativo) { this.correlativo = correlativo; }
+    public String getDocumentoCliente() { return documentoCliente; }
+    public void setDocumentoCliente(String documentoCliente) { this.documentoCliente = documentoCliente; }
+    public String getNombreCliente() { return nombreCliente; }
+    public void setNombreCliente(String nombreCliente) { this.nombreCliente = nombreCliente; }
+    public String getDireccionCliente() { return direccionCliente; }
+    public void setDireccionCliente(String direccionCliente) { this.direccionCliente = direccionCliente; }
+    public String getEstado() { return estado; }
+    public void setEstado(String estado) { this.estado = estado; }
+    public LocalDateTime getFechaAnulacion() { return fechaAnulacion; }
+    public void setFechaAnulacion(LocalDateTime fechaAnulacion) { this.fechaAnulacion = fechaAnulacion; }
+    public String getMotivoAnulacion() { return motivoAnulacion; }
+    public void setMotivoAnulacion(String motivoAnulacion) { this.motivoAnulacion = motivoAnulacion; }
 }

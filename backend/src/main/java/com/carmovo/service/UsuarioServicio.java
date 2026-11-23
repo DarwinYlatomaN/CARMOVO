@@ -20,6 +20,8 @@ import java.util.Locale;
 
 @Service
 public class UsuarioServicio {
+    private final com.carmovo.repository.AlquilerRepositorio alquilerRepositorio;
+
 
     private static final String PERFIL_CLIENTE = "Cliente";
 
@@ -27,7 +29,9 @@ public class UsuarioServicio {
     private final PerfilRepositorio perfilRepositorio;
     private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
-    public UsuarioServicio(UsuarioRepositorio usuarioRepositorio, PerfilRepositorio perfilRepositorio) {
+    public UsuarioServicio(UsuarioRepositorio usuarioRepositorio, PerfilRepositorio perfilRepositorio,
+                           com.carmovo.repository.AlquilerRepositorio alquilerRepositorio) {
+        this.alquilerRepositorio = alquilerRepositorio;
         this.usuarioRepositorio = usuarioRepositorio;
         this.perfilRepositorio = perfilRepositorio;
     }
@@ -201,10 +205,22 @@ public class UsuarioServicio {
         return convertirADto(usuarioRepositorio.save(usuario));
     }
 
+    /**
+     * Elimina al usuario solo si no tiene historial. Si ya tiene alquileres,
+     * se desactiva (baja lógica) para no romper alquileres, pagos ni comprobantes.
+     *
+     * @return true si se eliminó; false si se desactivó.
+     */
     @Transactional
-    public void eliminarUsuario(Long id) {
+    public boolean eliminarUsuario(Long id) {
         Usuario usuario = buscarUsuario(id);
+        if (alquilerRepositorio.existsByIdUsuario(id)) {
+            usuario.setEstado(false);
+            usuarioRepositorio.save(usuario);
+            return false;
+        }
         usuarioRepositorio.delete(usuario);
+        return true;
     }
 
     private Usuario buscarUsuario(Long id) {

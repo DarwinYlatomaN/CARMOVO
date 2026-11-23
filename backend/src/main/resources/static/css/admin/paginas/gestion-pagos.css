@@ -652,3 +652,67 @@
 .pago-comprobante .acciones-pago { justify-content: flex-start; gap: 6px; }
 .boton-pago-icono.descargar { background: #4C966D; border-color: #4C966D; color: #fff; }
 .boton-pago-icono:disabled { opacity: .6; cursor: wait; }
+
+/* ---------- Estados nuevos y acciones de caja ---------- */
+.badge-pago.expirado { background: #EEF1F3; color: #66727C; }
+.badge-pago.reembolso { background: #F3E5F8; color: #7A3B91; }
+.badge-pago.reembolsado { background: #EAE6F5; color: #5A4B8A; }
+.pago-cargos { display: block; margin-top: 3px; font-size: 11.5px; font-weight: 700; color: #A4661A; }
+.boton-pago-icono.aprobar { background: #E5F7EE; color: #1C8353; border-color: transparent; }
+.boton-pago-icono.rechazar { background: #FBE9E9; color: #A33A3A; border-color: transparent; }
+.boton-pago-icono.reembolsar { background: #F3E5F8; color: #7A3B91; border-color: transparent; }
+.boton-pago-icono.cargos { background: #FFF1D6; color: #94620A; border-color: transparent; }
+#filtroComprobante { border: 0; background: var(--admin-fondo, #F3F8FC); border-radius: 12px; min-height: 44px; padding: 0 14px; font: inherit; color: var(--admin-texto, #293E4D); }
+
+.caja-modal { position: fixed; inset: 0; z-index: 1200; background: rgba(30, 45, 58, .45); display: flex; align-items: center; justify-content: center; padding: 20px; }
+.caja-modal__caja { width: 100%; max-width: 480px; background: #fff; border-radius: 20px; padding: 24px; box-shadow: 0 24px 60px rgba(20, 40, 60, .25); color: #293E4D; }
+.caja-modal__caja h3 { margin: 0 0 10px; font-size: 1.15rem; }
+.caja-modal__texto p { margin: 0 0 8px; color: #587284; line-height: 1.5; }
+.caja-monto { font-size: 1.05rem; color: #293E4D !important; }
+.caja-modal__campo { display: flex; flex-direction: column; gap: 6px; font-weight: 700; font-size: .85rem; color: #587284; margin-top: 10px; }
+.caja-modal__campo input, .caja-modal__campo textarea { border: 0; background: #F3F8FC; border-radius: 12px; padding: 12px 14px; font: inherit; font-size: 1rem; color: #293E4D; }
+.caja-modal__campo input:focus, .caja-modal__campo textarea:focus { outline: 0; box-shadow: 0 0 0 3px #DCECF7; }
+.caja-modal__info { margin: 10px 0 0; font-size: .95rem; color: #1C8353; }
+.caja-modal__info:empty { display: none; }
+.caja-modal__error { background: #FBE9E9; color: #A33A3A; border-radius: 10px; padding: 10px 12px; font-weight: 600; margin: 10px 0 0; }
+.caja-modal__error[hidden] { display: none; }
+.caja-modal__acciones { display: flex; justify-content: flex-end; gap: 10px; margin-top: 18px; flex-wrap: wrap; }
+.caja-btn { border: 0; border-radius: 12px; padding: 11px 16px; font: 700 .9rem inherit; font-family: inherit; cursor: pointer; }
+.caja-btn--suave { background: #EAF4FA; color: #293E4D; }
+.caja-btn--ok { background: #4C966D; color: #fff; }
+.caja-btn--peligro { background: #C65C5C; color: #fff; }
+
+/* Verificación de pagos con constancia (Yape, Plin, transferencia) */
+.boton-verificar-pago { display: inline-flex; align-items: center; gap: 6px; border: 0; border-radius: 10px; padding: 8px 12px;
+    background: #E5F7EE; color: #1C8353; font: inherit; font-size: .82rem; font-weight: 700; cursor: pointer; white-space: nowrap; }
+.boton-verificar-pago:hover { background: #D3F0E1; }
+.caja-modal__caja.vp { max-width: 980px; max-height: calc(100vh - 40px); overflow-y: auto; }
+.vp-cabecera { display: flex; justify-content: space-between; gap: 12px; margin-bottom: 16px; }
+.vp-cabecera h3 { margin: 0 0 4px; }
+.vp-cabecera p { margin: 0; color: #587284; font-size: .88rem; }
+.vp-cerrar { border: 0; background: #F3F8FC; width: 38px; height: 38px; border-radius: 10px; cursor: pointer; color: #587284; flex-shrink: 0; }
+.vp-cuerpo { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr); gap: 22px; }
+.vp-constancia { position: relative; background: #F3F8FC; border-radius: 16px; min-height: 360px; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+.vp-constancia img { display: block; max-width: 100%; max-height: 520px; object-fit: contain; cursor: zoom-in; }
+.vp-constancia iframe { width: 100%; height: 520px; border: 0; background: #fff; }
+.vp-abrir { position: absolute; bottom: 10px; right: 10px; background: rgba(255,255,255,.95); border-radius: 10px; padding: 7px 12px;
+    font-size: .8rem; font-weight: 700; color: #293E4D; text-decoration: none; box-shadow: 0 2px 8px rgba(20,40,60,.12); }
+.vp-cargando, .vp-sin-constancia { color: #7A93A5; text-align: center; padding: 20px; }
+.vp-sin-constancia i { font-size: 2rem; display: block; margin-bottom: 8px; }
+.vp-datos h4 { margin: 4px 0 8px; font-size: .78rem; letter-spacing: .06em; text-transform: uppercase; color: #7A93A5; }
+.vp-datos h4:not(:first-child) { margin-top: 16px; }
+.vp-dato { display: flex; justify-content: space-between; gap: 14px; padding: 8px 0; font-size: .9rem; color: #587284; }
+.vp-dato + .vp-dato { box-shadow: 0 -1px 0 #EEF3F7; }
+.vp-dato b { color: #293E4D; text-align: right; font-weight: 600; }
+.vp-dato b small { display: block; color: #7A93A5; font-weight: 500; }
+.vp-dato--fuerte b { font-size: 1.02rem; font-weight: 800; }
+.vp-alerta { display: block; font-style: normal; color: #A33A3A; font-size: .8rem; }
+.vp-checklist { list-style: none; margin: 14px 0 0; padding: 12px 14px; background: #F3F8FC; border-radius: 12px; display: grid; gap: 6px; font-size: .84rem; color: #587284; }
+.vp-checklist i { color: #1C8353; margin-right: 6px; }
+.vp-rechazo { margin-top: 16px; }
+.vp-rechazo[hidden] { display: none; }
+.vp-motivos { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+.vp-motivos button { border: 0; border-radius: 16px; padding: 6px 12px; background: #FBE9E9; color: #A33A3A; font: inherit; font-size: .78rem; font-weight: 600; cursor: pointer; }
+.vp-motivos button:hover { background: #F6D7D7; }
+.caja-modal__acciones button[hidden] { display: none; }
+@media (max-width: 860px) { .vp-cuerpo { grid-template-columns: 1fr; } .vp-constancia { min-height: 240px; } }

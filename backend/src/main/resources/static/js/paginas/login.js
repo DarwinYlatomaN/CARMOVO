@@ -40,6 +40,11 @@ document.addEventListener('DOMContentLoaded', () => {
         errorLogin.textContent = mensaje;
     }
 
+    // Aviso cuando la sesión venció y el sistema trajo al cliente de vuelta al login.
+    if (formularioLogin && new URLSearchParams(window.location.search).get('expirada')) {
+        mostrarError('Tu sesión expiró. Inicia sesión nuevamente para continuar.');
+    }
+
     if (formularioLogin) {
         formularioLogin.addEventListener('submit', async (e) => {
             e.preventDefault();
@@ -62,24 +67,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (btnSubmit) btnSubmit.disabled = true;
 
                 const usuario = await window.CarmovoClienteApi.iniciarSesion(correo, password);
-                const nombreCompleto = `${usuario.nombres || ''} ${usuario.apellidos || ''}`.trim();
+                // Guarda la sesión con el token JWT que devuelve el servidor.
+                window.CarmovoClienteApi.guardarSesion(usuario);
 
-                const sesion = {
-                    logueado: true,
-                    idUsuario: usuario.idUsuario,
-                    nombre: nombreCompleto || usuario.correo,
-                    nombres: usuario.nombres || '',
-                    apellidos: usuario.apellidos || '',
-                    correo: usuario.correo,
-                    telefono: usuario.telefono || '',
-                    perfil: usuario.nombrePerfil || 'Cliente'
-                };
-
-                localStorage.setItem('carmovo_sesion', JSON.stringify(sesion));
-                localStorage.setItem('usuarioCarmovoLogueado', 'true');
-                localStorage.removeItem('carmovo_usuarios');
-
-                window.location.href = '/reservas';
+                const volver = new URLSearchParams(window.location.search).get('volver');
+                const destinoSeguro = volver && volver.startsWith('/') && !volver.startsWith('//');
+                window.location.href = destinoSeguro ? volver : '/reservas';
             } catch (error) {
                 mostrarError(error.message || 'Correo o contraseña incorrectos.');
             } finally {

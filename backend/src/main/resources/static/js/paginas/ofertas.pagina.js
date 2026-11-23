@@ -45,7 +45,7 @@ function normalizarTextoOferta(texto) {
 }
 
 async function obtenerVehiculosReales() {
-    const respuesta = await fetch('http://localhost:8080/api/v1/vehiculos');
+    const respuesta = await fetch('/api/v1/vehiculos');
     if (!respuesta.ok) throw new Error('No se pudo consultar la flota actual');
 
     const datos = await respuesta.json();

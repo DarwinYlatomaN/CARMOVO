@@ -39,10 +39,7 @@ public class VehiculoDTO {
     private String modelo;
 
     @NotBlank(message = "La categoría es obligatoria.")
-    @Pattern(
-            regexp = "^(Económicos|Sedanes|SUVs|Pick-ups 4x4|Minivans|Todoterreno|Crossovers|Furgonetas|Híbridos|Premium / Lujo|Eventos)$",
-            message = "Selecciona una categoría válida."
-    )
+    @Size(max = 50, message = "La categoría no puede superar los 50 caracteres.")
     private String categoria;
 
     @NotNull(message = "El precio por día es obligatorio.")
@@ -91,6 +88,12 @@ public class VehiculoDTO {
             message = "Ingresa una URL HTTP(S) o una ruta local de imagen válida."
     )
     private String imagen;
+
+    @Size(max = 1000, message = "La descripción no puede superar los 1000 caracteres.")
+    private String descripcion;
+
+    public String getDescripcion() { return descripcion; }
+    public void setDescripcion(String descripcion) { this.descripcion = descripcion; }
 
     public VehiculoDTO() {}
 
@@ -165,4 +168,27 @@ public class VehiculoDTO {
     public void setImagen(String imagen) {
         this.imagen = imagen;
     }
+
+    // ---- Campos agregados (actualización 2026) ----
+    private String placa;
+    private Integer anio;
+    private String color;
+    private Integer kilometraje;
+    private java.time.LocalDate vencimientoSoat;
+    private java.time.LocalDate vencimientoRevision;
+    private String alertaDocumentos;
+    public String getPlaca() { return placa; }
+    public void setPlaca(String placa) { this.placa = placa; }
+    public Integer getAnio() { return anio; }
+    public void setAnio(Integer anio) { this.anio = anio; }
+    public String getColor() { return color; }
+    public void setColor(String color) { this.color = color; }
+    public Integer getKilometraje() { return kilometraje; }
+    public void setKilometraje(Integer kilometraje) { this.kilometraje = kilometraje; }
+    public java.time.LocalDate getVencimientoSoat() { return vencimientoSoat; }
+    public void setVencimientoSoat(java.time.LocalDate vencimientoSoat) { this.vencimientoSoat = vencimientoSoat; }
+    public java.time.LocalDate getVencimientoRevision() { return vencimientoRevision; }
+    public void setVencimientoRevision(java.time.LocalDate vencimientoRevision) { this.vencimientoRevision = vencimientoRevision; }
+    public String getAlertaDocumentos() { return alertaDocumentos; }
+    public void setAlertaDocumentos(String alertaDocumentos) { this.alertaDocumentos = alertaDocumentos; }
 }

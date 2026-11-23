@@ -1,9 +1,4 @@
--- =========================================================
--- CARMOVO - Panel Administrador - Pagos e ingresos
--- Esta migración NO crea ni modifica perfiles, usuarios o roles.
--- Solo agrega la tabla necesaria para el estado administrativo
--- de los pagos asociados a alquileres ya existentes.
--- =========================================================
+
 
 CREATE TABLE IF NOT EXISTS pagos (
     id_pago BIGSERIAL PRIMARY KEY,

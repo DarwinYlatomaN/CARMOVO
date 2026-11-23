@@ -181,7 +181,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         try {
-            const respuesta = await fetch('http://localhost:8080/api/v1/vehiculos');
+            const respuesta = await fetch('/api/v1/vehiculos');
             if (!respuesta.ok) throw new Error('Error al conectar con el servidor');
 
             const autosBackend = await respuesta.json();
@@ -296,8 +296,10 @@ document.addEventListener('DOMContentLoaded', () => {
             const carpetaNueva = carpetasNuevas[categoriaNormalizada];
             const imagenBD = String(autoActual.imagen || '').trim();
 
-            // Los 25 vehículos nuevos toman la imagen registrada en PostgreSQL.
-            if (carpetaNueva && imagenBD) {
+            // Fotos subidas desde el panel, enlaces o rutas absolutas: se usan tal cual.
+            if (/^(https?:|data:|blob:|\/)/i.test(imagenBD)) {
+                rutaImagen = imagenBD;
+            } else if (carpetaNueva && imagenBD) {
                 if (/^(https?:|data:|blob:)/i.test(imagenBD)) {
                     rutaImagen = imagenBD;
                 } else if (imagenBD.startsWith('../recursos/')) {
@@ -330,10 +332,21 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (etiquetaDias) etiquetaDias.textContent = `Tarifa base (${dias} ${dias === 1 ? 'día' : 'días'})`;
 
+        // Vista previa: el monto definitivo lo calcula el servidor al iniciar el pago.
+        const conChofer = !!document.getElementById('con-chofer')?.checked;
         const tarifaBase = autoActual.precio * dias;
+        const costoChofer = conChofer ? 80 * dias : 0;
         const costoSeguro = 120.00;
-        const impuestos = tarifaBase * 0.18;
-        totalPagar = tarifaBase + costoSeguro + impuestos;
+        const impuestos = (tarifaBase + costoChofer) * 0.18;
+        totalPagar = tarifaBase + costoChofer + costoSeguro + impuestos;
+
+        const filaChofer = document.getElementById('fila-chofer');
+        if (filaChofer) {
+            filaChofer.hidden = !conChofer;
+            document.getElementById('resumen-chofer').textContent = `S/ ${costoChofer.toFixed(2)}`;
+            document.getElementById('etiqueta-chofer').textContent =
+                `Servicio con chofer (${dias} ${dias === 1 ? 'día' : 'días'})`;
+        }
 
         if (resumenTarifaBase) resumenTarifaBase.textContent = `S/ ${tarifaBase.toFixed(2)}`;
         if (resumenImpuestos) resumenImpuestos.textContent = `S/ ${impuestos.toFixed(2)}`;
@@ -341,9 +354,133 @@ document.addEventListener('DOMContentLoaded', () => {
 
         document.querySelectorAll('.monto-dinamico-modal')
             .forEach(span => span.textContent = `S/ ${totalPagar.toFixed(2)}`);
+
+        cotizarEnServidor(conChofer);
+    }
+
+    // El precio definitivo (incluidas las ofertas vigentes del Portal web) lo calcula el servidor.
+    let temporizadorCotizacion = null;
+    function avisoChofer(texto) {
+        const caja = document.getElementById('aviso-chofer');
+        if (!caja) return;
+        caja.textContent = texto;
+        caja.hidden = !texto;
+    }
+
+    function cotizarEnServidor(conChofer) {
+        clearTimeout(temporizadorCotizacion);
+        if (!autoActual || !inputFechaInicio?.value || !inputFechaFin?.value || !window.CarmovoClienteApi?.pasarela) return;
+        const pedido = `${autoActual.idVehiculo}|${inputFechaInicio.value}|${inputFechaFin.value}|${conChofer}`;
+        temporizadorCotizacion = setTimeout(async () => {
+            try {
+                const c = await window.CarmovoClienteApi.pasarela('cotizacion', {
+                    vehiculoId: String(autoActual.idVehiculo), fechaInicio: inputFechaInicio.value,
+                    fechaFin: inputFechaFin.value, conChofer: String(conChofer)
+                });
+                const actual = `${autoActual?.idVehiculo}|${inputFechaInicio.value}|${inputFechaFin.value}|${!!document.getElementById('con-chofer')?.checked}`;
+                if (!c || actual !== pedido) return;
+                const dias = Number(c.dias);
+                totalPagar = Number(c.total);
+                if (etiquetaDias) {
+                    etiquetaDias.textContent = `Tarifa base (${dias} ${dias === 1 ? 'día' : 'días'})` +
+                        (c.descuento ? ` · oferta -${c.descuento}%` : '');
+                }
+                if (resumenTarifaBase) resumenTarifaBase.textContent = `S/ ${Number(c.tarifaBase).toFixed(2)}`;
+                if (resumenImpuestos) resumenImpuestos.textContent = `S/ ${Number(c.igv).toFixed(2)}`;
+                if (resumenTotal) resumenTotal.textContent = `S/ ${totalPagar.toFixed(2)}`;
+                const chofer = document.getElementById('resumen-chofer');
+                if (chofer) chofer.textContent = `S/ ${Number(c.chofer).toFixed(2)}`;
+                document.querySelectorAll('.monto-dinamico-modal')
+                    .forEach(span => span.textContent = `S/ ${totalPagar.toFixed(2)}`);
+                avisoChofer('');
+            } catch (error) {
+                // Sin choferes libres en esas fechas: se avisa y se quita la opción.
+                const mensaje = String(error?.message || '');
+                if (conChofer && /chofer/i.test(mensaje)) {
+                    const casilla = document.getElementById('con-chofer');
+                    if (casilla) casilla.checked = false;
+                    aplicarModoChofer();
+                    actualizarResumen();
+                    avisoChofer(mensaje);
+                }
+                // Sin sesión o fechas no válidas: se conserva la vista previa local.
+            }
+        }, 350);
     }
 
     if (selectorAuto) selectorAuto.addEventListener('change', actualizarResumen);
+    document.getElementById('con-chofer')?.addEventListener('change', actualizarResumen);
+
+    // ---------------------------------------------------------------- boleta o factura
+    const datosFactura = document.getElementById('datos-factura');
+    const inputRuc = document.getElementById('factura-ruc');
+    const estadoRuc = document.getElementById('factura-ruc-estado');
+    const errorFactura = document.getElementById('error-factura');
+
+    function tipoComprobante() {
+        return document.querySelector('input[name="tipo-comprobante"]:checked')?.value || 'BOLETA';
+    }
+
+    /** RUC: 11 dígitos, prefijo 10/15/17/20 y dígito verificador (módulo 11). */
+    function rucValido(ruc) {
+        if (!/^(10|15|17|20)\d{9}$/.test(ruc)) return false;
+        const pesos = [5, 4, 3, 2, 7, 6, 5, 4, 3, 2];
+        const suma = pesos.reduce((t, p, i) => t + p * Number(ruc[i]), 0);
+        let digito = 11 - (suma % 11);
+        if (digito === 10) digito = 0;
+        if (digito === 11) digito = 1;
+        return digito === Number(ruc[10]);
+    }
+
+    document.querySelectorAll('input[name="tipo-comprobante"]').forEach(radio => {
+        radio.addEventListener('change', () => {
+            const esFactura = tipoComprobante() === 'FACTURA';
+            if (datosFactura) datosFactura.hidden = !esFactura;
+            if (errorFactura) errorFactura.hidden = true;
+            if (esFactura) setTimeout(() => inputRuc?.focus(), 50);
+        });
+    });
+
+    inputRuc?.addEventListener('input', () => {
+        inputRuc.value = inputRuc.value.replace(/\D/g, '').slice(0, 11);
+        if (!estadoRuc) return;
+        if (inputRuc.value.length < 11) {
+            estadoRuc.textContent = inputRuc.value ? `${11 - inputRuc.value.length} dígitos más` : '';
+            estadoRuc.className = 'mensaje-campo';
+        } else if (rucValido(inputRuc.value)) {
+            estadoRuc.textContent = '✓ RUC válido';
+            estadoRuc.className = 'mensaje-campo ok';
+        } else {
+            estadoRuc.textContent = 'RUC inválido: revisa los números';
+            estadoRuc.className = 'mensaje-campo error';
+        }
+    });
+
+    function datosFacturacion() {
+        if (tipoComprobante() !== 'FACTURA') return { tipoComprobante: 'BOLETA' };
+        return {
+            tipoComprobante: 'FACTURA',
+            ruc: inputRuc?.value.trim() || '',
+            razonSocial: document.getElementById('factura-razon')?.value.trim() || '',
+            direccionFiscal: document.getElementById('factura-direccion')?.value.trim() || ''
+        };
+    }
+
+    function validarFacturacion() {
+        const datos = datosFacturacion();
+        let mensaje = '';
+        if (datos.tipoComprobante === 'FACTURA') {
+            if (!rucValido(datos.ruc)) mensaje = 'El RUC no es válido: debe tener 11 dígitos y empezar con 10, 15, 17 o 20.';
+            else if (datos.razonSocial.length < 3) mensaje = 'Ingresa la razón social para la factura.';
+            else if (datos.direccionFiscal.length < 5) mensaje = 'Ingresa la dirección fiscal para la factura.';
+        }
+        if (errorFactura) {
+            errorFactura.textContent = mensaje;
+            errorFactura.hidden = !mensaje;
+            if (mensaje) errorFactura.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+        return !mensaje;
+    }
 
     // Los datos del conductor se cargan desde el perfil persistido en PostgreSQL.
     // En Reservas son solo de lectura; cualquier corrección se realiza desde Mi Cuenta.
@@ -451,6 +588,36 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const radiosPago = document.querySelectorAll('input[name="pago"]');
 
+    // Términos y privacidad: se abre el documento completo y solo se marca al leerlo y aceptarlo.
+    const casillaPoliticas = document.getElementById('acepta-politicas');
+    window.CarmovoPoliticas?.vincular(casillaPoliticas, { tipo: 'cliente' });
+
+    // Con chofer de la agencia el cliente no maneja: su licencia deja de ser obligatoria.
+    function aplicarModoChofer() {
+        const conChofer = !!document.getElementById('con-chofer')?.checked;
+        [inputLicencia, inputCategoria, inputVenceLicencia].forEach(input => {
+            if (!input) return;
+            input.required = !conChofer;
+            input.classList.remove('input-error');
+            const grupo = input.closest('.grupo-input');
+            if (grupo) grupo.hidden = conChofer;
+        });
+        const titulo = document.getElementById('titulo-datos-conductor');
+        if (titulo) titulo.textContent = conChofer ? 'Datos del titular de la reserva' : 'Datos del conductor';
+        const radio = document.querySelector(`input[name="quien-maneja"][value="${conChofer ? 'agencia' : 'yo'}"]`);
+        if (radio && !radio.checked) radio.checked = true;
+    }
+    document.getElementById('con-chofer')?.addEventListener('change', aplicarModoChofer);
+    // "¿Quién manejará?": Yo manejo (como siempre) o Chofer de la agencia.
+    document.querySelectorAll('input[name="quien-maneja"]').forEach(radio => radio.addEventListener('change', () => {
+        const casilla = document.getElementById('con-chofer');
+        if (!casilla) return;
+        casilla.checked = radio.value === 'agencia' && radio.checked;
+        if (radio.value === 'agencia') avisoChofer('');
+        casilla.dispatchEvent(new Event('change'));
+    }));
+    aplicarModoChofer();
+
     function desmarcarMetodos() {
         radiosPago.forEach(radio => radio.checked = false);
     }
@@ -466,6 +633,17 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             if (!autoActual) {
                 alert('Debe seleccionar un vehículo.');
+                return;
+            }
+            if (!validarFacturacion()) {
+                desmarcarMetodos();
+                return;
+            }
+            if (!casillaPoliticas?.checked) {
+                desmarcarMetodos();
+                const etiqueta = document.getElementById('campo-acepto-reserva');
+                etiqueta?.classList.add('pol-acepto--error');
+                etiqueta?.scrollIntoView({ behavior: 'smooth', block: 'center' });
                 return;
             }
             if (!window.PasarelaSimulada) {
@@ -485,6 +663,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 titular: nombreCompleto,
                 celular: inputTelefono?.value || '',
                 correo: inputCorreo?.value || '',
+                // El servidor recalcula el monto con estos datos (no confía en el navegador).
+                reserva: {
+                    vehiculoId: autoActual.idVehiculo,
+                    fechaInicio: inputFechaInicio.value,
+                    fechaFin: inputFechaFin.value,
+                    conChofer: !!document.getElementById('con-chofer')?.checked
+                },
                 onAprobado: (resultado) => window.enviarReservaBackend(resultado.metodo, resultado),
                 onCancelado: desmarcarMetodos
             });
@@ -510,9 +695,10 @@ document.addEventListener('DOMContentLoaded', () => {
     function normalizarMetodoPago(metodo) {
         const metodos = {
             tarjeta: 'Tarjeta',
-            paypal: 'PayPal',
+            efectivo: 'Efectivo',
             yape: 'Yape',
-            plin: 'Plin'
+            plin: 'Plin',
+            transferencia: 'Transferencia'
         };
         return metodos[metodo] || metodo;
     }
@@ -549,9 +735,11 @@ document.addEventListener('DOMContentLoaded', () => {
             lugarRecogida: textoOpcion(selectRecogida),
             lugarEntrega: textoOpcion(selectEntrega),
             metodoPago: normalizarMetodoPago(metodoPago),
-            referenciaPago,
-            tokenPago: resultadoPago.tokenPago || null,
-            detallePago: resultadoPago.detallePago || null,
+            // El servidor valida este código de pago (monto, dueño y uso único).
+            codigoIntento: resultadoPago.codigoIntento,
+            conChofer: !!document.getElementById('con-chofer')?.checked,
+            aceptaPoliticas: !!casillaPoliticas?.checked,
+            ...datosFacturacion(),
             conductor: {
                 nombre: inputNombre.value.trim(),
                 apellidos: inputApellidos.value.trim(),
@@ -572,23 +760,8 @@ document.addEventListener('DOMContentLoaded', () => {
         enviandoReserva = true;
 
         try {
-            const res = await fetch('http://localhost:8080/api/v1/reservas', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(reservaData)
-            });
-
-            const tipoContenido = res.headers.get('content-type') || '';
-            const respuesta = tipoContenido.includes('application/json')
-                ? await res.json()
-                : await res.text();
-
-            if (!res.ok) {
-                const mensaje = typeof respuesta === 'string'
-                    ? respuesta
-                    : respuesta?.message || respuesta?.detalle || respuesta?.error || 'No se pudo registrar la reserva.';
-                throw new Error(mensaje);
-            }
+            // El token JWT identifica al cliente: el servidor ignora cualquier idUsuario ajeno.
+            const respuesta = await window.CarmovoClienteApi.crearReserva(reservaData);
 
             const alquiler = respuesta;
             if (typeof alquiler?.total === 'number') {
@@ -605,7 +778,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 fechaInicio: alquiler.fechaInicio,
                 fechaFin: alquiler.fechaFin,
                 metodoPago: normalizarMetodoPago(metodoPago),
-                estadoPago: estadoPagoInicial(),
+                estadoPago: resultadoPago.estado || estadoPagoInicial(),
                 referenciaPago
             }));
 
@@ -615,7 +788,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (nombreExito) nombreExito.textContent = inputNombre.value.split(' ')[0];
             if (textoValidacion) {
-                textoValidacion.innerHTML = `Reserva #${alquiler.idAlquiler} registrada como <strong>${alquiler.estado}</strong>.<br>Pago: <strong>Pagado</strong> con ${normalizarMetodoPago(metodoPago)} · Ref. <strong>${referenciaPago || '—'}</strong>.<br>Total: S/ ${Number(alquiler.total).toFixed(2)}. Tu comprobante ya está disponible en Mi Cuenta.`;
+                const total = `S/ ${Number(alquiler.total).toFixed(2)}`;
+                const mensajes = {
+                    APROBADO: `Tu pago con ${normalizarMetodoPago(metodoPago)} fue aprobado (ref. <strong>${referenciaPago || '—'}</strong>).<br>Total: ${total}. Tu comprobante ya está disponible en Mi Cuenta.`,
+                    EN_REVISION: `Registramos tu operación ${normalizarMetodoPago(metodoPago)} N° <strong>${referenciaPago || '—'}</strong>. Tu pago está <strong>en revisión</strong>.<br>Caja lo verificará y te avisaremos por correo si se aprueba o se rechaza. Total: ${total}.`,
+                    PENDIENTE: `Paga <strong>${total}</strong> en efectivo en nuestra oficina presentando el código <strong>${referenciaPago || '—'}</strong>.<br>Tienes hasta las 12:00 del día de recojo; si no, la reserva se cancelará automáticamente.`
+                };
+                textoValidacion.innerHTML = `Reserva #${alquiler.idAlquiler} registrada.<br>` +
+                    (mensajes[resultadoPago.estado] || `Total: ${total}.`);
             }
             if (modalExito) {
                 modalExito.classList.remove('oculto');

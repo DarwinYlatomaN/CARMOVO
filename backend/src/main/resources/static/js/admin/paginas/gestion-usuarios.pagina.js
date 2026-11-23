@@ -633,15 +633,15 @@
             `${usuario.nombres} ${usuario.apellidos}`.trim();
 
         const confirmar = window.confirm(
-            `¿Eliminar a ${nombreCompleto}? Esta acción eliminará su cuenta del sistema.`
+            `¿Eliminar a ${nombreCompleto}? Si ya tiene alquileres, su cuenta se desactivará en lugar de eliminarse para conservar su historial.`
         );
 
         if (!confirmar) return;
 
         try {
-            await window.CarmovoAdminApi.eliminarUsuario(id);
+            const resultado = await window.CarmovoAdminApi.eliminarUsuario(id);
 
-            notificar('Usuario eliminado correctamente.');
+            notificar(resultado?.message || 'Usuario eliminado correctamente.');
             await cargarDatos();
 
         } catch (error) {

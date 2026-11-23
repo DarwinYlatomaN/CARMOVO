@@ -80,4 +80,28 @@ public class Vehiculo {
 
     public String getDescripcion() { return descripcion; }
     public void setDescripcion(String descripcion) { this.descripcion = descripcion; }
+
+    // ---- Campos agregados (actualización 2026) ----
+    @Column(length = 10, unique = true)
+    private String placa;
+    private Integer anio;
+    @Column(length = 30)
+    private String color;
+    private Integer kilometraje;
+    @Column(name = "vencimiento_soat")
+    private java.time.LocalDate vencimientoSoat;
+    @Column(name = "vencimiento_revision")
+    private java.time.LocalDate vencimientoRevision;
+    public String getPlaca() { return placa; }
+    public void setPlaca(String placa) { this.placa = placa; }
+    public Integer getAnio() { return anio; }
+    public void setAnio(Integer anio) { this.anio = anio; }
+    public String getColor() { return color; }
+    public void setColor(String color) { this.color = color; }
+    public Integer getKilometraje() { return kilometraje; }
+    public void setKilometraje(Integer kilometraje) { this.kilometraje = kilometraje; }
+    public java.time.LocalDate getVencimientoSoat() { return vencimientoSoat; }
+    public void setVencimientoSoat(java.time.LocalDate vencimientoSoat) { this.vencimientoSoat = vencimientoSoat; }
+    public java.time.LocalDate getVencimientoRevision() { return vencimientoRevision; }
+    public void setVencimientoRevision(java.time.LocalDate vencimientoRevision) { this.vencimientoRevision = vencimientoRevision; }
 }

@@ -38,4 +38,7 @@ public interface UsuarioRepositorio extends JpaRepository<Usuario, Long> {
     boolean existsByTelefonoAndIdUsuarioNot(String telefono, Long idUsuario);
 
     boolean existsByNumeroLicenciaAndIdUsuarioNot(String numeroLicencia, Long idUsuario);
+
+    // Cantidad de cuentas que tienen un rol (Roles y permisos)
+    long countByPerfilIdPerfil(Long idPerfil);
 }

@@ -10,7 +10,7 @@
 
     const sesionExistente = window.CarmovoAdminApi?.obtenerSesionLocal();
 
-    if (sesionExistente?.token && sesionExistente?.perfil === 'Administrador') {
+    if (sesionExistente?.token && (sesionExistente?.perfil && String(sesionExistente.perfil).toLowerCase() !== 'cliente')) {
         window.CarmovoAdminApi.validarSesion()
             .then(sesion => window.location.replace(sesion.rutaInicio || RUTA_TABLERO))
             .catch(() => window.CarmovoAdminApi.limpiarSesionLocal());

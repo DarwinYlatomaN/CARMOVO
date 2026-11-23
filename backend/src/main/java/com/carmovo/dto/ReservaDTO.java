@@ -61,6 +61,11 @@ public class ReservaDTO {
     public ConductorDTO getConductor() { return conductor; }
     public void setConductor(ConductorDTO conductor) { this.conductor = conductor; }
 
+    /** Casilla "Acepto los Términos y la Política de privacidad". */
+    private Boolean aceptaPoliticas;
+    public Boolean getAceptaPoliticas() { return aceptaPoliticas; }
+    public void setAceptaPoliticas(Boolean aceptaPoliticas) { this.aceptaPoliticas = aceptaPoliticas; }
+
     public static class ConductorDTO {
         private String nombre;
         private String apellidos;
@@ -115,4 +120,24 @@ public class ReservaDTO {
         public String getDistrito() { return distrito; }
         public void setDistrito(String distrito) { this.distrito = distrito; }
     }
+
+    // ---- Campos agregados (actualización 2026) ----
+    private String codigoIntento;
+    private String tipoComprobante;
+    private String ruc;
+    private String razonSocial;
+    private String direccionFiscal;
+    private Boolean conChofer;
+    public String getCodigoIntento() { return codigoIntento; }
+    public void setCodigoIntento(String codigoIntento) { this.codigoIntento = codigoIntento; }
+    public String getTipoComprobante() { return tipoComprobante; }
+    public void setTipoComprobante(String tipoComprobante) { this.tipoComprobante = tipoComprobante; }
+    public String getRuc() { return ruc; }
+    public void setRuc(String ruc) { this.ruc = ruc; }
+    public String getRazonSocial() { return razonSocial; }
+    public void setRazonSocial(String razonSocial) { this.razonSocial = razonSocial; }
+    public String getDireccionFiscal() { return direccionFiscal; }
+    public void setDireccionFiscal(String direccionFiscal) { this.direccionFiscal = direccionFiscal; }
+    public Boolean getConChofer() { return conChofer; }
+    public void setConChofer(Boolean conChofer) { this.conChofer = conChofer; }
 }

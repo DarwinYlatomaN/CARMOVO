@@ -1,5 +1,7 @@
 package com.carmovo.controller;
 
+import com.carmovo.service.ClienteActual;
+
 
 import com.carmovo.dto.ReservaDTO;
 import com.carmovo.service.ReservaServicio;
@@ -22,6 +24,8 @@ public class ReservaController {
     @PostMapping
     public ResponseEntity<?> crearReserva(@RequestBody ReservaDTO reservaDTO) {
         try {
+            // El cliente es siempre el del token JWT, nunca el que envía el navegador.
+            reservaDTO.setIdUsuario(ClienteActual.id());
             AlquilerDTO alquiler = reservaServicio.procesarReserva(reservaDTO);
             return ResponseEntity.ok(alquiler);
         } catch (ResponseStatusException e) {

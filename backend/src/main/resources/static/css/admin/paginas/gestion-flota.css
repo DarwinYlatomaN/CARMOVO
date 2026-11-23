@@ -572,3 +572,42 @@
         transition: none;
     }
 }
+.flota-km { display: block; color: var(--admin-texto-secundario, #587284); font-size: .78rem; margin-top: 2px; }
+.flota-alerta { display: block; color: #A4661A; font-weight: 700; font-size: .76rem; margin-top: 3px; }
+
+/* Imagen del vehículo: subir foto con vista previa */
+.flota-imagen { display: flex; gap: 16px; align-items: center; background: var(--admin-fondo); border-radius: 14px; padding: 12px; margin-bottom: 10px; }
+.flota-imagen img, .flota-imagen__vacia { width: 160px; height: 100px; border-radius: 10px; object-fit: cover; background: var(--admin-superficie-2); flex-shrink: 0; }
+.flota-imagen__vacia { display: grid; place-items: center; font-size: 1.7rem; color: var(--admin-texto-secundario); }
+.flota-imagen__acciones { display: flex; flex-direction: column; align-items: flex-start; gap: 8px; }
+.flota-imagen__acciones small { color: var(--admin-texto-secundario); font-size: .78rem; }
+.flota-imagen__subir { cursor: pointer; display: inline-flex; align-items: center; gap: 8px; }
+.flota-imagen__subir.subiendo { opacity: .6; pointer-events: none; }
+.ayuda-campo-flota { display: block; margin-top: 6px; font-size: .78rem; color: var(--admin-texto-secundario); }
+.ayuda-campo-flota a { color: var(--admin-azul); font-weight: 700; }
+.flota-imagen [hidden] { display: none !important; }
+.flota-imagen__subir { min-height: 40px; padding: 0 16px; justify-content: center; }
+.flota-imagen__subir input[type=file] { display: none !important; }
+
+/* Descripción del vehículo */
+.campo-formulario textarea {
+    width: 100%;
+    min-height: 88px;
+    padding: 10px 12px;
+    border: 1px solid var(--admin-borde);
+    border-radius: 9px;
+    background: #FFFFFF;
+    color: #293E4D;
+    font: inherit;
+    line-height: 1.5;
+    resize: vertical;
+    outline: none;
+    box-sizing: border-box;
+    transition: border-color .2s ease, box-shadow .2s ease;
+}
+
+.campo-formulario textarea:focus {
+    border-color: #7CB5D9;
+    box-shadow: 0 0 0 3px rgba(124, 181, 217, .16);
+}
+.campo-formulario label.flota-imagen__subir { display: inline-flex; align-items: center; justify-content: center; margin: 0; font-size: .82rem; }

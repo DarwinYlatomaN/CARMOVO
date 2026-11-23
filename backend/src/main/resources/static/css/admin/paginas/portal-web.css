@@ -1,0 +1,77 @@
+/* CARMOVO · Editor del portal web (sin bordes) */
+.pw-diseno { display: grid; grid-template-columns: minmax(0, 1fr) 460px; gap: 20px; align-items: start; }
+.pw-diseno.sin-vista { grid-template-columns: minmax(0, 1fr); }
+.pw-editor .pu-tarjeta + .pu-tarjeta { margin-top: 18px; }
+.pw-fila-titulo { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; margin-bottom: 8px; }
+
+.pw-imagen { display: flex; gap: 16px; align-items: center; background: var(--admin-fondo); border-radius: 14px; padding: 12px; }
+.pw-imagen img, .pw-imagen video { width: 180px; height: 100px; object-fit: cover; border-radius: 10px; background: #1f2a24; flex-shrink: 0; }
+.pw-imagen [hidden] { display: none !important; }
+.pw-imagen strong { display: block; color: var(--admin-texto); font-size: .88rem; margin-bottom: 6px; }
+.pw-imagen__botones { display: flex; flex-wrap: wrap; gap: 8px; }
+.pw-imagen small { display: block; margin-top: 8px; font-weight: 500; }
+
+.pw-beneficios { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.pw-bloque { position: relative; background: var(--admin-fondo); border-radius: 14px; padding: 14px; display: grid; gap: 10px; }
+.pw-bloque .pu-campo input, .pw-bloque .pu-campo textarea { background: var(--admin-superficie); }
+.pw-bloque__numero { position: absolute; top: 12px; right: 14px; font-weight: 800; color: var(--admin-texto-secundario); opacity: .5; }
+.pw-faq { display: grid; gap: 12px; }
+.pw-bloque--faq { grid-template-columns: auto 1fr auto; align-items: start; }
+.pw-bloque__orden { display: flex; flex-direction: column; gap: 4px; }
+.pw-bloque__orden button, .pw-bloque__quitar { border: 0; background: var(--admin-superficie); width: 32px; height: 32px; border-radius: 9px; cursor: pointer; color: var(--admin-texto-secundario); }
+.pw-bloque__orden button:disabled { opacity: .35; cursor: default; }
+.pw-bloque__quitar { color: #9d3c3c; }
+.pw-bloque__campos { display: grid; gap: 10px; }
+.pw-version { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+
+/* Vista previa: la página real dentro de un marco a escala */
+.pw-vista { position: sticky; top: 20px; background: var(--admin-superficie); border-radius: 18px; box-shadow: var(--admin-sombra); overflow: hidden; }
+.pw-vista[hidden] { display: none; }
+.pw-vista__barra { display: flex; align-items: center; gap: 6px; padding: 10px 12px 10px 14px; background: var(--admin-superficie-2); }
+.pw-vista__barra > span { width: 9px; height: 9px; border-radius: 50%; background: #c8dbe8; }
+.pw-vista__barra small { margin-left: 8px; color: var(--admin-texto-secundario); font-weight: 700; font-size: .74rem; flex: 1; }
+.pw-vista__dispositivos { display: flex; gap: 4px; background: var(--admin-superficie); padding: 3px; border-radius: 9px; }
+.pw-vista__dispositivos button { border: 0; background: transparent; width: 30px; height: 26px; border-radius: 7px; cursor: pointer; color: var(--admin-texto-secundario); }
+.pw-vista__dispositivos button.activo { background: var(--admin-superficie-2); color: var(--admin-texto); }
+.pw-vista__marco { position: relative; overflow: hidden; background: #f3f8f5; }
+.pw-vista__marco iframe { position: absolute; top: 0; left: 0; border: 0; transform-origin: 0 0; pointer-events: none; background: #fff; }
+.pw-vista__nota { margin: 0; padding: 8px 14px; font-size: .74rem; color: var(--admin-texto-secundario); background: var(--admin-superficie-2); }
+
+@media (max-width: 1280px) {
+    .pw-diseno { grid-template-columns: minmax(0, 1fr); }
+    .pw-vista { position: static; }
+}
+
+.pw-progreso { height: 6px; border-radius: 99px; background: var(--admin-superficie-2); overflow: hidden; margin: 10px 0 4px; max-width: 260px; }
+.pw-progreso[hidden] { display: none; }
+.pw-progreso span { display: block; height: 100%; width: 40%; border-radius: 99px; background: var(--admin-azul); animation: pwCarga 1.1s ease-in-out infinite; }
+@keyframes pwCarga { from { transform: translateX(-100%); } to { transform: translateX(260%); } }
+.pw-imagen label.pu-boton.ocupado { opacity: .55; pointer-events: none; }
+
+/* Pestaña Diseño */
+.pw-paletas { display: flex; flex-wrap: wrap; gap: 10px; margin: 6px 0 16px; }
+.pw-paleta { display: flex; flex-direction: column; align-items: flex-start; gap: 8px; border: 0; background: var(--admin-fondo); border-radius: 14px; padding: 10px 12px; cursor: pointer; font: inherit; font-size: .8rem; font-weight: 700; color: var(--admin-texto); }
+.pw-paleta span { display: flex; }
+.pw-paleta i { width: 22px; height: 22px; border-radius: 50%; margin-right: -6px; box-shadow: 0 0 0 2px #fff; }
+.pw-paleta.activa { background: var(--admin-superficie-3); box-shadow: inset 0 0 0 2px var(--admin-azul); }
+.pw-colores { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.pw-color { display: flex; align-items: center; gap: 12px; background: var(--admin-fondo); border-radius: 14px; padding: 10px 12px; cursor: pointer; }
+.pw-color input[type=color] { width: 46px; height: 46px; border: 0; padding: 0; border-radius: 12px; background: none; cursor: pointer; flex-shrink: 0; }
+.pw-color input[type=color]::-webkit-color-swatch-wrapper { padding: 0; }
+.pw-color input[type=color]::-webkit-color-swatch { border: 0; border-radius: 12px; }
+.pw-color b { display: block; color: var(--admin-texto); font-size: .88rem; }
+.pw-color small { color: var(--admin-texto-secundario); font-size: .76rem; }
+.pw-muestra-fuente { background: var(--admin-fondo); border-radius: 14px; padding: 14px 16px; }
+.pw-muestra-fuente strong { display: block; font-size: 1.2rem; color: var(--admin-texto); margin-bottom: 4px; }
+.pw-muestra-fuente span { color: var(--admin-texto-secundario); font-size: .9rem; }
+.pw-opciones { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 10px; }
+.pw-opciones button { border: 0; background: var(--admin-fondo); border-radius: 14px; padding: 14px 10px; display: flex; flex-direction: column; align-items: center; gap: 10px; cursor: pointer; font: inherit; font-size: .8rem; font-weight: 700; color: var(--admin-texto-secundario); }
+.pw-opciones button.activa { background: var(--admin-superficie-3); color: var(--admin-texto); box-shadow: inset 0 0 0 2px var(--admin-azul); }
+.pw-ej { display: inline-block; background: #2F8654; color: #fff; padding: 8px 16px; font-size: .78rem; }
+.pw-ej--original { border-radius: 30px; }
+.pw-ej-tarjeta { display: block; width: 70px; height: 44px; background: #E4F3E9; box-shadow: inset 0 0 0 1px #C4DDCD; }
+.pw-rango { padding: 0 !important; accent-color: var(--admin-azul); }
+#pw-restaurar-inicial { background: #f9e5e5; }
+@media (max-width: 900px) { .pw-colores { grid-template-columns: 1fr; } }
+.pw-color input[type=color] { box-shadow: inset 0 0 0 1px rgba(0,0,0,.12); }
+.pw-color input[type=color]::-webkit-color-swatch { box-shadow: inset 0 0 0 1px rgba(0,0,0,.12); }
