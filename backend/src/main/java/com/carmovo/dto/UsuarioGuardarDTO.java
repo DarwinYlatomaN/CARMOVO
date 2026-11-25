@@ -240,4 +240,9 @@ public class UsuarioGuardarDTO {
     public void setIdPerfil(Long idPerfil) {
         this.idPerfil = idPerfil;
     }
+
+    /** Casilla "El cliente acepta los Términos y la Política de privacidad" (alta desde el panel). */
+    private Boolean aceptaPoliticas;
+    public Boolean getAceptaPoliticas() { return aceptaPoliticas; }
+    public void setAceptaPoliticas(Boolean aceptaPoliticas) { this.aceptaPoliticas = aceptaPoliticas; }
 }

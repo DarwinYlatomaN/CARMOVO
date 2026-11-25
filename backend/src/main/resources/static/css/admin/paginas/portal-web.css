@@ -75,3 +75,4 @@
 @media (max-width: 900px) { .pw-colores { grid-template-columns: 1fr; } }
 .pw-color input[type=color] { box-shadow: inset 0 0 0 1px rgba(0,0,0,.12); }
 .pw-color input[type=color]::-webkit-color-swatch { box-shadow: inset 0 0 0 1px rgba(0,0,0,.12); }
+.pw-subtitulo-colores { margin: 20px 0 10px; font-size: .78rem; letter-spacing: .06em; text-transform: uppercase; color: var(--admin-texto-secundario, #587284); }

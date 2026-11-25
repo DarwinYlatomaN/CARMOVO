@@ -29,7 +29,7 @@ import java.util.Map;
  * Flujo:
  *  1. crear(): el servidor calcula el monto (no confía en el navegador) y abre un intento de 15 minutos.
  *  2. Según el método:
- *       Tarjeta  → pagarTarjeta() → verificar3ds() → APROBADO / RECHAZADO
+ *       Tarjeta  → pagarTarjeta() → verificar3ds() → APROBADO (pago "En revisión" hasta que lo valide el Cajero) / RECHAZADO
  *       Yape          → subirConstancia() + reportarYape()          → EN_REVISION (lo valida el Cajero)
  *       Plin          → subirConstancia() + reportarPlin()          → EN_REVISION (lo valida el Cajero)
  *       Transferencia → subirConstancia() + reportarTransferencia() → EN_REVISION (lo valida el Cajero)

@@ -1,10 +1,4 @@
-/* =========================================================
-   CARMOVO · Contenido del sitio editable desde "Portal web"
-   Lee /api/v1/portal (contenido publicado + ofertas vigentes)
-   y lo aplica sobre el diseño existente de cada página.
-   Si la API no responde, la página conserva su texto original.
-   Todo se inserta con textContent (no se ejecuta HTML ajeno).
-   ========================================================= */
+
 (() => {
     'use strict';
 
@@ -27,13 +21,21 @@
     }
 
     // ------------------------------------------------------------ diseño del sitio (colores, letras, formas)
-    // Cada color original del sitio pertenece a un grupo. Al elegir un nuevo color base,
-    // los tonos del grupo se recalculan conservando su diferencia de luz y saturación.
+    // TODOS los colores del sitio se pueden personalizar. Cada color de las hojas de estilo se
+    // clasifica en un grupo (según dónde se usa y su tono) y, al elegir un nuevo color para el grupo,
+    // se recalcula conservando su diferencia de tono, saturación y luz con el color base del grupo.
     const GRUPOS = {
-        colorPrincipal: { base: '#376B50', tonos: ['#376B50', '#2F7A4E', '#2F8654', '#236D4E', '#1F7A45', '#329A61', '#164D39', '#5B9C76'] },
-        colorAcento:    { base: '#A8D5BA', tonos: ['#A8D5BA', '#8BC9A3', '#D8EEDF', '#E4F3E9', '#D8E9DE', '#DFF3E6', '#C9E1D1', '#C4DDCD'] },
-        colorFondo:     { base: '#F5FAF6', tonos: ['#F5FAF6', '#F1F7F2', '#F0F6F1'] },
-        colorTexto:     { base: '#263B30', tonos: ['#263B30', '#526B5D', '#648070', '#667F70', '#708579', '#789184'] }
+        colorPrincipal: '#376B50',     // botones, enlaces, títulos de color
+        colorAcento: '#A8D5BA',        // botones suaves, etiquetas, resaltados
+        colorFondo: '#F5FAF6',         // fondos claros de las páginas y secciones
+        colorTarjetas: '#FFFFFF',      // fondo de tarjetas, cajas y ventanas
+        colorTexto: '#263B30',         // textos y párrafos
+        colorTextoBotones: '#FFFFFF',  // texto claro sobre botones y la portada
+        colorCabecera: '#EAF4ED',      // cabecera y menú
+        colorPie: '#E4F3E9',           // pie de página
+        colorOfertas: '#C65C5C',       // descuentos, avisos y errores
+        colorDestacado: '#B58C3A',     // estrellas, insignias y destacados
+        colorSalir: '#A64545'          // botón "Salir" (cerrar sesión)
     };
     // Mismo catálogo que el editor del Portal web (Google Fonts).
     const FUENTES = ["Montserrat", "Poppins", "Inter", "Roboto", "Open Sans", "Lato", "Nunito", "Nunito Sans", "Raleway", "Work Sans", "Rubik", "Manrope", "DM Sans", "Outfit", "Plus Jakarta Sans", "Urbanist", "Mulish", "Source Sans 3", "Barlow", "Kanit", "Josefin Sans", "Quicksand", "Sora", "Lexend", "Figtree", "Playfair Display", "Merriweather", "Lora", "Libre Baskerville", "Cormorant Garamond", "EB Garamond", "Roboto Slab", "Crimson Text", "DM Serif Display", "Bebas Neue", "Oswald", "Anton", "Archivo Black", "Righteous", "Bungee", "Fredoka", "Comfortaa", "Teko", "Russo One", "Orbitron", "Pacifico", "Dancing Script", "Caveat", "Lobster", "Satisfy"];
@@ -41,7 +43,12 @@
     const FORMAS_BOTON = { redondeado: '12px', pildora: '999px', recto: '4px' };
     const FORMAS_TARJETA = { suave: '22px', recta: '6px' };
 
-    const hexARgb = h => [1, 3, 5].map(i => parseInt(h.slice(i, i + 2), 16));
+    const hexARgb = h => {
+        let x = h.replace('#', '');
+        if (x.length === 3 || x.length === 4) x = x.split('').map(c => c + c).join('');
+        return [0, 2, 4].map(i => parseInt(x.slice(i, i + 2), 16));
+    };
+    const rgbAHex = rgb => '#' + rgb.map(v => v.toString(16).padStart(2, '0')).join('').toUpperCase();
     function rgbAHsl([r, g, b]) {
         r /= 255; g /= 255; b /= 255;
         const max = Math.max(r, g, b), min = Math.min(r, g, b);
@@ -71,35 +78,56 @@
     const limitar = v => Math.min(1, Math.max(0, v));
     const hexValido = v => /^#[0-9a-f]{6}$/i.test(String(v || ''));
 
-    function mapaDeColores(tema) {
-        const mapa = new Map();
-        Object.entries(GRUPOS).forEach(([clave, grupo]) => {
-            const nuevo = tema?.[clave];
-            if (!hexValido(nuevo) || nuevo.toUpperCase() === grupo.base) return;
-            const [hb, sb, lb] = rgbAHsl(hexARgb(grupo.base));
-            const [hn, sn, ln] = rgbAHsl(hexARgb(nuevo));
-            grupo.tonos.forEach(tono => {
-                const [h, sat, l] = rgbAHsl(hexARgb(tono));
-                const destino = hslARgb([(hn + (h - hb) + 1) % 1, limitar(sn + (sat - sb)), limitar(ln + (l - lb))]);
-                mapa.set(hexARgb(tono).join(','), destino.join(', '));
-            });
-        });
-        return mapa;
+    /** ¿A qué grupo pertenece este color, según la propiedad y el lugar donde se usa? */
+    function grupoDe(rgb, prop, selector) {
+        const [h, sat, l] = rgbAHsl(rgb);
+        const fondo = /background|fill/.test(prop);
+        const texto = prop === 'color';
+        const sel = String(selector || '').toLowerCase();
+        if (/cerrar-sesion/.test(sel)) return 'colorSalir';
+        if (texto && l > 0.85) return 'colorTextoBotones';
+        if (fondo && /pie-pagina|footer|pie-/.test(sel)) return 'colorPie';
+        if (fondo && /cabecera|navegacion|barra-nav/.test(sel)) return 'colorCabecera';
+        if (sat > 0.35 && (h < 0.11 || h > 0.9) && l < 0.8) return 'colorOfertas';
+        if (sat > 0.35 && h >= 0.11 && h < 0.19 && l < 0.8) return 'colorDestacado';
+        if (l > 0.97 && sat < 0.2) return 'colorTarjetas';
+        if (l > 0.86) return 'colorFondo';
+        if (sat < 0.18 || (texto && l < 0.3) || l < 0.28) return 'colorTexto';
+        return l < 0.5 ? 'colorPrincipal' : 'colorAcento';
     }
 
+    /** Convierte un color al grupo elegido conservando su diferencia con el color base del grupo. */
+    function transformar(rgb, grupo, tema, cache) {
+        const nuevo = tema?.[grupo];
+        if (!hexValido(nuevo) || nuevo.toUpperCase() === GRUPOS[grupo]) return null;
+        const clave = grupo + rgb.join(',');
+        if (cache.has(clave)) return cache.get(clave);
+        const [hb, sb, lb] = rgbAHsl(hexARgb(GRUPOS[grupo]));
+        const [hn, sn, ln] = rgbAHsl(hexARgb(nuevo));
+        const [h, sat, l] = rgbAHsl(rgb);
+        const destino = hslARgb([(hn + (h - hb) + 1) % 1, limitar(sn + (sat - sb)), limitar(ln + (l - lb))]);
+        cache.set(clave, destino);
+        return destino;
+    }
+
+    const PATRON_COLOR = /#(?:[0-9a-f]{6}|[0-9a-f]{3})\b|rgba?\(\s*\d+\s*,\s*\d+\s*,\s*\d+/gi;
     let declaraciones = null;
     function declaracionesConColor() {
         if (declaraciones) return declaraciones;
         declaraciones = [];
-        const recorrer = reglas => {
+        const recorrer = (reglas, selectorPadre = '') => {
             for (const regla of reglas) {
-                if (regla.cssRules) recorrer(regla.cssRules);
+                if (regla.cssRules) recorrer(regla.cssRules, regla.selectorText || selectorPadre);
                 const st = regla.style;
-                if (!st) continue;
+                if (!st || regla.parentStyleSheet?.ownerNode?.id === 'portal-tema') continue;
                 for (let i = 0; i < st.length; i++) {
                     const prop = st[i];
+                    if (/shadow|border|outline/.test(prop)) continue;
                     const valor = st.getPropertyValue(prop);
-                    if (/rgba?\(/.test(valor)) declaraciones.push({ st, prop, valor, prioridad: st.getPropertyPriority(prop) });
+                    PATRON_COLOR.lastIndex = 0;
+                    if (PATRON_COLOR.test(valor)) {
+                        declaraciones.push({ st, prop, valor, prioridad: st.getPropertyPriority(prop), selector: regla.selectorText || selectorPadre });
+                    }
                 }
             }
         };
@@ -110,13 +138,17 @@
     }
 
     function aplicarColores(tema) {
-        const mapa = mapaDeColores(tema);
-        if (!mapa.size && !declaraciones) return;
+        const hayCambios = Object.keys(GRUPOS).some(g => hexValido(tema?.[g]) && tema[g].toUpperCase() !== GRUPOS[g]);
+        if (!hayCambios && !declaraciones) return;
+        const cache = new Map();
         declaracionesConColor().forEach(d => {
-            const nuevo = mapa.size ? d.valor.replace(/rgba?\((\d+),\s*(\d+),\s*(\d+)/g, (todo, r, g, b) => {
-                const destino = mapa.get(`${r},${g},${b}`);
-                return destino ? todo.replace(`${r}, ${g}, ${b}`, destino).replace(`${r},${g},${b}`, destino) : todo;
-            }) : d.valor;
+            const nuevo = !hayCambios ? d.valor : d.valor.replace(PATRON_COLOR, token => {
+                const esHex = token.startsWith('#');
+                const rgb = esHex ? hexARgb(token) : token.match(/\d+/g).slice(0, 3).map(Number);
+                const destino = transformar(rgb, grupoDe(rgb, d.prop, d.selector), tema, cache);
+                if (!destino) return token;
+                return esHex ? rgbAHex(destino) : token.replace(/\(\s*\d+\s*,\s*\d+\s*,\s*\d+/, `(${destino.join(', ')}`);
+            });
             if (d.st.getPropertyValue(d.prop) !== nuevo) d.st.setProperty(d.prop, nuevo, d.prioridad);
         });
     }

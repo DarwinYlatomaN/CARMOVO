@@ -1,12 +1,4 @@
 
-/* ==========================================================================
-   CARMOVO - TABLERO DEL ADMINISTRADOR
-   PALETA AZUL PASTEL
-   ========================================================================== */
-
-/* ==========================================================================
-   TARJETA DE BIENVENIDA
-   ========================================================================== */
 
 .tablero-bienvenida {
     width: 100%;
@@ -285,4 +277,308 @@
     .accion-rapida:hover {
         transform: none;
     }
+}
+
+/* ==========================================================================
+   INGRESOS (gráficos) Y ÚLTIMOS VEHÍCULOS
+   ========================================================================== */
+
+.tablero-grid-inferior {
+    grid-template-columns: minmax(0, 2fr) minmax(330px, 1fr);
+    align-items: start;
+}
+
+.tablero-ingresos {
+    padding: 22px 24px;
+}
+
+.ti-cabecera {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 16px;
+    flex-wrap: wrap;
+    margin-bottom: 14px;
+}
+
+.ti-cabecera h3 {
+    margin: 0;
+    color: #25506E;
+    font-size: 1.05rem;
+    font-weight: 800;
+}
+
+.ti-cabecera p {
+    margin: 3px 0 0;
+    color: #5F7A8E;
+    font-size: 0.78rem;
+}
+
+.ti-filtros {
+    display: flex;
+    gap: 4px;
+    padding: 4px;
+    border-radius: 12px;
+    background: #F2F7FB;
+}
+
+.ti-filtros button {
+    border: 0;
+    background: transparent;
+    color: #5F7A8E;
+    font: inherit;
+    font-size: 0.78rem;
+    font-weight: 700;
+    padding: 7px 12px;
+    border-radius: 9px;
+    cursor: pointer;
+    transition: background .2s ease, color .2s ease;
+}
+
+.ti-filtros button:hover {
+    color: #315A75;
+    background: #E6F0F7;
+}
+
+.ti-filtros button.activo {
+    background: #315A75;
+    color: #FFFFFF;
+    box-shadow: 0 6px 14px rgba(49, 90, 117, .25);
+}
+
+.ti-resumen {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px 34px;
+    margin-bottom: 10px;
+}
+
+.ti-resumen small {
+    display: block;
+    color: #5F7A8E;
+    font-size: 0.76rem;
+}
+
+.ti-resumen strong {
+    color: #1F3B52;
+    font-size: 1.4rem;
+    font-weight: 800;
+}
+
+.ti-resumen .ti-revisar {
+    color: #B7791F;
+}
+
+.ti-variacion {
+    margin-left: 6px;
+    font-size: 0.76rem;
+    font-weight: 700;
+}
+
+.ti-variacion.sube { color: #1C8353; }
+.ti-variacion.baja { color: #C0392B; }
+
+.ti-cuerpo {
+    display: grid;
+    grid-template-columns: minmax(0, 1.75fr) minmax(200px, 1fr);
+    gap: 22px;
+    align-items: center;
+}
+
+.ti-linea {
+    position: relative;
+    height: 270px;
+    min-width: 0;
+}
+
+.ti-metodos {
+    padding-left: 22px;
+    box-shadow: inset 1px 0 0 #EEF3F7;
+}
+
+.ti-metodos h4 {
+    margin: 0;
+    color: #25506E;
+    font-size: 0.9rem;
+    font-weight: 800;
+}
+
+.ti-metodos p {
+    margin: 2px 0 6px;
+    color: #5F7A8E;
+    font-size: 0.76rem;
+}
+
+.ti-dona {
+    position: relative;
+    height: 140px;
+}
+
+.ti-dona-vacia {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    color: #8AA0B0;
+    font-size: 0.78rem;
+    font-weight: 700;
+}
+
+.ti-leyenda {
+    list-style: none;
+    margin: 12px 0 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    font-size: 0.8rem;
+}
+
+.ti-leyenda li {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    color: #3E5B70;
+}
+
+.ti-leyenda i {
+    display: inline-block;
+    width: 9px;
+    height: 9px;
+    border-radius: 3px;
+    margin-right: 7px;
+}
+
+.ti-leyenda strong {
+    color: #1F3B52;
+}
+
+.ti-aviso {
+    margin: 12px 0 0;
+    padding: 10px 14px;
+    border-radius: 12px;
+    background: #FFF4DB;
+    color: #94620A;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+.ultimos-vehiculos {
+    list-style: none;
+    margin: 0;
+    padding: 0 16px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.ultimos-vehiculos .estado-vacio {
+    padding: 18px 6px;
+    color: #5F7A8E;
+    font-size: 0.85rem;
+}
+
+.uv-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 11px 12px;
+    border-radius: 14px;
+    background: #F5F9FC;
+    transition: transform .2s ease, box-shadow .2s ease;
+}
+
+.uv-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 22px rgba(49, 90, 117, .08);
+}
+
+.uv-icono {
+    width: 40px;
+    height: 40px;
+    flex: none;
+    display: grid;
+    place-items: center;
+    border-radius: 12px;
+    background: #E1EDF6;
+    color: #315A75;
+}
+
+.uv-nombre {
+    flex: 1;
+    min-width: 0;
+}
+
+.uv-nombre strong {
+    display: block;
+    color: #1F3B52;
+    font-size: 0.86rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.uv-nombre small {
+    display: block;
+    color: #5F7A8E;
+    font-size: 0.75rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.uv-dato {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 4px;
+    flex: none;
+}
+
+.uv-dato strong {
+    color: #1F3B52;
+    font-size: 0.82rem;
+}
+
+.uv-dato .badge-estado {
+    font-size: 0.68rem;
+    padding: 3px 9px;
+}
+
+@media (max-width: 1250px) {
+    .tablero-grid-inferior,
+    .ti-cuerpo {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .ti-metodos {
+        padding-left: 0;
+        box-shadow: none;
+    }
+}
+
+.ti-dona-vacia[hidden] {
+    display: none;
+}
+
+.tablero-grid-inferior aside .panel-cabecera {
+    flex-wrap: nowrap;
+    gap: 10px;
+    padding: 18px 18px 12px;
+    min-height: 0;
+}
+
+.tablero-grid-inferior aside .panel-cabecera h3 {
+    min-width: 0;
+    font-size: 0.9rem;
+    font-weight: 800;
+    color: #25506E;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.tablero-grid-inferior aside .panel-cabecera a {
+    white-space: nowrap;
+    font-size: 0.72rem;
 }

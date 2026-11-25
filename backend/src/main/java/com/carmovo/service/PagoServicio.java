@@ -129,9 +129,11 @@ public class PagoServicio {
         String estadoIntento = intento.getEstado();
         switch (estadoIntento) {
             case "APROBADO" -> {
-                pago.setEstado("Pagado");
-                pago.setFechaPago(LocalDateTime.now());
-                pago.setObservaciones("Pago aprobado en la pasarela (" + pago.getMetodo() + "). Intento " + intento.getCodigo() + ".");
+                // La tarjeta fue autorizada por la pasarela, pero caja la valida antes de emitir el comprobante.
+                pago.setEstado("En revisión");
+                if (pago.getFechaOperacion() == null) pago.setFechaOperacion(LocalDateTime.now());
+                pago.setObservaciones("Cargo con tarjeta autorizado por la pasarela (" + intento.getReferencia()
+                        + "). Pendiente de validación del Cajero. Intento " + intento.getCodigo() + ".");
             }
             case "EN_REVISION" -> {
                 pago.setEstado("En revisión");
@@ -154,7 +156,7 @@ public class PagoServicio {
 
     // ================================================================ acciones del Cajero
 
-    /** Yape o Plin en revisión → Pagado. Confirma el alquiler y emite el comprobante. */
+    /** Tarjeta, Yape, Plin o transferencia en revisión → Pagado. Confirma el alquiler y emite el comprobante. */
     @Transactional
     public PagoDTO aprobar(Long idAlquiler, String actor) {
         Pago pago = exigirEstado(idAlquiler, "En revisión");
@@ -171,7 +173,7 @@ public class PagoServicio {
         return obtenerPorAlquiler(idAlquiler);
     }
 
-    /** Yape o Plin en revisión, o efectivo pendiente → Rechazado. El alquiler se cancela y el auto queda libre. */
+    /** Pago en revisión o efectivo pendiente → Rechazado. El alquiler se cancela y el auto queda libre. */
     @Transactional
     public PagoDTO rechazar(Long idAlquiler, String motivo, String actor) {
         if (motivo == null || motivo.isBlank()) {

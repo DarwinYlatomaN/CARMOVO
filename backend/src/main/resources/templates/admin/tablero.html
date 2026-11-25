@@ -21,7 +21,11 @@
     <script defer th:src="@{/js/admin/guardias/rol.guardia.js}"></script>
     <script defer th:src="@{/js/admin/componentes/barra-lateral.js}"></script>
     <script defer th:src="@{/js/admin/principal.js}"></script>
+    <script defer src="/js/vendor/chart.umd.js" th:src="@{/js/vendor/chart.umd.js}"></script>
     <script defer th:src="@{/js/admin/paginas/tablero.pagina.js}"></script>
+    <link rel="stylesheet" href="/css/admin/premium.css" th:href="@{/css/admin/premium.css}">
+    <script src="/js/servicios/dialogo.js" th:src="@{/js/servicios/dialogo.js}"></script>
+    <script defer src="/js/servicios/animaciones.js" th:src="@{/js/servicios/animaciones.js}"></script>
 </head>
 <body data-pagina="tablero">
 <div class="app-admin">
@@ -125,80 +129,63 @@
             </div>
 
             <section class="tablero-seccion tablero-grid-inferior">
-                <article class="panel-base">
+                <article class="panel-base tablero-ingresos" id="tableroIngresos">
+                    <div class="ti-cabecera">
+                        <div>
+                            <h3>Ingresos</h3>
+                            <p>Solo cuentan los pagos aprobados por caja.</p>
+                        </div>
+                        <div class="ti-filtros" role="group" aria-label="Período de ingresos">
+                            <button type="button" data-periodo="7d">7 días</button>
+                            <button type="button" data-periodo="mes" class="activo">Este mes</button>
+                            <button type="button" data-periodo="6m">6 meses</button>
+                            <button type="button" data-periodo="anio">Este año</button>
+                        </div>
+                    </div>
+
+                    <div class="ti-resumen">
+                        <div>
+                            <small id="tiEtiquetaTotal">Total del mes</small>
+                            <strong id="tiTotal">S/ 0.00</strong>
+                            <span class="ti-variacion" id="tiVariacion" hidden></span>
+                        </div>
+                        <div>
+                            <small>Hoy</small>
+                            <strong id="tiHoy">S/ 0.00</strong>
+                        </div>
+                        <div>
+                            <small>Por revisar</small>
+                            <strong class="ti-revisar" id="tiRevisar">S/ 0.00</strong>
+                        </div>
+                    </div>
+
+                    <div class="ti-cuerpo">
+                        <div class="ti-linea">
+                            <canvas id="tiGraficoLinea" aria-label="Ingresos por período"></canvas>
+                        </div>
+                        <div class="ti-metodos">
+                            <h4>Por método de pago</h4>
+                            <p id="tiEtiquetaMetodos">Este mes</p>
+                            <div class="ti-dona">
+                                <canvas id="tiGraficoDona" aria-label="Ingresos por método de pago"></canvas>
+                                <span class="ti-dona-vacia" id="tiDonaVacia" hidden>Sin pagos</span>
+                            </div>
+                            <ul class="ti-leyenda" id="tiLeyenda"></ul>
+                        </div>
+                    </div>
+
+                    <p class="ti-aviso" id="tiAviso" hidden></p>
+                </article>
+
+                <aside class="panel-base">
                     <div class="panel-cabecera">
                         <h3>Últimos vehículos registrados</h3>
                         <a th:href="@{/admin/gestion-flota}">Ver toda la flota</a>
                     </div>
 
-                    <div class="tabla-contenedor">
-                        <table class="tabla-datos">
-                            <thead>
-                            <tr>
-                                <th>ID</th>
-                                <th>Vehículo</th>
-                                <th>Categoría</th>
-                                <th>Precio/día</th>
-                                <th>Estado</th>
-                            </tr>
-                            </thead>
-                            <tbody id="tablaVehiculosRecientes">
-                            <tr>
-                                <td colspan="5" class="estado-vacio">
-                                    Cargando información...
-                                </td>
-                            </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </article>
-
-                <aside class="panel-base">
-                    <div class="panel-cabecera">
-                        <h3>Acciones rápidas</h3>
-                    </div>
-
-                    <div class="acciones-rapidas">
-                        <a class="accion-rapida" th:href="@{/admin/gestion-flota}">
-                                <span class="accion-rapida__icono">
-                                    <i class="fa-solid fa-car"></i>
-                                </span>
-                            <span>
-                                    <strong>Gestionar flota</strong>
-                                    <span>Vehículos y disponibilidad</span>
-                                </span>
-                        </a>
-
-                        <a class="accion-rapida" th:href="@{/admin/gestion-alquileres}">
-                                <span class="accion-rapida__icono">
-                                    <i class="fa-solid fa-calendar-check"></i>
-                                </span>
-                            <span>
-                                    <strong>Ver alquileres</strong>
-                                    <span>Reservas y entregas</span>
-                                </span>
-                        </a>
-
-                        <a class="accion-rapida" th:href="@{/admin/gestion-usuarios}">
-                                <span class="accion-rapida__icono">
-                                    <i class="fa-solid fa-user-plus"></i>
-                                </span>
-                            <span>
-                                    <strong>Gestionar usuarios</strong>
-                                    <span>Clientes y accesos</span>
-                                </span>
-                        </a>
-
-                        <a class="accion-rapida" th:href="@{/admin/reportes}">
-                                <span class="accion-rapida__icono">
-                                    <i class="fa-solid fa-file-lines"></i>
-                                </span>
-                            <span>
-                                    <strong>Consultar reportes</strong>
-                                    <span>Indicadores del negocio</span>
-                                </span>
-                        </a>
-                    </div>
+                    <ul class="ultimos-vehiculos" id="tablaVehiculosRecientes">
+                        <li class="estado-vacio">Cargando información...</li>
+                    </ul>
                 </aside>
             </section>
         </main>

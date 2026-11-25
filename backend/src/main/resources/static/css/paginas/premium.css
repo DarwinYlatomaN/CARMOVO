@@ -1,0 +1,101 @@
+/* =========================================================
+   CARMOVO · Estilo premium del sitio web
+   Se carga al final de cada página:
+   1) sin bordes en todo el sitio (los campos usan un fondo suave),
+   2) tarjetas limpias con sombra suave y animación al pasar el mouse,
+   3) aparición suave de las tarjetas al bajar por la página.
+   ========================================================= */
+
+/* ---------- 1. Sin bordes ---------- */
+*, *::before, *::after { border-color: transparent !important; }
+hr { border: 0 !important; height: 0; }
+
+/* Indicadores de carga (giran gracias a su borde de color) */
+.pas-spinner { border-color: var(--pas-claro, #E4F3E9) !important; border-top-color: var(--pas-acento, #2F8654) !important; }
+.pas-checklist li.en-curso::before { border-color: var(--pas-claro, #E4F3E9) !important; border-top-color: var(--pas-acento, #2F8654) !important; }
+
+/* Campos: fondo suave en lugar de borde */
+:where(input:not([type=checkbox]):not([type=radio]):not([type=range]):not([type=color]):not([type=file]):not([type=hidden]), select, textarea) {
+    background-color: #F1F6F3 !important;
+    transition: background-color .2s ease, box-shadow .2s ease;
+}
+:where(input, select, textarea):focus { box-shadow: 0 0 0 3px rgba(55, 107, 80, .16) !important; outline: none; }
+/* Campos que van dentro de una caja con fondo propio */
+.formulario-reservas :where(input, select), .barra-busqueda :where(input), .campo-input :where(input, select),
+.pas-campo :where(input, select), .campo-contrasena :where(input) { background-color: transparent !important; box-shadow: none !important; }
+.pas-campo { background: #F1F6F3 !important; }
+.pas-campo:focus-within { box-shadow: 0 0 0 3px rgba(55, 107, 80, .16) !important; }
+/* Errores: fondo rojizo en lugar de borde rojo */
+.input-error, .is-invalid, [aria-invalid="true"] { background-color: #FCECEC !important; }
+
+/* Opciones elegidas: fondo y sombra en lugar de borde */
+.opcion-comprobante input:checked + span,
+.quien-maneja__opcion input:checked + span { background: #E4F3E9 !important; box-shadow: 0 8px 22px rgba(55, 107, 80, .16); }
+.radio-pago:has(input:checked) { background: #E4F3E9 !important; box-shadow: 0 8px 22px rgba(55, 107, 80, .16); }
+.filtro-oferta.activo, .filtro-categoria.activo { box-shadow: 0 8px 20px rgba(55, 107, 80, .18); }
+.historial-item.seleccionado { background: #E4F3E9 !important; box-shadow: 0 8px 22px rgba(55, 107, 80, .14); }
+
+/* ---------- 2. Tarjetas premium ---------- */
+:root {
+    --cm-sombra: 0 1px 2px rgba(20, 45, 32, .04), 0 10px 30px rgba(20, 45, 32, .07);
+    --cm-sombra-alta: 0 2px 6px rgba(20, 45, 32, .05), 0 22px 48px rgba(20, 45, 32, .13);
+    --cm-curva: cubic-bezier(.2, .8, .2, 1);
+}
+.beneficio, .tarjeta-oferta, .tarjeta-vehiculo, .tarjeta-ayuda, .tarjeta-guia, .tarjeta-ruta, .tarjeta-contacto,
+.tarjeta-sos, .insignia-card, .disponible, .item-faq, .tarjeta-reserva, .tarjeta-cuenta, .tarjeta-login,
+.tarjeta-registro, .tarjeta-recuperacion, .tarjeta-bloqueo, .resultado-mood-card, .historia-item, .pasarela-caja {
+    background-color: #FFFFFF !important;
+    border-radius: 22px;
+    box-shadow: var(--cm-sombra) !important;
+}
+/* Tarjetas que se pueden tocar: se elevan y la foto se acerca */
+.beneficio, .tarjeta-oferta, .tarjeta-vehiculo, .tarjeta-ayuda, .tarjeta-guia, .tarjeta-ruta, .tarjeta-contacto,
+.insignia-card, .disponible {
+    transition: transform .45s var(--cm-curva), box-shadow .45s var(--cm-curva) !important;
+    will-change: transform;
+}
+@media (hover: hover) {
+    .beneficio:hover, .tarjeta-oferta:hover, .tarjeta-vehiculo:hover, .tarjeta-ayuda:hover, .tarjeta-guia:hover,
+    .tarjeta-ruta:hover, .tarjeta-contacto:hover, .insignia-card:hover, .disponible:hover {
+        transform: translateY(-6px);
+        box-shadow: var(--cm-sombra-alta) !important;
+    }
+}
+.tarjeta-oferta img, .tarjeta-vehiculo img, .disponible img, .tarjeta-guia img, .tarjeta-ruta img {
+    transition: transform .8s var(--cm-curva) !important;
+}
+@media (hover: hover) {
+    .tarjeta-oferta:hover img, .tarjeta-vehiculo:hover img, .disponible:hover img,
+    .tarjeta-guia:hover img, .tarjeta-ruta:hover img { transform: scale(1.06); }
+}
+.tarjeta-oferta .imagen-oferta, .tarjeta-vehiculo, .disponible__img { overflow: hidden; }
+/* Datos dentro de tarjetas (Mi cuenta, reservas): cajitas suaves sin borde */
+.item-dato, .detalle-item, .precio-item { background-color: #F4F8F5; border-radius: 14px; }
+
+/* Botones: respuesta suave al tocar */
+:where(button, .btn, [class*="boton"]):not(:disabled) { transition: transform .2s ease, box-shadow .2s ease, filter .2s ease, background-color .2s ease; }
+@media (hover: hover) {
+    :where(.boton-accion-naranja, .btn-reservar-oferta, .disponible__reservar, .boton-buscar, .boton-login):hover {
+        transform: translateY(-2px); box-shadow: 0 10px 22px rgba(55, 107, 80, .22);
+    }
+}
+:where(button, .btn, [class*="boton"]):active { transform: translateY(0) scale(.98); }
+
+/* Menú: el enlace activo resalta con sombra */
+.navegacion-principal { box-shadow: 0 10px 30px rgba(20, 45, 32, .08) !important; }
+.navegacion-principal .enlace.activo, .navegacion-principal a.activo { box-shadow: 0 8px 18px rgba(55, 107, 80, .25); }
+
+/* ---------- 3. Aparición al bajar ---------- */
+.cm-revelar { opacity: 0; transform: translateY(22px); }
+.cm-revelar.cm-visible { opacity: 1; transform: none; transition: opacity .7s var(--cm-curva), transform .7s var(--cm-curva); }
+
+/* ---------- Celulares ---------- */
+@media (max-width: 640px) {
+    .beneficio, .tarjeta-oferta, .tarjeta-vehiculo, .tarjeta-ayuda, .tarjeta-guia, .tarjeta-ruta, .tarjeta-contacto,
+    .tarjeta-reserva, .tarjeta-cuenta, .disponible, .item-faq { border-radius: 18px; }
+    .navegacion-principal { box-shadow: 0 8px 22px rgba(20, 45, 32, .08) !important; }
+}
+@media (prefers-reduced-motion: reduce) {
+    .cm-revelar, .cm-revelar.cm-visible { opacity: 1; transform: none; transition: none; }
+    *, *::before, *::after { transition-duration: .01ms !important; animation-duration: .01ms !important; }
+}

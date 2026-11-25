@@ -181,7 +181,8 @@
         const pregunta = tipo === 'taller'
             ? `¿Enviar ${m.vehiculo} al taller? No se podrá alquilar hasta completar el mantenimiento.`
             : '¿Cancelar este mantenimiento programado?';
-        if (!window.confirm(pregunta)) return;
+        if (!(await window.CarmovoDialogo.confirmar({ titulo: tipo === 'taller' ? 'Enviar al taller' : 'Cancelar mantenimiento', mensaje: pregunta,
+            aceptar: tipo === 'taller' ? 'Enviar al taller' : 'Cancelar mantenimiento', cancelar: 'Volver', tipo: tipo === 'taller' ? 'advertencia' : 'peligro' }))) return;
         try {
             await api().accionMantenimiento(id, tipo);
             avisar(tipo === 'taller' ? 'Vehículo enviado al taller.' : 'Mantenimiento cancelado.');

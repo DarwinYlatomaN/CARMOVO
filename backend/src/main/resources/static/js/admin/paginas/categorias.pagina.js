@@ -110,7 +110,7 @@
 
     async function eliminar(id) {
         const c = lista.find(x => String(x.idCategoria) === String(id));
-        if (!c || !window.confirm(`¿Eliminar la categoría "${c.nombre}"?`)) return;
+        if (!c || !(await window.CarmovoDialogo.confirmar({ titulo: `¿Eliminar la categoría "${c.nombre}"?`, mensaje: 'Dejará de mostrarse en el sitio web.', aceptar: 'Eliminar', tipo: 'peligro' }))) return;
         try {
             await api().eliminarCategoria(id);
             avisar('Categoría eliminada.');

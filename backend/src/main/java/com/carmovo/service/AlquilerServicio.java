@@ -52,14 +52,17 @@ public class AlquilerServicio {
     private final ApplicationEventPublisher eventos;
 
     private final com.carmovo.repository.PortalOfertaRepositorio ofertas;
+    private final com.carmovo.repository.MantenimientoRepositorio mantenimientos;
 
     public AlquilerServicio(
             AlquilerRepositorio alquilerRepositorio,
             UsuarioServicio usuarioServicio,
             VehiculoServicio vehiculoServicio,
             ApplicationEventPublisher eventos,
-            com.carmovo.repository.PortalOfertaRepositorio ofertas
+            com.carmovo.repository.PortalOfertaRepositorio ofertas,
+            com.carmovo.repository.MantenimientoRepositorio mantenimientos
     ) {
+        this.mantenimientos = mantenimientos;
         this.eventos = eventos;
         this.ofertas = ofertas;
         this.alquilerRepositorio = alquilerRepositorio;
@@ -113,6 +116,7 @@ public class AlquilerServicio {
         }
         VehiculoDTO vehiculo = vehiculoServicio.obtenerPorId(idVehiculo);
         validarVehiculoAlquilable(vehiculo, fin);
+        validarSinTaller(idVehiculo, inicio, fin);
         validarDisponibilidad(idVehiculo, inicio, fin, null, "Pendiente");
         if (conChofer && buscarChoferLibre(vehiculo.getCategoria(), inicio, fin, null).isEmpty()) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, SIN_CHOFER);
@@ -151,6 +155,68 @@ public class AlquilerServicio {
     }
 
     /** Un vehículo en taller, inactivo o con SOAT / revisión técnica vencidos no se alquila. */
+    /**
+     * Autos que se pueden alquilar entre esas fechas: sin otro alquiler que se cruce,
+     * no están en taller ni inactivos y tienen SOAT y revisión técnica vigentes hasta la entrega.
+     * Incluye el precio con la oferta vigente y el total estimado (sin chofer).
+     */
+    @Transactional(readOnly = true)
+    public List<java.util.Map<String, Object>> vehiculosDisponibles(LocalDate inicio, LocalDate fin) {
+        if (inicio == null || fin == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Indica la fecha de recogida y la de entrega.");
+        }
+        if (inicio.isBefore(LocalDate.now())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "La fecha de recogida no puede estar en el pasado.");
+        }
+        if (fin.isBefore(inicio)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "La fecha de entrega no puede ser anterior a la de recogida.");
+        }
+        if (ChronoUnit.DAYS.between(inicio, fin) > 90) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "El alquiler puede ser de hasta 90 días.");
+        }
+        java.util.Set<Long> ocupados = new java.util.HashSet<>(
+                alquilerRepositorio.vehiculosOcupados(inicio, fin, ESTADOS_QUE_BLOQUEAN));
+        ocupados.addAll(mantenimientos.vehiculosEnTaller(inicio, fin));
+        return vehiculoServicio.obtenerTodos().stream()
+                .filter(v -> !ocupados.contains(v.getIdVehiculo()))
+                .filter(v -> {
+                    try {
+                        validarVehiculoAlquilable(v, fin);
+                        return v.getPrecioDia() != null;
+                    } catch (ResponseStatusException e) {
+                        return false;
+                    }
+                })
+                .map(v -> {
+                    Cotizacion c = calcular(v.getPrecioDia(), descuentoVigente(v.getIdVehiculo(), inicio), inicio, fin, false);
+                    java.util.Map<String, Object> m = new java.util.LinkedHashMap<>();
+                    m.put("idVehiculo", v.getIdVehiculo());
+                    m.put("marca", v.getMarca());
+                    m.put("modelo", v.getModelo());
+                    m.put("nombre", (v.getMarca() + " " + v.getModelo()).trim());
+                    m.put("categoria", v.getCategoria());
+                    m.put("pasajeros", v.getPasajeros());
+                    m.put("transmision", v.getTransmision());
+                    m.put("imagen", v.getImagen());
+                    m.put("descripcion", v.getDescripcion());
+                    m.put("precioDia", v.getPrecioDia());
+                    m.put("descuento", c.descuento());
+                    m.put("precioFinal", c.precioDia());
+                    m.put("dias", c.dias());
+                    m.put("total", c.total());
+                    return m;
+                })
+                .sorted(Comparator.comparing(m -> (BigDecimal) m.get("precioFinal")))
+                .toList();
+    }
+
+    private void validarSinTaller(Long idVehiculo, LocalDate inicio, LocalDate fin) {
+        if (mantenimientos != null && mantenimientos.vehiculosEnTaller(inicio, fin).contains(idVehiculo)) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT,
+                    "Este vehículo estará en mantenimiento en esas fechas. Elige otro auto u otras fechas.");
+        }
+    }
+
     private void validarVehiculoAlquilable(VehiculoDTO vehiculo, LocalDate fin) {
         String estado = vehiculo.getEstado() == null ? "" : vehiculo.getEstado().trim().toLowerCase(Locale.ROOT);
         if (ESTADOS_NO_ALQUILABLES.contains(estado)) {
@@ -180,6 +246,7 @@ public class AlquilerServicio {
 
         if (ESTADOS_QUE_BLOQUEAN.contains(estado)) {
             validarVehiculoAlquilable(vehiculo, dto.getFechaFin());
+            validarSinTaller(vehiculo.getIdVehiculo(), dto.getFechaInicio(), dto.getFechaFin());
         }
 
         validarDisponibilidad(

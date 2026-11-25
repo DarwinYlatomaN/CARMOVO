@@ -16,6 +16,9 @@
     <script defer th:src="@{/js/admin/componentes/barra-lateral.js}"></script>
     <script defer th:src="@{/js/admin/principal.js}"></script>
     <script defer th:src="@{/js/admin/paginas/portal-web.pagina.js}"></script>
+    <link rel="stylesheet" href="/css/admin/premium.css" th:href="@{/css/admin/premium.css}">
+    <script src="/js/servicios/dialogo.js" th:src="@{/js/servicios/dialogo.js}"></script>
+    <script defer src="/js/servicios/animaciones.js" th:src="@{/js/servicios/animaciones.js}"></script>
 </head>
 <body data-pagina="portal-web">
 <div class="app-admin">
@@ -103,6 +106,16 @@
                                 <label class="pw-color"><input type="color" data-tema="colorAcento"><span><b>Acento</b><small>Botones suaves, tarjetas y resaltados</small></span></label>
                                 <label class="pw-color"><input type="color" data-tema="colorFondo"><span><b>Fondo</b><small>Fondo general de las páginas</small></span></label>
                                 <label class="pw-color"><input type="color" data-tema="colorTexto"><span><b>Texto</b><small>Títulos y párrafos</small></span></label>
+                            </div>
+                            <h3 class="pw-subtitulo-colores">Más colores del sitio</h3>
+                            <div class="pw-colores">
+                                <label class="pw-color"><input type="color" data-tema="colorTarjetas"><span><b>Tarjetas</b><small>Fondo de tarjetas, cajas y ventanas</small></span></label>
+                                <label class="pw-color"><input type="color" data-tema="colorTextoBotones"><span><b>Texto sobre botones</b><small>Letras de botones y de la portada</small></span></label>
+                                <label class="pw-color"><input type="color" data-tema="colorCabecera"><span><b>Cabecera y menú</b><small>Barra superior y menú de páginas</small></span></label>
+                                <label class="pw-color"><input type="color" data-tema="colorPie"><span><b>Pie de página</b><small>Franja inferior con enlaces</small></span></label>
+                                <label class="pw-color"><input type="color" data-tema="colorOfertas"><span><b>Ofertas y avisos</b><small>Descuentos, alertas y errores</small></span></label>
+                                <label class="pw-color"><input type="color" data-tema="colorDestacado"><span><b>Destacados</b><small>Estrellas e insignias</small></span></label>
+                                <label class="pw-color"><input type="color" data-tema="colorSalir"><span><b>Botón Salir</b><small>Botón para cerrar sesión del cliente</small></span></label>
                             </div>
                         </div>
                         <div class="pu-tarjeta">

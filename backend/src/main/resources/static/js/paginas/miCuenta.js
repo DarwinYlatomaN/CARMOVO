@@ -1,4 +1,3 @@
-
 document.addEventListener('DOMContentLoaded', async () => {
     let sesionActual = null;
     let perfilActual = null;
@@ -1267,7 +1266,10 @@ document.addEventListener('DOMContentLoaded', async () => {
         if (pagoEnRevision) {
             cajaEstado.classList.add('pendiente');
             mensaje.textContent =
-                'Caja está verificando la constancia de tu pago. Tu reserva queda en revisión hasta que el pago se apruebe o se rechace; te avisaremos por correo.';
+                (/tarjeta/i.test(alquiler.metodoPago || '')
+                    ? 'Tu banco autorizó el cargo y caja está verificando tu pago con tarjeta.'
+                    : 'Caja está verificando la constancia de tu pago.')
+                + ' Tu reserva queda en revisión hasta que el pago se apruebe o se rechace; te avisaremos por correo.';
         } else if (pagoRechazado) {
             cajaEstado.classList.add('rechazado');
             mensaje.textContent = `Tu pago fue rechazado y la reserva se canceló.${alquiler.motivoRechazoPago ? ` Motivo: ${alquiler.motivoRechazoPago}` : ''}`;
@@ -1863,9 +1865,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         );
     }
 
-    // =========================================================
-    // INICIALIZACIÓN
-    // =========================================================
 
     await cargarPerfil();
     await cargarUltimoAlquiler();

@@ -1,3 +1,11 @@
+-- =========================================================
+-- CARMOVO - Gestión de Usuarios
+-- Archivo de verificación de la base de datos.
+--
+-- Este script NO crea tablas, NO crea perfiles/roles y NO
+-- modifica datos existentes. Gestión de Usuarios trabaja con
+-- los perfiles que ya estén definidos en la base de datos.
+-- =========================================================
 
 -- Verificar perfiles existentes
 SELECT id_perfil, nombre

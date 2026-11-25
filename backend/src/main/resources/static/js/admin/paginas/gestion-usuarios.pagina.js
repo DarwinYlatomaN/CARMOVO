@@ -13,8 +13,37 @@
         telefono: ['usuarioTelefono', 'errorUsuarioTelefono'],
         idPerfil: ['usuarioPerfil', 'errorUsuarioPerfil'],
         estado: ['usuarioEstado', 'errorUsuarioEstado'],
-        contrasena: ['usuarioContrasena', 'errorUsuarioContrasena']
+        contrasena: ['usuarioContrasena', 'errorUsuarioContrasena'],
+        documento: ['usuarioDocumento', 'errorUsuarioDocumento'],
+        fechaNacimiento: ['usuarioFechaNacimiento', 'errorUsuarioFechaNacimiento'],
+        departamento: ['usuarioDepartamento', 'errorUsuarioDepartamento'],
+        provincia: ['usuarioProvincia', 'errorUsuarioProvincia'],
+        distrito: ['usuarioDistrito', 'errorUsuarioDistrito'],
+        domicilio: ['usuarioDomicilio', 'errorUsuarioDomicilio'],
+        numeroLicencia: ['usuarioLicencia', 'errorUsuarioLicencia'],
+        categoriaLicencia: ['usuarioCategoria', 'errorUsuarioCategoria'],
+        vencimientoLicencia: ['usuarioVencimiento', 'errorUsuarioVencimiento'],
+        aceptaPoliticas: ['usuarioAcepta', 'errorUsuarioAcepta']
     };
+
+    const RUTA_UBIGEOS = '/data/UBIGEOS_2022_1891_distritos.csv';
+    let ubigeos = null;
+    const esPerfilCliente = () => {
+        const perfil = perfiles.find(p => String(p.idPerfil) === $('#usuarioPerfil').value);
+        return normalizar(perfil?.nombre) === 'cliente';
+    };
+    function hoyISO() {
+        const d = new Date();
+        d.setMinutes(d.getMinutes() - d.getTimezoneOffset());
+        return d.toISOString().slice(0, 10);
+    }
+    function edad(fecha) {
+        const n = new Date(`${fecha}T00:00:00`);
+        const h = new Date();
+        let e = h.getFullYear() - n.getFullYear();
+        if (h.getMonth() < n.getMonth() || (h.getMonth() === n.getMonth() && h.getDate() < n.getDate())) e--;
+        return e;
+    }
 
     // Celular peruano: exactamente 9 dígitos y empieza con 9.
     const PATRON_CELULAR = /^9[0-9]{8}$/;
@@ -201,6 +230,26 @@
             error('estado', 'Debes seleccionar un estado válido.');
         }
 
+        // Datos de la cuenta del cliente (los mismos que pide "Crear cuenta" en la web).
+        const cliente = esPerfilCliente();
+        if (cliente || datos.documento) {
+            if (!/^\d{8}$/.test(datos.documento || '')) error('documento', 'El DNI debe tener 8 dígitos.');
+        }
+        if (cliente) {
+            if (!datos.telefono) error('telefono', 'El celular es obligatorio.');
+            if (!datos.fechaNacimiento) error('fechaNacimiento', 'Indica la fecha de nacimiento.');
+            else if (edad(datos.fechaNacimiento) < 18) error('fechaNacimiento', 'El cliente debe tener al menos 18 años.');
+            if (!datos.departamento) error('departamento', 'Selecciona el departamento.');
+            if (!datos.provincia) error('provincia', 'Selecciona la provincia.');
+            if (!datos.distrito) error('distrito', 'Selecciona el distrito.');
+            if (!datos.domicilio || datos.domicilio.length < 5) error('domicilio', 'Escribe el domicilio.');
+            if (!/^[A-Z]?\d{8,9}$/.test(datos.numeroLicencia || '')) error('numeroLicencia', 'Escribe el número de licencia (ej.: Q12345678).');
+            if (!datos.categoriaLicencia) error('categoriaLicencia', 'Selecciona la categoría.');
+            if (!datos.vencimientoLicencia) error('vencimientoLicencia', 'Indica la fecha de vencimiento.');
+            else if (datos.vencimientoLicencia < hoyISO()) error('vencimientoLicencia', 'La licencia está vencida.');
+            if (!usuarioEditandoId && !datos.aceptaPoliticas) error('aceptaPoliticas', 'El cliente debe aceptar los términos y la política de privacidad.');
+        }
+
         if (!usuarioEditandoId && !contrasena) {
             error(
                 'contrasena',
@@ -263,6 +312,10 @@
             mostrarErrorCampo('correo', mensaje);
         } else if (mensajeNormalizado.includes('telefono')) {
             mostrarErrorCampo('telefono', mensaje);
+        } else if (mensajeNormalizado.includes('dni')) {
+            mostrarErrorCampo('documento', mensaje);
+        } else if (mensajeNormalizado.includes('licencia')) {
+            mostrarErrorCampo('numeroLicencia', mensaje);
         } else {
             return false;
         }
@@ -522,6 +575,25 @@
         $('#usuarioEstado').value =
             usuario?.estado === false ? 'false' : 'true';
 
+        $('#usuarioDocumento').value = usuario?.documento ?? '';
+        $('#usuarioFechaNacimiento').value = usuario?.fechaNacimiento ?? '';
+        $('#usuarioDomicilio').value = usuario?.domicilio ?? '';
+        $('#usuarioLicencia').value = usuario?.numeroLicencia ?? '';
+        $('#usuarioCategoria').value = usuario?.categoriaLicencia ?? '';
+        $('#usuarioVencimiento').value = usuario?.vencimientoLicencia ?? '';
+        $('#usuarioFechaNacimiento').max = hoyISO();
+        if (!editando) {
+            const cliente = perfiles.find(p => normalizar(p.nombre) === 'cliente');
+            if (cliente) $('#usuarioPerfil').value = String(cliente.idPerfil);
+        }
+        $('#usuarioAcepta').checked = false;
+        $('#usuarioAcepta').closest('label').classList.remove('pol-acepto--ok');
+        $('#campoAceptaUsuario').hidden = editando || !esPerfilCliente();
+        ultimoDni = usuario?.documento || '';
+        estadoDni('');
+        document.querySelectorAll('#formUsuario .autocompletado').forEach(i => i.classList.remove('autocompletado'));
+        cargarUbigeos().then(() => ponerUbicacion(usuario?.departamento, usuario?.provincia, usuario?.distrito));
+
         $('#usuarioContrasena').value = '';
         $('#usuarioContrasena').required = !editando;
 
@@ -532,7 +604,7 @@
         $('#modalUsuario').classList.add('abierto');
         document.body.style.overflow = 'hidden';
 
-        setTimeout(() => $('#usuarioNombres').focus(), 50);
+        setTimeout(() => (editando ? $('#usuarioNombres') : $('#usuarioDocumento')).focus(), 50);
     }
 
     function cerrarModal() {
@@ -562,7 +634,17 @@
                 ? Number(perfilSeleccionado)
                 : null,
             estado: $('#usuarioEstado').value === 'true',
-            contrasena: contrasena || null
+            contrasena: contrasena || null,
+            documento: $('#usuarioDocumento').value.trim() || null,
+            fechaNacimiento: $('#usuarioFechaNacimiento').value || null,
+            departamento: $('#usuarioDepartamento').value || null,
+            provincia: $('#usuarioProvincia').value || null,
+            distrito: $('#usuarioDistrito').value || null,
+            domicilio: $('#usuarioDomicilio').value.trim() || null,
+            numeroLicencia: $('#usuarioLicencia').value.trim().toUpperCase().replace(/[^A-Z0-9]/g, '') || null,
+            categoriaLicencia: $('#usuarioCategoria').value || null,
+            vencimientoLicencia: $('#usuarioVencimiento').value || null,
+            aceptaPoliticas: $('#usuarioAcepta').checked
         };
 
         if (!validarFormulario(datos, contrasena)) {
@@ -632,9 +714,11 @@
         const nombreCompleto =
             `${usuario.nombres} ${usuario.apellidos}`.trim();
 
-        const confirmar = window.confirm(
-            `¿Eliminar a ${nombreCompleto}? Si ya tiene alquileres, su cuenta se desactivará en lugar de eliminarse para conservar su historial.`
-        );
+        const confirmar = await window.CarmovoDialogo.confirmar({
+            titulo: `¿Eliminar a ${nombreCompleto}?`,
+            mensaje: 'Si ya tiene alquileres, su cuenta se desactivará en lugar de eliminarse para conservar su historial.',
+            aceptar: 'Eliminar', tipo: 'peligro'
+        });
 
         if (!confirmar) return;
 
@@ -651,6 +735,104 @@
                 error.message || 'No se pudo eliminar el usuario.',
                 'error'
             );
+        }
+    }
+
+    // ------------------------------------------------------------ ubicación (mismo catálogo que "Crear cuenta")
+    async function cargarUbigeos() {
+        if (ubigeos) return ubigeos;
+        try {
+            const texto = await (await fetch(RUTA_UBIGEOS)).text();
+            const lineas = texto.replace(/^\uFEFF/, '').split(/\r?\n/);
+            const cab = lineas[0].split(';').map(c => c.trim().toUpperCase());
+            const [iDep, iProv, iDist] = ['NOMBDEP', 'NOMBPROV', 'NOMBDIST'].map(c => cab.indexOf(c));
+            ubigeos = new Map();
+            lineas.slice(1).forEach(l => {
+                const c = l.split(';');
+                const dep = c[iDep]?.trim(), prov = c[iProv]?.trim(), dist = c[iDist]?.trim();
+                if (!dep || !prov || !dist) return;
+                if (!ubigeos.has(dep)) ubigeos.set(dep, new Map());
+                const provincias = ubigeos.get(dep);
+                if (!provincias.has(prov)) provincias.set(prov, []);
+                provincias.get(prov).push(dist);
+            });
+        } catch (error) {
+            ubigeos = new Map();
+            notificar('No se pudo cargar la lista de departamentos.', 'error');
+        }
+        const sel = $('#usuarioDepartamento');
+        sel.innerHTML = '<option value="">Selecciona un departamento</option>' +
+            [...ubigeos.keys()].sort().map(d => `<option value="${escapar(d)}">${escapar(d)}</option>`).join('');
+        return ubigeos;
+    }
+
+    function opciones(select, lista, vacio) {
+        select.innerHTML = `<option value="">${vacio}</option>` +
+            lista.map(v => `<option value="${escapar(v)}">${escapar(v)}</option>`).join('');
+        select.disabled = !lista.length;
+    }
+
+    function alCambiarDepartamento() {
+        const provincias = ubigeos?.get($('#usuarioDepartamento').value);
+        opciones($('#usuarioProvincia'), provincias ? [...provincias.keys()].sort() : [], provincias ? 'Selecciona una provincia' : 'Selecciona primero un departamento');
+        opciones($('#usuarioDistrito'), [], 'Selecciona primero una provincia');
+    }
+
+    function alCambiarProvincia() {
+        const distritos = ubigeos?.get($('#usuarioDepartamento').value)?.get($('#usuarioProvincia').value);
+        opciones($('#usuarioDistrito'), distritos ? [...distritos].sort() : [], distritos ? 'Selecciona un distrito' : 'Selecciona primero una provincia');
+    }
+
+    /** Coloca la ubicación guardada aunque esté escrita con otras mayúsculas o tildes. */
+    function ponerUbicacion(dep, prov, dist) {
+        const elegir = (select, valor) => {
+            if (!valor) { select.value = ''; return; }
+            const opcion = [...select.options].find(o => normalizar(o.value) === normalizar(valor));
+            select.value = opcion ? opcion.value : '';
+        };
+        elegir($('#usuarioDepartamento'), dep);
+        alCambiarDepartamento();
+        elegir($('#usuarioProvincia'), prov);
+        alCambiarProvincia();
+        elegir($('#usuarioDistrito'), dist);
+    }
+
+    // ------------------------------------------------------------ DNI → nombres (RENIEC)
+    let ultimoDni = '';
+    function estadoDni(texto, tipo = '') {
+        const caja = $('#estadoDniUsuario');
+        caja.textContent = texto || '';
+        caja.className = `estado-dni ${tipo}`;
+        caja.hidden = !texto;
+    }
+
+    async function consultarDni(forzar = false) {
+        const dni = $('#usuarioDocumento').value.trim();
+        if (!/^\d{8}$/.test(dni)) {
+            if (forzar) estadoDni('Escribe los 8 dígitos del DNI.', 'error');
+            return;
+        }
+        if (dni === ultimoDni && !forzar) return;
+        ultimoDni = dni;
+        const nombres = $('#usuarioNombres'), apellidos = $('#usuarioApellidos');
+        const puedeEscribir = forzar || !nombres.value.trim() || !apellidos.value.trim()
+            || (nombres.classList.contains('autocompletado') && apellidos.classList.contains('autocompletado'));
+        estadoDni('Buscando en RENIEC…');
+        $('#btnBuscarDniUsuario').disabled = true;
+        try {
+            const r = await window.CarmovoAdminApi.consultarDni(dni);
+            if (!r?.nombres) throw new Error('No se encontró ese DNI.');
+            if ($('#usuarioDocumento').value.trim() !== dni) return;
+            if (puedeEscribir) {
+                nombres.value = r.nombres;
+                apellidos.value = r.apellidos;
+                [nombres, apellidos].forEach(i => { i.classList.add('autocompletado'); limpiarErrorCampo(i === nombres ? 'nombres' : 'apellidos'); });
+            }
+            estadoDni(`✓ ${r.nombreCompleto}`, 'ok');
+        } catch (error) {
+            estadoDni(`${error.message || 'No se pudo consultar el DNI.'} Puedes escribir los nombres a mano.`, 'error');
+        } finally {
+            $('#btnBuscarDniUsuario').disabled = false;
         }
     }
 
@@ -681,6 +863,23 @@
             'click',
             alternarContrasena
         );
+
+        $('#usuarioDepartamento').addEventListener('change', alCambiarDepartamento);
+        $('#usuarioProvincia').addEventListener('change', alCambiarProvincia);
+        $('#usuarioPerfil').addEventListener('change', () => {
+            $('#campoAceptaUsuario').hidden = Boolean(usuarioEditandoId) || !esPerfilCliente();
+        });
+        ['usuarioDocumento', 'usuarioTelefono'].forEach(id => $(`#${id}`).addEventListener('input', e => {
+            e.target.value = e.target.value.replace(/\D/g, '').slice(0, id === 'usuarioDocumento' ? 8 : 9);
+            if (id === 'usuarioDocumento') {
+                if (e.target.value.length === 8) consultarDni();
+                else estadoDni('');
+            }
+        }));
+        $('#btnBuscarDniUsuario').addEventListener('click', () => consultarDni(true));
+        ['usuarioNombres', 'usuarioApellidos'].forEach(id => $(`#${id}`).addEventListener('input', e => e.target.classList.remove('autocompletado')));
+        $('#usuarioLicencia').addEventListener('input', e => { e.target.value = e.target.value.toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 9); });
+        window.CarmovoPoliticas?.vincular($('#usuarioAcepta'), { tipo: 'cliente' });
 
         Object.entries(CAMPOS).forEach(([nombre, campo]) => {
             const input = document.getElementById(campo[0]);

@@ -81,6 +81,10 @@ public class UsuarioController {
     public ResponseEntity<UsuarioDTO> crear(@Valid @RequestBody UsuarioGuardarDTO dto) {
         impedirPerfilAdministrador(dto);
         UsuarioDTO usuario = usuarioServicio.crearUsuario(dto);
+        if ("Cliente".equalsIgnoreCase(usuario.getNombrePerfil())) {
+            politicas.registrar(usuario.getIdUsuario(), com.carmovo.service.PoliticasServicio.REGISTRO, null,
+                    com.carmovo.service.AdminContextoSesion.obtenerActor());
+        }
 
         auditoriaServicio.registrarSeguro(
                 "Usuarios", "CREAR", "Usuario", usuario.getIdUsuario(),

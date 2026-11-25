@@ -1,9 +1,4 @@
-# =====================================================================
-# CARMOVO · Configuración
-# Cada valor se puede cambiar con una VARIABLE DE ENTORNO (lo que está
-# entre ${...}). Así el mismo proyecto funciona en tu PC y en internet.
-# Formato: ${VARIABLE:valor_por_defecto}
-# =====================================================================
+
 spring:
   datasource:
     url: ${DB_URL:jdbc:mysql://localhost:3308/carmovo_db?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=America/Lima}
@@ -24,13 +19,13 @@ spring:
         jdbc:
           time_zone: America/Lima
 
-  # Archivos del panel: imágenes (máx. 2 MB) y video de portada (máx. 20 MB)
+
   servlet:
     multipart:
       max-file-size: 21MB
       max-request-size: 22MB
 
-  # Correo (opcional). Si MAIL_HOST está vacío, los correos se muestran en la consola.
+
   mail:
     host: ${MAIL_HOST:}
     port: ${MAIL_PORT:587}
@@ -44,15 +39,18 @@ spring:
             enable: true
 
 server:
-  # Los servicios en la nube (Railway, Render) indican el puerto con PORT.
+
   port: ${PORT:8080}
   forward-headers-strategy: framework
 
 carmovo:
-  # Dirección pública del sitio (se usa en los enlaces de los correos).
+  panel:
+
+    solo-local: ${CARMOVO_PANEL_SOLO_LOCAL:false}
+
   url-publica: ${CARMOVO_URL_PUBLICA:http://localhost:8080}
   jwt:
-    # En producción define CARMOVO_JWT_SECRETO (mínimo 32 caracteres).
+
     secreto: ${CARMOVO_JWT_SECRETO:carmovo-clave-de-desarrollo-cambiar-en-produccion-2026}
     # Minutos que dura la sesión del cliente.
     minutos: ${CARMOVO_JWT_MINUTOS:480}
@@ -60,7 +58,7 @@ carmovo:
     remitente: ${MAIL_FROM:CARMOVO <no-responder@carmovo.com>}
   dni:
 
-    token: 8fdf8b92-a73a-487f-9fe0-e8e35a44f10c
+    token: ${CARMOVO_DNI_TOKEN:8fdf8b92-a73a-487f-9fe0-e8e35a44f10c}
 
     url: ${CARMOVO_DNI_URL:https://miapi.cloud/v1/dni/{dni}}
   pagos:

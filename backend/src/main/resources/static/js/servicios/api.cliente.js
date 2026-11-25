@@ -205,6 +205,12 @@
         return leerRespuesta(respuesta, { privada: true });
     }
 
+    /** Consulta de RUC en SUNAT (mismo proveedor que la consulta de DNI) para completar la factura. */
+    async function consultarRuc(ruc) {
+        const respuesta = await privada(`/api/v1/reservas/ruc/${encodeURIComponent(ruc)}`);
+        return leerRespuesta(respuesta, { privada: true });
+    }
+
     async function listarComprobantes(idUsuario) {
         const respuesta = await privada(`${API_BASE}/${idUsuario}/comprobantes`);
         return leerRespuesta(respuesta, { privada: true });
@@ -236,6 +242,7 @@
         crearReserva,
         pasarela,
         subirConstancia,
+        consultarRuc,
         listarComprobantes
     };
 })();

@@ -1635,3 +1635,34 @@ button {
 /* ==========================================================================
    FIN DE HOME.CSS
    ========================================================================== */
+/* Autos disponibles según las fechas del buscador */
+.resultados-disponibles { max-width: 1240px; margin: 34px auto 10px; padding: 26px; background: #fff; border-radius: 22px;
+    box-shadow: 0 14px 40px rgba(38, 59, 48, .08); scroll-margin-top: 20px; }
+.resultados-disponibles[hidden] { display: none; }
+.resultados-disponibles__cabecera { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; margin-bottom: 18px; }
+.resultados-disponibles__cabecera h2 { margin: 0 0 4px; font-size: 1.5rem; color: #2F5D45; }
+.resultados-disponibles__cabecera p { margin: 0; color: #5E7568; }
+.resultados-disponibles__cerrar { border: 0; width: 40px; height: 40px; border-radius: 12px; background: #F1F7F3; color: #4C6B5A; cursor: pointer; flex-shrink: 0; }
+.resultados-disponibles__lista { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 18px; }
+.disponible { border-radius: 18px; overflow: hidden; background: #F8FBF9; display: flex; flex-direction: column; }
+.disponible__img { position: relative; height: 170px; background: #E8F2EC; }
+.disponible__img img { width: 100%; height: 100%; object-fit: cover; }
+.disponible__oferta { position: absolute; top: 10px; left: 10px; background: #E4572E; color: #fff; font-weight: 800; font-size: .8rem; padding: 5px 10px; border-radius: 10px; }
+.disponible__info { padding: 14px 16px 16px; display: flex; flex-direction: column; gap: 6px; flex: 1; }
+.disponible__categoria { font-size: .72rem; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; color: #3E7A57; }
+.disponible__info h3 { margin: 0; font-size: 1.1rem; color: #263B30; }
+.disponible__datos { display: flex; gap: 14px; margin: 0; color: #5E7568; font-size: .86rem; }
+.disponible__precio { margin-top: auto; padding-top: 8px; }
+.disponible__precio s { color: #93A69B; margin-right: 6px; font-size: .9rem; }
+.disponible__precio strong { font-size: 1.3rem; color: #2E7D52; }
+.disponible__precio > small { display: block; color: #5E7568; font-size: .8rem; margin-top: 2px; }
+.disponible__precio > small span { color: #93A69B; }
+.disponible__reservar { margin-top: 10px; border: 0; border-radius: 12px; padding: 11px; background: #2E7D52; color: #fff; font: inherit; font-weight: 700; cursor: pointer; }
+.disponible__reservar:hover { background: #276B46; }
+.disponibles-cargando { grid-column: 1 / -1; text-align: center; padding: 30px; font-size: 1.5rem; color: #3E7A57; }
+.disponibles-vacio { grid-column: 1 / -1; text-align: center; color: #5E7568; padding: 20px; margin: 0; }
+@media (max-width: 640px) {
+    .resultados-disponibles { margin: 20px 16px 6px; padding: 18px; }
+    .resultados-disponibles__cabecera h2 { font-size: 1.2rem; }
+    .resultados-disponibles__lista { grid-template-columns: 1fr; }
+}

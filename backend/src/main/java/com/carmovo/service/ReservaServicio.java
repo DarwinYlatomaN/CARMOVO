@@ -81,7 +81,8 @@ public class ReservaServicio {
         alquiler.setLugarRecogida(dto.getLugarRecogida().trim());
         alquiler.setLugarEntrega(dto.getLugarEntrega().trim());
         alquiler.setMetodoPago(nombreMetodo(intento.getMetodo()));
-        alquiler.setEstado("APROBADO".equals(intento.getEstado()) ? "Confirmado" : "Pendiente");
+        // Todos los métodos quedan pendientes hasta que caja valide el pago (tarjeta, Yape, Plin, transferencia o efectivo).
+        alquiler.setEstado("Pendiente");
         alquiler.setObservaciones(construirObservaciones(dto));
         alquiler.setConChofer(conChofer);
 

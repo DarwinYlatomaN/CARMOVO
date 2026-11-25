@@ -67,6 +67,11 @@ public class UsuarioServicio {
     @Transactional
     public UsuarioDTO crearUsuario(UsuarioGuardarDTO dto) {
         validarDatosObligatorios(dto, true);
+        if (esPerfilCliente(dto.getIdPerfil())) {
+            // Mismos datos que pide "Crear cuenta" en la web.
+            validarPerfilClienteCompleto(dto);
+            PoliticasServicio.exigir(dto.getAceptaPoliticas());
+        }
 
         String correo = normalizarCorreo(dto.getCorreo());
         if (usuarioRepositorio.existsByCorreoIgnoreCase(correo)) {
@@ -153,6 +158,9 @@ public class UsuarioServicio {
     @Transactional
     public UsuarioDTO actualizarUsuario(Long id, UsuarioGuardarDTO dto) {
         validarDatosObligatorios(dto, false);
+        if (esPerfilCliente(dto.getIdPerfil())) {
+            validarPerfilClienteCompleto(dto);
+        }
 
         Usuario usuario = buscarUsuario(id);
         String correo = normalizarCorreo(dto.getCorreo());
@@ -379,6 +387,28 @@ public class UsuarioServicio {
 
         validarCorreo(dto.getCorreo());
         validarFechasPerfil(dto.getFechaNacimiento(), dto.getVencimientoLicencia());
+    }
+
+    private boolean esPerfilCliente(Long idPerfil) {
+        return idPerfil != null && perfilRepositorio.findById(idPerfil)
+                .map(p -> PERFIL_CLIENTE.equalsIgnoreCase(p.getNombre())).orElse(false);
+    }
+
+    /** Cliente creado o editado desde el panel: DNI, celular, edad, ubicación, domicilio y licencia vigente. */
+    private void validarPerfilClienteCompleto(UsuarioGuardarDTO dto) {
+        validarPerfilCliente(dto);
+        if (!ValidadorDocumentos.dniValido(dto.getDocumento().trim())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "El DNI debe tener 8 dígitos.");
+        }
+        if (!ValidadorDocumentos.celularValido(dto.getTelefono().trim())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "El celular debe tener 9 dígitos y empezar con 9.");
+        }
+        if (ValidadorDocumentos.edad(dto.getFechaNacimiento(), LocalDate.now()) < 18) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "El cliente debe tener al menos 18 años.");
+        }
+        if (ValidadorDocumentos.normalizarCategoria(dto.getCategoriaLicencia()) == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "La categoría de licencia no es válida.");
+        }
     }
 
     private void validarFechasPerfil(LocalDate fechaNacimiento, LocalDate vencimientoLicencia) {

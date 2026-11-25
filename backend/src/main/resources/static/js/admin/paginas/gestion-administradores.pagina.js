@@ -363,7 +363,7 @@
     async function cambiarEstado(id, activar) {
         const empleado = empleados.find(e => e.idUsuario === id);
         if (!empleado) return;
-        if (!activar && !window.confirm(`¿Desactivar el acceso de ${empleado.nombres} ${empleado.apellidos}? Ya no podrá entrar al panel.`)) return;
+        if (!activar && !(await window.CarmovoDialogo.confirmar({ titulo: `¿Desactivar a ${empleado.nombres} ${empleado.apellidos}?`, mensaje: 'Ya no podrá entrar al panel hasta que lo actives de nuevo.', aceptar: 'Desactivar', tipo: 'peligro' }))) return;
         try {
             if (activar) await api().activarAdministrador(id);
             else await api().desactivarAdministrador(id);

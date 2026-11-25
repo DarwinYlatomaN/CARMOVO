@@ -658,9 +658,11 @@
 
         if (!alquiler) return;
 
-        const confirmar = window.confirm(
-            `\u00bfEliminar el alquiler #${alquiler.idAlquiler} de ${alquiler.cliente}? Solo se permite si est\u00e1 Pendiente o Cancelado.`
-        );
+        const confirmar = await window.CarmovoDialogo.confirmar({
+            titulo: `¿Eliminar el alquiler #${alquiler.idAlquiler}?`,
+            mensaje: `Es de ${alquiler.cliente}. Solo se puede eliminar si está Pendiente o Cancelado.`,
+            aceptar: 'Eliminar', tipo: 'peligro'
+        });
 
         if (!confirmar) return;
 

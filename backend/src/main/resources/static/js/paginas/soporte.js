@@ -263,7 +263,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (formReclamo) {
         formReclamo.addEventListener('submit', (e) => {
             e.preventDefault(); // Evita que la página recargue
-            alert("Tu solicitud ha sido registrada correctamente. Nuestro equipo de soporte te contactará en las próximas 48 horas.");
+            window.CarmovoDialogo.avisar({ titulo: 'Solicitud enviada', mensaje: 'Tu solicitud ha sido registrada correctamente. Nuestro equipo de soporte te contactará en las próximas 48 horas.', tipo: 'exito' });
             cerrarModalReclamo();
             formReclamo.reset(); 
         });

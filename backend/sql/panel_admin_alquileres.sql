@@ -1,4 +1,8 @@
-
+-- =========================================================
+-- CARMOVO - Gestión de alquileres
+-- Esta migración NO crea, elimina ni modifica perfiles/roles.
+-- Solo agrega la tabla necesaria para persistir alquileres.
+-- =========================================================
 
 CREATE TABLE IF NOT EXISTS alquileres (
     id_alquiler BIGSERIAL PRIMARY KEY,

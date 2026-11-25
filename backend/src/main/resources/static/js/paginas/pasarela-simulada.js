@@ -220,7 +220,7 @@
                 <ul class="pas-checklist">
                     <li class="en-curso">Verificando disponibilidad del vehículo</li>
                     <li>Registrando el pago</li>
-                    <li>${intento.estado === 'APROBADO' ? 'Emitiendo comprobante' : 'Guardando tu reserva'}</li>
+                    <li>Guardando tu reserva</li>
                 </ul>
             </div>`, 3);
 
@@ -240,11 +240,10 @@
         estado.bloqueado = false;
         if (!estado) return;
 
-        const icono = intento.estado === 'APROBADO'
-            ? '<div class="pas-icono-resultado ok"><i class="fa-solid fa-check"></i></div>'
-            : '<div class="pas-icono-resultado espera"><i class="fa-solid fa-hourglass-half"></i></div>';
+        // Todos los pagos esperan la validación de caja; el comprobante se emite cuando caja lo aprueba.
+        const icono = '<div class="pas-icono-resultado espera"><i class="fa-solid fa-hourglass-half"></i></div>';
         const pie = {
-            APROBADO: 'Comprobante emitido. Lo encuentras en Mi Cuenta.',
+            APROBADO: 'Tu banco autorizó el cargo. Tu pago queda en revisión hasta que caja lo valide; luego recibirás tu comprobante por correo y en Mi Cuenta.',
             EN_REVISION: 'Tu pago queda en revisión hasta que caja lo apruebe o lo rechace. Te avisaremos por correo.',
             PENDIENTE: 'Presenta este código en caja para pagar y recibir tu comprobante.'
         }[intento.estado] || '';
@@ -256,7 +255,7 @@
                 <div class="pas-kv"><span>Monto</span><b>${soles(intento.monto)}</b></div>
             </div>
             <p class="pas-emitiendo"><i class="fa-solid fa-circle-info"></i> ${esc(pie)}</p>`, 4);
-        await esperar(intento.estado === 'APROBADO' ? 1800 : 2600);
+        await esperar(2600);
         if (estado) cerrar(false);
     }
 
@@ -382,7 +381,7 @@
                 }
                 if (manejarRechazo(r)) return;
                 limpiarTemporizadores();
-                finalizar(r, [['Autorización', r.referencia], ['Tarjeta', r.detalle]], '¡Pago aprobado!');
+                finalizar(r, [['Autorización', r.referencia], ['Tarjeta', r.detalle]], 'Pago autorizado · en revisión');
             } catch (err) {
                 pantallaRechazo(err.message || 'No se pudo verificar el pago.');
             }

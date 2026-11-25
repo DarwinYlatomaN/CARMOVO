@@ -57,6 +57,21 @@ document.addEventListener('DOMContentLoaded', () => {
         inputFechaInicio.min = hoyISO;
         inputFechaFin.min = hoyISO;
 
+        // Si viene del buscador del inicio, se usan sus fechas y sedes.
+        try {
+            const desdeInicio = JSON.parse(sessionStorage.getItem('carmovo_reserva_home') || 'null');
+            if (desdeInicio) {
+                if (desdeInicio.fechaRecogida >= hoyISO) inputFechaInicio.value = desdeInicio.fechaRecogida;
+                if (desdeInicio.fechaEntrega >= (desdeInicio.fechaRecogida || hoyISO)) inputFechaFin.value = desdeInicio.fechaEntrega;
+                [[selectRecogida, desdeInicio.lugarRecogida], [selectEntrega, desdeInicio.lugarEntrega]].forEach(([sel, valor]) => {
+                    if (sel && valor && [...sel.options].some(o => o.value === valor)) {
+                        sel.value = valor;
+                        sel.dispatchEvent(new Event('change'));
+                    }
+                });
+            }
+        } catch (_) { /* sin datos del buscador */ }
+
         if (!inputFechaInicio.value) inputFechaInicio.value = hoyISO;
         if (!inputFechaFin.value) inputFechaFin.value = mananaISO;
 
@@ -69,6 +84,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         inputFechaFin.addEventListener('change', actualizarResumen);
+        [inputFechaInicio, inputFechaFin].forEach(i => i.addEventListener('change', marcarDisponibles));
     }
 
     function obtenerDias() {
@@ -177,6 +193,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // La API queda como respaldo para conservar compatibilidad con el frontend original.
         if (opcionesThymeleaf.length > 0) {
             seleccionarAutoStorage();
+            marcarDisponibles();
             return;
         }
 
@@ -210,9 +227,38 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             seleccionarAutoStorage();
+            marcarDisponibles();
         } catch (error) {
             console.error('Error al cargar vehículos desde la BD:', error);
         }
+    }
+
+    /**
+     * Deja elegir solo los autos disponibles en las fechas: sin otra reserva,
+     * sin taller y con SOAT y revisión técnica vigentes.
+     */
+    let pedidoDisponibles = 0;
+    async function marcarDisponibles() {
+        if (!selectorAuto || !inputFechaInicio?.value || !inputFechaFin?.value) return;
+        const pedido = ++pedidoDisponibles;
+        try {
+            const r = await fetch(`/api/v1/vehiculos/disponibles?inicio=${inputFechaInicio.value}&fin=${inputFechaFin.value}`);
+            if (!r.ok || pedido !== pedidoDisponibles) return;
+            const libres = new Set((await r.json()).map(a => String(a.idVehiculo)));
+            [...selectorAuto.options].forEach(o => {
+                if (!o.value) return;
+                if (!o.dataset.textoOriginal) o.dataset.textoOriginal = o.textContent;
+                const libre = libres.has(o.value);
+                o.disabled = !libre;
+                o.textContent = libre ? o.dataset.textoOriginal : `${o.dataset.textoOriginal} — no disponible en esas fechas`;
+            });
+            const elegido = selectorAuto.options[selectorAuto.selectedIndex];
+            if (elegido?.value && elegido.disabled) {
+                selectorAuto.value = '';
+                actualizarResumen();
+                window.CarmovoDialogo.avisar({ titulo: 'Auto no disponible', mensaje: 'El auto que elegiste no está disponible en esas fechas. Elige otro de la lista.', tipo: 'advertencia' });
+            }
+        } catch (_) { /* sin conexión: el servidor igual valida al pagar */ }
     }
 
     function seleccionarAutoStorage() {
@@ -418,7 +464,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const errorFactura = document.getElementById('error-factura');
 
     function tipoComprobante() {
-        return document.querySelector('input[name="tipo-comprobante"]:checked')?.value || 'BOLETA';
+        return document.querySelector('input[name="tipo-comprobante"]:checked')?.value || '';
     }
 
     /** RUC: 11 dígitos, prefijo 10/15/17/20 y dígito verificador (módulo 11). */
@@ -437,6 +483,9 @@ document.addEventListener('DOMContentLoaded', () => {
             const esFactura = tipoComprobante() === 'FACTURA';
             if (datosFactura) datosFactura.hidden = !esFactura;
             if (errorFactura) errorFactura.hidden = true;
+            document.querySelector('.selector-comprobante')?.classList.remove('selector-comprobante--error');
+            const etiquetaElegir = document.querySelector('.obligatorio-comprobante');
+            if (etiquetaElegir) etiquetaElegir.hidden = true;
             if (esFactura) setTimeout(() => inputRuc?.focus(), 50);
         });
     });
@@ -448,16 +497,47 @@ document.addEventListener('DOMContentLoaded', () => {
             estadoRuc.textContent = inputRuc.value ? `${11 - inputRuc.value.length} dígitos más` : '';
             estadoRuc.className = 'mensaje-campo';
         } else if (rucValido(inputRuc.value)) {
-            estadoRuc.textContent = '✓ RUC válido';
-            estadoRuc.className = 'mensaje-campo ok';
+            buscarRuc(inputRuc.value);
         } else {
             estadoRuc.textContent = 'RUC inválido: revisa los números';
             estadoRuc.className = 'mensaje-campo error';
         }
     });
 
+    // Busca la razón social y la dirección fiscal en SUNAT (mismo token que la consulta de DNI).
+    let rucConsultado = '';
+    let rucInactivo = false;
+    async function buscarRuc(ruc) {
+        if (ruc === rucConsultado) return;
+        rucConsultado = ruc;
+        const razon = document.getElementById('factura-razon');
+        const direccion = document.getElementById('factura-direccion');
+        estadoRuc.textContent = 'Buscando en SUNAT…';
+        estadoRuc.className = 'mensaje-campo';
+        try {
+            const datos = await window.CarmovoClienteApi.consultarRuc(ruc);
+            if (inputRuc.value !== ruc) return;
+            if (razon && datos.razonSocial) razon.value = datos.razonSocial;
+            if (direccion && datos.direccion) direccion.value = datos.direccion;
+            const estado = [datos.estado, datos.condicion].filter(Boolean).join(' · ');
+            const inactivo = !!datos.estado && !/^ACTIVO/i.test(datos.estado);
+            rucInactivo = inactivo;
+            estadoRuc.textContent = inactivo
+                ? `⚠ RUC ${estado}: SUNAT no permite emitir factura a este RUC.`
+                : `✓ ${datos.razonSocial}${estado ? ` · ${estado}` : ''}`;
+            estadoRuc.className = `mensaje-campo ${inactivo ? 'error' : 'ok'}`;
+            if (errorFactura) errorFactura.hidden = true;
+        } catch (e) {
+            if (inputRuc.value !== ruc) return;
+            rucConsultado = '';
+            rucInactivo = false;
+            estadoRuc.textContent = `✓ RUC válido. ${e?.message || 'No se pudo consultar SUNAT'}`;
+            estadoRuc.className = 'mensaje-campo ok';
+        }
+    }
+
     function datosFacturacion() {
-        if (tipoComprobante() !== 'FACTURA') return { tipoComprobante: 'BOLETA' };
+        if (tipoComprobante() !== 'FACTURA') return { tipoComprobante: tipoComprobante() || 'BOLETA' };
         return {
             tipoComprobante: 'FACTURA',
             ruc: inputRuc?.value.trim() || '',
@@ -469,8 +549,12 @@ document.addEventListener('DOMContentLoaded', () => {
     function validarFacturacion() {
         const datos = datosFacturacion();
         let mensaje = '';
-        if (datos.tipoComprobante === 'FACTURA') {
+        if (!tipoComprobante()) {
+            mensaje = 'Elige si quieres boleta o factura antes de pagar.';
+            document.querySelector('.selector-comprobante')?.classList.add('selector-comprobante--error');
+        } else if (datos.tipoComprobante === 'FACTURA') {
             if (!rucValido(datos.ruc)) mensaje = 'El RUC no es válido: debe tener 11 dígitos y empezar con 10, 15, 17 o 20.';
+            else if (rucInactivo && datos.ruc === rucConsultado) mensaje = 'Ese RUC no está activo en SUNAT. Usa otro RUC o elige boleta.';
             else if (datos.razonSocial.length < 3) mensaje = 'Ingresa la razón social para la factura.';
             else if (datos.direccionFiscal.length < 5) mensaje = 'Ingresa la dirección fiscal para la factura.';
         }
@@ -790,7 +874,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (textoValidacion) {
                 const total = `S/ ${Number(alquiler.total).toFixed(2)}`;
                 const mensajes = {
-                    APROBADO: `Tu pago con ${normalizarMetodoPago(metodoPago)} fue aprobado (ref. <strong>${referenciaPago || '—'}</strong>).<br>Total: ${total}. Tu comprobante ya está disponible en Mi Cuenta.`,
+                    APROBADO: `Tu banco autorizó el cargo con ${normalizarMetodoPago(metodoPago)} (ref. <strong>${referenciaPago || '—'}</strong>). Tu pago está <strong>en revisión</strong>.<br>Caja lo verificará y luego recibirás tu comprobante por correo y en Mi Cuenta. Total: ${total}.`,
                     EN_REVISION: `Registramos tu operación ${normalizarMetodoPago(metodoPago)} N° <strong>${referenciaPago || '—'}</strong>. Tu pago está <strong>en revisión</strong>.<br>Caja lo verificará y te avisaremos por correo si se aprueba o se rechaza. Total: ${total}.`,
                     PENDIENTE: `Paga <strong>${total}</strong> en efectivo en nuestra oficina presentando el código <strong>${referenciaPago || '—'}</strong>.<br>Tienes hasta las 12:00 del día de recojo; si no, la reserva se cancelará automáticamente.`
                 };
@@ -811,4 +895,3 @@ document.addEventListener('DOMContentLoaded', () => {
     completarDatosDesdePerfil();
     cargarVehiculosBackend();
 });
-

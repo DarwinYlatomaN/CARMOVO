@@ -1,0 +1,84 @@
+/* =========================================================
+   CARMOVO · Estilo premium del panel de administración
+   Se carga al final: sin bordes, tarjetas con sombra suave,
+   campos con fondo y animaciones discretas.
+   ========================================================= */
+:root {
+    --admin-borde: transparent;
+    --pa-sombra: 0 1px 2px rgba(30, 55, 75, .04), 0 10px 30px rgba(30, 55, 75, .07);
+    --pa-sombra-alta: 0 2px 6px rgba(30, 55, 75, .05), 0 20px 44px rgba(30, 55, 75, .12);
+    --pa-campo: #F2F6FA;
+    --pa-curva: cubic-bezier(.2, .8, .2, 1);
+}
+
+/* ---------- Sin bordes ---------- */
+*, *::before, *::after { border-color: transparent !important; }
+hr { border: 0 !important; height: 0; }
+
+/* ---------- Campos con fondo suave ---------- */
+:where(input:not([type=checkbox]):not([type=radio]):not([type=range]):not([type=color]):not([type=file]):not([type=hidden]), select, textarea) {
+    background-color: var(--pa-campo) !important;
+    transition: background-color .2s ease, box-shadow .2s ease;
+}
+:where(input, select, textarea):focus { box-shadow: 0 0 0 3px rgba(77, 134, 170, .18) !important; outline: none; }
+.campo-contrasena :where(input), .ga-dni :where(input) { background-color: var(--pa-campo) !important; }
+[aria-invalid="true"], .input-error { background-color: #FCECEC !important; }
+input[type=color] { border-radius: 10px; }
+
+/* ---------- Tarjetas premium ---------- */
+.panel-base, .pu-tarjeta, .tarjeta-estadistica, .reporte-panel, .ga-tarjeta, .ga-resumen__item, .ms-tarjeta,
+.resumen-flota__dato, .resumen-alquileres__dato, .resumen-usuarios__dato, .resumen-pagos__dato, .resumen-monitoreo__dato,
+.pu-resumen > *, .reportes-resumen > * {
+    background-color: #FFFFFF !important;
+    border-radius: 20px;
+    box-shadow: var(--pa-sombra) !important;
+}
+.tarjeta-estadistica, .ga-resumen__item, .resumen-flota__dato, .resumen-alquileres__dato, .resumen-usuarios__dato,
+.resumen-pagos__dato, .resumen-monitoreo__dato, .ms-tarjeta {
+    transition: transform .4s var(--pa-curva), box-shadow .4s var(--pa-curva);
+}
+@media (hover: hover) {
+    .tarjeta-estadistica:hover, .ga-resumen__item:hover, .resumen-flota__dato:hover, .resumen-alquileres__dato:hover,
+    .resumen-usuarios__dato:hover, .resumen-pagos__dato:hover, .resumen-monitoreo__dato:hover, .ms-tarjeta:hover {
+        transform: translateY(-4px);
+        box-shadow: var(--pa-sombra-alta) !important;
+    }
+}
+
+/* Ventanas (modales) */
+.pu-modal__caja, .ga-modal__caja, .modal-usuario__contenido, .caja-modal__caja, .mp-ventana, [class*="modal"][class*="__contenido"] {
+    border-radius: 24px !important;
+    box-shadow: 0 30px 80px rgba(20, 40, 60, .25) !important;
+}
+
+/* Tablas: filas separadas por espacio y un leve resaltado al pasar el mouse */
+:where(table:not(.rp-matriz):not(.vp)) tbody tr { transition: background-color .2s ease; }
+@media (hover: hover) {
+    :where(table:not(.rp-matriz)) tbody tr:hover > td { background-color: #F5F9FC; }
+}
+
+/* Botones: respuesta suave */
+:where(button, .pu-boton, [class*="boton"]):not(:disabled) { transition: transform .2s ease, box-shadow .2s ease, filter .2s ease, background-color .2s ease; }
+@media (hover: hover) {
+    :where(.pu-boton:not(.pu-boton--suave), .ga-boton, .boton-primario, .caja-btn--ok):not(:disabled):hover {
+        transform: translateY(-1px); box-shadow: 0 10px 22px rgba(49, 90, 117, .22);
+    }
+}
+:where(button, .pu-boton, [class*="boton"]):active { transform: scale(.98); }
+
+/* Menú lateral: el enlace activo resalta con sombra */
+.barra-lateral__enlace { transition: background-color .2s ease, transform .2s ease; }
+@media (hover: hover) { .barra-lateral__enlace:hover { transform: translateX(3px); } }
+.barra-lateral__enlace.activo { box-shadow: 0 8px 18px rgba(49, 90, 117, .14); }
+
+/* Aparición al cargar */
+.cm-revelar { opacity: 0; transform: translateY(16px); }
+.cm-revelar.cm-visible { opacity: 1; transform: none; transition: opacity .6s var(--pa-curva), transform .6s var(--pa-curva); }
+
+@media (max-width: 640px) {
+    .panel-base, .pu-tarjeta, .tarjeta-estadistica, .reporte-panel, .ga-tarjeta, .ms-tarjeta { border-radius: 18px; }
+}
+@media (prefers-reduced-motion: reduce) {
+    .cm-revelar, .cm-revelar.cm-visible { opacity: 1; transform: none; transition: none; }
+    *, *::before, *::after { transition-duration: .01ms !important; animation-duration: .01ms !important; }
+}

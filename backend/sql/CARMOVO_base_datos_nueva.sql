@@ -1,28 +1,21 @@
-
-
 DROP DATABASE IF EXISTS carmovo_db;
 CREATE DATABASE carmovo_db CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 USE carmovo_db;
 SET NAMES utf8mb4;
-
-
--- =====================================================================
--- 1. ROLES Y ACCESO
--- =====================================================================
 
 CREATE TABLE perfiles (
     id_perfil BIGINT      NOT NULL AUTO_INCREMENT,
     nombre    VARCHAR(50) NOT NULL,
     PRIMARY KEY (id_perfil),
     UNIQUE KEY uk_perfiles_nombre (nombre)
-) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
+);
 
 CREATE TABLE perfil_permisos (
     id_perfil BIGINT      NOT NULL,
     codigo    VARCHAR(50) NOT NULL,
     PRIMARY KEY (id_perfil, codigo),
     CONSTRAINT fk_perfil_permisos_perfil FOREIGN KEY (id_perfil) REFERENCES perfiles (id_perfil) ON DELETE CASCADE
-) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
+);
 
 CREATE TABLE opciones (
     id_opcion BIGINT       NOT NULL AUTO_INCREMENT,
@@ -30,7 +23,7 @@ CREATE TABLE opciones (
     ruta      VARCHAR(150) NOT NULL,
     PRIMARY KEY (id_opcion),
     UNIQUE KEY uk_opciones_ruta (ruta)
-) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
+);
 
 CREATE TABLE perfil_opcion (
     id_perfil BIGINT NOT NULL,
@@ -39,12 +32,7 @@ CREATE TABLE perfil_opcion (
     KEY idx_perfil_opcion_opcion (id_opcion),
     CONSTRAINT fk_perfil_opcion_perfil FOREIGN KEY (id_perfil) REFERENCES perfiles (id_perfil) ON DELETE CASCADE,
     CONSTRAINT fk_perfil_opcion_opcion FOREIGN KEY (id_opcion) REFERENCES opciones (id_opcion) ON DELETE CASCADE
-) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
-
-
--- =====================================================================
--- 2. PERSONAS (clientes y personal)
--- =====================================================================
+);
 
 CREATE TABLE usuarios (
     id_usuario           BIGINT       NOT NULL AUTO_INCREMENT,
@@ -71,21 +59,21 @@ CREATE TABLE usuarios (
     UNIQUE KEY uk_usuarios_licencia (numero_licencia),
     KEY idx_usuarios_perfil (id_perfil),
     CONSTRAINT fk_usuarios_perfil FOREIGN KEY (id_perfil) REFERENCES perfiles (id_perfil)
-) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
+);
 
 CREATE TABLE administradores_acceso (
     id_usuario   BIGINT     NOT NULL,
     es_principal TINYINT(1) NOT NULL DEFAULT 0,
     PRIMARY KEY (id_usuario),
     CONSTRAINT fk_admin_usuario FOREIGN KEY (id_usuario) REFERENCES usuarios (id_usuario) ON DELETE CASCADE
-) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
+);
 
 CREATE TABLE administradores_permisos (
     id_usuario BIGINT      NOT NULL,
     codigo     VARCHAR(50) NOT NULL,
     PRIMARY KEY (id_usuario, codigo),
     CONSTRAINT fk_admin_permisos_usuario FOREIGN KEY (id_usuario) REFERENCES administradores_acceso (id_usuario) ON DELETE CASCADE
-) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
+);
 
 CREATE TABLE restablecimientos_contrasena (
     id_restablecimiento BIGINT     NOT NULL AUTO_INCREMENT,
@@ -98,12 +86,7 @@ CREATE TABLE restablecimientos_contrasena (
     UNIQUE KEY uk_restablecimiento_token (token_hash),
     KEY idx_restablecimiento_usuario (id_usuario),
     CONSTRAINT fk_restablecimiento_usuario FOREIGN KEY (id_usuario) REFERENCES usuarios (id_usuario) ON DELETE CASCADE
-) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
-
-
--- =====================================================================
--- 3. FLOTA
--- =====================================================================
+);
 
 CREATE TABLE categorias (
     id_categoria   BIGINT       NOT NULL AUTO_INCREMENT,
@@ -116,7 +99,7 @@ CREATE TABLE categorias (
     PRIMARY KEY (id_categoria),
     UNIQUE KEY uk_categorias_nombre (nombre),
     KEY idx_categorias_activa_orden (activa, orden)
-) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
+);
 
 CREATE TABLE vehiculos (
     id_vehiculo          BIGINT        NOT NULL AUTO_INCREMENT,
@@ -144,7 +127,7 @@ CREATE TABLE vehiculos (
     CONSTRAINT fk_vehiculos_categoria FOREIGN KEY (categoria) REFERENCES categorias (nombre) ON UPDATE CASCADE,
     CONSTRAINT chk_vehiculos_precio CHECK (precio_dia > 0),
     CONSTRAINT chk_vehiculos_pasajeros CHECK (pasajeros > 0)
-) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
+);
 
 CREATE TABLE mantenimientos (
     id_mantenimiento BIGINT        NOT NULL AUTO_INCREMENT,
@@ -164,12 +147,7 @@ CREATE TABLE mantenimientos (
     KEY idx_mant_fecha (fecha_programada),
     CONSTRAINT fk_mant_vehiculo FOREIGN KEY (id_vehiculo) REFERENCES vehiculos (id_vehiculo),
     CONSTRAINT chk_mant_estado CHECK (estado IN ('PROGRAMADO', 'EN_TALLER', 'COMPLETADO', 'CANCELADO'))
-) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
-
-
--- =====================================================================
--- 4. ALQUILERES
--- =====================================================================
+);
 
 CREATE TABLE alquileres (
     id_alquiler     BIGINT        NOT NULL AUTO_INCREMENT,
@@ -199,7 +177,7 @@ CREATE TABLE alquileres (
     CONSTRAINT chk_alquiler_estado CHECK (estado IN ('Pendiente', 'Confirmado', 'En curso', 'Finalizado', 'Cancelado')),
     CONSTRAINT chk_alquiler_fechas CHECK (fecha_fin >= fecha_inicio),
     CONSTRAINT chk_alquiler_total  CHECK (total >= 0)
-) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
+);
 
 CREATE TABLE alquiler_inspecciones (
     id_inspeccion  BIGINT       NOT NULL AUTO_INCREMENT,
@@ -216,7 +194,7 @@ CREATE TABLE alquiler_inspecciones (
     CONSTRAINT fk_insp_alquiler FOREIGN KEY (id_alquiler) REFERENCES alquileres (id_alquiler) ON DELETE CASCADE,
     CONSTRAINT chk_insp_tipo CHECK (tipo IN ('ENTREGA', 'DEVOLUCION')),
     CONSTRAINT chk_insp_combustible CHECK (combustible BETWEEN 0 AND 8)
-) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
+);
 
 CREATE TABLE alquiler_cargos (
     id_cargo       BIGINT        NOT NULL AUTO_INCREMENT,
@@ -233,7 +211,7 @@ CREATE TABLE alquiler_cargos (
     KEY idx_cargo_estado (estado),
     CONSTRAINT fk_cargo_alquiler FOREIGN KEY (id_alquiler) REFERENCES alquileres (id_alquiler) ON DELETE CASCADE,
     CONSTRAINT chk_cargo_monto CHECK (monto >= 0)
-) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
+);
 
 CREATE TABLE aceptaciones_politicas (
     id_aceptacion  BIGINT       NOT NULL AUTO_INCREMENT,
@@ -250,12 +228,7 @@ CREATE TABLE aceptaciones_politicas (
     CONSTRAINT fk_aceptaciones_usuario  FOREIGN KEY (id_usuario)    REFERENCES usuarios (id_usuario) ON DELETE CASCADE,
     CONSTRAINT fk_aceptaciones_alquiler FOREIGN KEY (id_referencia) REFERENCES alquileres (id_alquiler) ON DELETE SET NULL,
     CONSTRAINT chk_aceptaciones_contexto CHECK (contexto IN ('REGISTRO', 'RESERVA', 'EMPLEADO'))
-) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
-
-
--- =====================================================================
--- 5. PAGOS Y COMPROBANTES
--- =====================================================================
+);
 
 CREATE TABLE intentos_pago (
     id_intento        BIGINT        NOT NULL AUTO_INCREMENT,
@@ -288,7 +261,7 @@ CREATE TABLE intentos_pago (
     CONSTRAINT fk_intento_alquiler FOREIGN KEY (id_alquiler) REFERENCES alquileres (id_alquiler) ON DELETE SET NULL,
     CONSTRAINT chk_intento_estado CHECK (estado IN ('CREADO', 'REQUIERE_3DS', 'APROBADO', 'RECHAZADO', 'BLOQUEADO',
                                                     'EN_REVISION', 'PENDIENTE', 'USADO', 'EXPIRADO'))
-) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
+);
 
 CREATE TABLE constancias_pago (
     id_constancia  BIGINT       NOT NULL AUTO_INCREMENT,
@@ -303,7 +276,7 @@ CREATE TABLE constancias_pago (
     CONSTRAINT fk_constancia_intento FOREIGN KEY (id_intento) REFERENCES intentos_pago (id_intento) ON DELETE CASCADE,
     CONSTRAINT chk_constancia_tipo CHECK (tipo_contenido IN ('image/jpeg', 'image/png', 'image/webp', 'application/pdf')),
     CONSTRAINT chk_constancia_tamano CHECK (tamano > 0 AND tamano <= 5242880)
-) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
+);
 
 CREATE TABLE pagos (
     id_pago          BIGINT        NOT NULL AUTO_INCREMENT,
@@ -339,7 +312,7 @@ CREATE TABLE pagos (
     CONSTRAINT chk_pagos_estado CHECK (estado IN ('Pendiente', 'En revisión', 'Pagado', 'Rechazado',
                                                   'Expirado', 'Anulado', 'Reembolso pendiente', 'Reembolsado')),
     CONSTRAINT chk_pagos_tipo_comprobante CHECK (tipo_comprobante IS NULL OR tipo_comprobante IN ('BOLETA', 'FACTURA'))
-) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
+);
 
 CREATE TABLE comprobantes (
     id_comprobante      BIGINT        NOT NULL AUTO_INCREMENT,
@@ -373,12 +346,7 @@ CREATE TABLE comprobantes (
         REFERENCES pagos (id_alquiler, id_pago),
     CONSTRAINT chk_comprobantes_tipo CHECK (tipo IN ('BOLETA', 'FACTURA')),
     CONSTRAINT chk_comprobantes_estado CHECK (estado IN ('EMITIDO', 'ANULADO'))
-) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
-
-
--- =====================================================================
--- 6. SITIO WEB (contenido editable desde el panel)
--- =====================================================================
+);
 
 CREATE TABLE portal_documento (
     id_documento      BIGINT       NOT NULL,
@@ -388,7 +356,7 @@ CREATE TABLE portal_documento (
     fecha_borrador    DATETIME     NULL,
     fecha_publicacion DATETIME     NULL,
     PRIMARY KEY (id_documento)
-) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
+);
 
 CREATE TABLE portal_versiones (
     id_version BIGINT       NOT NULL AUTO_INCREMENT,
@@ -398,7 +366,7 @@ CREATE TABLE portal_versiones (
     fecha      DATETIME     NOT NULL,
     PRIMARY KEY (id_version),
     KEY idx_portal_version_fecha (fecha)
-) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
+);
 
 CREATE TABLE portal_imagenes (
     id_imagen      BIGINT       NOT NULL AUTO_INCREMENT,
@@ -409,7 +377,7 @@ CREATE TABLE portal_imagenes (
     fecha_registro DATETIME     NOT NULL,
     PRIMARY KEY (id_imagen),
     KEY idx_portal_imagen_nombre (nombre)
-) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
+);
 
 CREATE TABLE portal_ofertas (
     id_oferta      BIGINT       NOT NULL AUTO_INCREMENT,
@@ -427,12 +395,7 @@ CREATE TABLE portal_ofertas (
     CONSTRAINT fk_oferta_vehiculo FOREIGN KEY (id_vehiculo) REFERENCES vehiculos (id_vehiculo) ON DELETE CASCADE,
     CONSTRAINT chk_oferta_descuento CHECK (descuento BETWEEN 1 AND 70),
     CONSTRAINT chk_oferta_fechas CHECK (fin >= inicio)
-) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
-
-
--- =====================================================================
--- 7. AUDITORÍA
--- =====================================================================
+);
 
 CREATE TABLE auditoria (
     id_auditoria BIGINT       NOT NULL AUTO_INCREMENT,
@@ -444,46 +407,11 @@ CREATE TABLE auditoria (
     actor        VARCHAR(120) NOT NULL DEFAULT 'Panel administrador',
     detalle      VARCHAR(700) NOT NULL,
     PRIMARY KEY (id_auditoria),
-    KEY idx_auditoria_fecha_hora (fecha_hora DESC),
+    KEY idx_auditoria_fecha_hora (fecha_hora),
     KEY idx_auditoria_modulo (modulo),
     KEY idx_auditoria_accion (accion),
     KEY idx_auditoria_entidad (entidad, id_entidad)
-) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
-
-
--- =====================================================================
--- 8. PROTECCIÓN DEL ADMINISTRADOR PRINCIPAL
--- =====================================================================
-
-DELIMITER $$
-
-CREATE TRIGGER trg_proteger_admin_principal_upd
-BEFORE UPDATE ON usuarios
-FOR EACH ROW
-BEGIN
-    IF EXISTS (SELECT 1 FROM administradores_acceso a WHERE a.id_usuario = OLD.id_usuario AND a.es_principal = 1)
-       AND (NEW.estado = 0 OR NEW.id_perfil <> OLD.id_perfil) THEN
-        SIGNAL SQLSTATE '45000'
-            SET MESSAGE_TEXT = 'La cuenta del administrador principal no se puede desactivar ni cambiar de rol.';
-    END IF;
-END$$
-
-CREATE TRIGGER trg_proteger_admin_principal_del
-BEFORE DELETE ON usuarios
-FOR EACH ROW
-BEGIN
-    IF EXISTS (SELECT 1 FROM administradores_acceso a WHERE a.id_usuario = OLD.id_usuario AND a.es_principal = 1) THEN
-        SIGNAL SQLSTATE '45000'
-            SET MESSAGE_TEXT = 'La cuenta del administrador principal no se puede eliminar.';
-    END IF;
-END$$
-
-DELIMITER ;
-
-
--- =====================================================================
--- 9. DATOS INICIALES DEL SISTEMA (no son datos de prueba)
--- =====================================================================
+);
 
 INSERT INTO perfiles (id_perfil, nombre) VALUES
     (1, 'Administrador'),
@@ -499,8 +427,6 @@ INSERT INTO perfil_permisos (id_perfil, codigo) VALUES
     (4, 'WEB_INICIO'), (4, 'WEB_CATEGORIAS'), (4, 'WEB_OFERTAS'), (4, 'WEB_EXPERIENCIA'), (4, 'WEB_SOPORTE'),
     (5, 'ADMIN_SERVICIOS'), (5, 'WEB_INICIO');
 
--- Administrador principal · correo: admin@carmovo.com · contraseña: Carmovo2026
--- (cámbiala al entrar: arriba a la derecha → Cambiar contraseña)
 INSERT INTO usuarios (id_usuario, id_perfil, nombres, apellidos, correo, contrasena, estado) VALUES
     (1, 1, 'Administrador', 'Carmovo', 'admin@carmovo.com',
      '$2a$10$NRPw6qGa0hMJ8M1YdPagveRn0JJypXELG4Buf45iqw.2pj5NIoVOu', 1);

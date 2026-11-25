@@ -1,12 +1,4 @@
 
-/* ==========================================================================
-   CARMOVO - ADMINISTRADOR
-   GESTION DE PAGOS - PALETA AZUL PASTEL
-   ========================================================================== */
-
-/* ==========================================================================
-   RESUMEN DE PAGOS
-   ========================================================================== */
 
 .resumen-pagos {
     margin-bottom: 18px;
@@ -716,3 +708,13 @@
 .vp-motivos button:hover { background: #F6D7D7; }
 .caja-modal__acciones button[hidden] { display: none; }
 @media (max-width: 860px) { .vp-cuerpo { grid-template-columns: 1fr; } .vp-constancia { min-height: 240px; } }
+.vp-tarjeta { width: calc(100% - 32px); display: flex; flex-direction: column; align-items: center; gap: 8px; text-align: center; padding: 26px 20px;
+    border-radius: 18px; color: #fff; background: linear-gradient(135deg, #1F3B52, #315A75 55%, #3F7FB0); min-height: 220px; justify-content: center; }
+.vp-tarjeta i { font-size: 2.2rem; opacity: .9; }
+.vp-tarjeta b { font-size: 1.02rem; }
+.vp-tarjeta span { font-size: .9rem; opacity: .95; }
+.vp-tarjeta small { font-size: .76rem; opacity: .8; max-width: 260px; line-height: 1.45; margin-top: 4px; }
+.vp-checklist[hidden] { display: none; }
+.vp-tarjeta--efectivo { background: linear-gradient(135deg, #1C6B45, #2F8A5B 55%, #46A574); }
+.boton-pago-icono.detalle { background: #EEF4F9; color: #315A75; }
+.boton-pago-icono.detalle:hover { background: #E1EDF6; }

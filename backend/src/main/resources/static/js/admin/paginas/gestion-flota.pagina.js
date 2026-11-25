@@ -1,4 +1,3 @@
-
 (function () {
     let vehiculos = [];
     let vehiculoEditandoId = null;
@@ -253,10 +252,10 @@
             !/^\d+$/.test(pasajerosTexto) ||
             !Number.isInteger(pasajeros) ||
             pasajeros < 1 ||
-            pasajeros > 5
+            pasajeros > 30
         ) {
             errores.pasajeros =
-                'La cantidad de pasajeros debe ser un número entero entre 1 y 5.';
+                'La cantidad de pasajeros debe ser un número entero entre 1 y 30.';
         }
 
         const transmision = $('#vehiculoTransmision').value;
@@ -697,9 +696,10 @@
 
         if (!vehiculo) return;
 
-        const confirmar = window.confirm(
-            `¿Eliminar ${vehiculo.marca} ${vehiculo.modelo}? Esta acción no se puede deshacer.`
-        );
+        const confirmar = await window.CarmovoDialogo.confirmar({
+            titulo: `¿Eliminar ${vehiculo.marca} ${vehiculo.modelo}?`,
+            mensaje: 'Esta acción no se puede deshacer.', aceptar: 'Eliminar', tipo: 'peligro'
+        });
 
         if (!confirmar) return;
 

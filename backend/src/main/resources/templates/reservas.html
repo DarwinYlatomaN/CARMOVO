@@ -15,6 +15,9 @@
    
     <link rel="stylesheet" href="/css/paginas/reserva.css" th:href="@{/css/paginas/reserva.css}">
     <link rel="stylesheet" href="/css/paginas/pasarela-simulada.css" th:href="@{/css/paginas/pasarela-simulada.css}">
+    <link rel="stylesheet" href="/css/paginas/premium.css" th:href="@{/css/paginas/premium.css}">
+    <script src="/js/servicios/dialogo.js" th:src="@{/js/servicios/dialogo.js}"></script>
+    <script defer src="/js/servicios/animaciones.js" th:src="@{/js/servicios/animaciones.js}"></script>
 </head>
 <body>
     <header class="cabecera">
@@ -265,10 +268,10 @@
                     <div class="tarjeta-reserva oculto" id="seccion-metodos-pago">
                         <h3>3. Comprobante y método de pago</h3>
 
-                        <p class="subtitulo-pago">¿Qué comprobante necesitas?</p>
+                        <p class="subtitulo-pago">¿Qué comprobante necesitas? <span class="obligatorio-comprobante">Elige uno</span></p>
                         <div class="selector-comprobante" role="radiogroup" aria-label="Tipo de comprobante">
                             <label class="opcion-comprobante">
-                                <input type="radio" name="tipo-comprobante" value="BOLETA" checked>
+                                <input type="radio" name="tipo-comprobante" value="BOLETA">
                                 <span><strong>Boleta</strong><small>Para personas naturales (con tu DNI)</small></span>
                             </label>
                             <label class="opcion-comprobante">

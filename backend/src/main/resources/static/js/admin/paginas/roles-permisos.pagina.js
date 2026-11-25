@@ -103,8 +103,11 @@
     async function guardar() {
         const cambiados = rolesModificados();
         const vacios = cambiados.filter(r => ![...borrador.get(r.idPerfil)].some(c => c.startsWith('ADMIN_')));
-        if (vacios.length && !window.confirm(
-            `El rol ${vacios.map(r => r.nombre).join(', ')} quedará sin módulos del panel y sus empleados no podrán trabajar en él. ¿Continuar?`)) {
+        if (vacios.length && !(await window.CarmovoDialogo.confirmar({
+            titulo: 'Rol sin módulos',
+            mensaje: `El rol ${vacios.map(r => r.nombre).join(', ')} quedará sin módulos del panel y sus empleados no podrán trabajar en él.`,
+            aceptar: 'Guardar igual'
+        }))) {
             return;
         }
         const boton = $('rp-guardar');
@@ -125,8 +128,8 @@
     // ------------------------------------------------------------ crear, renombrar y eliminar roles
     let rolEnEdicion = null;
 
-    function abrirModal(rol = null) {
-        if (rolesModificados().length && !window.confirm('Tienes cambios de permisos sin guardar. Se perderán. ¿Continuar?')) return;
+    async function abrirModal(rol = null) {
+        if (rolesModificados().length && !(await window.CarmovoDialogo.confirmar({ titulo: 'Cambios sin guardar', mensaje: 'Tienes cambios de permisos sin guardar. Si continúas, se perderán.', aceptar: 'Continuar' }))) return;
         rolEnEdicion = rol;
         const f = $('rp-form');
         f.reset();
@@ -177,7 +180,7 @@
 
     async function eliminarRol(id) {
         const rol = roles.find(r => r.idPerfil === id);
-        if (!rol || !window.confirm(`¿Eliminar el rol "${rol.nombre}"? Esta acción no se puede deshacer.`)) return;
+        if (!rol || !(await window.CarmovoDialogo.confirmar({ titulo: `¿Eliminar el rol "${rol.nombre}"?`, mensaje: 'Esta acción no se puede deshacer.', aceptar: 'Eliminar', tipo: 'peligro' }))) return;
         try {
             await api().eliminarRol(id);
             avisar('Rol eliminado.');

@@ -160,7 +160,7 @@
         let html = '';
         if (estado === 'En revisión') {
             html += `<button class="boton-verificar-pago" type="button" data-accion="verificar" data-id-alquiler="${id}"
-                        title="Revisar la constancia y aprobar o rechazar"><i class="fa-solid fa-magnifying-glass-dollar"></i> Verificar</button>`;
+                        title="Revisar el pago y aprobar o rechazar"><i class="fa-solid fa-magnifying-glass-dollar"></i> Verificar</button>`;
         }
         if (estado === 'Pendiente' && metodo === 'efectivo') {
             html += boton('cobrar-efectivo', 'fa-money-bill-wave', 'Cobrar en efectivo', 'aprobar');
@@ -171,6 +171,9 @@
         }
         if (Number(pago.cargosPendientes || 0) > 0) {
             html += boton('cobrar-cargos', 'fa-file-invoice-dollar', `Cobrar cargos adicionales (${moneda(pago.cargosPendientes)})`, 'cargos');
+        }
+        if (estado !== 'En revisión') {
+            html += boton('detalle', 'fa-receipt', 'Ver detalle de la operación', 'detalle');
         }
         return html;
     }
@@ -370,7 +373,7 @@
     }
 
     /** Ventana para revisar todos los datos de la operación y la constancia, y aprobar o rechazar con motivo. */
-    async function verificarPago(pago) {
+    async function verificarPago(pago, soloLectura = false) {
         const total = Number(pago.monto || 0);
         const reportado = Number(pago.montoPagado || pago.monto || 0);
         const coincide = Math.abs(total - reportado) < 0.005;
@@ -381,8 +384,8 @@
             <div class="caja-modal__caja vp" role="dialog" aria-modal="true" aria-labelledby="vp-titulo">
                 <div class="vp-cabecera">
                     <div>
-                        <h3 id="vp-titulo">Verificar pago · ${escapar(nombreMetodo(pago.metodoPago))}</h3>
-                        <p>Alquiler #${escapar(pago.idAlquiler)} · reportado el ${escapar(fechaHora(pago.fechaRegistro))}</p>
+                        <h3 id="vp-titulo">${soloLectura ? 'Detalle del pago' : 'Verificar pago'} · ${escapar(nombreMetodo(pago.metodoPago))}</h3>
+                        <p>Alquiler #${escapar(pago.idAlquiler)} · registrado el ${escapar(fechaHora(pago.fechaRegistro))}</p>
                     </div>
                     <button type="button" class="vp-cerrar" data-vp="cerrar" aria-label="Cerrar"><i class="fa-solid fa-xmark"></i></button>
                 </div>
@@ -395,14 +398,22 @@
                         ${fila('Detalle', escapar(pago.detalle || '—'))}
                         ${pago.banco ? fila('Banco', escapar(pago.banco)) : ''}
                         ${fila('Fecha y hora del pago', escapar(fechaHora(pago.fechaOperacion)))}
-                        ${fila('Monto a recibir', `${moneda(total)} ${coincide ? '' : `<em class="vp-alerta">reportado ${moneda(reportado)}</em>`}`, true)}
+                        ${fila(soloLectura ? 'Monto' : 'Monto a recibir', `${moneda(total)} ${coincide ? '' : `<em class="vp-alerta">reportado ${moneda(reportado)}</em>`}`, true)}
+                        ${soloLectura ? `
+                        <h4>Estado</h4>
+                        ${fila('Estado del pago', escapar(pago.estadoPago || '—'), true)}
+                        ${pago.fechaPago ? fila('Fecha de aprobación', escapar(fechaHora(pago.fechaPago))) : ''}
+                        ${pago.validadoPor ? fila('Validado por', escapar(pago.validadoPor)) : ''}
+                        ${pago.motivoRechazo ? fila('Motivo del rechazo', escapar(pago.motivoRechazo)) : ''}
+                        ${pago.montoRecibido != null ? fila('Recibido / vuelto', `${moneda(pago.montoRecibido)} / ${moneda(pago.vuelto || 0)}`) : ''}
+                        ${fila('Comprobante', escapar(pago.numeroComprobante || 'No emitido'))}` : ''}
                         <h4>Reserva</h4>
                         ${fila('Cliente', `${escapar(pago.cliente || '—')}<small>${escapar(pago.correoCliente || '')}</small>`)}
                         ${fila('Vehículo', escapar(pago.vehiculo || '—'))}
                         ${fila('Fechas', `${escapar(fechaCorta(pago.fechaInicio))} al ${escapar(fechaCorta(pago.fechaFin))}${pago.conChofer ? ' · con chofer' : ''}`)}
                         ${pago.lugarRecogida ? fila('Recojo', escapar(pago.lugarRecogida)) : ''}
                         ${fila('Comprobante pedido', escapar(pago.tipoComprobante === 'FACTURA' ? `Factura · RUC ${pago.ruc || ''}` : 'Boleta'))}
-                        <ul class="vp-checklist">
+                        <ul class="vp-checklist" ${soloLectura ? 'hidden' : ''}>
                             <li><i class="fa-regular fa-square-check"></i> El dinero aparece en la cuenta o app de CARMOVO.</li>
                             <li><i class="fa-regular fa-square-check"></i> El monto, el N° de operación y la fecha coinciden con la foto.</li>
                         </ul>
@@ -416,8 +427,8 @@
                 <p class="caja-modal__error" id="vp-error" hidden></p>
                 <div class="caja-modal__acciones">
                     <button type="button" class="caja-btn caja-btn--suave" data-vp="cerrar">Cerrar</button>
-                    <button type="button" class="caja-btn caja-btn--peligro" data-vp="rechazar"><i class="fa-solid fa-xmark"></i> Rechazar</button>
-                    <button type="button" class="caja-btn caja-btn--ok" data-vp="aprobar"><i class="fa-solid fa-check"></i> Aprobar y emitir comprobante</button>
+                    ${soloLectura ? '' : `<button type="button" class="caja-btn caja-btn--peligro" data-vp="rechazar"><i class="fa-solid fa-xmark"></i> Rechazar</button>
+                    <button type="button" class="caja-btn caja-btn--ok" data-vp="aprobar"><i class="fa-solid fa-check"></i> Aprobar y emitir comprobante</button>`}
                 </div>
             </div>`;
         document.body.appendChild(fondo);
@@ -425,7 +436,29 @@
         const cerrar = () => { if (urlConstancia) URL.revokeObjectURL(urlConstancia); fondo.remove(); };
         const mostrarError = texto => { const e = fondo.querySelector('#vp-error'); e.textContent = texto; e.hidden = !texto; };
 
-        try {
+        const esTarjeta = normalizar(pago.metodoPago) === 'tarjeta';
+        const esEfectivo = normalizar(pago.metodoPago) === 'efectivo';
+        if (esEfectivo) {
+            fondo.querySelector('#vp-constancia').innerHTML = `
+                <div class="vp-tarjeta vp-tarjeta--efectivo">
+                    <i class="fa-solid fa-money-bill-wave"></i>
+                    <b>Pago en efectivo en oficina</b>
+                    <span>Código de pago: <strong>${escapar(pago.referencia || '—')}</strong></span>
+                    ${pago.montoRecibido != null ? `<span>Recibido ${moneda(pago.montoRecibido)} · vuelto ${moneda(pago.vuelto || 0)}</span>` : '<span>Aún no se cobra en caja.</span>'}
+                </div>`;
+        } else if (esTarjeta) {
+            fondo.querySelector('#vp-constancia').innerHTML = `
+                <div class="vp-tarjeta">
+                    <i class="fa-regular fa-credit-card"></i>
+                    <b>Cargo autorizado por la pasarela</b>
+                    <span>${escapar(pago.detalle || 'Tarjeta')}</span>
+                    <span>Código de autorización: <strong>${escapar(pago.referencia || '—')}</strong></span>
+                    <small>Los pagos con tarjeta no llevan foto: revisa la autorización en el reporte de tu pasarela o banco.</small>
+                </div>`;
+            fondo.querySelector('.vp-checklist').innerHTML = `
+                <li><i class="fa-regular fa-square-check"></i> El cargo aparece en el reporte de la pasarela o del banco.</li>
+                <li><i class="fa-regular fa-square-check"></i> El monto y el código de autorización coinciden.</li>`;
+        } else try {
             const c = await window.CarmovoAdminApi.constanciaPago(pago.idAlquiler);
             const caja = fondo.querySelector('#vp-constancia');
             if (!c) {
@@ -477,6 +510,7 @@
 
     async function accionCaja(accion, pago) {
         if (accion === 'verificar') return verificarPago(pago);
+        if (accion === 'detalle') return verificarPago(pago, true);
         const etiqueta = `alquiler #${pago.idAlquiler} · ${pago.cliente}`;
         const total = Number(pago.montoPagado || pago.monto || 0);
         let respuesta = null;
@@ -714,7 +748,7 @@
 
         $('#tablaPagos').addEventListener('click', async evento => {
             const botonCaja = evento.target.closest(
-                '[data-accion="verificar"], [data-accion="aprobar"], [data-accion="rechazar"], [data-accion="cobrar-efectivo"], [data-accion="reembolsar"], [data-accion="cobrar-cargos"]'
+                '[data-accion="verificar"], [data-accion="aprobar"], [data-accion="rechazar"], [data-accion="cobrar-efectivo"], [data-accion="reembolsar"], [data-accion="cobrar-cargos"], [data-accion="detalle"]'
             );
             if (botonCaja) {
                 const pago = pagos.find(item => String(item.idAlquiler) === String(botonCaja.dataset.idAlquiler));

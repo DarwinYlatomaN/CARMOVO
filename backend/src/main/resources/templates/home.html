@@ -23,6 +23,9 @@
     <link rel="stylesheet"
           href="/css/paginas/responsive.css"
           th:href="@{/css/paginas/responsive.css}">
+    <link rel="stylesheet" href="/css/paginas/premium.css" th:href="@{/css/paginas/premium.css}">
+    <script src="/js/servicios/dialogo.js" th:src="@{/js/servicios/dialogo.js}"></script>
+    <script defer src="/js/servicios/animaciones.js" th:src="@{/js/servicios/animaciones.js}"></script>
 </head>
 
 <body>
@@ -355,6 +358,19 @@
         </form>
 
     </div>
+
+    <!-- Autos disponibles según las fechas del buscador -->
+    <section class="resultados-disponibles" id="resultadosDisponibles" hidden aria-live="polite">
+        <div class="resultados-disponibles__cabecera">
+            <div>
+                <h2 id="disponiblesTitulo">Autos disponibles</h2>
+                <p id="disponiblesDetalle"></p>
+            </div>
+            <button type="button" class="resultados-disponibles__cerrar" aria-label="Cerrar resultados"
+                    onclick="document.getElementById('resultadosDisponibles').hidden = true"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        <div class="resultados-disponibles__lista" id="disponiblesLista"></div>
+    </section>
 
     <!-- =====================================================
          BENEFICIOS

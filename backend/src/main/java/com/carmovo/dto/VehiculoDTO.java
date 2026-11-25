@@ -1,4 +1,3 @@
-
 package com.carmovo.dto;
 
 import jakarta.validation.constraints.DecimalMin;
@@ -60,8 +59,8 @@ public class VehiculoDTO {
             message = "El vehículo debe permitir al menos 1 pasajero."
     )
     @Max(
-            value = 5,
-            message = "Por ahora, el máximo permitido es de 5 pasajeros."
+            value = 30,
+            message = "El máximo permitido es de 30 pasajeros."
     )
     private Integer pasajeros;
 

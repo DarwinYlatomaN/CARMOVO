@@ -1,10 +1,4 @@
-/* =========================================================
-   CARMOVO · Editor del portal web
-   El contenido es un documento JSON con borrador y publicado.
-   - Los cambios se guardan como BORRADOR (autoguardado).
-   - "Publicar" copia el borrador al sitio y crea una versión.
-   - Las ofertas se guardan directo (tienen fechas de vigencia).
-   ========================================================= */
+
 (() => {
     'use strict';
 
@@ -142,7 +136,12 @@
     }
 
     // ------------------------------------------------------------ diseño (colores, letras, formas)
-    const ORIGINAL = { colorPrincipal: '#376b50', colorAcento: '#a8d5ba', colorFondo: '#f5faf6', colorTexto: '#263b30' };
+    const ORIGINAL = {
+        colorPrincipal: '#376b50', colorAcento: '#a8d5ba', colorFondo: '#f5faf6', colorTexto: '#263b30',
+        colorTarjetas: '#ffffff', colorTextoBotones: '#ffffff', colorCabecera: '#eaf4ed', colorPie: '#e4f3e9',
+        colorOfertas: '#c65c5c', colorDestacado: '#b58c3a', colorSalir: '#a64545'
+    };
+    const COLORES_PALETA = ['colorPrincipal', 'colorAcento', 'colorFondo', 'colorTexto'];
     // Mismo catálogo que portal.publico.js (Google Fonts), agrupado por estilo.
     const GRUPOS_FUENTES = {"Modernas": ["Montserrat", "Poppins", "Inter", "Roboto", "Open Sans", "Lato", "Nunito", "Nunito Sans", "Raleway", "Work Sans", "Rubik", "Manrope", "DM Sans", "Outfit", "Plus Jakarta Sans", "Urbanist", "Mulish", "Source Sans 3", "Barlow", "Kanit", "Josefin Sans", "Quicksand", "Sora", "Lexend", "Figtree"], "Clásicas (con serifa)": ["Playfair Display", "Merriweather", "Lora", "Libre Baskerville", "Cormorant Garamond", "EB Garamond", "Roboto Slab", "Crimson Text", "DM Serif Display"], "Llamativas": ["Bebas Neue", "Oswald", "Anton", "Archivo Black", "Righteous", "Bungee", "Fredoka", "Comfortaa", "Teko", "Russo One", "Orbitron"], "Manuscritas": ["Pacifico", "Dancing Script", "Caveat", "Lobster", "Satisfy"]};
     const FUENTES = Object.values(GRUPOS_FUENTES).flat();
@@ -176,7 +175,7 @@
         $('pw-oscuridad-valor').textContent = tieneOscuridad ? `${t.oscuridadPortada}%` : 'original';
         $('pw-paletas').innerHTML = PALETAS.map((p, i) => {
             const c = { ...ORIGINAL, ...p.colores };
-            const activa = Object.keys(ORIGINAL).every(k => (t[k] || ORIGINAL[k]).toLowerCase() === c[k].toLowerCase());
+            const activa = COLORES_PALETA.every(k => (t[k] || ORIGINAL[k]).toLowerCase() === c[k].toLowerCase());
             return `<button type="button" class="pw-paleta ${activa ? 'activa' : ''}" data-paleta="${i}">
                 <span>${[c.colorPrincipal, c.colorAcento, c.colorFondo, c.colorTexto].map(x => `<i style="background:${x}"></i>`).join('')}</span>${esc(p.nombre)}</button>`;
         }).join('');
@@ -208,9 +207,11 @@
     }
 
     async function restaurarInicial() {
-        const ok = window.confirm('¿Restaurar la configuración inicial del sitio?\n\n' +
-            'Se volverán a poner los textos, el video de portada, las preguntas frecuentes, el contacto y el diseño originales, y se publicará de inmediato.\n\n' +
-            'Lo que tienes ahora queda guardado en "Historial", por si quieres recuperarlo.');
+        const ok = await window.CarmovoDialogo.confirmar({
+            titulo: '¿Restaurar la configuración inicial?',
+            mensaje: 'Se volverán a poner los textos, el video de portada, las preguntas frecuentes, el contacto y el diseño originales, y se publicará de inmediato.\n\nLo que tienes ahora queda guardado en "Historial".',
+            aceptar: 'Restaurar', tipo: 'advertencia'
+        });
         if (!ok) return;
         try {
             aplicarEstado(await api().restaurarPortalInicial());
@@ -267,7 +268,7 @@
     async function publicar() {
         if (!(await guardar(true))) return;
         if (!hayCambios) return avisar('No hay cambios por publicar.');
-        const resumen = window.prompt('Describe brevemente qué cambiaste (queda en el historial):', 'Actualización de contenido');
+        const resumen = await window.CarmovoDialogo.pedir({ titulo: 'Publicar cambios', mensaje: 'Describe brevemente qué cambiaste. Quedará en el historial.', valor: 'Actualización de contenido', aceptar: 'Publicar', tipo: 'exito', maximo: 255 });
         if (resumen === null) return;
         try {
             const r = await api().publicarPortal(resumen);
@@ -281,7 +282,7 @@
     }
 
     async function descartar() {
-        if (!window.confirm('¿Descartar el borrador y volver a lo que está publicado?')) return;
+        if (!(await window.CarmovoDialogo.confirmar({ titulo: '¿Descartar el borrador?', mensaje: 'Se perderán los cambios sin publicar y volverás a lo que se ve ahora en el sitio.', aceptar: 'Descartar', tipo: 'peligro' }))) return;
         try {
             const r = await api().descartarBorradorPortal();
             aplicarEstado(r);
@@ -371,7 +372,7 @@
     }
 
     async function restaurar(id) {
-        if (!window.confirm('Se cargará esa versión como borrador. Luego podrás revisarla y publicarla. ¿Continuar?')) return;
+        if (!(await window.CarmovoDialogo.confirmar({ titulo: 'Recuperar esta versión', mensaje: 'Se cargará como borrador. Luego podrás revisarla y publicarla.', aceptar: 'Recuperar', tipo: 'info' }))) return;
         try {
             aplicarEstado(await api().restaurarVersionPortal(id));
             avisar('Versión cargada como borrador. Revísala y publícala.');
@@ -461,7 +462,7 @@
     }
 
     async function quitarOferta(id) {
-        if (!window.confirm('¿Eliminar esta oferta? Dejará de mostrarse en el sitio.')) return;
+        if (!(await window.CarmovoDialogo.confirmar({ titulo: '¿Eliminar esta oferta?', mensaje: 'Dejará de mostrarse en el sitio.', aceptar: 'Eliminar', tipo: 'peligro' }))) return;
         try {
             await api().eliminarOfertaPortal(id);
             avisar('Oferta eliminada.');
@@ -504,7 +505,7 @@
                 cambio();
             }
         });
-        $('pw-faq').addEventListener('click', e => {
+        $('pw-faq').addEventListener('click', async e => {
             const mover = e.target.closest('[data-faq-mover]');
             const quitar = e.target.closest('[data-faq-quitar]');
             if (mover) {
@@ -514,7 +515,7 @@
                 pintarFaq();
                 cambio();
             }
-            if (quitar && window.confirm('¿Eliminar esta pregunta?')) {
+            if (quitar && await window.CarmovoDialogo.confirmar({ titulo: '¿Eliminar esta pregunta?', mensaje: 'Se quitará de las preguntas frecuentes.', aceptar: 'Eliminar', tipo: 'peligro' })) {
                 contenido.faq.splice(Number(quitar.dataset.faqQuitar), 1);
                 pintarFaq();
                 cambio();
@@ -539,13 +540,13 @@
             if (!b) return;
             const paleta = PALETAS[Number(b.dataset.paleta)];
             contenido.tema = contenido.tema || {};
-            Object.keys(ORIGINAL).forEach(k => { delete contenido.tema[k]; });
+            COLORES_PALETA.forEach(k => { delete contenido.tema[k]; });
             Object.assign(contenido.tema, paleta.colores);
             pintarDiseno();
             cambio();
         });
-        $('pw-diseno-original').addEventListener('click', () => {
-            if (!window.confirm('¿Volver al diseño original (colores, letras y formas)? Los textos no cambian.')) return;
+        $('pw-diseno-original').addEventListener('click', async () => {
+            if (!(await window.CarmovoDialogo.confirmar({ titulo: '¿Volver al diseño original?', mensaje: 'Se restauran los colores, las letras y las formas. Los textos no cambian.', aceptar: 'Volver al original', tipo: 'advertencia' }))) return;
             contenido.tema = {};
             pintarDiseno();
             cambio();

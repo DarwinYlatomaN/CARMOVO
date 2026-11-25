@@ -75,7 +75,7 @@
     }
 
     async function avanzar(boton) {
-        if (boton.dataset.estado === 'FINALIZADO' && !window.confirm('¿Confirmas que el servicio terminó?')) return;
+        if (boton.dataset.estado === 'FINALIZADO' && !(await window.CarmovoDialogo.confirmar({ titulo: '¿Terminó el servicio?', mensaje: 'Confirma que dejaste al cliente y el servicio terminó.', aceptar: 'Sí, terminó', tipo: 'exito' }))) return;
         boton.disabled = true;
         try {
             await api().avanzarServicio(boton.dataset.id, boton.dataset.estado);

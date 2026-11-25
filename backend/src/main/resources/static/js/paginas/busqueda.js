@@ -303,7 +303,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const hoy = obtenerFechaActual();
 
         if (recogida < hoy || entrega < recogida) {
-            alert('Selecciona fechas v\u00e1lidas para tu reserva.');
+            window.CarmovoDialogo.avisar({ titulo: 'Revisa las fechas', mensaje: 'La recogida no puede ser antes de hoy y la entrega no puede ser antes de la recogida.', tipo: 'advertencia' });
             return;
         }
 
@@ -313,17 +313,101 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        // Conservar temporalmente los datos seleccionados.
-        sessionStorage.setItem('carmovo_reserva_home', JSON.stringify({
+        const busqueda = {
             lugarRecogida: sedes[0].value,
             lugarEntrega: sedes[1].value,
             fechaRecogida: recogida,
-            fechaEntrega: entrega
-        }));
+            fechaEntrega: entrega,
+            textoRecogida: sedes[0].options[sedes[0].selectedIndex]?.text.trim() || '',
+            textoEntrega: sedes[1].options[sedes[1].selectedIndex]?.text.trim() || ''
+        };
+        try { sessionStorage.setItem('carmovo_reserva_home', JSON.stringify(busqueda)); } catch (_) { /* sin almacenamiento */ }
 
-        // Dirigir a la p\u00e1gina de Reservas.
-        window.location.href = '/reservas';
-
+        buscarDisponibles(busqueda, formReserva.querySelector('button[type="submit"]'));
     });
 
 });
+
+// =====================================================
+// Autos disponibles según las fechas (buscador del inicio)
+// =====================================================
+async function buscarDisponibles(busqueda, boton) {
+    const seccion = document.getElementById('resultadosDisponibles');
+    if (!seccion) {
+        window.location.href = '/reservas';
+        return;
+    }
+    const esc = v => String(v ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+    const soles = n => `S/ ${Number(n || 0).toLocaleString('es-PE', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+    const fechaCorta = f => new Date(`${f}T12:00:00`).toLocaleDateString('es-PE', { weekday: 'short', day: 'numeric', month: 'short' });
+    const imagen = auto => {
+        const img = String(auto.imagen || '').trim();
+        if (/^(https:|\/)/i.test(img)) return img;
+        if (img.startsWith('recursos/')) return `/${img}`;
+        if (typeof autosDB !== 'undefined' && Array.isArray(autosDB)) {
+            const ref = autosDB.find(a => String(a.nombre).toLowerCase() === String(auto.nombre).toLowerCase());
+            if (ref?.imagen) return ref.imagen;
+        }
+        return '/recursos/imagenes/home/logo-carmovo-transparente.png';
+    };
+
+    const titulo = seccion.querySelector('#disponiblesTitulo');
+    const detalle = seccion.querySelector('#disponiblesDetalle');
+    const lista = seccion.querySelector('#disponiblesLista');
+    seccion.hidden = false;
+    titulo.textContent = 'Buscando autos disponibles…';
+    detalle.textContent = `${fechaCorta(busqueda.fechaRecogida)} → ${fechaCorta(busqueda.fechaEntrega)} · ${busqueda.textoRecogida}`;
+    lista.innerHTML = '<div class="disponibles-cargando"><i class="fa-solid fa-spinner fa-spin"></i></div>';
+    seccion.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    if (boton) boton.disabled = true;
+
+    try {
+        const r = await fetch(`/api/v1/vehiculos/disponibles?inicio=${busqueda.fechaRecogida}&fin=${busqueda.fechaEntrega}`);
+        const datos = await r.json().catch(() => null);
+        if (!r.ok) throw new Error(datos?.detail || datos?.message || 'No se pudo buscar los autos.');
+        const autos = Array.isArray(datos) ? datos : [];
+        const dias = autos[0]?.dias || Math.max(1, Math.round((new Date(busqueda.fechaEntrega) - new Date(busqueda.fechaRecogida)) / 86400000));
+        titulo.textContent = autos.length
+            ? `${autos.length} ${autos.length === 1 ? 'auto disponible' : 'autos disponibles'}`
+            : 'No hay autos disponibles en esas fechas';
+        detalle.textContent = `${fechaCorta(busqueda.fechaRecogida)} → ${fechaCorta(busqueda.fechaEntrega)} · ${dias} ${dias === 1 ? 'día' : 'días'} · Recojo en ${busqueda.textoRecogida}`;
+        if (!autos.length) {
+            lista.innerHTML = '<p class="disponibles-vacio">Prueba con otras fechas: todos los autos están reservados o en mantenimiento.</p>';
+            return;
+        }
+        lista.innerHTML = autos.map(a => `
+            <article class="disponible">
+                <div class="disponible__img">
+                    <img src="${esc(imagen(a))}" alt="${esc(a.nombre)}" loading="lazy"
+                         onerror="this.onerror=null;this.src='/recursos/imagenes/home/logo-carmovo-transparente.png'">
+                    ${a.descuento ? `<span class="disponible__oferta">−${esc(a.descuento)}%</span>` : ''}
+                </div>
+                <div class="disponible__info">
+                    <span class="disponible__categoria">${esc(a.categoria)}</span>
+                    <h3>${esc(a.nombre)}</h3>
+                    <p class="disponible__datos"><span><i class="fa-solid fa-user-group"></i> ${esc(a.pasajeros)}</span>
+                        <span><i class="fa-solid fa-gears"></i> ${esc(a.transmision)}</span></p>
+                    <div class="disponible__precio">
+                        <div>${a.descuento ? `<s>${soles(a.precioDia)}</s>` : ''}<strong>${soles(a.precioFinal)}</strong><small> / día</small></div>
+                        <small>Total ${dias} ${dias === 1 ? 'día' : 'días'}: <b>${soles(a.total)}</b> <span>(incluye seguro e IGV)</span></small>
+                    </div>
+                    <button type="button" class="disponible__reservar" data-id="${esc(a.idVehiculo)}">Reservar <i class="fa-solid fa-arrow-right"></i></button>
+                </div>
+            </article>`).join('');
+        lista.querySelectorAll('.disponible__reservar').forEach(b => b.addEventListener('click', () => {
+            const a = autos.find(x => String(x.idVehiculo) === b.dataset.id);
+            try {
+                localStorage.setItem('autoReserva', JSON.stringify({
+                    idVehiculo: a.idVehiculo, id: a.idVehiculo, nombre: a.nombre, marca: a.marca, modelo: a.modelo,
+                    categoria: a.categoria, tipo: a.categoria, imagen: a.imagen, precioDia: a.precioDia, precio: a.precioDia
+                }));
+            } catch (_) { /* sin almacenamiento */ }
+            window.location.href = '/reservas';
+        }));
+    } catch (error) {
+        titulo.textContent = 'No se pudo completar la búsqueda';
+        lista.innerHTML = `<p class="disponibles-vacio">${esc(error.message)}</p>`;
+    } finally {
+        if (boton) boton.disabled = false;
+    }
+}

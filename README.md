@@ -211,6 +211,15 @@ En **Empleados**, al escribir un DNI de 8 dígitos el sistema trae los nombres y
 
 Sin token el panel funciona igual: solo escribes los nombres a mano.
 
+### Publicar solo el sitio web con un enlace (gratis, desde VS Code)
+1. Ejecuta el sistema con **Run and Debug ▶ "CARMOVO (local)"** (así se activa `CARMOVO_PANEL_SOLO_LOCAL=true`).
+2. En VS Code: panel inferior → pestaña **PUERTOS** → **Reenviar un puerto** → `8080` (inicia sesión con GitHub la primera vez).
+3. Clic derecho en el puerto → **Visibilidad del puerto → Público**, y copia la **dirección reenviada** (`https://…devtunnels.ms`).
+4. Ábrela en cualquier celular o tableta. Por ese enlace **solo se ve el sitio web**: `/admin` responde "Página no disponible".
+   El panel lo sigues usando en tu PC en **http://localhost:8080/admin/login**.
+
+El enlace funciona mientras tu PC esté encendida con VS Code y el sistema corriendo.
+
 ### Verlo desde tu celular (misma red Wi-Fi)
 1. Averigua la IP de tu computadora (Windows: `ipconfig` → "Dirección IPv4", por ejemplo `192.168.1.20`).
 2. En el celular abre `http://192.168.1.20:8080`.

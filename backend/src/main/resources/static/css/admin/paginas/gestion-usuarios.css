@@ -658,3 +658,21 @@
         transition: none;
     }
 }
+
+/* Formulario completo del cliente */
+.modal-usuario__contenido { width: min(860px, calc(100vw - 32px)); }
+.seccion-usuario { margin: 6px 0 -4px; display: flex; align-items: center; gap: 8px; color: #315A75;
+    font-size: .74rem; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; }
+.seccion-usuario:not(:first-child) { margin-top: 10px; padding-top: 14px; border-top: 1px solid var(--admin-borde); }
+.campo-usuario label .opcional { font-weight: 500; color: #7A93A5; }
+.campo-dni { display: flex; gap: 10px; }
+.campo-dni input { flex: 1; }
+.campo-dni button { white-space: nowrap; min-height: 43px; }
+.estado-dni { font-weight: 600; }
+.estado-dni.ok { color: #1C8353 !important; }
+.estado-dni.error { color: #A33A3A !important; }
+.campo-usuario input.autocompletado { background: #F0FAF4; }
+.campo-usuario select:disabled { background: #F3F6F8; color: #8198A8; }
+.campo-usuario .pol-acepto { margin: 4px 0 0; }
+.campo-usuario label.pol-acepto { display: flex; font-size: .82rem; font-weight: 500; color: #33495A; margin-bottom: 0; }
+@media (max-width: 640px) { .formulario-usuario__grid { grid-template-columns: 1fr; } }
