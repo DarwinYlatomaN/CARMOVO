@@ -1,4 +1,3 @@
-
 package com.carmovo.service;
 
 import com.carmovo.model.Usuario;
@@ -90,6 +89,38 @@ public class UsuarioServicio {
         usuario.setEstado(dto.getEstado() == null ? true : dto.getEstado());
         usuario.setPerfil(buscarPerfil(dto.getIdPerfil()));
 
+        return convertirADto(usuarioRepositorio.save(usuario));
+    }
+
+    /** Revisa los datos de un cliente nuevo sin crear la cuenta (antes de enviar el código al correo). */
+    @Transactional(readOnly = true)
+    public void validarNuevoCliente(UsuarioGuardarDTO dto) {
+        validarDatosCliente(dto);
+        if (usuarioRepositorio.existsByCorreoIgnoreCase(normalizarCorreo(dto.getCorreo()))) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Este correo ya está registrado. Inicia sesión.");
+        }
+        validarDatosUnicos(dto, null);
+    }
+
+    /** Crea la cuenta del cliente cuando ya verificó su correo. La contraseña llega cifrada. */
+    @Transactional
+    public UsuarioDTO registrarClienteVerificado(UsuarioGuardarDTO dto, String contrasenaHash) {
+        validarPerfilCliente(dto);
+        String correo = normalizarCorreo(dto.getCorreo());
+        if (usuarioRepositorio.existsByCorreoIgnoreCase(correo)) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Este correo ya está registrado. Inicia sesión.");
+        }
+        validarDatosUnicos(dto, null);
+
+        Usuario usuario = new Usuario();
+        usuario.setNombres(dto.getNombres().trim());
+        usuario.setApellidos(dto.getApellidos().trim());
+        usuario.setCorreo(correo);
+        usuario.setContrasena(contrasenaHash);
+        usuario.setTelefono(dto.getTelefono().trim());
+        copiarDatosPerfilCliente(usuario, dto);
+        usuario.setEstado(true);
+        usuario.setPerfil(buscarPerfilCliente());
         return convertirADto(usuarioRepositorio.save(usuario));
     }
 

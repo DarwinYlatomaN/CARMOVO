@@ -48,6 +48,8 @@ public class SeguridadConfig {
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         .requestMatchers(HttpMethod.POST,
                                 "/api/v1/clientes/registro",
+                                "/api/v1/clientes/registro/verificar",
+                                "/api/v1/clientes/registro/reenviar",
                                 "/api/v1/clientes/login",
                                 "/api/v1/clientes/recuperar/solicitar",
                                 "/api/v1/clientes/recuperar/confirmar").permitAll()

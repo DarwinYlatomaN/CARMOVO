@@ -122,6 +122,25 @@
         return leerRespuesta(respuesta);
     }
 
+    /** Paso 2 del registro: el código de 6 dígitos que llegó al correo. Devuelve el cliente con su token. */
+    async function verificarRegistro(correo, codigo) {
+        const respuesta = await fetch(`${API_BASE}/registro/verificar`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ correo, codigo })
+        });
+        return leerRespuesta(respuesta);
+    }
+
+    async function reenviarCodigoRegistro(correo) {
+        const respuesta = await fetch(`${API_BASE}/registro/reenviar`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ correo })
+        });
+        return leerRespuesta(respuesta);
+    }
+
     async function iniciarSesion(correo, contrasena) {
         const respuesta = await fetch(`${API_BASE}/login`, {
             method: 'POST',
@@ -231,6 +250,8 @@
         cerrarSesion,
         cabeceras,
         registrar,
+        verificarRegistro,
+        reenviarCodigoRegistro,
         iniciarSesion,
         solicitarRecuperacion,
         restablecerContrasena,

@@ -356,13 +356,17 @@
                          th:errors="*{contrasenaSinDatosPersonales}">
                         La contraseña no debe incluir datos personales.
                     </div>
-                    <div id="requisitosContrasena"
-                         class="form-text"
-                         style="display: none;"
-                         aria-live="polite">
-                        Usa entre 8 y 12 caracteres, al menos una mayúscula,
-                        una minúscula, un número y un símbolo (@, #, $, %, *, _ o -).
-                        No incluyas tu DNI, nombres, apellidos ni fecha de nacimiento.
+                    <div id="requisitosContrasena" class="rv-requisitos" aria-live="polite">
+                        <div class="rv-barra" aria-hidden="true"><b></b><b></b><b></b><b></b></div>
+                        <span class="rv-fuerza" id="rvFuerza">Escribe tu contraseña</span>
+                        <ul class="rv-lista">
+                            <li data-regla="largo"><i class="fa-regular fa-circle"></i>Entre 8 y 12 caracteres</li>
+                            <li data-regla="mayuscula"><i class="fa-regular fa-circle"></i>Una mayúscula</li>
+                            <li data-regla="minuscula"><i class="fa-regular fa-circle"></i>Una minúscula</li>
+                            <li data-regla="numero"><i class="fa-regular fa-circle"></i>Un número</li>
+                            <li data-regla="simbolo"><i class="fa-regular fa-circle"></i>Un símbolo (@ # $ % * _ -)</li>
+                            <li data-regla="personal"><i class="fa-regular fa-circle"></i>Sin tu nombre, DNI ni fecha de nacimiento</li>
+                        </ul>
                     </div>
                 </div>
 
@@ -385,6 +389,7 @@
                             <i class="fa-regular fa-eye"></i>
                         </button>
                     </div>
+                    <small class="rv-coincide" id="rvCoincide" aria-live="polite"></small>
                 </div>
 
             </div>
@@ -452,6 +457,7 @@
 <script src="/js/servicios/api.cliente.js"
         th:src="@{/js/servicios/api.cliente.js}"></script>
 <script src="/js/servicios/politicas.js" th:src="@{/js/servicios/politicas.js}"></script>
+<script src="/js/paginas/registro-verificacion.js" th:src="@{/js/paginas/registro-verificacion.js}"></script>
 <script src="/js/paginas/registro.js"
         th:src="@{/js/paginas/registro.js}"></script>
     <script src="/js/paginas/portal.publico.js" th:src="@{/js/paginas/portal.publico.js}"></script>

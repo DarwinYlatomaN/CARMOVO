@@ -250,7 +250,7 @@ a {
 }
 
 /* ==========================================================================
-   CAMPOS DE CONTRASEÑA
+   CAMPOS DE CONTRASEï¿½A
    ========================================================================== */
 
 .campo-password-registro {
@@ -271,7 +271,7 @@ a {
     padding-right: 55px;
 }
 
-/* Botón para mostrar u ocultar la contraseña. */
+/* Botï¿½n para mostrar u ocultar la contraseï¿½a. */
 .campo-password-registro > button.btn-mostrar-password {
     grid-area: 1 / 1;
     position: relative;
@@ -334,7 +334,7 @@ a {
 }
 
 /* ==========================================================================
-   REQUISITOS DE CONTRASEÑA
+   REQUISITOS DE CONTRASEï¿½A
    ========================================================================== */
 
 #requisitosContrasena {
@@ -493,3 +493,29 @@ a {
         transition: none;
     }
 }
+
+/* ==========================================================================
+   MEDIDOR DE CONTRASEÃ‘A Y CONFIRMACIÃ“N
+   ========================================================================== */
+.rv-requisitos { margin-top: 10px; }
+.rv-barra { display: flex; gap: 6px; margin-bottom: 6px; }
+.rv-barra b { flex: 1; height: 6px; border-radius: 9px; background: #E3ECE6; transition: background .25s ease; }
+.rv-requisitos[data-nivel="1"] .rv-barra b:nth-child(-n+1) { background: #D9534F; }
+.rv-requisitos[data-nivel="2"] .rv-barra b:nth-child(-n+2) { background: #E08A3B; }
+.rv-requisitos[data-nivel="3"] .rv-barra b:nth-child(-n+3) { background: #E0A23B; }
+.rv-requisitos[data-nivel="4"] .rv-barra b { background: #2F8A5B; }
+.rv-fuerza { font-size: .78rem; font-weight: 700; color: #7B9184; }
+.rv-requisitos[data-nivel="1"] .rv-fuerza { color: #B23B3B; }
+.rv-requisitos[data-nivel="2"] .rv-fuerza,
+.rv-requisitos[data-nivel="3"] .rv-fuerza { color: #B7791F; }
+.rv-requisitos[data-nivel="4"] .rv-fuerza { color: #1F7A45; }
+.rv-lista { list-style: none; padding: 0; margin: 8px 0 0; display: grid; grid-template-columns: 1fr 1fr; gap: 5px 14px; font-size: .78rem; }
+.rv-lista li { display: flex; gap: 7px; align-items: flex-start; color: #8A9C92; transition: color .2s ease; }
+.rv-lista li i { margin-top: 2px; }
+.rv-lista li.si { color: #1F7A45; }
+.rv-coincide { display: block; min-height: 18px; margin-top: 6px; font-size: .78rem; font-weight: 600; }
+.rv-coincide.rv-ok { color: #1F7A45; }
+.rv-coincide.rv-error { color: #B23B3B; }
+.campo-input-registro.rv-mal { box-shadow: 0 0 0 2px #E58C8C; border-radius: 14px; }
+.campo-input-registro.rv-bien { box-shadow: 0 0 0 2px #7CC59B; border-radius: 14px; }
+@media (max-width: 560px) { .rv-lista { grid-template-columns: 1fr; } }

@@ -1,851 +1,277 @@
-
-document.addEventListener('DOMContentLoaded', () => {
-
-    function configurarTogglePassword(btnId, inputId) {
-        const btn = document.getElementById(btnId);
-        const input = document.getElementById(inputId);
-
-        if (btn && input) {
-            btn.addEventListener('click', () => {
-                const tipoActual = input.getAttribute('type');
-                const icono = btn.querySelector('i');
-
-                if (tipoActual === 'password') {
-                    input.setAttribute('type', 'text');
-
-                    if (icono) {
-                        icono.classList.remove('fa-eye');
-                        icono.classList.add('fa-eye-slash');
-                    }
-                } else {
-                    input.setAttribute('type', 'password');
-
-                    if (icono) {
-                        icono.classList.remove('fa-eye-slash');
-                        icono.classList.add('fa-eye');
-                    }
-                }
-            });
-        }
-    }
-
-    configurarTogglePassword('btnMostrarPassword1', 'contrasena');
-    configurarTogglePassword('btnMostrarPassword2', 'confirmarContrasena');
-
-    const formularioRegistro = document.getElementById('formularioRegistro');
-    const inputPassword1 = document.getElementById('contrasena');
-    const inputPassword2 = document.getElementById('confirmarContrasena');
-    const mensajeError = document.getElementById('mensajeErrorRegistro');
-
-    if (!formularioRegistro || !inputPassword1 || !inputPassword2 || !mensajeError) {
-        return;
-    }
-
-    const selectDepartamento = document.getElementById('departamento');
-    const selectProvincia = document.getElementById('provincia');
-    const selectDistrito = document.getElementById('distrito');
-
-    const RUTA_UBIGEOS = '/data/UBIGEOS_2022_1891_distritos.csv';
-
-    const campos = [
-        'nombres',
-        'apellidos',
-        'correo',
-        'telefono',
-        'documento',
-        'fechaNacimiento',
-        'departamento',
-        'provincia',
-        'distrito',
-        'domicilio',
-        'numeroLicencia',
-        'categoriaLicencia',
-        'vencimientoLicencia',
-        'contrasena',
-        'confirmarContrasena'
-    ];
-
-    let catalogoUbigeos = new Map();
-    let catalogoCargado = false;
-
-    function obtenerCampo(id) {
-        return document.getElementById(id);
-    }
-
-    function obtenerValor(id) {
-        const campo = obtenerCampo(id);
-        return campo ? campo.value.trim() : '';
-    }
-
-    function mostrarError(mensaje, idsCampos = []) {
-        mensajeError.textContent = mensaje;
-        mensajeError.style.display = 'block';
-
-        idsCampos.forEach((id) => {
-            const campo = obtenerCampo(id);
-
-            if (campo) {
-                campo.classList.add('is-invalid');
-
-                const contenedor = campo.closest('.campo-input-registro');
-
-                if (contenedor) {
-                    contenedor.classList.add('campo-input-error');
-                }
-            }
-        });
-    }
-
-    function limpiarErrores() {
-        mensajeError.textContent = '';
-        mensajeError.style.display = 'none';
-
-        campos.forEach((id) => {
-            const campo = obtenerCampo(id);
-
-            if (campo) {
-                campo.classList.remove('is-invalid');
-
-                const contenedor = campo.closest('.campo-input-registro');
-
-                if (contenedor) {
-                    contenedor.classList.remove('campo-input-error');
-                }
-            }
-        });
-    }
-
-    function obtenerFechaLocalActual() {
-        const fecha = new Date();
-
-        const anio = fecha.getFullYear();
-        const mes = String(fecha.getMonth() + 1).padStart(2, '0');
-        const dia = String(fecha.getDate()).padStart(2, '0');
-
-        return `${anio}-${mes}-${dia}`;
-    }
-
-    function normalizarUbicacion(valor) {
-        return String(valor || '')
-            .normalize('NFD')
-            .replace(/[\u0300-\u036f]/g, '')
-            .trim()
-            .replace(/\s+/g, ' ')
-            .toUpperCase();
-    }
-
-    function crearOpcion(valor, texto) {
-        const opcion = document.createElement('option');
-        opcion.value = valor;
-        opcion.textContent = texto;
-        return opcion;
-    }
-
-    function reiniciarSelector(selector, mensaje) {
-        if (!selector) {
-            return;
-        }
-
-        selector.replaceChildren(crearOpcion('', mensaje));
-        selector.value = '';
-        selector.disabled = true;
-    }
-
-    function buscarDepartamento(nombre) {
-        return catalogoUbigeos.get(normalizarUbicacion(nombre));
-    }
-
-    function buscarProvincia(departamento, nombreProvincia) {
-        if (!departamento) {
-            return null;
-        }
-
-        return departamento.provincias.get(
-            normalizarUbicacion(nombreProvincia)
-        );
-    }
-
-    function llenarProvincias(valorAnterior = '') {
-        reiniciarSelector(
-            selectProvincia,
-            'Selecciona una provincia'
-        );
-
-        reiniciarSelector(
-            selectDistrito,
-            'Selecciona primero una provincia'
-        );
-
-        if (!catalogoCargado || !selectDepartamento || !selectProvincia) {
-            return;
-        }
-
-        const departamento = buscarDepartamento(
-            selectDepartamento.value
-        );
-
-        if (!departamento) {
-            return;
-        }
-
-        const provincias = Array.from(
-            departamento.provincias.values()
-        ).sort((a, b) => a.nombre.localeCompare(b.nombre, 'es'));
-
-        provincias.forEach((provincia) => {
-            selectProvincia.appendChild(
-                crearOpcion(provincia.nombre, provincia.nombre)
-            );
-        });
-
-        selectProvincia.disabled = false;
-
-        if (valorAnterior) {
-            const provinciaAnterior = buscarProvincia(
-                departamento,
-                valorAnterior
-            );
-
-            if (provinciaAnterior) {
-                selectProvincia.value = provinciaAnterior.nombre;
-            }
-        }
-    }
-
-    function llenarDistritos(valorAnterior = '') {
-        reiniciarSelector(
-            selectDistrito,
-            'Selecciona un distrito'
-        );
-
-        if (!catalogoCargado
-            || !selectDepartamento
-            || !selectProvincia
-            || !selectDistrito) {
-            return;
-        }
-
-        const departamento = buscarDepartamento(
-            selectDepartamento.value
-        );
-
-        const provincia = buscarProvincia(
-            departamento,
-            selectProvincia.value
-        );
-
-        if (!provincia) {
-            return;
-        }
-
-        const distritos = Array.from(
-            provincia.distritos.values()
-        ).sort((a, b) => a.localeCompare(b, 'es'));
-
-        distritos.forEach((distrito) => {
-            selectDistrito.appendChild(
-                crearOpcion(distrito, distrito)
-            );
-        });
-
-        selectDistrito.disabled = false;
-
-        if (valorAnterior) {
-            const distritoAnterior = provincia.distritos.get(
-                normalizarUbicacion(valorAnterior)
-            );
-
-            if (distritoAnterior) {
-                selectDistrito.value = distritoAnterior;
-            }
-        }
-    }
-
-    function procesarCsvUbigeos(contenido) {
-        const nuevoCatalogo = new Map();
-        const lineas = contenido.replace(/^\uFEFF/, '').split(/\r?\n/);
-
-        if (lineas.length < 2) {
-            throw new Error('El archivo de ubigeos está vacío.');
-        }
-
-        const encabezados = lineas[0]
-            .split(';')
-            .map((columna) => columna.trim().toUpperCase());
-
-        const indiceDepartamento = encabezados.indexOf('NOMBDEP');
-        const indiceProvincia = encabezados.indexOf('NOMBPROV');
-        const indiceDistrito = encabezados.indexOf('NOMBDIST');
-        const indiceCodigo = encabezados.indexOf('IDDIST');
-
-        if (indiceDepartamento === -1
-            || indiceProvincia === -1
-            || indiceDistrito === -1
-            || indiceCodigo === -1) {
-            throw new Error(
-                'El archivo CSV no contiene las columnas de ubigeo esperadas.'
-            );
-        }
-
-        let registrosValidos = 0;
-
-        for (let i = 1; i < lineas.length; i++) {
-            const columnas = lineas[i].split(';');
-
-            if (columnas.length < encabezados.length) {
-                continue;
-            }
-
-            const codigo = columnas[indiceCodigo].trim();
-            const nombreDepartamento = columnas[indiceDepartamento].trim();
-            const nombreProvincia = columnas[indiceProvincia].trim();
-            const nombreDistrito = columnas[indiceDistrito].trim();
-
-            // Se ignoran notas y filas que no correspondan a un distrito.
-            if (!/^\d{5,6}$/.test(codigo)
-                || !nombreDepartamento
-                || !nombreProvincia
-                || !nombreDistrito) {
-                continue;
-            }
-
-            const claveDepartamento = normalizarUbicacion(
-                nombreDepartamento
-            );
-            const claveProvincia = normalizarUbicacion(
-                nombreProvincia
-            );
-            const claveDistrito = normalizarUbicacion(
-                nombreDistrito
-            );
-
-            if (!nuevoCatalogo.has(claveDepartamento)) {
-                nuevoCatalogo.set(claveDepartamento, {
-                    nombre: nombreDepartamento,
-                    provincias: new Map()
-                });
-            }
-
-            const departamento = nuevoCatalogo.get(
-                claveDepartamento
-            );
-
-            if (!departamento.provincias.has(claveProvincia)) {
-                departamento.provincias.set(claveProvincia, {
-                    nombre: nombreProvincia,
-                    distritos: new Map()
-                });
-            }
-
-            const provincia = departamento.provincias.get(
-                claveProvincia
-            );
-
-            provincia.distritos.set(
-                claveDistrito,
-                nombreDistrito
-            );
-
-            registrosValidos++;
-        }
-
-        if (registrosValidos === 0 || nuevoCatalogo.size === 0) {
-            throw new Error(
-                'No se encontraron ubicaciones válidas en el CSV.'
-            );
-        }
-
-        return nuevoCatalogo;
-    }
-
-    async function cargarUbigeos() {
-        if (!selectDepartamento || !selectProvincia || !selectDistrito) {
-            return;
-        }
-
-        const departamentoAnterior = selectDepartamento.value;
-        const provinciaAnterior = selectProvincia.value;
-        const distritoAnterior = selectDistrito.value;
-
-        reiniciarSelector(
-            selectProvincia,
-            'Cargando provincias...'
-        );
-
-        reiniciarSelector(
-            selectDistrito,
-            'Selecciona primero una provincia'
-        );
-
-        try {
-            const respuesta = await fetch(RUTA_UBIGEOS, {
-                cache: 'no-store'
-            });
-
-            if (!respuesta.ok) {
-                throw new Error(
-                    'No se pudo descargar el catálogo de ubicaciones.'
-                );
-            }
-
-            const datosBinarios = await respuesta.arrayBuffer();
-
-            const decodificador = new TextDecoder('windows-1252');
-            const contenidoCsv = decodificador.decode(datosBinarios);
-
-            catalogoUbigeos = procesarCsvUbigeos(contenidoCsv);
-            catalogoCargado = true;
-
-            // Los departamentos siguen viniendo de VistaController.
-            // El CSV proporciona las provincias y los distritos.
-            if (departamentoAnterior) {
-                const departamento = buscarDepartamento(
-                    departamentoAnterior
-                );
-
-                if (departamento) {
-                    llenarProvincias(provinciaAnterior);
-                    llenarDistritos(distritoAnterior);
-                }
-            } else {
-                reiniciarSelector(
-                    selectProvincia,
-                    'Selecciona primero un departamento'
-                );
-            }
-
-        } catch (error) {
-            catalogoCargado = false;
-
-            reiniciarSelector(
-                selectProvincia,
-                'No se pudieron cargar las provincias'
-            );
-
-            reiniciarSelector(
-                selectDistrito,
-                'No se pudieron cargar los distritos'
-            );
-
-            mostrarError(
-                'No se pudo cargar el catálogo de departamentos, provincias y distritos. Recarga la página.'
-            );
-
-            console.error('Error al cargar ubigeos:', error);
-        }
-    }
-
-    if (selectDepartamento && selectProvincia && selectDistrito) {
-        selectDepartamento.addEventListener('change', () => {
-            llenarProvincias();
-        });
-
-        selectProvincia.addEventListener('change', () => {
-            llenarDistritos();
-        });
-
-        cargarUbigeos();
-    }
-
-    function validarUbicacion(datos) {
-        if (!catalogoCargado) {
-            mostrarError(
-                'El catálogo de ubicaciones todavía no está disponible.'
-            );
-            return false;
-        }
-
-        const departamento = buscarDepartamento(
-            datos.departamento
-        );
-
-        if (!departamento) {
-            mostrarError(
-                'Selecciona un departamento válido.',
-                ['departamento']
-            );
-            return false;
-        }
-
-        const provincia = buscarProvincia(
-            departamento,
-            datos.provincia
-        );
-
-        if (!provincia) {
-            mostrarError(
-                'Selecciona una provincia del departamento indicado.',
-                ['provincia']
-            );
-            return false;
-        }
-
-        if (!provincia.distritos.has(
-            normalizarUbicacion(datos.distrito)
-        )) {
-            mostrarError(
-                'Selecciona un distrito de la provincia indicada.',
-                ['distrito']
-            );
-            return false;
-        }
-
-        return true;
-    }
-
-    function normalizarTextoPersonal(valor) {
-        return String(valor || '')
-            .normalize('NFD')
-            .replace(/[\u0300-\u036f]/g, '')
-            .toLowerCase();
-    }
-
-    function contrasenaContieneDatosPersonales(datos) {
-        const clave = normalizarTextoPersonal(datos.contrasena);
-
-        if (datos.documento && clave.includes(datos.documento)) {
-            return true;
-        }
-
-        const nombresYApellidos = [
-            datos.nombres,
-            datos.apellidos
-        ];
-
-        for (const dato of nombresYApellidos) {
-            const normalizado = normalizarTextoPersonal(dato);
-
-            if (normalizado.length >= 3 && clave.includes(normalizado)) {
-                return true;
-            }
-
-            const partes = normalizado.split(/[\s'-]+/);
-
-            for (const parte of partes) {
-                if (parte.length >= 3 && clave.includes(parte)) {
-                    return true;
-                }
-            }
-        }
-
-        if (datos.fechaNacimiento) {
-            const fechaCompacta = datos.fechaNacimiento.replace(/-/g, '');
-            const partesFecha = datos.fechaNacimiento.split('-');
-
-            const fechaInversa = partesFecha.length === 3
-                ? `${partesFecha[2]}${partesFecha[1]}${partesFecha[0]}`
-                : '';
-
-            if (clave.includes(fechaCompacta)
-                || (fechaInversa && clave.includes(fechaInversa))
-                || clave.includes(datos.fechaNacimiento)) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    function validarFormulario(datos, confirmarContrasena) {
-
-        const camposObligatorios = [
-            ['nombres', datos.nombres],
-            ['apellidos', datos.apellidos],
-            ['correo', datos.correo],
-            ['telefono', datos.telefono],
-            ['documento', datos.documento],
-            ['fechaNacimiento', datos.fechaNacimiento],
-            ['departamento', datos.departamento],
-            ['provincia', datos.provincia],
-            ['distrito', datos.distrito],
-            ['domicilio', datos.domicilio],
-            ['numeroLicencia', datos.numeroLicencia],
-            ['categoriaLicencia', datos.categoriaLicencia],
-            ['vencimientoLicencia', datos.vencimientoLicencia],
-            ['contrasena', datos.contrasena],
-            ['confirmarContrasena', confirmarContrasena]
-        ];
-
-        for (const [campo, valor] of camposObligatorios) {
-            if (!valor) {
-                mostrarError(
-                    'Completa todos los campos obligatorios.',
-                    [campo]
-                );
-                return false;
-            }
-        }
-
-        const expresionNombres = /^(?=.{3,100}$)\p{L}+(?:[ '-]\p{L}+)*$/u;
-
-        if (!expresionNombres.test(datos.nombres)) {
-            mostrarError(
-                'Los nombres deben tener al menos 3 caracteres y contener solo letras.',
-                ['nombres']
-            );
-            return false;
-        }
-
-        if (!expresionNombres.test(datos.apellidos)) {
-            mostrarError(
-                'Los apellidos deben tener al menos 3 caracteres y contener solo letras.',
-                ['apellidos']
-            );
-            return false;
-        }
-
-        const expresionCorreo = /^[A-Za-z0-9._%+-]+@gmail\.com$/i;
-
-        if (!expresionCorreo.test(datos.correo)) {
-            mostrarError(
-                'Ingresa un correo electrónico válido que termine en @gmail.com.',
-                ['correo']
-            );
-            return false;
-        }
-
-        if (!/^9[0-9]{8}$/.test(datos.telefono)) {
-            mostrarError(
-                'El teléfono debe tener exactamente 9 números y comenzar con 9.',
-                ['telefono']
-            );
-            return false;
-        }
-
-        if (!/^[0-9]{8}$/.test(datos.documento)) {
-            mostrarError(
-                'El DNI debe contener exactamente 8 números.',
-                ['documento']
-            );
-            return false;
-        }
-
-        const fechaActual = obtenerFechaLocalActual();
-
-        if (datos.fechaNacimiento > fechaActual) {
-            mostrarError(
-                'La fecha de nacimiento no puede ser futura.',
-                ['fechaNacimiento']
-            );
-            return false;
-        }
-
-        // Validar la mayoría de edad considerando año, mes y día.
-        const [anioNacimiento, mesNacimiento, diaNacimiento] =
-            datos.fechaNacimiento.split('-').map(Number);
-
-        const hoy = new Date();
-
-        let edad = hoy.getFullYear() - anioNacimiento;
-
-        const yaCumplioAnios =
-            hoy.getMonth() + 1 > mesNacimiento ||
-            (hoy.getMonth() + 1 === mesNacimiento &&
-                hoy.getDate() >= diaNacimiento);
-
-        if (!yaCumplioAnios) {
-            edad--;
-        }
-
-        if (edad < 18) {
-            mostrarError(
-                'Debes tener al menos 18 años para registrarte en CARMOVO.',
-                ['fechaNacimiento']
-            );
-            return false;
-        }
-
-        if (!validarUbicacion(datos)) {
-            return false;
-        }
-
-        if (datos.domicilio.length > 200) {
-            mostrarError(
-                'El domicilio no puede superar los 200 caracteres.',
-                ['domicilio']
-            );
-            return false;
-        }
-
-        // Validación provisional de formato.
-        // No comprueba la existencia oficial del brevete.
-        const expresionLicencia = /^[A-Za-z]-?[0-9]{6,12}E?$/i;
-
-        if (!expresionLicencia.test(datos.numeroLicencia)) {
-            mostrarError(
-                'La licencia debe comenzar con una letra, continuar con 6 a 12 números y puede terminar en E.',
-                ['numeroLicencia']
-            );
-            return false;
-        }
-
-        const categoriasValidas = [
-            'A-I',
-            'A-IIA',
-            'A-IIB',
-            'A-IIIA',
-            'A-IIIB',
-            'A-IIIC'
-        ];
-
-        if (!categoriasValidas.includes(
-            datos.categoriaLicencia.toUpperCase()
-        )) {
-            mostrarError(
-                'Selecciona una categoría de licencia válida.',
-                ['categoriaLicencia']
-            );
-            return false;
-        }
-
-        if (datos.vencimientoLicencia < fechaActual) {
-            mostrarError(
-                'La licencia de conducir no debe estar vencida.',
-                ['vencimientoLicencia']
-            );
-            return false;
-        }
-
-        if (datos.contrasena.length < 8
-            || datos.contrasena.length > 12) {
-            mostrarError(
-                'La contraseña debe tener entre 8 y 12 caracteres.',
-                ['contrasena']
-            );
-            return false;
-        }
-
-        const expresionContrasena =
-            /^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[@#$%*_\-])[^\s].*[^\s]$/;
-
-        if (!expresionContrasena.test(datos.contrasena)) {
-            mostrarError(
-                'La contraseña debe incluir una mayúscula, una minúscula, un número y un símbolo (@, #, $, %, *, _ o -), sin espacios al inicio ni al final.',
-                ['contrasena']
-            );
-            return false;
-        }
-
-        if (contrasenaContieneDatosPersonales(datos)) {
-            mostrarError(
-                'La contraseña no debe contener tu DNI, nombres, apellidos ni fecha de nacimiento.',
-                ['contrasena']
-            );
-            return false;
-        }
-
-        if (datos.contrasena !== confirmarContrasena) {
-            mostrarError(
-                'Las contraseñas no coinciden.',
-                ['contrasena', 'confirmarContrasena']
-            );
-            return false;
-        }
-
-        return true;
-    }
-
-    function interpretarErrorBackend(error) {
-        return error && error.message
-            ? error.message
-            : 'No se pudo registrar la cuenta.';
-    }
-
-    // Términos y privacidad: se abre el documento completo antes de poder marcar la casilla.
-    const casillaPoliticas = document.getElementById('aceptaPoliticas');
-    window.CarmovoPoliticas?.vincular(casillaPoliticas, { tipo: 'cliente' });
-
-    formularioRegistro.addEventListener('submit', async (e) => {
-        e.preventDefault();
-
-        limpiarErrores();
-
-        const nombres = obtenerValor('nombres');
-        const apellidos = obtenerValor('apellidos');
-        const correo = obtenerValor('correo');
-        const telefono = obtenerValor('telefono');
-        const documento = obtenerValor('documento');
-        const nacimiento = obtenerValor('fechaNacimiento');
-        const departamento = obtenerValor('departamento');
-        const provincia = obtenerValor('provincia');
-        const distrito = obtenerValor('distrito');
-        const domicilio = obtenerValor('domicilio');
-        const licencia = obtenerValor('numeroLicencia');
-        const categoria = obtenerValor('categoriaLicencia');
-        const venceLicencia = obtenerValor('vencimientoLicencia');
-
-        const pass1 = inputPassword1.value;
-        const pass2 = inputPassword2.value;
-
-        const btnSubmit = formularioRegistro.querySelector(
-            'button[type="submit"]'
-        );
-
-        const datosRegistro = {
-            nombres,
-            apellidos,
-            correo,
-            contrasena: pass1,
-            telefono,
-            documento,
-            fechaNacimiento: nacimiento,
-            departamento,
-            provincia,
-            distrito,
-            domicilio,
-            numeroLicencia: licencia,
-            categoriaLicencia: categoria,
-            vencimientoLicencia: venceLicencia,
-            aceptaPoliticas: !!casillaPoliticas?.checked
+/* =========================================================
+   CARMOVO · Crear cuenta: medidor de contraseña y verificación del correo
+   1. Mientras se escribe, marca cada requisito de la contraseña y su fuerza.
+   2. Tras enviar el formulario, abre la ventana para escribir el código
+      de 6 dígitos que llegó al correo. Recién con el código correcto se crea la cuenta.
+   ========================================================= */
+(() => {
+    'use strict';
+
+    const $ = id => document.getElementById(id);
+    const normalizar = v => String(v || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
+
+    // ------------------------------------------------------------ requisitos de la contraseña
+    function reglas(clave) {
+        const n = normalizar(clave);
+        const partes = [$('nombres')?.value, $('apellidos')?.value]
+            .flatMap(t => normalizar(t).split(/\s+/)).filter(p => p.length >= 3);
+        const dni = ($('documento')?.value || '').trim();
+        const nacimiento = ($('fechaNacimiento')?.value || '').replace(/-/g, '');
+        const personal = !!clave && (partes.some(p => n.includes(p)) || (dni.length >= 6 && n.includes(dni))
+            || (nacimiento && n.includes(nacimiento)));
+        return {
+            largo: clave.length >= 8 && clave.length <= 12,
+            mayuscula: /[A-Z]/.test(clave),
+            minuscula: /[a-z]/.test(clave),
+            numero: /[0-9]/.test(clave),
+            simbolo: /[@#$%*_\-]/.test(clave),
+            personal: !!clave && !personal && !/^\s|\s$/.test(clave)
         };
+    }
 
-        if (!validarFormulario(datosRegistro, pass2)) {
+    function pintarRequisitos() {
+        const campo = $('contrasena');
+        const caja = $('requisitosContrasena');
+        if (!campo || !caja) return;
+        const clave = campo.value;
+        const r = reglas(clave);
+        const cumplidas = Object.values(r).filter(Boolean).length;
+        caja.querySelectorAll('[data-regla]').forEach(li => {
+            const ok = r[li.dataset.regla];
+            li.classList.toggle('si', ok);
+            li.querySelector('i').className = ok ? 'fa-solid fa-circle-check' : 'fa-regular fa-circle';
+        });
+        const nivel = !clave ? 0 : cumplidas <= 2 ? 1 : cumplidas <= 4 ? 2 : cumplidas === 5 ? 3 : 4;
+        const nombres = ['Escribe tu contraseña', 'Contraseña débil', 'Contraseña regular', 'Contraseña media', 'Contraseña segura'];
+        const faltan = Object.entries(r).filter(([, ok]) => !ok).map(([k]) => ({
+            largo: 'entre 8 y 12 caracteres', mayuscula: 'una mayúscula', minuscula: 'una minúscula',
+            numero: 'un número', simbolo: 'un símbolo', personal: 'quitar tus datos personales'
+        })[k]);
+        caja.dataset.nivel = String(nivel);
+        $('rvFuerza').textContent = nivel && nivel < 4 && faltan.length
+            ? `${nombres[nivel]} · te falta ${faltan[0]}`
+            : nombres[nivel];
+        pintarCoincidencia();
+        return cumplidas === 6;
+    }
+
+    function pintarCoincidencia() {
+        const a = $('contrasena')?.value || '';
+        const b = $('confirmarContrasena')?.value || '';
+        const aviso = $('rvCoincide');
+        const campo = $('confirmarContrasena');
+        if (!aviso || !campo) return;
+        const envoltura = campo.closest('.campo-input-registro') || campo;
+        if (!b) {
+            aviso.textContent = '';
+            envoltura.classList.remove('rv-bien', 'rv-mal');
             return;
         }
+        const igual = a === b;
+        aviso.innerHTML = igual
+            ? '<i class="fa-solid fa-circle-check"></i> Las contraseñas coinciden.'
+            : '<i class="fa-solid fa-circle-exclamation"></i> Las contraseñas no coinciden.';
+        aviso.className = `rv-coincide ${igual ? 'rv-ok' : 'rv-error'}`;
+        envoltura.classList.toggle('rv-bien', igual);
+        envoltura.classList.toggle('rv-mal', !igual);
+    }
 
-        if (!datosRegistro.aceptaPoliticas) {
-            const etiqueta = document.getElementById('campo-acepto-registro');
-            etiqueta?.classList.add('pol-acepto--error');
-            mostrarError('Lee y acepta los Términos y la Política de privacidad para crear tu cuenta.');
-            etiqueta?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            return;
-        }
-
-        if (!window.CarmovoClienteApi) {
-            mostrarError(
-                'No se pudo cargar el servicio de clientes de CARMOVO.'
-            );
-            return;
-        }
-
-        try {
-            if (btnSubmit) {
-                btnSubmit.disabled = true;
-            }
-
-            const usuario = await window.CarmovoClienteApi.registrar(
-                datosRegistro
-            );
-
-            // El servidor devuelve el cliente con su token JWT: se guarda la sesión.
-            window.CarmovoClienteApi.guardarSesion({
-                ...usuario,
-                nombres: usuario.nombres || nombres,
-                apellidos: usuario.apellidos || apellidos,
-                correo: usuario.correo || correo,
-                telefono: usuario.telefono || telefono
-            });
-
-            window.location.href = '/miCuenta';
-
-        } catch (error) {
-            mostrarError(interpretarErrorBackend(error));
-
-        } finally {
-            if (btnSubmit) {
-                btnSubmit.disabled = false;
-            }
-        }
+    document.addEventListener('DOMContentLoaded', () => {
+        ['contrasena', 'confirmarContrasena', 'nombres', 'apellidos', 'documento', 'fechaNacimiento'].forEach(id =>
+            $(id)?.addEventListener('input', pintarRequisitos));
+        pintarRequisitos();
     });
 
-});
+    // ------------------------------------------------------------ ventana del código
+    const ESTILOS = `
+        .rv-fondo{position:fixed;inset:0;z-index:5000;display:flex;align-items:center;justify-content:center;padding:16px;
+            background:rgba(15,28,22,.45);backdrop-filter:blur(3px);animation:rvAparecer .2s ease}
+        .rv-caja{width:min(440px,100%);background:#fff;border-radius:24px;padding:30px 26px 24px;text-align:center;
+            box-shadow:0 30px 80px rgba(15,28,22,.3);animation:rvSubir .28s cubic-bezier(.2,.9,.3,1.2);font-family:inherit;color:#263B30}
+        .rv-icono{width:68px;height:68px;border-radius:50%;margin:0 auto 14px;display:grid;place-items:center;font-size:28px;
+            background:#E4F3E9;color:#376B50}
+        .rv-icono.ok{background:#1C8353;color:#fff;box-shadow:0 0 0 8px #E5F7EE}
+        .rv-caja h2{margin:0 0 6px;font-size:1.35rem;font-weight:800;color:#2A5A40}
+        .rv-caja p{margin:0;color:#5F7368;font-size:.92rem;line-height:1.5}
+        .rv-caja p b{color:#263B30}
+        .rv-cods{display:flex;gap:8px;justify-content:center;margin:20px 0 10px}
+        .rv-cods input{width:46px;height:56px;border:0;border-radius:14px;background:#F1F6F3;text-align:center;
+            font-size:1.5rem;font-weight:800;color:#263B30;outline:none;transition:box-shadow .15s ease, background .15s ease}
+        .rv-cods input:focus{background:#fff;box-shadow:0 0 0 2px #376B50 inset}
+        .rv-cods.error input{box-shadow:0 0 0 2px #E58C8C inset;background:#FDF3F3;animation:rvTemblar .35s ease}
+        .rv-tiempo{font-size:.85rem;color:#5F7368}.rv-tiempo b{color:#263B30}
+        .rv-tiempo.vencido b{color:#B23B3B}
+        .rv-error{min-height:20px;margin:8px 0 0;color:#B23B3B;font-size:.85rem;font-weight:600}
+        .rv-principal{width:100%;margin-top:14px;border:0;border-radius:14px;padding:14px;background:#376B50;color:#fff;
+            font:inherit;font-weight:800;font-size:1rem;cursor:pointer;box-shadow:0 10px 24px rgba(55,107,80,.28);
+            transition:transform .15s ease, filter .15s ease}
+        .rv-principal:hover{transform:translateY(-1px);filter:brightness(1.05)}
+        .rv-principal:disabled{background:#B9CFC2;box-shadow:none;cursor:default;transform:none}
+        .rv-enlaces{margin-top:14px;font-size:.85rem;color:#8A9C92}
+        .rv-enlaces button{border:0;background:none;padding:0;font:inherit;font-weight:700;color:#376B50;cursor:pointer}
+        .rv-enlaces button:disabled{color:#A8B8AF;cursor:default}
+        .rv-volver{display:block;margin:10px auto 0;color:#8A9C92 !important;font-weight:600 !important}
+        .rv-prueba{margin-top:12px;padding:9px 12px;border-radius:12px;background:#FFF4DB;color:#94620A;font-size:.8rem;font-weight:600}
+        @keyframes rvAparecer{from{opacity:0}to{opacity:1}}
+        @keyframes rvSubir{from{opacity:0;transform:translateY(14px) scale(.96)}to{opacity:1;transform:none}}
+        @keyframes rvTemblar{25%{transform:translateX(-4px)}75%{transform:translateX(4px)}}
+        @media (max-width:560px){.rv-fondo{align-items:flex-end;padding:0}
+            .rv-caja{width:100%;border-radius:24px 24px 0 0;padding:26px 18px calc(22px + env(safe-area-inset-bottom))}
+            .rv-cods input{width:42px;height:52px}}
+        @media (prefers-reduced-motion:reduce){.rv-fondo,.rv-caja,.rv-cods.error input{animation:none}}`;
+
+    function estilos() {
+        if ($('rv-estilos')) return;
+        const st = document.createElement('style');
+        st.id = 'rv-estilos';
+        st.textContent = ESTILOS;
+        document.head.appendChild(st);
+    }
+
+    const esc = v => String(v ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+    const reloj = s => `${String(Math.floor(s / 60)).padStart(2, '0')}:${String(s % 60).padStart(2, '0')}`;
+
+    /**
+     * Abre la ventana del código. Devuelve una promesa con el cliente ya creado (con su token)
+     * o null si la persona cerró la ventana para corregir su correo.
+     */
+    function abrir(respuesta) {
+        estilos();
+        return new Promise(resolver => {
+            const api = window.CarmovoClienteApi;
+            let vigencia = Number(respuesta.segundosVigencia) || 600;
+            let espera = Number(respuesta.segundosReenvio) || 60;
+            const fondo = document.createElement('div');
+            fondo.className = 'rv-fondo';
+            fondo.innerHTML = `
+                <div class="rv-caja" role="dialog" aria-modal="true" aria-labelledby="rv-titulo">
+                    <div class="rv-icono"><i class="fa-solid fa-envelope-open-text"></i></div>
+                    <h2 id="rv-titulo">Verifica tu correo</h2>
+                    <p>Enviamos un código de 6 dígitos a<br><b>${esc(respuesta.correoOculto || respuesta.correo)}</b></p>
+                    <div class="rv-cods" id="rv-cods">
+                        ${Array.from({ length: 6 }, (_, i) => `<input inputmode="numeric" maxlength="1" autocomplete="${i === 0 ? 'one-time-code' : 'off'}" aria-label="Dígito ${i + 1}">`).join('')}
+                    </div>
+                    <p class="rv-tiempo" id="rv-tiempo">El código vence en <b>${reloj(vigencia)}</b></p>
+                    <p class="rv-error" id="rv-error" role="alert"></p>
+                    <button type="button" class="rv-principal" id="rv-verificar" disabled>Verificar y crear cuenta</button>
+                    <div class="rv-enlaces">¿No te llegó? Revisa spam o
+                        <button type="button" id="rv-reenviar" disabled>reenviar código</button> <span id="rv-espera"></span>
+                        <button type="button" class="rv-volver" id="rv-volver">← Cambiar correo</button>
+                    </div>
+                    ${respuesta.correoReal === false ? '<div class="rv-prueba"><i class="fa-solid fa-circle-info"></i> Modo prueba: el correo no está configurado, el código aparece en la terminal donde corre el sistema.</div>' : ''}
+                </div>`;
+            document.body.appendChild(fondo);
+            const casillas = [...fondo.querySelectorAll('.rv-cods input')];
+            const btn = $('rv-verificar');
+            const error = $('rv-error');
+            const codigo = () => casillas.map(c => c.value).join('');
+            const actualizar = () => { btn.disabled = codigo().length !== 6 || vigencia <= 0; };
+            const mostrarError = texto => {
+                error.textContent = texto || '';
+                const grupo = $('rv-cods');
+                grupo.classList.remove('error');
+                if (texto) { void grupo.offsetWidth; grupo.classList.add('error'); }
+            };
+            setTimeout(() => casillas[0].focus(), 50);
+
+            casillas.forEach((c, i) => {
+                c.addEventListener('input', () => {
+                    const solo = c.value.replace(/\D/g, '');
+                    if (solo.length > 1) {
+                        solo.slice(0, 6 - i).split('').forEach((d, k) => { casillas[i + k].value = d; });
+                        casillas[Math.min(i + solo.length, 5)].focus();
+                    } else {
+                        c.value = solo;
+                        if (solo && i < 5) casillas[i + 1].focus();
+                    }
+                    mostrarError('');
+                    actualizar();
+                    if (codigo().length === 6) verificar();
+                });
+                c.addEventListener('keydown', e => {
+                    if (e.key === 'Backspace' && !c.value && i > 0) casillas[i - 1].focus();
+                    if (e.key === 'Enter' && codigo().length === 6) verificar();
+                });
+                c.addEventListener('paste', e => {
+                    const texto = (e.clipboardData?.getData('text') || '').replace(/\D/g, '').slice(0, 6);
+                    if (!texto) return;
+                    e.preventDefault();
+                    texto.split('').forEach((d, k) => { casillas[k].value = d; });
+                    casillas[Math.min(texto.length, 5)].focus();
+                    actualizar();
+                    if (texto.length === 6) verificar();
+                });
+            });
+
+            const reloj1 = setInterval(() => {
+                vigencia = Math.max(0, vigencia - 1);
+                espera = Math.max(0, espera - 1);
+                const t = $('rv-tiempo');
+                if (t) {
+                    t.classList.toggle('vencido', vigencia === 0);
+                    t.innerHTML = vigencia ? `El código vence en <b>${reloj(vigencia)}</b>` : '<b>El código venció.</b> Pide uno nuevo.';
+                }
+                $('rv-reenviar').disabled = espera > 0;
+                $('rv-espera').textContent = espera > 0 ? `(en ${espera} s)` : '';
+                actualizar();
+            }, 1000);
+            $('rv-espera').textContent = `(en ${espera} s)`;
+
+            const cerrar = valor => {
+                clearInterval(reloj1);
+                fondo.remove();
+                resolver(valor);
+            };
+
+            let ocupado = false;
+            async function verificar() {
+                if (ocupado || codigo().length !== 6) return;
+                ocupado = true;
+                btn.disabled = true;
+                btn.textContent = 'Verificando…';
+                try {
+                    const usuario = await api.verificarRegistro(respuesta.correo, codigo());
+                    clearInterval(reloj1);
+                    fondo.querySelector('.rv-caja').innerHTML = `
+                        <div class="rv-icono ok"><i class="fa-solid fa-check"></i></div>
+                        <h2>¡Cuenta creada!</h2>
+                        <p>Tu correo fue verificado. Ya puedes reservar.</p>`;
+                    setTimeout(() => cerrar(usuario), 1400);
+                } catch (e) {
+                    mostrarError(e?.message || 'No se pudo verificar el código.');
+                    casillas.forEach(c => { c.value = ''; });
+                    casillas[0].focus();
+                    btn.textContent = 'Verificar y crear cuenta';
+                    actualizar();
+                } finally {
+                    ocupado = false;
+                }
+            }
+
+            btn.addEventListener('click', verificar);
+            $('rv-reenviar').addEventListener('click', async () => {
+                $('rv-reenviar').disabled = true;
+                try {
+                    const r = await api.reenviarCodigoRegistro(respuesta.correo);
+                    vigencia = Number(r.segundosVigencia) || 600;
+                    espera = Number(r.segundosReenvio) || 60;
+                    casillas.forEach(c => { c.value = ''; });
+                    casillas[0].focus();
+                    mostrarError('');
+                    error.textContent = 'Te enviamos un código nuevo.';
+                    error.style.color = '#1C8353';
+                    setTimeout(() => { error.style.color = ''; }, 2500);
+                } catch (e) {
+                    mostrarError(e?.message || 'No se pudo reenviar el código.');
+                    espera = 10;
+                }
+            });
+            $('rv-volver').addEventListener('click', () => {
+                cerrar(null);
+                $('correo')?.focus();
+            });
+        });
+    }
+
+    window.CarmovoVerificacionRegistro = { abrir, contrasenaValida: () => pintarRequisitos() };
+})();

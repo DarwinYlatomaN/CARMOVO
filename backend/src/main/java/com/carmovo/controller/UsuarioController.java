@@ -1,4 +1,3 @@
-
 package com.carmovo.controller;
 
 import com.carmovo.service.UsuarioServicio;
@@ -38,6 +37,7 @@ public class UsuarioController {
     private final RecuperacionContrasenaServicio recuperacionServicio;
     private final com.carmovo.repository.PagoRepositorio pagoRepositorio;
     private final com.carmovo.service.PoliticasServicio politicas;
+    private final com.carmovo.service.VerificacionRegistroServicio verificacionRegistro;
 
     public UsuarioController(
             UsuarioServicio usuarioServicio,
@@ -49,8 +49,10 @@ public class UsuarioController {
             JwtServicio jwtServicio,
             RecuperacionContrasenaServicio recuperacionServicio,
             com.carmovo.repository.PagoRepositorio pagoRepositorio,
-            com.carmovo.service.PoliticasServicio politicas
+            com.carmovo.service.PoliticasServicio politicas,
+            com.carmovo.service.VerificacionRegistroServicio verificacionRegistro
     ) {
+        this.verificacionRegistro = verificacionRegistro;
         this.politicas = politicas;
         this.pagoRepositorio = pagoRepositorio;
         this.usuarioServicio = usuarioServicio;
@@ -138,14 +140,33 @@ public class UsuarioController {
                         : "El usuario tiene alquileres registrados, por eso se desactivó en lugar de eliminarse."));
     }
 
+    /**
+     * Paso 1 del registro web: valida los datos y envía un código de 6 dígitos al correo.
+     * La cuenta todavía no se crea.
+     */
     @PostMapping("/api/v1/clientes/registro")
     public ResponseEntity<?> registrarCliente(
             @Valid @RequestBody RegistroClienteDTO dto
     ) {
         try {
-            UsuarioGuardarDTO datosUsuario = convertirRegistro(dto);
+            usuarioServicio.validarNuevoCliente(convertirRegistro(dto));
+            return ResponseEntity.status(HttpStatus.ACCEPTED).body(verificacionRegistro.iniciar(dto));
+        } catch (ResponseStatusException ex) {
+            return errorRegistro(ex);
+        }
+    }
 
-            UsuarioDTO usuario = usuarioServicio.registrarCliente(datosUsuario);
+    /** Paso 2: con el código correcto se crea la cuenta y se inicia la sesión. */
+    @PostMapping("/api/v1/clientes/registro/verificar")
+    public ResponseEntity<?> verificarRegistro(@RequestBody Map<String, String> datos) {
+        String correo = datos == null ? null : datos.get("correo");
+        String codigo = datos == null ? null : datos.get("codigo");
+        try {
+            com.carmovo.service.VerificacionRegistroServicio.Pendiente pendiente =
+                    verificacionRegistro.verificar(correo, codigo);
+            UsuarioDTO usuario = usuarioServicio.registrarClienteVerificado(
+                    convertirRegistro(pendiente.registro()), pendiente.contrasenaHash());
+            verificacionRegistro.completar(correo);
             politicas.registrar(usuario.getIdUsuario(), com.carmovo.service.PoliticasServicio.REGISTRO, null, null);
 
             auditoriaServicio.registrarSeguro(
@@ -153,21 +174,33 @@ public class UsuarioController {
                     usuario.getIdUsuario(),
                     "Se registró el cliente " + nombreUsuario(usuario)
                             + " (" + usuario.getCorreo()
-                            + ") desde el sitio público."
+                            + ") desde el sitio público, con el correo verificado."
             );
 
             usuario.setToken(jwtServicio.generar(usuario.getIdUsuario(), "CLIENTE"));
             return new ResponseEntity<>(usuario, HttpStatus.CREATED);
-
         } catch (ResponseStatusException ex) {
-            String mensaje = ex.getReason() == null
-                    ? "No se pudo completar el registro."
-                    : ex.getReason();
-
-            return ResponseEntity
-                    .status(ex.getStatusCode())
-                    .body(Map.of("message", mensaje));
+            return errorRegistro(ex);
         }
+    }
+
+    /** Envía un código nuevo (cada 60 segundos, máximo 5 por hora). */
+    @PostMapping("/api/v1/clientes/registro/reenviar")
+    public ResponseEntity<?> reenviarCodigoRegistro(@RequestBody Map<String, String> datos) {
+        try {
+            return ResponseEntity.ok(verificacionRegistro.reenviar(datos == null ? null : datos.get("correo")));
+        } catch (ResponseStatusException ex) {
+            return errorRegistro(ex);
+        }
+    }
+
+    private ResponseEntity<?> errorRegistro(ResponseStatusException ex) {
+        String mensaje = ex.getReason() == null
+                ? "No se pudo completar el registro."
+                : ex.getReason();
+        return ResponseEntity
+                .status(ex.getStatusCode())
+                .body(Map.of("message", mensaje));
     }
 
     @PostMapping("/api/v1/clientes/login")

@@ -1,4 +1,3 @@
-
 package com.carmovo.controller;
 
 import com.carmovo.dto.RegistroClienteDTO;
@@ -176,21 +175,11 @@ public class VistaController {
             return "registro";
         }
 
-        try {
-            UsuarioGuardarDTO datosUsuario = convertirRegistro(registroForm);
-
-            UsuarioDTO usuario = usuarioServicio.registrarCliente(datosUsuario);
-            politicas.registrar(usuario.getIdUsuario(), com.carmovo.service.PoliticasServicio.REGISTRO, null, null);
-
-            usuario.setToken(jwtServicio.generar(usuario.getIdUsuario(), "CLIENTE"));
-            model.addAttribute("usuarioRegistrado", usuario);
-
-        } catch (ResponseStatusException ex) {
-            model.addAttribute(
-                    "errorRegistro",
-                    mensajeExcepcion(ex, "No se pudo registrar la cuenta.")
-            );
-        }
+        // La cuenta se crea solo después de verificar el correo con el código (lo hace registro.js).
+        model.addAttribute(
+                "errorRegistro",
+                "Para crear tu cuenta debes verificar tu correo. Activa JavaScript en tu navegador y vuelve a intentarlo."
+        );
 
         return "registro";
     }
